@@ -1,0 +1,1 @@
+All controllers are in this folder. All controllers should extend ApplicationController. See comments in ApplicationController.java for more information.

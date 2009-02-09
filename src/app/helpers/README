@@ -1,0 +1,1 @@
+All helpers are in this folder. All helpers should extend ApplicationHelper. See comments in ApplicationHelper.java for more information.
