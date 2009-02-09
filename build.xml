@@ -1,0 +1,68 @@
+<project name="apes" default="dist" basedir=".">
+  <description>Audio Program for Editing Sound</description>
+
+  <property name="src.dir"   value="src" />
+  <property name="build.dir" value="build" />
+  <property name="dist.dir"  value="dist" />
+  <property name="junit.dir" value="test/junit-results" />
+  <property name="doc.dir" value="doc" />
+  <property name="javadoc.dir" value="doc/javadoc" />
+
+  <property name="main.class" value="Main" />
+  <property name="test.class" value="TestClass" />
+
+  <property name="junit.jar" location="lib/junit.jar" />
+  <property name="build.jar" value="apes.jar" />
+
+  <path id="classpath">
+    <pathelement location="${build.dir}" />
+    <pathelement location="${junit.jar}" />
+  </path>
+
+  <target name="init">
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${junit.dir}" />
+  </target>
+
+  <target name="build" depends="init" description="Build everything under ${src.dir}">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" debug="true" debuglevel="lines,vars,source">
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="test" depends="build" description="Unit test">
+    <junit errorProperty="test.failed" failureProperty="test.failed">
+      <test name="${test.class}" todir="${junit.dir}" />
+      <formatter type="brief" usefile="false" />
+      <formatter type="xml" />
+      <classpath refid="classpath" />
+    </junit>
+  </target>
+
+  <target name="dist" depends="build" description="Generate the distribution">
+    <jar jarfile="${dist.dir}/${build.jar}" basedir="${build.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="${main.class}" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run" depends="dist">
+    <java jar="${dist.dir}/${build.jar}" fork="true" />
+  </target>
+
+  <target name="javadoc" description="Create Javadocs">
+    <mkdir dir="${doc.dir}/javadoc/" />
+    <javadoc destdir="${doc.dir}/javadoc/" additionalparam="-J-Dorg.apache.commons.attributes.javadoc.CATaglet.sources=${basedir}">
+      <fileset dir="${src.dir}" includes="**/*.java" />
+    </javadoc>
+  </target>
+
+  <target name="clean" description="Clean up">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+    <delete dir="${junit.dir}" />
+    <delete dir="${javadoc.dir}" />
+  </target>
+</project>
