@@ -8,7 +8,7 @@
   <property name="doc.dir" value="doc" />
   <property name="javadoc.dir" value="doc/javadoc" />
 
-  <property name="main.class" value="Main" />
+  <property name="main.class" value="apes.Main" />
   <property name="test.class" value="TestClass" />
 
   <property name="junit.jar" location="lib/junit.jar" />
