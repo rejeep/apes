@@ -7,22 +7,28 @@
   <property name="junit.dir" value="test/junit-results" />
   <property name="doc.dir" value="doc" />
   <property name="javadoc.dir" value="doc/javadoc" />
-
-  <property name="main.class" value="apes.Main" />
-  <property name="test.class" value="TestClass" />
-
-  <property name="junit.jar" location="lib/junit.jar" />
+  <property name="test.dir" value="test" />
+  <property name="test-build.dir" value="test/build" />
+  <property name="main.class" value="src.app.Main" />
+  <property name="junit.jar" location="lib/junit-4.5.jar" />
   <property name="build.jar" value="apes.jar" />
 
   <path id="classpath">
     <pathelement location="${build.dir}" />
+  </path>
+
+  <path id="classpath.test">
+    <pathelement location="${test.dir}" />
+    <pathelement location="${test-build.dir}" />
     <pathelement location="${junit.jar}" />
+    <pathelement location="${build.dir}" />
   </path>
 
   <target name="init">
     <mkdir dir="${build.dir}" />
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${junit.dir}" />
+    <mkdir dir="${test-build.dir}" />
   </target>
 
   <target name="build" depends="init" description="Build everything under ${src.dir}">
@@ -31,12 +37,22 @@
     </javac>
   </target>
 
-  <target name="test" depends="build" description="Unit test">
+  <target name="build-test" depends="init" description="Build test files">
+    <javac srcdir="${test.dir}" destdir="${test-build.dir}" debug="true" debuglevel="lines,vars,source">
+      <classpath refid="classpath.test" />
+    </javac>
+  </target>
+
+  <target name="test" depends="build-test" description="Unit test">
     <junit errorProperty="test.failed" failureProperty="test.failed">
-      <test name="${test.class}" todir="${junit.dir}" />
+      <batchtest fork="yes" todir="${junit.dir}">
+        <fileset dir="${test-build.dir}">
+          <include name="**/Test*.class"/>
+        </fileset>
+      </batchtest>
+      <classpath refid="classpath.test" />
       <formatter type="brief" usefile="false" />
       <formatter type="xml" />
-      <classpath refid="classpath" />
     </junit>
   </target>
 
@@ -62,6 +78,7 @@
 
   <target name="clean" description="Clean up">
     <delete dir="${build.dir}" />
+    <delete dir="${test-build.dir}" />
     <delete dir="${dist.dir}" />
     <delete dir="${junit.dir}" />
     <delete dir="${javadoc.dir}" />
