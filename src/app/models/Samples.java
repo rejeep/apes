@@ -1,4 +1,4 @@
-package apes.models;
+package src.app.models;
 
 import java.nio.ByteBuffer;
 

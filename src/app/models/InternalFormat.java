@@ -1,4 +1,4 @@
-package apes;
+package src.app.models;
 
 import java.util.List;
 
