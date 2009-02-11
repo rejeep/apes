@@ -1,6 +1,7 @@
 /build
 /dist
 /doc/javadoc/*
+/test/junit-results
 .classpath
 .project
 *.class
