@@ -1,4 +1,4 @@
-package apes;
+package src.app;
 
 import javax.swing.JFrame;
 

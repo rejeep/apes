@@ -1,4 +1,4 @@
-package apes;
+package src.app.controllers;
 
 /**
  * This class contains stuff common to all controllers. All

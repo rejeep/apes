@@ -1,4 +1,4 @@
-package apes;
+package src.app.controllers;
 
 import java.awt.Component;
 import java.lang.reflect.Method;
