@@ -1,0 +1,4 @@
+first=Some value
+second="Lots of values"
+third.option="This should not go in the configuration"
+fourth_option=Great day
