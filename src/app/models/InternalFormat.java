@@ -13,7 +13,7 @@ public class InternalFormat
 	/**
 	 * Information of all sound file tags.
 	 */
-	private Tag tags;
+	private Tags tags;
 	
 	/**
 	 * Amount of samples per second.
@@ -28,11 +28,13 @@ public class InternalFormat
 	/**
 	 * Constructor setting up the Internal Format according to the supplied data.
 	 * @param tag Tag information of the audio file.
-	 * @param channels Channels containing all audio data.
 	 * @param samplerate Amount of samples per second.
+	 * @param channels Channels containing all audio data.
 	 */
-	public InternalFormat(Tag tag, List<Channel> channelList, int samplerate)
+	public InternalFormat( Tags tag, int samplerate, List<Channel> channelList )
 	{
+	  tags = tag;
+	  sampleRate = samplerate;
 		channels = channelList;
 	}
 	
@@ -40,9 +42,9 @@ public class InternalFormat
 	 * The tag object describing all the tags of the audio file.
 	 * @return All tags of the audio file as a Tag object.
 	 */
-	public Tag getTag()
+	public Tags getTag()
 	{
-		return tag;
+		return tags;
 	}
 	
 	/**
