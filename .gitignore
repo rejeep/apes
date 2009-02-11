@@ -2,4 +2,4 @@
 /dist
 .classpath
 .project
-/**/*.class
+*.class
