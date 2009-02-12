@@ -65,7 +65,7 @@ public class Config
   private Config()
   {
     // Default configuration file.
-    file = new File( System.getProperty( "user.home" ) + File.separator + ".apes" );
+    setFilePath( System.getProperty( "user.home" ) + File.separator + ".apes" );
 
     // Initialize options map.
     options = new HashMap<String, String>();
