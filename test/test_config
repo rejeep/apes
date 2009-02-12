@@ -1,4 +1,10 @@
 first=Some value
+# Comment
 second="Lots of values"
+
+# Some
+# lines
+# with
+# comments...
 third.option="This should not go in the configuration"
 fourth_option=Great day
