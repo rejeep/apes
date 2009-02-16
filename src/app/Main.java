@@ -7,9 +7,23 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
+import src.app.views.buttons.CopyButton;
+import src.app.views.buttons.CutButton;
+import src.app.views.buttons.DeleteButton;
+import src.app.views.buttons.FullScreenButton;
+import src.app.views.buttons.ImageButton;
+import src.app.views.buttons.OpenButton;
+import src.app.views.buttons.PasteButton;
+import src.app.views.buttons.RedoButton;
+import src.app.views.buttons.SaveButton;
+import src.app.views.buttons.UndoButton;
+import src.app.views.buttons.ZoomInButton;
+import src.app.views.buttons.ZoomOutButton;
+import src.app.views.buttons.ZoomResetButton;
 import src.lib.Locale;
 
 /**
@@ -36,6 +50,9 @@ public class Main extends JFrame
 
     // Create and add menu.
     createMenu();
+
+    // Create and add top panel.
+    createTopPanel();
 
     pack();
     setVisible( true );
@@ -172,6 +189,53 @@ public class Main extends JFrame
     // Help End
 
     setJMenuBar(menuBar);
+  }
+
+
+  /**
+   * Creates and adds a panel on the top of the frame. The panel
+   * contains buttons such as save, zoom, undo and redo.
+   */
+  private void createTopPanel()
+  {
+    JPanel topPanel = new JPanel();
+    add(topPanel);
+
+    ImageButton open = new OpenButton();
+    topPanel.add(open);
+
+    ImageButton save = new SaveButton();
+    topPanel.add(save);
+
+    ImageButton undo = new UndoButton();
+    topPanel.add(undo);
+
+    ImageButton redo = new RedoButton();
+    topPanel.add(redo);
+
+    ImageButton copy = new CopyButton();
+    topPanel.add(copy);
+
+    ImageButton cut = new CutButton();
+    topPanel.add(cut);
+
+    ImageButton paste = new PasteButton();
+    topPanel.add(paste);
+
+    ImageButton delete = new DeleteButton();
+    topPanel.add(delete);
+
+    ImageButton zoomIn = new ZoomInButton();
+    topPanel.add(zoomIn);
+
+    ImageButton zoomOut = new ZoomOutButton();
+    topPanel.add(zoomOut);
+
+    ImageButton zoomReset = new ZoomResetButton();
+    topPanel.add(zoomReset);
+
+    ImageButton fullScreen = new FullScreenButton();
+    topPanel.add(fullScreen);
   }
 
   public static void main( String[] args )
