@@ -1,6 +1,8 @@
 package src.app;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -69,6 +71,15 @@ public class Main extends JFrame
     file.add(export);
 
     JMenuItem quit = new ApesMenuItem( "menu.file.quit" );
+    // Exit program is this is clicked.
+    quit.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        System.exit( 0 );
+      }
+    });
+
     file.add(quit);
     // File END
 
