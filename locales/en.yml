@@ -41,3 +41,28 @@ menu:
     manual: Manual
     bug: Report bug
     about: About
+button:
+  open:
+    description: Open music file
+  save:
+    description: Saves this file to disk
+  undo:
+    description: Undoes last change
+  redo:
+    description: Redoes last change
+  copy:
+    description: Copies the selected region
+  cut:
+    description: Cuts the selected region
+  paste:
+    description: Pastes to selection
+  delete:
+    description: Deletes selected region
+  zoom_in:
+    description: Zooms in
+  zoom_out:
+    description: Zooms out
+  zoom_reset:
+    description: Resets the zoom to default size
+  full_screen:
+    description: Opens a full screen view
