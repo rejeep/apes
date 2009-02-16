@@ -27,7 +27,7 @@ public class TestConfig
   @Before public void setUpConfigObject()
   {
     config = Config.getInstance();
-    config.setFilePath("test/test_config");
+    config.setFilePath( "test/test_config" );
     config.parse();
   }
 
@@ -59,6 +59,6 @@ public class TestConfig
    */
   @Test public void testThatGetOptionReturnsCorrectValue()
   {
-    assertEquals( "Should give correct value for given key.", "Great day", config.getOption("fourth_option") );
+    assertEquals( "Should give correct value for given key.", "Great day", config.getOption( "fourth_option" ) );
   }
 }

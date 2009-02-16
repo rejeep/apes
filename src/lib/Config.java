@@ -96,7 +96,7 @@ public class Config
           // If line matches an option.
           if( matcher.matches() )
           {
-            options.put( matcher.group(1), matcher.group(2) );
+            options.put( matcher.group( 1 ), matcher.group( 2 ) );
           }
         }
       }
@@ -122,7 +122,7 @@ public class Config
    *
    * @param path The absolute path to the file.
    */
-  public void setFilePath(String path)
+  public void setFilePath( String path )
   {
     this.file = new File( path );
   }
