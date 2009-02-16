@@ -126,6 +126,29 @@ public class Main extends JFrame
     view.add(fullScreen);
     // View END
 
+    // Player START
+    JMenu player = new ApesMenu( "menu.head.player" );
+    menuBar.add(player);
+
+    JMenuItem play = new ApesMenuItem( "menu.player.play" );
+    player.add(play);
+
+    JMenuItem pause = new ApesMenuItem( "menu.player.pause" );
+    player.add(pause);
+
+    JMenuItem stop = new ApesMenuItem( "menu.player.stop" );
+    player.add(stop);
+
+    JMenuItem forward = new ApesMenuItem( "menu.player.forward" );
+    player.add(forward);
+
+    JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
+    player.add(backward);
+
+    JMenuItem record = new ApesMenuItem( "menu.player.record" );
+    player.add(record);
+    // Player END
+
     // Tools START
     JMenu tools = new ApesMenu( "menu.head.tools" );
     menuBar.add(tools);

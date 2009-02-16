@@ -3,6 +3,7 @@ menu:
     file: File
     edit: Edit
     view: View
+    player: Player
     zoom: Zoom
     tools: Tools
     help: Help
@@ -27,6 +28,13 @@ menu:
       out: Out
       reset: Reset
     full_screen: Full screen
+  player:
+    play: Play
+    pause: Pause
+    stop: Stop
+    forward: Forward
+    backward: Backward
+    record: Record
   tools:
     properties: Properties
   help:
