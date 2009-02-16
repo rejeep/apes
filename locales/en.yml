@@ -1,0 +1,35 @@
+menu:
+  head:
+    file: File
+    edit: Edit
+    view: View
+    zoom: Zoom
+    tools: Tools
+    help: Help
+  file:
+    open: Open
+    new_tab: New tab
+    close_tab: Close tab
+    save: Save
+    save_as: Save as
+    export: Export
+    quit: Quit
+  edit:
+    undo: Undo
+    redo: Redo
+    cut: Cut
+    copy: Copy
+    paste: Paste
+    delete: Delete
+  view:
+    zoom:
+      in: In
+      out: Out
+      reset: Reset
+    full_screen: Full screen
+  tools:
+    properties: Properties
+  help:
+    manual: Manual
+    bug: Report bug
+    about: About
