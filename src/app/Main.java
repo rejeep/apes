@@ -1,5 +1,18 @@
 package src.app;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
 import src.app.views.buttons.BackwardButton;
@@ -21,21 +34,7 @@ import src.app.views.buttons.UndoButton;
 import src.app.views.buttons.ZoomInButton;
 import src.app.views.buttons.ZoomOutButton;
 import src.app.views.buttons.ZoomResetButton;
-
 import src.lib.Locale;
-
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
 
 
 /**
