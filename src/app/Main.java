@@ -1,30 +1,42 @@
 package src.app;
 
+import src.app.views.ApesMenu;
+import src.app.views.ApesMenuItem;
+import src.app.views.buttons.BackwardButton;
+import src.app.views.buttons.CopyButton;
+import src.app.views.buttons.CutButton;
+import src.app.views.buttons.DeleteButton;
+import src.app.views.buttons.ForwardButton;
+import src.app.views.buttons.FullScreenButton;
+import src.app.views.buttons.ImageButton;
+import src.app.views.buttons.OpenButton;
+import src.app.views.buttons.PasteButton;
+import src.app.views.buttons.PauseButton;
+import src.app.views.buttons.PlayButton;
+import src.app.views.buttons.RecordButton;
+import src.app.views.buttons.RedoButton;
+import src.app.views.buttons.SaveButton;
+import src.app.views.buttons.StopButton;
+import src.app.views.buttons.UndoButton;
+import src.app.views.buttons.ZoomInButton;
+import src.app.views.buttons.ZoomOutButton;
+import src.app.views.buttons.ZoomResetButton;
+
+import src.lib.Locale;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTabbedPane;
 
-import src.app.views.ApesMenu;
-import src.app.views.ApesMenuItem;
-import src.app.views.buttons.CopyButton;
-import src.app.views.buttons.CutButton;
-import src.app.views.buttons.DeleteButton;
-import src.app.views.buttons.FullScreenButton;
-import src.app.views.buttons.ImageButton;
-import src.app.views.buttons.OpenButton;
-import src.app.views.buttons.PasteButton;
-import src.app.views.buttons.RedoButton;
-import src.app.views.buttons.SaveButton;
-import src.app.views.buttons.UndoButton;
-import src.app.views.buttons.ZoomInButton;
-import src.app.views.buttons.ZoomOutButton;
-import src.app.views.buttons.ZoomResetButton;
-import src.lib.Locale;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
