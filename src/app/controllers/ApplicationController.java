@@ -7,7 +7,7 @@ package src.app.controllers;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ApplicationController
+public class ApplicationController extends ActionController
 {
   /**
    *
