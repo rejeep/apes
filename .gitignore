@@ -7,3 +7,4 @@
 *.class
 TAGS
 prj.el
+.DS_Store
