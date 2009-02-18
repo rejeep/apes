@@ -4,4 +4,5 @@
 /test/junit-results
 .classpath
 .project
-*.class/TAGS
+*.class
+TAGS
