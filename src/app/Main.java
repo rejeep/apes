@@ -207,7 +207,7 @@ public class Main extends JFrame
 
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
     help.add( about );
-    // Help End
+    // Help END
     
     setJMenuBar( menuBar );
   }
