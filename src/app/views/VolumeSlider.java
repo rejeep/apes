@@ -2,6 +2,8 @@ package src.app.views;
 
 import javax.swing.JSlider;
 
+import src.lib.Config;
+
 /**
  * Slider that changes the volume.
  *
@@ -17,5 +19,9 @@ public class VolumeSlider extends JSlider
     // Min and max values for volume.
     setMinimum( 0 );
     setMaximum( 100 );
+
+    // Set start value.
+    Config config = Config.getInstance();
+    setValue( Integer.parseInt( config.getOption( "volume" ) ) );
   }
 }
