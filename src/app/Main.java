@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
 
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
+import src.app.views.VolumeSlider;
 import src.app.views.buttons.BackwardButton;
 import src.app.views.buttons.CopyButton;
 import src.app.views.buttons.CutButton;
@@ -299,7 +300,7 @@ public class Main extends JFrame
     ImageButton record = new RecordButton();
     bottomPanel.add( record );
 
-    JSlider volume = new JSlider();
+    JSlider volume = new VolumeSlider();;
     bottomPanel.add( volume );
     
     return bottomPanel;
