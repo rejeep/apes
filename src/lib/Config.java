@@ -69,6 +69,9 @@ public class Config
 
     // Initialize options map.
     options = new HashMap<String, String>();
+
+    // Default settings.
+    options.put( "volume", "50" );
   }
 
   /**
