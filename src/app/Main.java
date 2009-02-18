@@ -207,7 +207,6 @@ public class Main extends JFrame
     setJMenuBar( menuBar );
   }
 
-
   /**
    * Creates and adds a panel on the top of the frame. The panel
    * contains buttons such as save, zoom, undo and redo.
@@ -215,43 +214,43 @@ public class Main extends JFrame
   private void createTopPanel()
   {
     JPanel topPanel = new JPanel();
-    add(topPanel);
+    add( topPanel );
 
     ImageButton open = new OpenButton();
-    topPanel.add(open);
+    topPanel.add( open );
 
     ImageButton save = new SaveButton();
-    topPanel.add(save);
+    topPanel.add( save );
 
     ImageButton undo = new UndoButton();
-    topPanel.add(undo);
+    topPanel.add( undo );
 
     ImageButton redo = new RedoButton();
-    topPanel.add(redo);
+    topPanel.add( redo );
 
     ImageButton copy = new CopyButton();
-    topPanel.add(copy);
+    topPanel.add( copy );
 
     ImageButton cut = new CutButton();
-    topPanel.add(cut);
+    topPanel.add( cut );
 
     ImageButton paste = new PasteButton();
-    topPanel.add(paste);
+    topPanel.add( paste );
 
     ImageButton delete = new DeleteButton();
-    topPanel.add(delete);
+    topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
-    topPanel.add(zoomIn);
+    topPanel.add( zoomIn );
 
     ImageButton zoomOut = new ZoomOutButton();
-    topPanel.add(zoomOut);
+    topPanel.add( zoomOut );
 
     ImageButton zoomReset = new ZoomResetButton();
-    topPanel.add(zoomReset);
+    topPanel.add( zoomReset );
 
     ImageButton fullScreen = new FullScreenButton();
-    topPanel.add(fullScreen);
+    topPanel.add( fullScreen );
   }
 
   public static void main( String[] args )
