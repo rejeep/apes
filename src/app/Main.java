@@ -1,16 +1,13 @@
 package src.app;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-
+import src.app.helpers.Language.Language;
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
-import src.lib.Locale;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -29,10 +26,16 @@ public class Main extends JFrame
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new FlowLayout() );
 
-    // Set default locale to en.
-    Locale locale = Locale.getInstance();
-    locale.setLocale( "en" );
-    locale.load();
+    // Initiate the language with default and then load the dictionary.
+    //Language.initLanguage();
+    Language.initLanguage( "sv" );
+    try
+    {
+      Language.load();
+    } catch ( Exception e )
+    {
+      e.printStackTrace();
+    }
 
     // Create and add menu.
     createMenu();
@@ -50,25 +53,25 @@ public class Main extends JFrame
 
     // File START
     JMenu file = new ApesMenu( "menu.head.file" );
-    menuBar.add(file);
+    menuBar.add( file );
 
     JMenuItem open = new ApesMenuItem( "menu.file.open" );
-    file.add(open);
+    file.add( open );
 
     JMenuItem newTab = new ApesMenuItem( "menu.file.new_tab" );
-    file.add(newTab);
+    file.add( newTab );
 
     JMenuItem closeTab = new ApesMenuItem( "menu.file.close_tab" );
-    file.add(closeTab);
+    file.add( closeTab );
 
     JMenuItem save = new ApesMenuItem( "menu.file.save" );
-    file.add(save);
+    file.add( save );
 
     JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as" );
-    file.add(saveAs);
+    file.add( saveAs );
 
     JMenuItem export = new ApesMenuItem( "menu.file.export" );
-    file.add(export);
+    file.add( export );
 
     JMenuItem quit = new ApesMenuItem( "menu.file.quit" );
     // Exit program is this is clicked.
@@ -78,77 +81,77 @@ public class Main extends JFrame
       {
         System.exit( 0 );
       }
-    });
+    } );
 
-    file.add(quit);
+    file.add( quit );
     // File END
 
     // Edit START
     JMenu edit = new ApesMenu( "menu.head.edit" );
-    menuBar.add(edit);
+    menuBar.add( edit );
 
     JMenuItem undo = new ApesMenuItem( "menu.edit.undo" );
-    edit.add(undo);
+    edit.add( undo );
 
     JMenuItem redo = new ApesMenuItem( "menu.edit.redo" );
-    edit.add(redo);
+    edit.add( redo );
 
     JMenuItem cut = new ApesMenuItem( "menu.edit.cut" );
-    edit.add(cut);
+    edit.add( cut );
 
     JMenuItem copy = new ApesMenuItem( "menu.edit.copy" );
-    edit.add(copy);
+    edit.add( copy );
 
     JMenuItem paste = new ApesMenuItem( "menu.edit.paste" );
-    edit.add(paste);
+    edit.add( paste );
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
-    edit.add(delete);
+    edit.add( delete );
     // Edit END
 
     // View START
     JMenu view = new ApesMenu( "menu.head.view" );
-    menuBar.add(view);
+    menuBar.add( view );
 
     JMenu zoom = new ApesMenu( "menu.head.zoom" );
-    view.add(zoom);
+    view.add( zoom );
 
     JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in" );
-    zoom.add(zoomIn);
+    zoom.add( zoomIn );
 
     JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out" );
-    zoom.add(zoomOut);
+    zoom.add( zoomOut );
 
     JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
-    zoom.add(zoomReset);
+    zoom.add( zoomReset );
 
     JMenuItem fullScreen = new ApesMenuItem( "menu.view.full_screen" );
-    view.add(fullScreen);
+    view.add( fullScreen );
     // View END
 
     // Tools START
     JMenu tools = new ApesMenu( "menu.head.tools" );
-    menuBar.add(tools);
+    menuBar.add( tools );
 
     JMenuItem properties = new ApesMenuItem( "menu.tools.properties" );
-    tools.add(properties);
+    tools.add( properties );
     // Tools END
 
     // Help START
     JMenu help = new ApesMenu( "menu.head.help" );
-    menuBar.add(help);
+    menuBar.add( help );
 
     JMenuItem manual = new ApesMenuItem( "menu.help.manual" );
-    help.add(manual);
+    help.add( manual );
 
     JMenuItem bug = new ApesMenuItem( "menu.help.bug" );
-    help.add(bug);
+    help.add( bug );
 
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
-    help.add(about);
+    help.add( about );
     // Help End
 
-    setJMenuBar(menuBar);
+    setJMenuBar( menuBar );
   }
 
   public static void main( String[] args )

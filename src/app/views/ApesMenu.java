@@ -1,8 +1,8 @@
 package src.app.views;
 
-import javax.swing.JMenu;
+import src.app.helpers.Language.Language;
 
-import src.lib.Locale;
+import javax.swing.*;
 
 /**
  * This extends {@link javax.swing.JMenuItem JMenu} with locale
@@ -13,19 +13,12 @@ import src.lib.Locale;
 public class ApesMenu extends JMenu
 {
   /**
-   * Locale object.
-   */
-  private Locale locale;
-
-  /**
    * Creates a new <code>ApesMenu</code> instance.
    *
-   * @param tag The locale tag.
+   * @param tag The Language tag.
    */
   public ApesMenu( String tag )
   {
-    locale = Locale.getInstance();
-
-    setText( locale.get( tag ) );
+    setText( Language.get( tag ) );
   }
 }

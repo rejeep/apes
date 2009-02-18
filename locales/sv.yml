@@ -1,0 +1,35 @@
+menu:
+  head:
+    file: Arkiv
+    edit: Redigera
+    view: Visa
+    zoom: Zoom
+    tools: Verktyg
+    help: Hjälp
+  file:
+    open: Öppna
+    new_tab: Ny tab
+    close_tab: Stäng tab
+    save: Spara
+    save_as: Spara som...
+    export: Exportera
+    quit: Avsluta
+  edit:
+    undo: Stega bakåt
+    redo: Stega framåt
+    cut: Klipp ut
+    copy: Kopiera
+    paste: Klistra in
+    delete: Ta bort
+  view:
+    zoom:
+      in: In
+      out: Ut
+      reset: Återställ
+    full_screen: Fullskärm
+  tools:
+    properties: Inställningar
+  help:
+    manual: Manual
+    bug: Reportera bug
+    about: Om
