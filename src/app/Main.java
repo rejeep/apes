@@ -12,6 +12,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 
+import src.app.controllers.HelpController;
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
 import src.app.views.VolumeSlider;
@@ -36,7 +37,6 @@ import src.app.views.buttons.ZoomOutButton;
 import src.app.views.buttons.ZoomResetButton;
 import src.lib.Locale;
 
-
 /**
  * This is where it all starts. This creates a basic GUI with a layout
  * and on it a few components are placed.
@@ -45,11 +45,17 @@ import src.lib.Locale;
  */
 public class Main extends JFrame
 {
+  private HelpController helpController;
+  
   /**
    * Starts the program.
    */
   public Main()
   {
+    // Set some instance variables.
+    helpController = new HelpController();
+
+    // Frame options.
     setTitle( "apes - Audio Program for Editing Sound" );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
@@ -206,6 +212,8 @@ public class Main extends JFrame
     help.add( bug );
 
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
+    about.addActionListener( helpController );
+    about.setName( "about" );
     help.add( about );
     // Help END
     
