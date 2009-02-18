@@ -66,3 +66,15 @@ button:
     description: Resets the zoom to default size
   full_screen:
     description: Opens a full screen view
+  play:
+    description: Plays selected region or whole music filex
+  pause:
+    description: Pauses playing the music file
+  stop:
+    description: Stops playing the music file
+  forward:
+    description: Goes forward
+  backward:
+    description: Goes backward
+  record:
+    description: Starts a recording

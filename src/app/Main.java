@@ -1,10 +1,12 @@
 package src.app;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -52,7 +54,7 @@ public class Main extends JFrame
   {
     setTitle( "apes - Audio Program for Editing Sound" );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
-    setLayout( new FlowLayout() );
+    setLayout( new BorderLayout() );
 
     // Set default locale to en.
     Locale locale = Locale.getInstance();
@@ -63,7 +65,17 @@ public class Main extends JFrame
     createMenu();
 
     // Create and add top panel.
-    createTopPanel();
+    JPanel topPanel = createTopPanel();
+    add( topPanel, BorderLayout.NORTH );
+
+    JTabbedPane tabs = new JTabbedPane();
+    JPanel defaultPanel = new JPanel();
+    tabs.addTab( "*Default*", defaultPanel );
+    add( tabs, BorderLayout.CENTER );
+
+    // Create and bottom top panel.
+    JPanel bottomPanel = createBottomPanel();
+    add( bottomPanel, BorderLayout.SOUTH );
 
     pack();
     setVisible( true );
@@ -209,11 +221,12 @@ public class Main extends JFrame
   /**
    * Creates and adds a panel on the top of the frame. The panel
    * contains buttons such as save, zoom, undo and redo.
+   *
+   * @return The panel that all components are placed on.
    */
-  private void createTopPanel()
+  private JPanel createTopPanel()
   {
     JPanel topPanel = new JPanel();
-    add( topPanel );
 
     ImageButton open = new OpenButton();
     topPanel.add( open );
@@ -250,6 +263,46 @@ public class Main extends JFrame
 
     ImageButton fullScreen = new FullScreenButton();
     topPanel.add( fullScreen );
+
+    return topPanel;
+  }
+
+  /**
+   * Creates and adds a panel on the bottom of the frame. The panel
+   * contains a progress bar, buttons such as play, pause, stop,
+   * etc.. and a volume control.
+   *
+   * @return The panel that all components are placed on.
+   */
+  private JPanel createBottomPanel()
+  {
+    JPanel bottomPanel = new JPanel();
+
+    JProgressBar progressBar = new JProgressBar();
+    bottomPanel.add( progressBar );
+
+    ImageButton play = new PlayButton();
+    bottomPanel.add( play );
+
+    ImageButton pause = new PauseButton();
+    bottomPanel.add( pause );
+
+    ImageButton stop = new StopButton();
+    bottomPanel.add( stop );
+
+    ImageButton forward = new ForwardButton();
+    bottomPanel.add( forward );
+
+    ImageButton backward = new BackwardButton();
+    bottomPanel.add( backward );
+
+    ImageButton record = new RecordButton();
+    bottomPanel.add( record );
+
+    JSlider volume = new JSlider();
+    bottomPanel.add( volume );
+    
+    return bottomPanel;
   }
 
   public static void main( String[] args )
