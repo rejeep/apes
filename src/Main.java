@@ -69,7 +69,7 @@ public class Main extends JFrame
     createMenu();
 
     // Create and add top panel.
-    JPanel topPanel = createTopPanel();
+    JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
 
     JTabbedPane tabs = new JTabbedPane();
@@ -78,7 +78,7 @@ public class Main extends JFrame
     add( tabs, BorderLayout.CENTER );
 
     // Create and bottom top panel.
-    JPanel bottomPanel = createBottomPanel();
+    JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
 
     pack();
@@ -221,12 +221,12 @@ public class Main extends JFrame
   }
 
   /**
-   * Creates and adds a panel on the top of the frame. The panel
-   * contains buttons such as save, zoom, undo and redo.
+   * Creates a panel and adds some buttons such as save, zoom, undo
+   * and redo to it.
    *
    * @return The panel that all components are placed on.
    */
-  private JPanel createTopPanel()
+  private JPanel topPanel()
   {
     JPanel topPanel = new JPanel();
 
@@ -270,13 +270,12 @@ public class Main extends JFrame
   }
 
   /**
-   * Creates and adds a panel on the bottom of the frame. The panel
-   * contains a progress bar, buttons such as play, pause, stop,
-   * etc.. and a volume control.
+   * Creates a panel and adds some components such as a progress bar,
+   * buttons: play, pause, stop, etc.. and a volume control.
    *
    * @return The panel that all components are placed on.
    */
-  private JPanel createBottomPanel()
+  private JPanel bottomPanel()
   {
     JPanel bottomPanel = new JPanel();
 
