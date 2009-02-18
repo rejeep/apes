@@ -1,7 +1,0 @@
-Our MVC naming for this project is best described with an example of how person would be named.
-Model: Person.java
-Controller: PersonController.java
-View: PersonView.java
-Helper: PersonHelper.java
-
-Helper is not required to create.
