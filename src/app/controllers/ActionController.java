@@ -1,6 +1,8 @@
 package src.app.controllers;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.EventObject;
 
@@ -46,13 +48,20 @@ import java.util.EventObject;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ActionController
+public class ActionController implements ActionListener
 {
   /**
    * The event that was fired. Controllers can via this variable get
    * the Component who fired the event.
    */
   protected EventObject event;
+
+  public void actionPerformed( ActionEvent e )
+  {
+    this.event = e;
+
+    callActionByName();
+  }
 
   /**
    * Will call the method in the controller with the same name as the
