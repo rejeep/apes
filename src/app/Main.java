@@ -79,25 +79,25 @@ public class Main extends JFrame
 
     // File START
     JMenu file = new ApesMenu( "menu.head.file" );
-    menuBar.add(file);
+    menuBar.add( file );
 
     JMenuItem open = new ApesMenuItem( "menu.file.open" );
-    file.add(open);
+    file.add( open );
 
     JMenuItem newTab = new ApesMenuItem( "menu.file.new_tab" );
-    file.add(newTab);
+    file.add( newTab );
 
     JMenuItem closeTab = new ApesMenuItem( "menu.file.close_tab" );
-    file.add(closeTab);
+    file.add( closeTab );
 
     JMenuItem save = new ApesMenuItem( "menu.file.save" );
-    file.add(save);
+    file.add( save );
 
     JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as" );
-    file.add(saveAs);
+    file.add( saveAs );
 
     JMenuItem export = new ApesMenuItem( "menu.file.export" );
-    file.add(export);
+    file.add( export );
 
     JMenuItem quit = new ApesMenuItem( "menu.file.quit" );
     // Exit program is this is clicked.
@@ -107,100 +107,104 @@ public class Main extends JFrame
       {
         System.exit( 0 );
       }
-    });
+    } );
 
-    file.add(quit);
+    file.add( quit );
+
     // File END
 
     // Edit START
     JMenu edit = new ApesMenu( "menu.head.edit" );
-    menuBar.add(edit);
+    menuBar.add( edit );
 
     JMenuItem undo = new ApesMenuItem( "menu.edit.undo" );
-    edit.add(undo);
+    edit.add( undo );
 
     JMenuItem redo = new ApesMenuItem( "menu.edit.redo" );
-    edit.add(redo);
+    edit.add( redo );
 
     JMenuItem cut = new ApesMenuItem( "menu.edit.cut" );
-    edit.add(cut);
+    edit.add( cut );
 
     JMenuItem copy = new ApesMenuItem( "menu.edit.copy" );
-    edit.add(copy);
+    edit.add( copy );
 
     JMenuItem paste = new ApesMenuItem( "menu.edit.paste" );
-    edit.add(paste);
+    edit.add( paste );
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
-    edit.add(delete);
+    edit.add( delete );
+
     // Edit END
 
     // View START
     JMenu view = new ApesMenu( "menu.head.view" );
-    menuBar.add(view);
+    menuBar.add( view );
 
     JMenu zoom = new ApesMenu( "menu.head.zoom" );
-    view.add(zoom);
+    view.add( zoom );
 
     JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in" );
-    zoom.add(zoomIn);
+    zoom.add( zoomIn );
 
     JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out" );
-    zoom.add(zoomOut);
+    zoom.add( zoomOut );
 
     JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
-    zoom.add(zoomReset);
+    zoom.add( zoomReset );
 
     JMenuItem fullScreen = new ApesMenuItem( "menu.view.full_screen" );
-    view.add(fullScreen);
+    view.add( fullScreen );
+
     // View END
 
     // Player START
     JMenu player = new ApesMenu( "menu.head.player" );
-    menuBar.add(player);
+    menuBar.add( player );
 
     JMenuItem play = new ApesMenuItem( "menu.player.play" );
-    player.add(play);
+    player.add( play );
 
     JMenuItem pause = new ApesMenuItem( "menu.player.pause" );
-    player.add(pause);
+    player.add( pause );
 
     JMenuItem stop = new ApesMenuItem( "menu.player.stop" );
-    player.add(stop);
+    player.add( stop );
 
     JMenuItem forward = new ApesMenuItem( "menu.player.forward" );
-    player.add(forward);
+    player.add( forward );
 
     JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
-    player.add(backward);
+    player.add( backward );
 
     JMenuItem record = new ApesMenuItem( "menu.player.record" );
-    player.add(record);
+    player.add( record );
+
     // Player END
 
     // Tools START
     JMenu tools = new ApesMenu( "menu.head.tools" );
-    menuBar.add(tools);
+    menuBar.add( tools );
 
     JMenuItem properties = new ApesMenuItem( "menu.tools.properties" );
-    tools.add(properties);
+    tools.add( properties );
+
     // Tools END
 
     // Help START
     JMenu help = new ApesMenu( "menu.head.help" );
-    menuBar.add(help);
+    menuBar.add( help );
 
     JMenuItem manual = new ApesMenuItem( "menu.help.manual" );
-    help.add(manual);
+    help.add( manual );
 
     JMenuItem bug = new ApesMenuItem( "menu.help.bug" );
-    help.add(bug);
+    help.add( bug );
 
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
-    help.add(about);
+    help.add( about );
     // Help End
-
-    setJMenuBar(menuBar);
+    setJMenuBar( menuBar );
   }
 
 
