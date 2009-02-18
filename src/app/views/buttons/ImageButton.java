@@ -60,13 +60,13 @@ public abstract class ImageButton extends JButton
     setPreferredSize( new Dimension( width, height ) );
 
     // Remove border.
-    setBorderPainted(false);
+    setBorderPainted( false );
 
     // Remove filling.
-    setContentAreaFilled(false);
+    setContentAreaFilled( false );
 
     // Background color.
-    setBackground(Color.GRAY);
+    setBackground( Color.GRAY );
 
     // Icon to use for rollover.
     setRolloverIcon( getButtonHoverIcon() );
