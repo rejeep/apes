@@ -13,6 +13,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 
 import src.app.controllers.HelpController;
+import src.app.helpers.Language.Language;
 import src.app.views.ApesMenu;
 import src.app.views.ApesMenuItem;
 import src.app.views.VolumeSlider;
@@ -36,7 +37,6 @@ import src.app.views.buttons.ZoomInButton;
 import src.app.views.buttons.ZoomOutButton;
 import src.app.views.buttons.ZoomResetButton;
 import src.lib.Config;
-import src.lib.Locale;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -65,10 +65,16 @@ public class Main extends JFrame
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
 
-    // Set default locale to en.
-    Locale locale = Locale.getInstance();
-    locale.setLocale( "en" );
-    locale.load();
+    // Initiate the language with default and then load the dictionary.
+    //Language.initLanguage();
+    Language.initLanguage( "sv" );
+    try
+    {
+      Language.load();
+    } catch ( Exception e )
+    {
+      e.printStackTrace();
+    }
 
     // Create and add menu.
     createMenu();
