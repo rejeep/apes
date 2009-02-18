@@ -119,7 +119,6 @@ public class Main extends JFrame
     } );
 
     file.add( quit );
-
     // File END
 
     // Edit START
@@ -143,7 +142,6 @@ public class Main extends JFrame
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
     edit.add( delete );
-
     // Edit END
 
     // View START
@@ -164,7 +162,6 @@ public class Main extends JFrame
 
     JMenuItem fullScreen = new ApesMenuItem( "menu.view.full_screen" );
     view.add( fullScreen );
-
     // View END
 
     // Player START
@@ -188,7 +185,6 @@ public class Main extends JFrame
 
     JMenuItem record = new ApesMenuItem( "menu.player.record" );
     player.add( record );
-
     // Player END
 
     // Tools START
@@ -197,7 +193,6 @@ public class Main extends JFrame
 
     JMenuItem properties = new ApesMenuItem( "menu.tools.properties" );
     tools.add( properties );
-
     // Tools END
 
     // Help START
@@ -213,6 +208,7 @@ public class Main extends JFrame
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
     help.add( about );
     // Help End
+    
     setJMenuBar( menuBar );
   }
 
