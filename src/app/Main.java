@@ -35,6 +35,7 @@ import src.app.views.buttons.UndoButton;
 import src.app.views.buttons.ZoomInButton;
 import src.app.views.buttons.ZoomOutButton;
 import src.app.views.buttons.ZoomResetButton;
+import src.lib.Config;
 import src.lib.Locale;
 
 /**
@@ -46,12 +47,16 @@ import src.lib.Locale;
 public class Main extends JFrame
 {
   private HelpController helpController;
-  
+
   /**
    * Starts the program.
    */
   public Main()
   {
+    // Parse the configuration file and set default values.
+    Config config = Config.getInstance();
+    config.parse();
+
     // Set some instance variables.
     helpController = new HelpController();
 
@@ -216,7 +221,7 @@ public class Main extends JFrame
     about.setName( "about" );
     help.add( about );
     // Help END
-    
+
     setJMenuBar( menuBar );
   }
 
@@ -303,7 +308,7 @@ public class Main extends JFrame
 
     JSlider volume = new VolumeSlider();;
     bottomPanel.add( volume );
-    
+
     return bottomPanel;
   }
 
