@@ -16,7 +16,7 @@ public class Language
   /**
    * The default language to be loaded.
    */
-  private static final String DEFAULT_LANG = "en";
+  private static final String DEFAULT_LANGUAGE = "en";
 
   /**
    * The Language instance.
@@ -45,7 +45,7 @@ public class Language
 
   private Language()
   {
-    file = DEFAULT_LANG;
+    file = DEFAULT_LANGUAGE;
   }
 
   private Language( String language )
