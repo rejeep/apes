@@ -14,12 +14,16 @@ public class Player
    * An instance of this class.
    */
   private static Player instance = null;
+  
+  /**
+   * Different status a Player can be in.
+   */
+  public enum Status { PLAY, PAUSE, STOP };
 
   /**
-   * This variable holds the status for the player. true means that
-   * it's playing and false means it's not.
-   */
-  private boolean status;
+   * This variable holds the current status for the player.
+   */  
+  private Status status = Status.STOP;
 
   /**
    * A Player is always connected to an internal format.
@@ -53,12 +57,12 @@ public class Player
   public void play()
   {
     // If there's no playing.
-    if( status == false )
+    if( status != Status.PLAY )
     {
 
     }
 
-    setStatus( true );
+    setStatus( Status.PLAY );
   }
 
   /**
@@ -68,12 +72,12 @@ public class Player
   public void pause()
   {
     // If there's playing.
-    if( status )
+    if( status == Status.PLAY )
     {
 
     }
 
-    setStatus( false );
+    setStatus( Status.PAUSE );
   }
 
   /**
@@ -83,12 +87,12 @@ public class Player
   public void stop()
   {
     // If there's no playing.
-    if( status == false )
+    if( status == Status.PLAY )
     {
 
     }
 
-    setStatus( false );
+    setStatus( Status.STOP );
   }
 
   /**
@@ -166,7 +170,7 @@ public class Player
    *
    * @return Current status.
    */
-  public boolean getStatus()
+  public Status getStatus()
   {
     return this.status;
   }
@@ -176,7 +180,7 @@ public class Player
    *
    * @param status The new status.
    */
-  private void setStatus( boolean status )
+  private void setStatus( Status status )
   {
     this.status = status;
   }
