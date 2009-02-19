@@ -14,7 +14,7 @@ public class PlayerController extends ApplicationController
    * Player model.
    */
   private Player player;
-  
+
   /**
    * Creates a new Player controller.
    */
@@ -22,12 +22,44 @@ public class PlayerController extends ApplicationController
   {
     this.player = Player.getInstance();
   }
-  
+
   /**
    * Go backward.
    */
   public void backward()
   {
     player.backward();
+  }
+
+  /**
+   * Pause playing.
+   */
+  public void pause()
+  {
+    player.pause();
+  }
+
+  /**
+   * Play.
+   */
+  public void play()
+  {
+    player.play();
+  }
+
+  /**
+   * Stop playing.
+   */
+  public void stop()
+  {
+    player.stop();
+  }
+
+  /**
+   * Forward playing.
+   */
+  public void forward()
+  {
+    player.forward();
   }
 }
