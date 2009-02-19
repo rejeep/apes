@@ -44,7 +44,7 @@
   </target>
 
   <target name="test" depends="build-test" description="Unit test">
-    <junit errorProperty="test.failed" failureProperty="test.failed">
+    <junit errorProperty="test.failed" failureProperty="test.failed" dir=".">
       <batchtest fork="yes" todir="${junit.dir}">
         <fileset dir="${test-build.dir}">
           <include name="**/Test*.class"/>
