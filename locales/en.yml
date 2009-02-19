@@ -78,3 +78,8 @@ button:
     description: Goes backward
   record:
     description: Starts a recording
+help:
+  about:
+    title: About apes
+    name: apes - Audio Program for Editing Sound
+    authors: Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm

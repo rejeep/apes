@@ -3,6 +3,7 @@ package apes.views;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import apes.lib.Language;
 
 /**
  * This class holds all help related view stuff.
@@ -16,11 +17,10 @@ public class HelpView
    */
   public void about()
   {
-    JOptionPane.showMessageDialog( new JLabel(  ),
-                                   "apes - Audio Program for Editing Sound\n" +
-                                   "Version: x\n" +
-                                   "Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm",
-                                   "About apes", JOptionPane.INFORMATION_MESSAGE,
+    JOptionPane.showMessageDialog( new JLabel(),
+                                   Language.get( "help.about.name" ) + "\n" + Language.get( "help.about.authors" ),
+                                   Language.get( "help.about.title" ),
+                                   JOptionPane.INFORMATION_MESSAGE,
                                    new ImageIcon( "images/apes.png" ) );
   }
 }
