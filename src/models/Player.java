@@ -122,9 +122,12 @@ public class Player
    *
    * @param volume The new volume.
    */
-  public void setVolume(int newVolume)
+  public void setVolume( int volume )
   {
-    this.volume = newVolume;
+    if( volume >= MIN_VALUE && volume <= MAX_VALUE )
+    {
+      this.volume = volume;
+    }
   }
 
   /**
