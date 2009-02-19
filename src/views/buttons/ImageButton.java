@@ -20,7 +20,7 @@ import apes.interfaces.ApesObserver;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public abstract class ImageButton extends JButton
+public abstract class ImageButton extends JButton implements ApesObserver
 {
   /**
    * Path to folder where buttons images are.
