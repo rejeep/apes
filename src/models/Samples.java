@@ -12,13 +12,28 @@ public class Samples
   /**
    * Size of a sample in bits.
    */
-  private static final int BITS_PER_SAMPLE = 32;
+  public static final int BITS_PER_SAMPLE = 32;
+  
+  /**
+   * Amount of samples in this object.
+   */
   private int size;
   
   /**
    * Contains all the raw data of the samples.
    */
   private byte[] sampleData;
+  
+  /**
+   * Constructs a <code>Samples</code> object with the desired size.
+   * @param bps bits per sample.
+   * @param amount number of samples.
+   */
+  public Samples(int bps, int amount)
+  {
+    sampleData = new byte[size*bps];
+    size = amount;
+  }
   
   /**
    * Constructs a <code>Samples</code> object from the given data. 
@@ -29,13 +44,13 @@ public class Samples
     // Complain if bps is invalid
     if(bps <= 0 || bps%8 != 0 || bps > BITS_PER_SAMPLE)
     {
-      throw new Exception();
+      throw new Exception("Invalid amount of bits per sample");
     }
     
     // Count bytes instead of bits
     bps /= 8;
     size = data.length/bps;
-    sampleData = new byte[size];
+    sampleData = new byte[data.length];
     int bpsDiff = BITS_PER_SAMPLE - bps;
     
     // Transfer data to sampleData array.
@@ -57,11 +72,20 @@ public class Samples
     }
   }
   
+  /**
+   * Returns amount of samples.
+   * @return the amount of samples stored in this samples object.
+   */
   public int getSize()
   {
     return size;
   }
   
+  /**
+   * Returns the sample at given index.
+   * @param index The index of the desired sample. 
+   * @return The amplitude of the requested sample.
+   */
   public long getSample( int index )
   {
     long value = 0;
@@ -72,10 +96,16 @@ public class Samples
     return value;
   }
   
+  /**
+   * Sets amplitude of selected sample.
+   * @param index The index of the sample to affect.
+   * @param value The desired amplitude.
+   * @throws Exception Throws an exception of the amplitude has a negative value.
+   */
   public void setSample( int index, long value ) throws Exception
   {
     if( value < 0 )
-      throw new Exception();
+      throw new Exception("Amplitude must be non-negative!");
     for(int i = 0; i < BITS_PER_SAMPLE / 8; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
   }

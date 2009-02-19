@@ -31,6 +31,15 @@ public class Player
    */
   private int volume;
 
+  /**
+   * Minimum value for the player.
+   */
+  public static final int MIN_VALUE = 0;
+
+  /**
+   * Maximum value for the player.
+   */
+  public static final int MAX_VALUE = 100;
 
   /**
    * Empty and private so that you can not create an object of this
@@ -101,7 +110,7 @@ public class Player
   /**
    * Get the volume for this player.
    *
-   * @return an <code>int</code> value
+   * @return the volume.
    */
   public int getVolume()
   {
@@ -111,11 +120,14 @@ public class Player
   /**
    * Set the volume for this player.
    *
-   * @param newVolume The new Volume value.
+   * @param volume The new volume.
    */
-  public void setVolume(int newVolume)
+  public void setVolume( int volume )
   {
-    this.volume = newVolume;
+    if( volume >= MIN_VALUE && volume <= MAX_VALUE )
+    {
+      this.volume = volume;
+    }
   }
 
   /**

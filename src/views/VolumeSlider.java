@@ -3,6 +3,7 @@ package apes.views;
 import javax.swing.JSlider;
 
 import apes.lib.Config;
+import apes.models.Player;
 
 /**
  * Slider that changes the volume.
@@ -17,8 +18,8 @@ public class VolumeSlider extends JSlider
   public VolumeSlider()
   {
     // Min and max values for volume.
-    setMinimum( 0 );
-    setMaximum( 100 );
+    setMinimum( Player.MIN_VALUE );
+    setMaximum( Player.MAX_VALUE );
 
     // Set start value.
     Config config = Config.getInstance();

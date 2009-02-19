@@ -13,6 +13,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 
 import apes.controllers.HelpController;
+import apes.controllers.PlayerController;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.views.ApesMenu;
@@ -46,8 +47,16 @@ import apes.views.buttons.ZoomResetButton;
  */
 public class Main extends JFrame
 {
+  /**
+   * Help controller.
+   */
   private HelpController helpController;
-
+  
+  /**
+   * Player controller.
+   */
+  private PlayerController playerController;
+  
   /**
    * Starts the program.
    */
@@ -59,6 +68,7 @@ public class Main extends JFrame
 
     // Set some instance variables.
     helpController = new HelpController();
+    playerController = new PlayerController();
 
     // Initiate the language with default and then load the
     // dictionary.
@@ -295,18 +305,28 @@ public class Main extends JFrame
     bottomPanel.add( progressBar );
 
     ImageButton backward = new BackwardButton();
+    backward.addActionListener( playerController );
+    backward.setName( "backward" );
     bottomPanel.add( backward );
 
     ImageButton pause = new PauseButton();
+    backward.addActionListener( playerController );
+    backward.setName( "pause" );
     bottomPanel.add( pause );
 
     ImageButton play = new PlayButton();
+    backward.addActionListener( playerController );
+    backward.setName( "play" );
     bottomPanel.add( play );
 
     ImageButton stop = new StopButton();
+    backward.addActionListener( playerController );
+    backward.setName( "stop" );
     bottomPanel.add( stop );
 
     ImageButton forward = new ForwardButton();
+    backward.addActionListener( playerController );
+    backward.setName( "forward" );
     bottomPanel.add( forward );
 
     ImageButton record = new RecordButton();

@@ -26,7 +26,16 @@ public class Channel
    */
   public Channel( Samples samples )
   {
-    // Go through all samples, divide into chunks of SAMPLES_SIZE.
+    // Divide samples into chunks of SAMPLES_SIZE.
+    for(int i = 0; i < samples.getSize()/SAMPLES_SIZE; i++)
+    {
+      Samples newSamp = new Samples(Samples.BITS_PER_SAMPLE, SAMPLES_SIZE);
+      for(int j = 0; j < SAMPLES_SIZE; j++)
+      {
+        newSamp.setSample(j, samples.getSample(i * SAMPLES_SIZE + j));
+      }
+      samplesList.add(newSamp);
+    }
   }
 
   /**
@@ -35,13 +44,14 @@ public class Channel
    * @param start Index of the first sample to return.
    * @param stop  Index of the last sample to return.
    * @return A Samples object with all samples from sample start until sample stop.
+   * @exception Throws an exception if the interval specified is invalid.
    */
-  public Samples getSamples( int start, int stop )
+  public Samples getSamples( int start, int stop ) throws Exception
   {
-    // Create new Samples object s
-    // For all Samples objects to include entirely
-    // Add samples to s
-    // Add the remaining samples to s
+    if( start < 0 || stop < 0 || start > stop || stop >= SAMPLES_SIZE * samplesList.size() )
+      throw new Exception("Invalid interval");
+    int first = start / SAMPLES_SIZE;
+    int last = stop / SAMPLES_SIZE;
     return null;
   }
 
@@ -62,10 +72,90 @@ public class Channel
    * @param start   Index of the first sample to replace.
    * @param stop    Index of the last sample to replace.
    * @param samples An object containing all sample data to replace selection with.
+   * @exception Throws an exception of the interval specified is invalid. 
    */
-  public void setSamples( int start, int stop, Samples samples )
+  public void setSamples( int start, int stop, Samples samples ) throws Exception
+  { 
+    if( start < 0 || stop < 0 || start > stop || stop >= SAMPLES_SIZE * samplesList.size() )
+      throw new Exception( "Invalid interval" );
+    
+    // First and last Samples objects to edit.
+    int first = start / SAMPLES_SIZE;
+    int last = stop / SAMPLES_SIZE;
+    
+    int curSamp = 0;
+    // Only one Samples object to edit:
+    if(first == last)
+    {
+      setSamplesObject(first, start % SAMPLES_SIZE, SAMPLES_SIZE, curSamp, samples);
+      return;
+    }
+    
+    // Edit first Samples object
+    setSamplesObject(first, start % SAMPLES_SIZE, SAMPLES_SIZE, curSamp, samples);
+    curSamp += start % SAMPLES_SIZE;
+    
+    // Edit all in-between first and last Samples objects.
+    if(first+1 < last)
+    {
+      setSamplesObjects( first + 1, last - 1, curSamp, samples);
+      curSamp += SAMPLES_SIZE;
+    }
+      
+     // Edit last Samples object.
+     setSamplesObject(last, 0, stop % SAMPLES_SIZE, curSamp, samples);
+      
+  }
+  
+  /**
+   * Replaces a range of samples within the selected Samples object.
+   * @param sample Index of the Samples object to edit.
+   * @param start Index of the first sample to set.
+   * @param stop Index of the last sample to set.
+   * @param samples The data to use.
+   * @exception An exception is thrown if the interval is invalid, sample index is invalid or 
+   *            samples contain insufficient amount of data.
+   */
+  private void setSamplesObject( int sample, int start, int stop, int firstSamp, Samples samples ) throws Exception
   {
-
+    if(stop < start)
+      throw new Exception("Invalid interval");
+    if(sample < 0 || sample >= samplesList.size())
+      throw new Exception("Invalid sample index");
+    if(stop - start > samples.size())
+      throw new Exception("Insufficient sample data");
+    
+    int curSample = firstSamp;
+    Samples s = samplesList.get( sample );
+    for(int i = start; i <= stop && i < SAMPLES_SIZE; i++)
+      s.setSample( i, samples.getSample( curSample++ ) );
+  }
+  
+  /**
+   * Replaces all samples of Samples objects in the specified range with the specified data.
+   * @param first The first samples object to set.
+   * @param last The last samples object to set.
+   * @param firstSamp Where to start fetching samples from.
+   * @param samples Samples object containing data to write.
+   * @throws An exception is thrown if the interval is erroneous or 
+   *          there are too few samples in the <code>samples</code> after <code>firstSamp</code>
+   */
+  private void setSamplesObjects( int first, int last, int firstSamp, Samples samples ) throws Exception
+  {
+    // Error checking.
+    if( last < first || last < 0 || first < 0 )
+      throw new Exception("Bad interval");
+    if( firstSamp < 0 || samples.getSize() - firstSamp < (last-first) * SAMPLES_SIZE )
+      throw new Exception("bad firstSamp index or samples object size");
+      
+    // Set data
+    int curSamp = firstSamp;
+    for(int i = first; i <= last; i++)
+    {
+      Samples s = samplesList.get(i);
+      for(int j = 0; j < SAMPLES_SIZE; j++)
+      s.setSample(j, samples.getSample(curSamp++));
+    }
   }
 
 }
