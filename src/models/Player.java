@@ -110,7 +110,7 @@ public class Player
   /**
    * Get the volume for this player.
    *
-   * @return an <code>int</code> value
+   * @return the volume.
    */
   public int getVolume()
   {
@@ -120,7 +120,7 @@ public class Player
   /**
    * Set the volume for this player.
    *
-   * @param newVolume The new Volume value.
+   * @param volume The new volume.
    */
   public void setVolume(int newVolume)
   {
