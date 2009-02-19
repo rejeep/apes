@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -43,36 +44,47 @@ public class ApeLang
     String line;
 
     //TODO: Speed up
-    while ( (line = bufferedReader.readLine()) != null )
+    while( (line = bufferedReader.readLine() ) != null )
     {
       depth = 0;
       for(int i = 0; line.charAt(i) == ' '; ++i)
         if((i & 1) == 1)
           depth++;
 
-      if ( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' )
+      if( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' )
       {
+        // Pattern that matches a tag with following text: "key: Some text"
+        Pattern withTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s+(.+)$" );
+        Matcher withTextMatcher = withTextPattern.matcher( line );
+
+        // Pattern that matches a tag without any following text: "key:"
+        Pattern withoutTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s*$" );
+        Matcher withoutTextMatcher = withoutTextPattern.matcher( line );
 
         String[] tokens = group.split( "\\." );
         group = "";
-        for ( int i = 0; i < depth; ++i )
+
+        for( int i = 0; i < depth; ++i )
+        {
           group = group + "." + tokens[i + 1];
+        }
 
-
-        if ( Pattern.matches( ".+:\\s*", line ) )
+        if( withoutTextMatcher.matches() )
         {
-
-          String item = line.split( ":" )[0].trim();
-          group = group + "." + item;
+          String key = withoutTextMatcher.group( 1 );
+          group = group + "." + key;
           ++depth;
-        } else if ( Pattern.matches( ".+:\\s.+", line ) )
+        }
+        else if( withTextMatcher.matches() )
         {
-          String[] items = line.split( ":" );
-          items[0] = items[0].trim();
-          items[1] = items[1].trim();
-          group = group + "." + items[0];
-          dictionary.put( group.substring( 1, group.length() ), items[1] );
-        } else
+          String key = withTextMatcher.group( 1 );
+          String text = withTextMatcher.group( 2 );
+
+          group += "." + key;
+
+          dictionary.put( group.substring( 1, group.length() ), text );
+        }
+        else
         {
           throw new Exception( "Syntax error: Line " + nLine + ", bad word match." );
         }
