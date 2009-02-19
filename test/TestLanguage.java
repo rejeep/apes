@@ -4,9 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import apes.lib.Language;
-import static junit.framework.Assert.assertTrue;
 
 
+/**
+ * Test class for Language.
+ * @author Simon Holm
+ */
 public class TestLanguage
 {
 

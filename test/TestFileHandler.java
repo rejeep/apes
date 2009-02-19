@@ -7,6 +7,10 @@ import apes.lib.FileHandler;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+/**
+ * Test class for FileHandler
+ * @author Simon Holm
+ */
 public class TestFileHandler
 {
   /**

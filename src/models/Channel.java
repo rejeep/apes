@@ -32,7 +32,7 @@ public class Channel
       Samples newSamp = new Samples(Samples.BITS_PER_SAMPLE, SAMPLES_SIZE);
       for(int j = 0; j < SAMPLES_SIZE; j++)
       {
-        newSamp.setSample(j, samples.getSample(i * SAMPLES_SIZE + j));
+
       }
       samplesList.add(newSamp);
     }
@@ -44,7 +44,7 @@ public class Channel
    * @param start Index of the first sample to return.
    * @param stop  Index of the last sample to return.
    * @return A Samples object with all samples from sample start until sample stop.
-   * @exception Throws an exception if the interval specified is invalid.
+
    */
   public Samples getSamples( int start, int stop ) throws Exception
   {
@@ -72,7 +72,7 @@ public class Channel
    * @param start   Index of the first sample to replace.
    * @param stop    Index of the last sample to replace.
    * @param samples An object containing all sample data to replace selection with.
-   * @exception Throws an exception of the interval specified is invalid. 
+
    */
   public void setSamples( int start, int stop, Samples samples ) throws Exception
   { 
@@ -113,22 +113,11 @@ public class Channel
    * @param start Index of the first sample to set.
    * @param stop Index of the last sample to set.
    * @param samples The data to use.
-   * @exception An exception is thrown if the interval is invalid, sample index is invalid or 
+
    *            samples contain insufficient amount of data.
    */
   private void setSamplesObject( int sample, int start, int stop, int firstSamp, Samples samples ) throws Exception
   {
-    if(stop < start)
-      throw new Exception("Invalid interval");
-    if(sample < 0 || sample >= samplesList.size())
-      throw new Exception("Invalid sample index");
-    if(stop - start > samples.size())
-      throw new Exception("Insufficient sample data");
-    
-    int curSample = firstSamp;
-    Samples s = samplesList.get( sample );
-    for(int i = start; i <= stop && i < SAMPLES_SIZE; i++)
-      s.setSample( i, samples.getSample( curSample++ ) );
   }
   
   /**
@@ -137,7 +126,7 @@ public class Channel
    * @param last The last samples object to set.
    * @param firstSamp Where to start fetching samples from.
    * @param samples Samples object containing data to write.
-   * @throws An exception is thrown if the interval is erroneous or 
+    
    *          there are too few samples in the <code>samples</code> after <code>firstSamp</code>
    */
   private void setSamplesObjects( int first, int last, int firstSamp, Samples samples ) throws Exception
