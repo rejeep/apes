@@ -31,6 +31,15 @@ public class Player
    */
   private int volume;
 
+  /**
+   * Minimum value for the player.
+   */
+  public static final int MIN_VALUE = 0;
+
+  /**
+   * Maximum value for the player.
+   */
+  public static final int MAX_VALUE = 100;
 
   /**
    * Empty and private so that you can not create an object of this
