@@ -160,7 +160,17 @@ public class Player
 
     return false;
   }
-
+  
+  /**
+   * Returns current status.
+   *
+   * @return Current status.
+   */
+  public boolean getStatus()
+  {
+    return this.status;
+  }
+  
   /**
    * Sets the status to <code>status</code>
    *
