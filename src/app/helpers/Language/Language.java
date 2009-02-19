@@ -1,14 +1,16 @@
 package src.app.helpers.Language;
 
-import java.util.Observable;
-import java.util.Observer;
+import src.app.helpers.ApesObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Singleton class for setting the language of the application
  *
  * @author Simon Holm
  */
-public class Language extends Observable
+public class Language
 {
   private static Language instance = null;
 
@@ -16,6 +18,8 @@ public class Language extends Observable
 
   private static String path = "locales";
   private static String file = "en";
+
+  private static List<ApesObserver> observers = new ArrayList<ApesObserver>();  
 
   private Language()
   {
@@ -47,22 +51,11 @@ public class Language extends Observable
   }
 
   /**
-   * Gets the singleton instance.
-   * @return Returns an instance of Language.
-   */
-  /*
-  public static Language getInstance()
-  {
-    return instance;
-  }
-     */
-
-  /**
    * Sets the language
    *
    * @param language The language to change to.
    */
-  public void setLanguage( String language )
+  public static void setLanguage( String language )
   {
     file = language;
     //TODO: find out if the language exists otherwise throw exception
@@ -81,22 +74,38 @@ public class Language extends Observable
 
   /**
    * Loads the dictionary into the memory from the file specivied.
+   * This will also notify all the observers looking at Language.
    *
    * @throws Exception Throws an exception if the parsing goes wrong.
    */
   public static void load() throws Exception
   {
     dictionary = new ApeLang( path, file + ".yml" );
-    instance.notifyObservers();
+    notifyAllObservers();
   }
 
   /**
-   * Adds an observer to the observable instance of Language.
+   * Adds an observer to the Language.
    *
-   * @param observer The observable item that should be added to the observable.
+   * @param observer The observable item that should be added to watch the language.
    */
-  public static void follow( Observer observer )
+  public static void addObserver( ApesObserver observer )
   {
-    instance.addObserver( observer );
+    observers.add( observer );
+  }
+
+  /**
+   * Removes the specified observer form the language.
+   * @param observer The observer to be removed.
+   */
+  public static void removeObserver( ApesObserver observer )
+  {
+    observers.remove(observer);
+  }
+
+  private static void notifyAllObservers()
+  {
+    for(ApesObserver o: observers)
+      o.update();
   }
 }

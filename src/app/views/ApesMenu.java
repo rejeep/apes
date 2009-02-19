@@ -1,6 +1,7 @@
 package src.app.views;
 
 import src.app.helpers.Language.Language;
+import src.app.helpers.ApesObserver;
 
 import javax.swing.*;
 
@@ -10,8 +11,10 @@ import javax.swing.*;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ApesMenu extends JMenu
+public class ApesMenu extends JMenu implements ApesObserver 
 {
+  private String tag;
+  
   /**
    * Creates a new <code>ApesMenu</code> instance.
    *
@@ -19,6 +22,17 @@ public class ApesMenu extends JMenu
    */
   public ApesMenu( String tag )
   {
+    this.tag = tag;
     setText( Language.get( tag ) );
+    Language.addObserver(this);
+  }
+
+  /**
+   * Update method used to update the text on the item.
+   */
+  public void update()
+  {
+    setText( Language.get( tag ) );
+    this.updateUI();
   }
 }
