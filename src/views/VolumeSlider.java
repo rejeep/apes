@@ -2,7 +2,7 @@ package apes.views;
 
 import javax.swing.JSlider;
 
-import src.lib.Config;
+import apes.lib.Config;
 
 /**
  * Slider that changes the volume.

@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.junit.*;
 import org.junit.Before;
-import src.lib.Config;
+import apes.lib.Config;
 
 import static org.junit.Assert.*;
 

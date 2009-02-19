@@ -3,8 +3,8 @@ package apes.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import apes.interfaces.ApesObserver;
 import apes.lib.ApeLang;
-import apes.lib.Interfaces;
 
 /**
  * Singleton class for setting the language of the application

@@ -1,11 +1,12 @@
-package src.app.views.buttons;
+package apes.views.buttons;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import apes.lib.Language;
+import apes.interfaces.ApesObserver;
 
 /**
  * <p>Creates a button with an icon on it. The button is stripped down so
