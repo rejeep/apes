@@ -5,7 +5,8 @@ import java.awt.Dimension;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import src.lib.Locale;
+import src.app.helpers.Language.Language;
+import src.app.helpers.ApesObserver;
 
 /**
  * <p>Creates a button with an icon on it. The button is stripped down so
@@ -19,7 +20,7 @@ import src.lib.Locale;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public abstract class ImageButton extends JButton
+public abstract class ImageButton extends JButton implements ApesObserver
 {
   /**
    * Path to folder where buttons images are.
@@ -42,9 +43,9 @@ public abstract class ImageButton extends JButton
   public ImageButton()
   {
     // Locale object.
-    Locale locale = Locale.getInstance();
-
-    setToolTipText( locale.get( getDescription() ) );
+    
+    setToolTipText( Language.get( getDescription() ) );
+    Language.addObserver( this );
 
     // Set default button path.
     setButtonPath( "images/buttons" );
@@ -164,6 +165,13 @@ public abstract class ImageButton extends JButton
   private void setButtonPath( String buttonPath )
   {
     this.buttonPath = buttonPath;
+  }
+
+
+  public void update()
+  {
+    setToolTipText( Language.get( getDescription() ) );
+    this.updateUI();
   }
 
   /**

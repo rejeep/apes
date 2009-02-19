@@ -45,7 +45,16 @@ public class ApeLang
     //TODO: Speed up
     while ( (line = bufferedReader.readLine()) != null )
     {
-      if ( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' || line.charAt( (--depth) * INDENTATION - 1 ) == ' ' )
+      System.out.println(depth);
+      System.out.println(line);
+
+
+      depth = 0;
+      for(int i = 0; line.charAt(i) == ' '; ++i)
+        if((i & 1) == 1)
+          depth++;
+
+      if ( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' )
       {
 
         String[] tokens = group.split( "\\." );
@@ -71,7 +80,8 @@ public class ApeLang
         {
           throw new Exception( "Syntax error: Line " + nLine + ", bad word match." );
         }
-      } else
+      }
+      else
       {
         throw new Exception( "Syntax error: Line " + nLine + ", bad whitespace match." );
       }
