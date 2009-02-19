@@ -79,7 +79,7 @@ public class InternalFormat
    */
   Samples getSamples( int channel, int start, int stop )
   {
-    return channels.get( channel ).getSamples( start * 1000 * Channel.SAMPLES_SIZE, stop * 1000 * Channel.SAMPLES_SIZE );
+    return null;
   }
 
   /**
@@ -102,7 +102,7 @@ public class InternalFormat
    */
   public void setSamples( int channel, int start, int stop, Samples samples )
   {
-    channels.get( channel ).setSamples( start * 1000 * Channel.SAMPLES_SIZE, stop * 1000 * Channel.SAMPLES_SIZE, samples );
+    
   }
 
   /**

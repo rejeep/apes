@@ -14,6 +14,11 @@ import apes.lib.ApeLang;
 public class Language
 {
   /**
+   * The default language to be loaded.
+   */
+  private static final String DEFAULT_LANGUAGE = "en";
+
+  /**
    * The Language instance.
    */
   private static Language instance = null;
@@ -31,7 +36,7 @@ public class Language
   /**
    * The name of the language file without the extenison.
    */
-  private static String file = "en";
+  private static String file;
 
   /**
    * The observers looking at the Language module.
@@ -40,6 +45,7 @@ public class Language
 
   private Language()
   {
+    file = DEFAULT_LANGUAGE;
   }
 
   private Language( String language )
@@ -52,8 +58,7 @@ public class Language
    */
   public static void initLanguage()
   {
-    if ( instance == null )
-      instance = new Language();
+    instance = new Language();
   }
 
   /**
@@ -63,8 +68,7 @@ public class Language
    */
   public static void initLanguage( String language )
   {
-    if ( instance == null )
-      instance = new Language( language );
+    instance = new Language( language );
   }
 
   /**
