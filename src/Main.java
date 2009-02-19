@@ -13,6 +13,8 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 
 import apes.controllers.HelpController;
+import apes.lib.Config;
+import apes.lib.Language;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.views.VolumeSlider;
@@ -35,8 +37,6 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import apes.lib.Language;
-import apes.lib.Config;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -60,21 +60,22 @@ public class Main extends JFrame
     // Set some instance variables.
     helpController = new HelpController();
 
-    // Frame options.
-    setTitle( "apes - Audio Program for Editing Sound" );
-    setDefaultCloseOperation( EXIT_ON_CLOSE );
-    setLayout( new BorderLayout() );
-
     // Initiate the language with default and then load the
     // dictionary.
     Language.initLanguage();
     try
     {
       Language.load();
-    } catch ( Exception e )
+    }
+    catch ( Exception e )
     {
       e.printStackTrace();
     }
+
+    // Frame options.
+    setTitle( Language.get( "help.about.name" ) );
+    setDefaultCloseOperation( EXIT_ON_CLOSE );
+    setLayout( new BorderLayout() );
 
     // Create and add menu.
     createMenu();
@@ -298,7 +299,7 @@ public class Main extends JFrame
 
     ImageButton pause = new PauseButton();
     bottomPanel.add( pause );
-    
+
     ImageButton play = new PlayButton();
     bottomPanel.add( play );
 
