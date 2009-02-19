@@ -42,8 +42,6 @@ public abstract class ImageButton extends JButton implements ApesObserver
    */
   public ImageButton()
   {
-    // Locale object.
-
     setToolTipText( Language.get( getDescription() ) );
     Language.addObserver( this );
 
@@ -184,10 +182,9 @@ public abstract class ImageButton extends JButton implements ApesObserver
   protected abstract String getImage();
 
   /**
-   * Returns the locale tag that gives a description of what this
-   * button does.
+   * Returns the description for that tells what this button does.
    *
-   * @return Locale tag for this button.
+   * @return Description for tag for this button.
    */
   protected abstract String getDescription();
 }
