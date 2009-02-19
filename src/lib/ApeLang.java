@@ -15,7 +15,13 @@ import java.util.regex.Pattern;
  */
 public class ApeLang
 {
+  /**
+   * Contains the keys with the corresponding words.
+   */
   private Map<String, String> dictionary;
+  /**
+   * Number of blankspaces before a new group.
+   */
   private static final int INDENTATION = 2;
 
   /**
@@ -37,7 +43,7 @@ public class ApeLang
     inputStreamReader = new InputStreamReader( new FileInputStream( path + "/" + file ) );
     BufferedReader bufferedReader = new BufferedReader( inputStreamReader );
 
-    int depth = 0;
+    int depth;
     int nLine = 0;
 
     String group = "";

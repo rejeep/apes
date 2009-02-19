@@ -13,13 +13,29 @@ import apes.lib.ApeLang;
  */
 public class Language
 {
+  /**
+   * The Language instance.
+   */
   private static Language instance = null;
 
+  /**
+   * The dictionary contianing all the words.
+   */
   private static ApeLang dictionary;
 
+  /**
+   * The path to the folder with the language files.
+   */
   private static String path = "locales";
+
+  /**
+   * The name of the language file without the extenison.
+   */
   private static String file = "en";
 
+  /**
+   * The observers looking at the Language module.
+   */
   private static List<ApesObserver> observers = new ArrayList<ApesObserver>();
 
   private Language()
