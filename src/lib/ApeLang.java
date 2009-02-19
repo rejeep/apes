@@ -45,10 +45,6 @@ public class ApeLang
     //TODO: Speed up
     while ( (line = bufferedReader.readLine()) != null )
     {
-      System.out.println(depth);
-      System.out.println(line);
-
-
       depth = 0;
       for(int i = 0; line.charAt(i) == ' '; ++i)
         if((i & 1) == 1)
