@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This class creates an Emacs TAGS file for this project and puts it
+# in the project root.
+
+# Parse options.
+getopts "h" option
+case $option in
+    h) echo "USAGE: tags [project-root-name]"; exit 0 ;;
+esac
+
+# Name of base folder for this project.
+folder=${1:-apes}
+
+# Name of source folder.
+src=src
+
+# If command is not runned from root. Go to it.
+while [[ $(basename $PWD) != $folder && $PWD != "/" ]]; do
+    builtin cd ..
+done
+
+# Create TAGS file.
+jtags $src
+
+# Move tags file to root.
+mv -f $src/TAGS .
