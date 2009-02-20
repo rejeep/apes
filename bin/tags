@@ -16,7 +16,13 @@ folder=${1:-apes}
 src=src
 
 # If command is not runned from root. Go to it.
-while [[ $(basename $PWD) != $folder && $PWD != "/" ]]; do
+while [[ $(basename $PWD) != $folder ]]; do
+    if [[ $PWD != "/" ]]; then
+        echo "Could not find project ${folder}"
+
+        exit 1
+    fi
+
     builtin cd ..
 done
 
