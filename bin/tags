@@ -21,7 +21,7 @@ while [[ $(basename $PWD) != $folder && $PWD != "/" ]]; do
 done
 
 # Create TAGS file.
-jtags $src
+( cd $src && jtags $PWD )
 
 # Move tags file to root.
 mv -f $src/TAGS .
