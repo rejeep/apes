@@ -137,7 +137,14 @@ public class Channel
     {
       Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, SAMPLES_SIZE );
       for( int j = 0; j < SAMPLES_SIZE; j++ )
-        sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
+        //TODO: Had to add the try/catch, handle this in a better way maybe??
+        try
+        {
+          sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
+        } catch ( Exception e )
+        {
+          e.printStackTrace();
+        }
       split.add( sampObj );
     }
     
@@ -145,7 +152,14 @@ public class Channel
     Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, remainder );
     for( int i = 0; i < remainder; i++ )
     {
-      sampObj.setSample( i, samples.getSample( fullChunks * SAMPLES_SIZE + i ) );
+      //TODO: Had to add the try/catch, handle this in a better way maybe??
+      try
+      {
+        sampObj.setSample( i, samples.getSample( fullChunks * SAMPLES_SIZE + i ) );
+      } catch ( Exception e )
+      {
+        e.printStackTrace();
+      }
     }
     split.add(sampObj);
     
