@@ -31,7 +31,7 @@ public class Samples
    */
   public Samples(int bps, int amount)
   {
-    sampleData = new byte[size*bps];
+    sampleData = new byte[size*bps*8];
     size = amount;
   }
   
@@ -48,26 +48,26 @@ public class Samples
     }
     
     // Count bytes instead of bits
-    bps /= 8;
-    size = data.length/bps;
+    int Bps = bps / 8;
+    size = data.length/Bps;
     sampleData = new byte[data.length];
     int bpsDiff = BITS_PER_SAMPLE - bps;
     
     // Transfer data to sampleData array.
-    for(int i = 0; i < data.length / bps; i++)
+    for(int i = 0; i < size; i++)
     {
       int j;
       
       // Pad as needed.
       for(j = 0; j < bpsDiff; i++)
       {
-        sampleData[i * bps + j] = 0;
+        sampleData[i * Bps + j] = 0;
       }
       
       // Handle supplied bytes.
-      for(; j < BITS_PER_SAMPLE/8; j++)
+      for(; j < BITS_PER_SAMPLE / 8; j++)
       {
-        sampleData[i * bps + j] = data[i * bps + j];
+        sampleData[i * Bps + j] = data[i * Bps + j];
       }
     }
   }
