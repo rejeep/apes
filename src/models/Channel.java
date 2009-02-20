@@ -1,6 +1,7 @@
 package apes.models;
 
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  * Describes a single channel of audio information.
@@ -27,19 +28,12 @@ public class Channel
   public Channel( Samples samples )
   {
     // Divide samples into chunks of SAMPLES_SIZE.
-    for(int i = 0; i < samples.getSize()/SAMPLES_SIZE; i++)
-    {
-      Samples newSamp = new Samples(Samples.BITS_PER_SAMPLE, SAMPLES_SIZE);
-      for(int j = 0; j < SAMPLES_SIZE; j++)
-      {
-
-      }
-      samplesList.add(newSamp);
-    }
+    samplesList = splitSamples( samples );
   }
 
   /**
-   * Returns a Samples object containing all samples in the specified interval, inclusively.
+   * Returns a Samples object containing all samples in the specified interval, inclusively.<br>
+   * If the <code>stop</code> index is beyond the length of the channel, all samples from <code>start</code> to the last sample of the channel are returned. 
    *
    * @param start Index of the first sample to return.
    * @param stop  Index of the last sample to return.
@@ -48,11 +42,54 @@ public class Channel
    */
   public Samples getSamples( int start, int stop ) throws Exception
   {
-    if( start < 0 || stop < 0 || start > stop || stop >= SAMPLES_SIZE * samplesList.size() )
+    if( start < 0 || stop < 0 || start > stop )
       throw new Exception("Invalid interval");
-    int first = start / SAMPLES_SIZE;
-    int last = stop / SAMPLES_SIZE;
-    return null;
+    
+    // Create object for returning.
+    Samples retObj = new Samples( Samples.BITS_PER_SAMPLE, stop - start + 1 );
+    
+    // What samples object are we looking at?
+    int samplesCounter;
+    
+    // What absolute sample index are we at?
+    int curSample;
+    
+    // Find start
+    for( samplesCounter = 0, curSample = 0; samplesCounter < samplesList.size(); samplesCounter++ )
+    {
+      Samples sampObj = samplesList.get(samplesCounter);
+      int nextSample = curSample + sampObj.getSize();
+      
+      // start is within this Samples object
+      if( nextSample > start )
+      {
+        // Find index of start
+        int startIndex;
+        for(startIndex = 0; curSample + startIndex < start; startIndex++)
+          ;
+        
+        // Copy samples
+        for( int i = startIndex; i < sampObj.getSize() && nextSample <= stop; i++, nextSample++ )
+          retObj.setSample( i - startIndex , sampObj.getSample(i) );
+        break;
+      }
+      
+      // fill in remaining samples
+      for( samplesCounter++; samplesCounter < samplesList.size(); samplesCounter++ )
+      {
+        Samples SampObj = samplesList.get( samplesCounter ); 
+        for( int i = 0; i < sampObj.getSize(); i++, nextSample++ )
+        {
+          retObj.setSample( nextSample - start, sampObj.getSample(i) );
+          if( nextSample == stop )
+            return retObj;
+        }
+      }
+      curSample = nextSample;
+    }
+    
+    return retObj;
+    
   }
 
   /**
@@ -76,75 +113,44 @@ public class Channel
    */
   public void setSamples( int start, int stop, Samples samples ) throws Exception
   { 
-    if( start < 0 || stop < 0 || start > stop || stop >= SAMPLES_SIZE * samplesList.size() )
+    if( start < 0 || stop < 0 || start > stop )
       throw new Exception( "Invalid interval" );
     
-    // First and last Samples objects to edit.
-    int first = start / SAMPLES_SIZE;
-    int last = stop / SAMPLES_SIZE;
-    
-    int curSamp = 0;
-    // Only one Samples object to edit:
-    if(first == last)
-    {
-      setSamplesObject(first, start % SAMPLES_SIZE, SAMPLES_SIZE, curSamp, samples);
-      return;
-    }
-    
-    // Edit first Samples object
-    setSamplesObject(first, start % SAMPLES_SIZE, SAMPLES_SIZE, curSamp, samples);
-    curSamp += start % SAMPLES_SIZE;
-    
-    // Edit all in-between first and last Samples objects.
-    if(first+1 < last)
-    {
-      setSamplesObjects( first + 1, last - 1, curSamp, samples);
-      curSamp += SAMPLES_SIZE;
-    }
-      
-     // Edit last Samples object.
-     setSamplesObject(last, 0, stop % SAMPLES_SIZE, curSamp, samples);
-      
   }
   
   /**
-   * Replaces a range of samples within the selected Samples object.
-   * @param sample Index of the Samples object to edit.
-   * @param start Index of the first sample to set.
-   * @param stop Index of the last sample to set.
-   * @param samples The data to use.
-
-   *            samples contain insufficient amount of data.
+   * Splits a <code>Samples</code> object into chunks of size <code>SAMPLES_SIZE</code>.
+   * @param samples The samples object to split.
+   * @return A samples object containing all samples in <code>samples</code> divided into Samples objects of size <code>SAMPLES_SIZE</code>
    */
-  private void setSamplesObject( int sample, int start, int stop, int firstSamp, Samples samples ) throws Exception
+  private List<Samples> splitSamples( Samples samples )
   {
-  }
-  
-  /**
-   * Replaces all samples of Samples objects in the specified range with the specified data.
-   * @param first The first samples object to set.
-   * @param last The last samples object to set.
-   * @param firstSamp Where to start fetching samples from.
-   * @param samples Samples object containing data to write.
+    // Amount of full chunks
+    int fullChunks = samples.getSize() / SAMPLES_SIZE;
+    // Remaining samples
+    int remainder = samples.getSize() % SAMPLES_SIZE;
     
-   *          there are too few samples in the <code>samples</code> after <code>firstSamp</code>
-   */
-  private void setSamplesObjects( int first, int last, int firstSamp, Samples samples ) throws Exception
-  {
-    // Error checking.
-    if( last < first || last < 0 || first < 0 )
-      throw new Exception("Bad interval");
-    if( firstSamp < 0 || samples.getSize() - firstSamp < (last-first) * SAMPLES_SIZE )
-      throw new Exception("bad firstSamp index or samples object size");
-      
-    // Set data
-    int curSamp = firstSamp;
-    for(int i = first; i <= last; i++)
+    List<Samples> split = new LinkedList<Samples>();
+    
+    // Make full chunks
+    for( int i = 0; i < fullChunks; i++ )
     {
-      Samples s = samplesList.get(i);
-      for(int j = 0; j < SAMPLES_SIZE; j++)
-      s.setSample(j, samples.getSample(curSamp++));
+      Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, SAMPLES_SIZE );
+      for( int j = 0; j < SAMPLES_SIZE; j++ )
+        sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
+      split.add( sampObj );
     }
+    
+    // Add remainder in smaller chunk
+    Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, remainder );
+    for( int i = 0; i < remainder; i++ )
+    {
+      sampObj.setSample( i, samples.getSample( fullChunks * SAMPLES_SIZE + i ) );
+    }
+    split.add(sampObj);
+    
+    // Return chunks.
+    return split;
   }
 
 }
