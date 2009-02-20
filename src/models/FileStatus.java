@@ -1,5 +1,7 @@
 package apes.models;
 
+//TODO: Add functionality to choose between save and save as...
+
 /**
  * Contians information about the file.
  * @author Simon Holm 
