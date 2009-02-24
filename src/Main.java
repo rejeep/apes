@@ -1,6 +1,7 @@
 package apes;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -14,10 +15,15 @@ import javax.swing.JTabbedPane;
 
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
+import apes.interfaces.AudioFormatPlugin;
 import apes.lib.Config;
 import apes.lib.Language;
+import apes.models.InternalFormat;
+import apes.models.Player;
+import apes.plugins.WaveFileFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
+import apes.views.InternalFormatView;
 import apes.views.VolumeSlider;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -31,13 +37,13 @@ import apes.views.buttons.PasteButton;
 import apes.views.buttons.PauseButton;
 import apes.views.buttons.PlayButton;
 import apes.views.buttons.RecordButton;
-import apes.views.buttons.RedoButton;
-import apes.views.buttons.SaveButton;
-import apes.views.buttons.StopButton;
-import apes.views.buttons.UndoButton;
-import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
+import apes.views.buttons.SaveButton;
+import apes.views.buttons.UndoButton;
+import apes.views.buttons.RedoButton;
+import apes.views.buttons.ZoomInButton;
+import apes.views.buttons.StopButton;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -51,19 +57,24 @@ public class Main extends JFrame
    * Help controller.
    */
   private HelpController helpController;
-  
+
   /**
    * Player controller.
    */
   private PlayerController playerController;
-  
+
+  /**
+   * Config object.
+   */
+  private Config config;
+
   /**
    * Starts the program.
    */
   public Main()
   {
     // Parse the configuration file and set default values.
-    Config config = Config.getInstance();
+    config = Config.getInstance();
     config.parse();
 
     // Set some instance variables.
@@ -99,12 +110,47 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
+    InternalFormatView internalFormatView = new InternalFormatView();
+    tabs.addTab( "Some file.wav", internalFormatView );
+
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
 
-    pack();
+    // Set window dimensions.
+    setWindowDimensions();
+
     setVisible( true );
+  }
+
+  /**
+   * Sets the dimensions for the window depending on the
+   * configuration file.
+   */
+  private void setWindowDimensions()
+  {
+    pack();
+
+    boolean maximized = config.getBooleanOption( "maximized" );
+
+    if( maximized )
+    {
+      setExtendedState( getExtendedState() | MAXIMIZED_BOTH );
+    }
+    else
+    {
+      try
+      {
+        int width = config.getIntOption( "width" );
+        int height = config.getIntOption( "height" );
+
+        if( width > 0 && height > 0 )
+        {
+          setPreferredSize( new Dimension( width, height ) );
+        }
+      }
+      catch( NumberFormatException e ) {}
+    }
   }
 
   /**
