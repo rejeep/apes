@@ -2,10 +2,10 @@ package test;
 
 import java.io.File;
 
-import org.junit.*;
-import org.junit.Before;
 import apes.lib.Config;
-
+import org.junit.Before;
+import org.junit.Test;
+ 
 import static org.junit.Assert.*;
 
 /**
@@ -60,5 +60,34 @@ public class TestConfig
   @Test public void testThatGetOptionReturnsCorrectValue()
   {
     assertEquals( "Should give correct value for given key.", "Great day", config.getOption( "fourth_option" ) );
+  }
+
+  /**
+   * Test methods that casts an options value.
+   */
+  @Test public void testGetBooleanOptionShuoldReturnTrueOrFalse()
+  {
+    assertFalse( "Fifth option should be false", config.getBooleanOption( "fifth_option" ) );
+    assertTrue( "Sixth option should be true", config.getBooleanOption( "sixth_option" ) );
+  }
+  
+  /**
+   * Tests that an int option is returned.
+   */
+  @Test public void testGetIntOptionReturnIntValue()
+  {
+    int expected = 122;
+    
+    assertEquals( "Int value should be " + expected, expected, config.getIntOption( "int" ) );
+  }
+
+  /**
+   * Tests that if key does not exist in file, getIntOption should
+   * throw an exception.
+   */
+  @Test(expected=NumberFormatException.class)
+  public void testGetIntOptionShuoldRaiseExceptionIfTheresNoValueForKey()
+  {
+    config.getIntOption( "key_does_not_exist" );
   }
 }
