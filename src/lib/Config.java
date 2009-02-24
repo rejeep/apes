@@ -144,6 +144,33 @@ public class Config
   }
 
   /**
+   * Same as {@link Config#getOption getOption} except that the value
+   * will be true or false instead of "true" and "false".
+   *
+   * @param key The configuration key.
+   * @return the value for <code>key</code> casted to a
+   * boolean. "true" option will return true. Everything else will
+   * return false.
+   */
+  public boolean getBooleanOption( String key )
+  {
+    return "true".equals( getOption( key ) );
+  }
+
+  /**
+   * Same as {@link Config#getOption getOption} except that the value
+   * will be not be a string, but an integer.
+   *
+   * @param key The configuration key.
+   * @return the value for <code>key</code> casted to an integer.
+   * @exception NumberFormatException if there was no value to key.
+   */
+  public int getIntOption( String key ) throws NumberFormatException
+  {
+    return new Integer( getOption( key ) );
+  }
+
+  /**
    * Will return an instance of this class.
    *
    * @return An instance of this class.
