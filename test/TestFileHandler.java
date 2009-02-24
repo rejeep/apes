@@ -23,13 +23,14 @@ public class TestFileHandler
 
     try
     {
-      FileHandler.saveToFile("fileTest", data);
-      ByteBuffer buffer = FileHandler.loadFile("fileTest");
+      String file = "fileTest";
+      FileHandler.saveToFile( file, data );
+      ByteBuffer buffer = FileHandler.loadFile( file );
 
       byte[] data2 = buffer.array();
 
       assertEquals( "Should be of the same length", data.length, data2.length );
-      for(int i = 0; i < data.length; ++i)
+      for( int i = 0; i < data.length; ++i )
       {
         assertEquals( "Data should not differ", data[i], data2[i]);
       }
