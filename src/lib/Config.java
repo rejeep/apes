@@ -71,6 +71,9 @@ public class Config
 
     // Default settings.
     options.put( "volume", "50" );
+    options.put( "maximized", "true" );
+    options.put( "width", "600" );
+    options.put( "height", "400" );
   }
 
   /**
