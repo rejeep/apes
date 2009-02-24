@@ -135,6 +135,7 @@ public class Config
   /**
    * Get the value for <code>key</code>.
    *
+   * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
   public String getOption( String key )
