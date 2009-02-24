@@ -55,8 +55,7 @@ public class Config
    * Regexp to match an option in the configuration file. It uses
    * grouping to extract the key and value.
    */
-  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*((\"{0,1}).*\\3)";
-
+  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]{0,1})(.*)\\2$";
 
   /**
    * Creates a new <code>Config</code> instance. A default file name
@@ -99,7 +98,7 @@ public class Config
           // If line matches an option.
           if( matcher.matches() )
           {
-            options.put( matcher.group( 1 ), matcher.group( 2 ) );
+            options.put( matcher.group( 1 ), matcher.group( 3 ) );
           }
         }
       }
