@@ -19,6 +19,11 @@ public class Channel
    * A list containing all Samples structure, and thus all audio data of the channel.
    */
   private List<Samples> samplesList;
+  
+  /**
+   * Maximum amplitude of all samples in the Channel
+   */
+  private long maxAmplitude;
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -29,6 +34,7 @@ public class Channel
   {
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
+    maxAmplitude = samples.getMaxAmplitude();
   }
 
   /**

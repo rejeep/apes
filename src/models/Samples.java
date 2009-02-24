@@ -20,6 +20,11 @@ public class Samples
   private int size;
   
   /**
+   * Maximum amplitude of all samples in the Samples object.
+   */
+  private long maxAmplitude;
+  
+  /**
    * Contains all the raw data of the samples.
    */
   private byte[] sampleData;
@@ -33,7 +38,7 @@ public class Samples
   {
     size = amount;
     sampleData = new byte[size*bps*8];  //TODO: size = 0 ??
-
+    maxAmplitude = 0;
   }
   
   /**
@@ -47,6 +52,8 @@ public class Samples
     {
       throw new Exception("Invalid amount of bits per sample");
     }
+    
+    maxAmplitude = 0;
     
     // Count bytes instead of bits
     int Bps = bps / 8;
@@ -63,7 +70,7 @@ public class Samples
       int j;
       
       // Pad as needed.
-      for(j = 0; j < BpsDiff; j++)
+      for( j = 0; j < BpsDiff; j++ )
       {
         sampleData[i * Bps + j] = 0; // dont make sense, sampledata are array of bytes but pad one byte for every bit diff
         //System.out.println("Padding");
@@ -75,6 +82,10 @@ public class Samples
         sampleData[i * Bps + j] = data[i * Bps + j];
         //System.out.println("data");
       }
+      
+      long samp;
+      if( ( samp = getSample( i ) ) > maxAmplitude )
+        maxAmplitude = samp; 
     }
   }
   
@@ -87,6 +98,27 @@ public class Samples
     return size;
   }
   
+  /**
+   * Returns an approximation of the average amplitude among all samples in this samples object.
+   * @return An approximate average amplitude over all samples.
+   */
+  public long getAverageAmplitude()
+  {
+    long total = 0;
+    for( int i = 0; i < size; i += 10 )
+      total += getSample( i );
+    return total / size;
+  }
+  
+  /**
+   * Returns the maximum amplitude among all samples in this object.
+   * @return The value of the highest amplitude of all samples in this object.
+   */
+  public long getMaxAmplitude()
+  {
+    return maxAmplitude;
+  }
+
   /**
    * Returns the sample at given index.
    * @param index The index of the desired sample. 
@@ -114,6 +146,8 @@ public class Samples
       throw new Exception("Amplitude must be non-negative!");
     for(int i = 0; i < BITS_PER_SAMPLE / 8; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
+    if( value > maxAmplitude )
+      maxAmplitude = value;
   }
   
 }
