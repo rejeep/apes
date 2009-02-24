@@ -31,8 +31,9 @@ public class Samples
    */
   public Samples(int bps, int amount)
   {
-    sampleData = new byte[size*bps*8];
     size = amount;
+    sampleData = new byte[size*bps*8];  //TODO: size = 0 ??
+
   }
   
   /**
@@ -50,24 +51,29 @@ public class Samples
     // Count bytes instead of bits
     int Bps = bps / 8;
     size = data.length/Bps;
-    sampleData = new byte[data.length];
-    int bpsDiff = BITS_PER_SAMPLE - bps;
-    
+    sampleData = new byte[size*(BITS_PER_SAMPLE/8)];
+    int BpsDiff = BITS_PER_SAMPLE/8 - Bps;
+
+    System.out.println("BpsDiff: " + BpsDiff);
+    System.out.println("Bytes per sample: " + BITS_PER_SAMPLE/8); 
+    System.out.println("size: " + size);
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
     {
       int j;
       
       // Pad as needed.
-      for(j = 0; j < bpsDiff; i++)
+      for(j = 0; j < BpsDiff; j++)
       {
-        sampleData[i * Bps + j] = 0;
+        sampleData[i * Bps + j] = 0; // dont make sense, sampledata are array of bytes but pad one byte for every bit diff
+        //System.out.println("Padding");
       }
       
       // Handle supplied bytes.
-      for(; j < BITS_PER_SAMPLE / 8; j++)
+      for(; j < (BITS_PER_SAMPLE / 8) - BpsDiff; j++)
       {
         sampleData[i * Bps + j] = data[i * Bps + j];
+        //System.out.println("data");
       }
     }
   }
