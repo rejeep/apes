@@ -9,7 +9,11 @@ import java.util.List;
  */
 public class InternalFormat
 {
-
+  /**
+   * Information about where the file were saved to or loaded from.
+   */
+  private FileStatus fileStatus;
+  
   /**
    * Information of all sound file tags.
    */
@@ -34,6 +38,7 @@ public class InternalFormat
    */
   public InternalFormat( Tags tag, int samplerate, List<Channel> channelList )
   {
+    fileStatus = new FileStatus();
     tags = tag;
     sampleRate = samplerate;
     channels = channelList;
@@ -79,7 +84,7 @@ public class InternalFormat
    */
   Samples getSamples( int channel, int start, int stop )
   {
-    return channels.get( channel ).getSamples( start * 1000 * Channel.SAMPLES_SIZE, stop * 1000 * Channel.SAMPLES_SIZE );
+    return null;
   }
 
   /**
@@ -102,7 +107,7 @@ public class InternalFormat
    */
   public void setSamples( int channel, int start, int stop, Samples samples )
   {
-    channels.get( channel ).setSamples( start * 1000 * Channel.SAMPLES_SIZE, stop * 1000 * Channel.SAMPLES_SIZE, samples );
+    
   }
 
   /**
@@ -115,5 +120,46 @@ public class InternalFormat
     return sampleRate;
   }
 
+  /**
+   * Save file as
+   * TODO: add error handling, or some sort of response
+   */
+  /**
+   * Saves the internal format to the specifed location with the specified name.
+   * @param filePath The location the file should be saved to.
+   * @param fileName The name of the file to be stored.
+   */
+  public void saveAs(String filePath, String fileName)
+  {    
+    //TODO: IMPLEMENT       
+  }
 
+  /**
+   * Save file
+   * TODO: add error handling or some sort of response
+   */
+  public void save()
+  {
+    //TODO: IMPLEMENT
+  }
+
+  /*
+  public void savePart()
+  {
+    //TODO: IMPLEMENT    
+  }
+  */
+
+  /**
+   * Load file
+   * @param filePath Where the file is located.
+   * @param fileName The name of the file.
+   * @return
+   */
+  public static InternalFormat load(String filePath, String fileName)
+  {
+
+    //TODO: IMPLEMENT
+    return null;
+  }
 }

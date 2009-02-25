@@ -55,8 +55,7 @@ public class Config
    * Regexp to match an option in the configuration file. It uses
    * grouping to extract the key and value.
    */
-  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*((\"{0,1}).*\\3)";
-
+  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]{0,1})(.*)\\2$";
 
   /**
    * Creates a new <code>Config</code> instance. A default file name
@@ -72,6 +71,9 @@ public class Config
 
     // Default settings.
     options.put( "volume", "50" );
+    options.put( "maximized", "true" );
+    options.put( "width", "600" );
+    options.put( "height", "400" );
   }
 
   /**
@@ -99,7 +101,7 @@ public class Config
           // If line matches an option.
           if( matcher.matches() )
           {
-            options.put( matcher.group( 1 ), matcher.group( 2 ) );
+            options.put( matcher.group( 1 ), matcher.group( 3 ) );
           }
         }
       }
@@ -133,11 +135,39 @@ public class Config
   /**
    * Get the value for <code>key</code>.
    *
+   * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
   public String getOption( String key )
   {
     return options.get( key );
+  }
+
+  /**
+   * Same as {@link Config#getOption getOption} except that the value
+   * will be true or false instead of "true" and "false".
+   *
+   * @param key The configuration key.
+   * @return the value for <code>key</code> casted to a
+   * boolean. "true" option will return true. Everything else will
+   * return false.
+   */
+  public boolean getBooleanOption( String key )
+  {
+    return "true".equals( getOption( key ) );
+  }
+
+  /**
+   * Same as {@link Config#getOption getOption} except that the value
+   * will be not be a string, but an integer.
+   *
+   * @param key The configuration key.
+   * @return the value for <code>key</code> casted to an integer.
+   * @exception NumberFormatException if there was no value to key.
+   */
+  public int getIntOption( String key ) throws NumberFormatException
+  {
+    return new Integer( getOption( key ) );
   }
 
   /**
