@@ -175,7 +175,10 @@ public class Player
 
       float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
 
-      gainControl.setValue( value );
+      if( gainControl != null )
+      {
+        gainControl.setValue( value );        
+      }
     }
   }
 
