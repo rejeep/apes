@@ -1,14 +1,13 @@
 package apes.interfaces;
 
-// TODO: Comment this interface.
-
 /**
+ * Observer used for observing Language
  * @author Simon Holm
  */
 public interface ApesObserver
 {
   /**
-   *
+   * Called when the Language changes language
    */
   public void update();
 }
