@@ -356,23 +356,23 @@ public class Main extends JFrame
     bottomPanel.add( backward );
 
     ImageButton pause = new PauseButton();
-    backward.addActionListener( playerController );
-    backward.setName( "pause" );
+    pause.addActionListener( playerController );
+    pause.setName( "pause" );
     bottomPanel.add( pause );
 
     ImageButton play = new PlayButton();
-    backward.addActionListener( playerController );
-    backward.setName( "play" );
+    play.addActionListener( playerController );
+    play.setName( "play" );
     bottomPanel.add( play );
 
     ImageButton stop = new StopButton();
-    backward.addActionListener( playerController );
-    backward.setName( "stop" );
+    stop.addActionListener( playerController );
+    stop.setName( "stop" );
     bottomPanel.add( stop );
 
     ImageButton forward = new ForwardButton();
-    backward.addActionListener( playerController );
-    backward.setName( "forward" );
+    forward.addActionListener( playerController );
+    forward.setName( "forward" );
     bottomPanel.add( forward );
 
     ImageButton record = new RecordButton();
