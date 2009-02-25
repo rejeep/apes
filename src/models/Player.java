@@ -9,6 +9,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
 import apes.exceptions.NoInternalFormatException;
 
 /**
@@ -75,7 +76,7 @@ public class Player
    * class without using the Singleton pattern.
    */
   private Player() {}
-
+  
   /**
    * Plays audio file from beginning.
    */

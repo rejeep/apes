@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -23,7 +24,8 @@ import apes.models.Player;
 import apes.plugins.WaveFileFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
-//import apes.views.InternalFormatView;
+import apes.views.InternalFormatView;
+import apes.views.VolumePanel;
 import apes.views.VolumeSlider;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -381,10 +383,8 @@ public class Main extends JFrame
     ImageButton record = new RecordButton();
     bottomPanel.add( record );
 
-    JSlider volume = new VolumeSlider();;
-    volume.addChangeListener( playerController );
-    volume.setName( "volume" );
-    bottomPanel.add( volume );
+    JPanel volumePanel = new VolumePanel( playerController );
+    bottomPanel.add( volumePanel );
     
     return bottomPanel;
   }

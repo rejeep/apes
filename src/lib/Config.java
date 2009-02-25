@@ -74,6 +74,7 @@ public class Config
     options.put( "maximized", "true" );
     options.put( "width", "600" );
     options.put( "height", "400" );
+    options.put( "volume_label_format", "%v %" );
   }
 
   /**

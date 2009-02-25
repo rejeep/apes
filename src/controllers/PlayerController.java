@@ -1,7 +1,9 @@
 package apes.controllers;
 
-import apes.models.Player;
 import javax.swing.JSlider;
+
+import apes.models.Player;
+import apes.views.VolumePanel;
 
 /**
  * Controller for the player.
@@ -73,12 +75,14 @@ public class PlayerController extends ApplicationController
   }
   
   /**
-   * Change volume.
+   * Change volume and update label that shows volume percentage.
    */
   public void volume()
   {
-    JSlider slider = (JSlider) event.getSource();
+    VolumePanel panel = (VolumePanel) ( (JSlider) event.getSource() ).getParent();
     
-    player.setVolume( slider.getValue() );
+    player.setVolume( panel.getVolume() );
+    
+    panel.updateLabelVolume();
   }
 }
