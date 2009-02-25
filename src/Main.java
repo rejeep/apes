@@ -76,7 +76,10 @@ public class Main extends JFrame
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
-
+    
+    Player player = Player.getInstance();
+    player.setVolume( config.getIntOption( "volume" ) );
+    
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
