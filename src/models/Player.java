@@ -1,6 +1,15 @@
 package apes.models;
 
-import apes.models.InternalFormat;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import apes.exceptions.NoInternalFormatException;
 
 /**
  * This class plays a music file. Or more precise, an {@link
@@ -14,7 +23,7 @@ public class Player
    * An instance of this class.
    */
   private static Player instance = null;
-  
+
   /**
    * Different status a Player can be in.
    */
@@ -22,7 +31,7 @@ public class Player
 
   /**
    * This variable holds the current status for the player.
-   */  
+   */
   private Status status = Status.STOP;
 
   /**
@@ -46,53 +55,85 @@ public class Player
   public static final int MAX_VALUE = 100;
 
   /**
+   * Represents a special kind of data line whose audio data can be
+   * loaded prior to playback.
+   */
+  private Clip clip;
+
+  /**
+   * Keeps track over floating-point values.
+   */
+  private FloatControl gainControl;
+
+  /**
+   * Used to keep track of where in audio file the pause occurred.
+   */
+  private long pausePosition;
+
+  /**
    * Empty and private so that you can not create an object of this
    * class without using the Singleton pattern.
    */
-  private Player() { }
+  private Player() {}
 
   /**
-   *
+   * Plays audio file from beginning.
    */
   public void play()
   {
-    // If there's no playing.
-    if( status != Status.PLAY )
-    {
-
-    }
-
-    setStatus( Status.PLAY );
+    play( 0 );
   }
 
   /**
+   * Plays audio file starting from the given <code>position</code>.
    *
-   *
+   * @param position the position to start playing from in
+   * milliseconds.
+   */
+  public void play( long position )
+  {
+    if( clip != null )
+    {
+      if( status != Status.PLAY )
+      {
+        setStatus( Status.PLAY );
+
+        clip.setMicrosecondPosition( position );
+        clip.loop( 0 );
+      }
+    }
+  }
+
+  /**
+   * Pause playing if any.
    */
   public void pause()
   {
     // If there's playing.
     if( status == Status.PLAY )
     {
+      setStatus( Status.PAUSE );
 
+      pausePosition = clip.getMicrosecondPosition();
+
+      clip.stop();
     }
-
-    setStatus( Status.PAUSE );
   }
 
   /**
-   *
-   *
+   * Stop playing of any.
    */
   public void stop()
   {
     // If there's no playing.
     if( status == Status.PLAY )
     {
+      setStatus( Status.STOP );
 
+      pausePosition = 0L;
+
+      clip.stop();
     }
-
-    setStatus( Status.STOP );
   }
 
   /**
@@ -131,6 +172,48 @@ public class Player
     if( volume >= MIN_VALUE && volume <= MAX_VALUE )
     {
       this.volume = volume;
+
+      float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
+
+      if( gainControl != null )
+      {
+        gainControl.setValue( value );        
+      }
+    }
+  }
+
+  /**
+   * Return pause position for this player. 0L means that there's no
+   * pausing.
+   *
+   * @return The pause position.
+   */
+  public long getPausePosition()
+  {
+    return this.pausePosition;
+  }
+
+  /**
+   * Initializes this player. This must be done when setting a new
+   * internal format.
+   *
+   * @exception NoInternalFormatException If there's no internal
+   * format.
+   * @exception UnsupportedAudioFileException if the File does not
+   * point to valid audio file.
+   * @exception IOException if any I/O exception occurs.
+   */
+  public void init() throws NoInternalFormatException, UnsupportedAudioFileException, IOException
+  {
+    if( interalFormat == null )
+    {
+      throw new NoInternalFormatException();
+    }
+    else
+    {
+      File file = new File( interalFormat.getFileStatus().getFullPath() );
+      AudioInputStream audioIn = AudioSystem.getAudioInputStream( file );
+      clip = makeClip( audioIn );
     }
   }
 
@@ -145,26 +228,21 @@ public class Player
   }
 
   /**
-   * Set the <code>InternalFormat</code> for this player.
+   * Set the <code>InternalFormat</code> for this player and
+   * initialize it.
    *
    * @param interalFormat the <code>InternalFormat</code> to use.
-   * @return true if interalFormat is not null. false otherwise.
+   * @exception Exception if {@link Player#init init} fails.
    */
-  public boolean setInternalFormat( InternalFormat interalFormat )
+  public void setInternalFormat( InternalFormat interalFormat ) throws Exception
   {
-    // Stop before change.
     stop();
 
-    if( interalFormat != null )
-    {
-      this.interalFormat = interalFormat;
+    this.interalFormat = interalFormat;
 
-      return true;
-    }
-
-    return false;
+    init();
   }
-  
+
   /**
    * Returns current status.
    *
@@ -174,7 +252,7 @@ public class Player
   {
     return this.status;
   }
-  
+
   /**
    * Sets the status to <code>status</code>
    *
@@ -183,6 +261,39 @@ public class Player
   private void setStatus( Status status )
   {
     this.status = status;
+  }
+
+  /**
+   * Returns a <code>Clip</code> for an audio input stream.
+   *
+   * @param The <code>AudioInputStream</code> object to connect the
+   * <code>Clip</code> to.
+   * @return the <code>Clip</code>.
+   */
+  private Clip makeClip( AudioInputStream audioIn )
+  {
+    Clip clip = null;
+
+    try
+    {
+      DataLine.Info dataLineInfo = new DataLine.Info( Clip.class, audioIn.getFormat() );
+
+      clip = (Clip) AudioSystem.getLine( dataLineInfo );
+      clip.open( audioIn );
+
+      // For volume control
+      gainControl = (FloatControl) clip.getControl( FloatControl.Type.MASTER_GAIN );
+    }
+    catch( LineUnavailableException e )
+    {
+      e.printStackTrace();
+    }
+    catch( IOException e2 )
+    {
+      e2.printStackTrace();
+    }
+
+    return clip;
   }
 
   /**

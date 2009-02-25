@@ -38,7 +38,6 @@ public class InternalFormat
    */
   public InternalFormat( Tags tag, int samplerate, List<Channel> channelList )
   {
-    fileStatus = new FileStatus();
     tags = tag;
     sampleRate = samplerate;
     channels = channelList;
@@ -150,6 +149,26 @@ public class InternalFormat
   }
   */
 
+  /**
+   * Get the <code>FileStatus</code>.
+   *
+   * @return The <code>FileStatus</code>.
+   */
+  public FileStatus getFileStatus()
+  {
+    return fileStatus;
+  }
+
+  /**
+   * Set a <code>FileStatus</code>.
+   *
+   * @param newFileStatus The new FileStatus.
+   */
+  public void setFileStatus( FileStatus fileStatus )
+  {
+    this.fileStatus = fileStatus;
+  }
+  
   /**
    * Load file
    * @param filePath Where the file is located.

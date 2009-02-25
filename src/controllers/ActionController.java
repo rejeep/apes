@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.EventObject;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 /**
  * <p>This class handles all actions. All controller should extend
@@ -48,7 +50,7 @@ import java.util.EventObject;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ActionController implements ActionListener
+public class ActionController implements ActionListener, ChangeListener
 {
   /**
    * The event that was fired. Controllers can via this variable get
@@ -57,6 +59,13 @@ public class ActionController implements ActionListener
   protected EventObject event;
 
   public void actionPerformed( ActionEvent e )
+  {
+    this.event = e;
+
+    callActionByName();
+  }
+
+  public void stateChanged( ChangeEvent e )
   {
     this.event = e;
 

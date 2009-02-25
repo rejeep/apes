@@ -1,5 +1,7 @@
 package apes.models;
 
+import java.io.File;
+
 //TODO: Add functionality to choose between save and save as...
 
 /**
@@ -11,29 +13,44 @@ public class FileStatus
   /**
    * Contains the path of the current file.
    */
-  private String filepath;
+  private String filePath;
   
   /**
    * Contains the name of the current file;
    */
   private String fileName;
-
+  
+  /**
+   * Creates a new <code>FileStatus</code> instance.
+   */
+  public FileStatus() {}
+  
+  /**
+   * Creates a new <code>FileStatus</code> instance and sets
+   * <code>filePath</code> and <code>fileName</code>.
+   */
+  public FileStatus( String filePath, String fileName )
+  {
+    setFilePath( filePath );
+    setFileName( fileName );
+  }
+  
   /**
    * Getter for the file path.
    * @return The file path.
    */
   public String getFilepath()
   {
-    return filepath;
+    return filePath;
   }
 
   /**
    * Setter for the file path.
-   * @param filepath The new file path.
+   * @param filePath The new file path.
    */
-  public void setFilepath( String filepath )
+  public void setFilePath( String filePath )
   {
-    this.filepath = filepath;
+    this.filePath = filePath;
   }
 
   /**
@@ -52,5 +69,15 @@ public class FileStatus
   public void setFileName( String fileName )
   {
     this.fileName = fileName;
+  }
+  
+  /**
+   * Returns the full path.
+   *
+   * @return The full path.
+   */
+  public String getFullPath()
+  {
+    return new File( this.filePath + File.separator + this.fileName ).getAbsolutePath();
   }
 }

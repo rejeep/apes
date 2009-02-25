@@ -37,13 +37,13 @@ import apes.views.buttons.PasteButton;
 import apes.views.buttons.PauseButton;
 import apes.views.buttons.PlayButton;
 import apes.views.buttons.RecordButton;
+import apes.views.buttons.RedoButton;
+import apes.views.buttons.SaveButton;
+import apes.views.buttons.StopButton;
+import apes.views.buttons.UndoButton;
+import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import apes.views.buttons.SaveButton;
-import apes.views.buttons.UndoButton;
-import apes.views.buttons.RedoButton;
-import apes.views.buttons.ZoomInButton;
-import apes.views.buttons.StopButton;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -76,7 +76,10 @@ public class Main extends JFrame
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
-
+    
+    Player player = Player.getInstance();
+    player.setVolume( config.getIntOption( "volume" ) );
+    
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
@@ -356,31 +359,33 @@ public class Main extends JFrame
     bottomPanel.add( backward );
 
     ImageButton pause = new PauseButton();
-    backward.addActionListener( playerController );
-    backward.setName( "pause" );
+    pause.addActionListener( playerController );
+    pause.setName( "pause" );
     bottomPanel.add( pause );
 
     ImageButton play = new PlayButton();
-    backward.addActionListener( playerController );
-    backward.setName( "play" );
+    play.addActionListener( playerController );
+    play.setName( "play" );
     bottomPanel.add( play );
 
     ImageButton stop = new StopButton();
-    backward.addActionListener( playerController );
-    backward.setName( "stop" );
+    stop.addActionListener( playerController );
+    stop.setName( "stop" );
     bottomPanel.add( stop );
 
     ImageButton forward = new ForwardButton();
-    backward.addActionListener( playerController );
-    backward.setName( "forward" );
+    forward.addActionListener( playerController );
+    forward.setName( "forward" );
     bottomPanel.add( forward );
 
     ImageButton record = new RecordButton();
     bottomPanel.add( record );
 
     JSlider volume = new VolumeSlider();;
+    volume.addChangeListener( playerController );
+    volume.setName( "volume" );
     bottomPanel.add( volume );
-
+    
     return bottomPanel;
   }
 

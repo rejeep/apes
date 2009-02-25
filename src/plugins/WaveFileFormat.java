@@ -7,10 +7,7 @@ import java.util.List;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
-import apes.models.Channel;
-import apes.models.InternalFormat;
-import apes.models.Samples;
-import apes.models.Tags;
+import apes.models.*;
 
 /**
  * Module used for converting .wav-files to the internal format
@@ -72,12 +69,11 @@ public class WaveFileFormat implements AudioFormatPlugin
     Subchunk2ID   = data
     Subchunk2Size = NumSamples * NumCHannels * BitsPerSample/8
     data          = the sound data
-    
+
     */
   }
 
   //TODO: Create a more detailed description of exception
-  //TODO: Add better error handling, check for errors, take different endians into account, handle more chunks
   /**
    * Imports a wave file, converts it to the internal format and returns it.
    *
@@ -126,26 +122,30 @@ public class WaveFileFormat implements AudioFormatPlugin
     // 4 little
     buffer.order( ByteOrder.LITTLE_ENDIAN );
     int subChunk2Size = buffer.getInt();
-    // little    
+    // little
 
     List<Channel> channels = new ArrayList<Channel>();
 
-    byte[][] samplesPerChannel = new byte[numChannels][subChunk2Size/numChannels]; 
+    byte[][] samplesPerChannel = new byte[numChannels][subChunk2Size/numChannels];
 
     int channel = 0;
     int bytesPerSample = bitsPerSample/8;
-    
+
     for( int i = 0; i < subChunk2Size/bytesPerSample; ++i )
     {
       buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
-      channel = (++channel) % numChannels;      
+      channel = (++channel) % numChannels;
     }
 
 
     for ( int i = 0; i < numChannels; ++i )
+    {
       channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
+    }
 
-    return new InternalFormat( tag, sampleRate, channels );
+    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
+    internalFormat.setFileStatus( new FileStatus( path, filename ) );
+
+    return internalFormat;
   }
-
 }
