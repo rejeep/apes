@@ -26,12 +26,12 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @param filename       The name of the file to be saved.
    * @throws Exception
    */
-  public void exportFile( InternalFormat internalFormat, String path, String filename ) throws Exception
+  public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
   {
-    //throw new Exception( "Not implemeted yet." );
-    /*
+    ByteBuffer data; // contians data to be exported
+    
     byte[] chunkID       = {'R','I','F','F'};
-    int    chunkSize     = 4+(8+subchunk1Size)+(8+subchunk2Size);
+    int    chunkSize;
     byte[] format        = {'W','A','V','E'};
     int    subchunk1ID   = 0x666d7420; // fmt
     int    subchunk1Size = 16;
@@ -39,38 +39,58 @@ public class WaveFileFormat implements AudioFormatPlugin
     short  numChannels   = (short)internalFormat.getNumChannels();
     int    sampleRate    = internalFormat.getSampleRate();
     int    byteRate      = sampleRate * numChannels * (Samples.BITS_PER_SAMPLE/8);
-    short  blackAlign    = (short)(numChannels * (Samples.BITS_PER_SAMPLE/8));
+    short  blockAlign    = (short)(numChannels * (Samples.BITS_PER_SAMPLE/8));
     short  bitsPerSample = Samples.BITS_PER_SAMPLE;
     byte[] subchunk2ID   = {'d','a','t','a'};
-    //int    subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
+    int    subchunk2Size;
 
-    byte[] data; //          = the sound data
 
-    Channel[] channels = new Channel[numChannels];
+    Samples[] channels = new Samples[numChannels];
     for( int i = 0; i < numChannels; ++i)
-      channels[i] = internalFormat.getChannel(i);
+      channels[i] = internalFormat.getChannel(i).getAllSamples();
 
-    //put samples into data
+    int numSamples = 0;
+    for(int i = 0; i < numChannels; ++i)
+      numSamples += channels[i].getSize();
 
-      */
+    subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
+    chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
 
-    /*
-    ChunkID       = RIFF
-    ChunkSize     = 4+(8+Subchunk1Size)+(8+Subchunk2Size)
-    Format        = WAVE
-    Subchunk1ID   = fmt
-    Subchunk1Size = 16
-    AudioFormat   = 1
-    NumChannels   = internalFormat.getNumChannels();
-    SampleRate    = internalFormat.getSampleRate();
-    ByteRate      = SampleRate * NumChannels * BitsPerSample/8
-    BlackAlign    = NumChannels * bitsPerSample/8
-    BitsPerSample = Samples.BITS_PER_SAMPLE;
-    Subchunk2ID   = data
-    Subchunk2Size = NumSamples * NumCHannels * BitsPerSample/8
-    data          = the sound data
+    data = ByteBuffer.wrap( new byte[8 + chunkSize] );
 
-    */
+    // Start copy data
+
+    data.order( ByteOrder.BIG_ENDIAN );
+    data.put( chunkID );
+    data.order( ByteOrder.LITTLE_ENDIAN );
+    data.putInt( chunkSize );
+    data.order( ByteOrder.BIG_ENDIAN );
+    data.put( format );
+    data.putInt( subchunk1ID );
+    data.order( ByteOrder.LITTLE_ENDIAN );
+    data.putInt( subchunk1Size );
+    data.putShort( audioFormat );
+    data.putShort( numChannels );
+    data.putInt( sampleRate );
+    data.putInt( byteRate );
+    data.putShort( blockAlign );
+    data.putShort( bitsPerSample );
+    data.order( ByteOrder.BIG_ENDIAN );
+    data.put( subchunk2ID );
+    data.order( ByteOrder.LITTLE_ENDIAN );
+    data.putInt( subchunk2Size );
+
+    for(int j = 0; j < numSamples; ++j)
+    {
+      for(int i = 0; i < numChannels; ++i)
+      {
+        //TODO: Allow different bitsPerSample
+        data.putInt( (int) channels[i].getSample(j) );
+      
+      }
+    }
+    
+    FileHandler.saveToFile( path, fileName, data.array() );
   }
 
   //TODO: Create a more detailed description of exception

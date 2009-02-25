@@ -4,6 +4,9 @@ import org.junit.Test;
 import apes.plugins.WaveFileFormat;
 import apes.interfaces.AudioFormatPlugin;
 import apes.models.InternalFormat;
+import apes.lib.FileHandler;
+
+import java.nio.ByteBuffer;
 
 public class TestWaveFileFormat
 {
@@ -16,6 +19,7 @@ public class TestWaveFileFormat
     try
     {
       internal = wav.importFile( ".", "test.wav" );
+      wav.exportFile(internal, ".", "test2.wav" );
     } catch ( Exception e )
     {
       e.printStackTrace();
