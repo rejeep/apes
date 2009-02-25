@@ -29,11 +29,11 @@ public class TestPlayer
     // Tests
     AudioFormatPlugin wave = new WaveFileFormat();
     InternalFormat internalFormat = null;
-    Player player = Player.getInstance();
+    player = Player.getInstance();
     
     try
     {
-      internalFormat = wave.importFile( ".", "test.wav" );
+      internalFormat = wave.importFile( "test", "test.wav" );
 
       player.setInternalFormat( internalFormat );
     }
@@ -129,8 +129,15 @@ public class TestPlayer
    */
   @Test public void testSettingInteranlFormatShouldOnlyBeValidIfNotNull()
   {
-    assertFalse( "Should not set new internal format", player.setInternalFormat( null ) );
-    assertTrue( "Should set new internal format", player.setInternalFormat( new InternalFormat( null, 0, null ) ) );
+    try
+    {
+      assertFalse( "Should not set new internal format", player.setInternalFormat( null ) );
+      assertTrue( "Should set new internal format", player.setInternalFormat( new InternalFormat( null, 0, null ) ) );
+    }
+    catch( Exception e )
+    {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -139,7 +146,14 @@ public class TestPlayer
    */
   @Test public void testSettingInteranlFormatShouldStopPlayer()
   {
-    player.setInternalFormat( new InternalFormat( null, 0, null ) );
+    try
+    {
+      player.setInternalFormat( new InternalFormat( null, 0, null ) );
+    }
+    catch( Exception e )
+    {
+      e.printStackTrace();
+    }
     
     assertEquals( "Setting internal format should set status to stop", Player.Status.STOP, player.getStatus() );
   }
