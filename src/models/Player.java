@@ -232,15 +232,24 @@ public class Player
    * initialize it.
    *
    * @param interalFormat the <code>InternalFormat</code> to use.
+   * @return true if <code>internalFormat</code> is not null. False
+   * otherwise.
    * @exception Exception if {@link Player#init init} fails.
    */
-  public void setInternalFormat( InternalFormat interalFormat ) throws Exception
+  public boolean setInternalFormat( InternalFormat interalFormat ) throws NoInternalFormatException, UnsupportedAudioFileException, IOException
   {
-    stop();
+    if( interalFormat != null )
+    {
+      stop();
+      
+      this.interalFormat = interalFormat;      
+      
+      init();
+      
+      return true;
+    }
 
-    this.interalFormat = interalFormat;
-
-    init();
+    return false;
   }
 
   /**
