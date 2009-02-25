@@ -203,7 +203,7 @@ public class Player
    * point to valid audio file.
    * @exception IOException if any I/O exception occurs.
    */
-  public void init() throws NoInternalFormatException, UnsupportedAudioFileException, IOException
+  private void init() throws NoInternalFormatException, UnsupportedAudioFileException, IOException
   {
     if( interalFormat == null )
     {
