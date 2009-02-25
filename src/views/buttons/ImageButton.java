@@ -6,7 +6,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import apes.lib.Language;
-import apes.interfaces.ApesObserver;
+import apes.interfaces.LanguageObserver;
 
 /**
  * <p>Creates a button with an icon on it. The button is stripped down so
@@ -20,7 +20,7 @@ import apes.interfaces.ApesObserver;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public abstract class ImageButton extends JButton implements ApesObserver
+public abstract class ImageButton extends JButton implements LanguageObserver
 {
   /**
    * Path to folder where buttons images are.
