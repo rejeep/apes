@@ -37,13 +37,13 @@ import apes.views.buttons.PasteButton;
 import apes.views.buttons.PauseButton;
 import apes.views.buttons.PlayButton;
 import apes.views.buttons.RecordButton;
+import apes.views.buttons.RedoButton;
+import apes.views.buttons.SaveButton;
+import apes.views.buttons.StopButton;
+import apes.views.buttons.UndoButton;
+import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import apes.views.buttons.SaveButton;
-import apes.views.buttons.UndoButton;
-import apes.views.buttons.RedoButton;
-import apes.views.buttons.ZoomInButton;
-import apes.views.buttons.StopButton;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
