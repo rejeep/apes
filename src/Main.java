@@ -382,8 +382,10 @@ public class Main extends JFrame
     bottomPanel.add( record );
 
     JSlider volume = new VolumeSlider();;
+    volume.addChangeListener( playerController );
+    volume.setName( "volume" );
     bottomPanel.add( volume );
-
+    
     return bottomPanel;
   }
 
