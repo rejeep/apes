@@ -37,7 +37,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     throw new Exception( "Not implemeted yet." );
   }
 
-  // Create a more detailed description of exception
+  //TODO: Create a more detailed description of exception
   /**
    * Imports a wave file, converts it to the internal format and returns it.
    *
@@ -87,39 +87,40 @@ public class WaveFileFormat implements AudioFormatPlugin
     buffer.order( ByteOrder.LITTLE_ENDIAN );
     int subChunk2Size = buffer.getInt();
     // little
-    byte[] samples = new byte[subChunk2Size];
+    //byte[] samples = new byte[subChunk2Size];
 
-    buffer.get( samples, 0, subChunk2Size );
+    //buffer.get( samples, 0, subChunk2Size );
 
-    //TODO remove printing
-    //TODO make compatible with internal format
 
     System.out.println( "Tags: " + tag );
     System.out.println( "Number of channels: " + numChannels );
     System.out.println( "Sample rate: " + sampleRate );
     System.out.println( "Bits per sample: " + bitsPerSample );
-    System.out.println( "Samples: " + samples.length );
+    //System.out.println( "Samples: " + samples.length );
+    System.out.println( "subChonuk2Size: " + subChunk2Size );
 
-    // tag sampleRate channels[]
-    //list with channels
     List<Channel> channels = new ArrayList<Channel>();
 
-    //TODO Add support for mor than one channel
-    if ( numChannels > 1 )
+
+    byte[][] samplesPerChannel = new byte[numChannels][subChunk2Size/numChannels];
+
+    int channel = 0;
+    int bytesPerSample = bitsPerSample/8;
+    for( int i = 0; i < subChunk2Size/bytesPerSample; ++i )
     {
-      System.exit( 1 );
+      buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
+      channel = (++channel) % numChannels;
     }
+
 
     for ( int i = 0; i < numChannels; ++i )
     {
-      channels.add( new Channel( new Samples( bitsPerSample, samples ) ) );
+      channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
     }
-    
-    
+
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
-      
+
     return internalFormat;
   }
-
 }

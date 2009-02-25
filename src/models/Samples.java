@@ -37,7 +37,7 @@ public class Samples
   public Samples(int bps, int amount)
   {
     size = amount;
-    sampleData = new byte[size*bps*8];  //TODO: size = 0 ??
+    sampleData = new byte[size*(bps/8)]; 
     maxAmplitude = 0;
   }
   

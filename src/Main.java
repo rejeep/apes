@@ -23,7 +23,7 @@ import apes.models.Player;
 import apes.plugins.WaveFileFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
-import apes.views.InternalFormatView;
+//import apes.views.InternalFormatView;
 import apes.views.VolumeSlider;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -113,8 +113,8 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
-    InternalFormatView internalFormatView = new InternalFormatView();
-    tabs.addTab( "Some file.wav", internalFormatView );
+    //InternalFormatView internalFormatView = new InternalFormatView();
+    //tabs.addTab( "Some file.wav", internalFormatView );
 
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();

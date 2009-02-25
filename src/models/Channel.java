@@ -137,7 +137,7 @@ public class Channel
     int remainder = samples.getSize() % SAMPLES_SIZE;
     
     List<Samples> split = new LinkedList<Samples>();
-    
+
     // Make full chunks
     for( int i = 0; i < fullChunks; i++ )
     {
