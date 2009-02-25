@@ -23,6 +23,6 @@ public class VolumeSlider extends JSlider
 
     // Set start value.
     Config config = Config.getInstance();
-    setValue( Integer.parseInt( config.getOption( "volume" ) ) );
+    setValue( config.getIntOption( "volume" ) );
   }
 }
