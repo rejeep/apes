@@ -14,10 +14,10 @@ import java.nio.ByteBuffer;
 public class TestFileHandler
 {
   /**
-   * Tests that the file that you write to the disk is identical when you read the same file.
+   * Tests that the file that you write to the disk is identical when you read the same binary file.
    */
   @Test
-  public void testWriteAndReadShouldBeTheSame()
+  public void testByteWriteAndReadShouldBeTheSame()
   {
     byte[] data = {1,5};
 
@@ -41,6 +41,35 @@ public class TestFileHandler
     }
 
   }
+
+  /**
+     * Tests that the file that you write to the disk is identical when you read the same object file.
+     */
+    @Test
+    public void testObjectWriteAndReadShouldBeTheSame()
+    {
+      Integer data = new Integer(7);
+
+      try
+      {
+        FileHandler.saveObjectToFile("objectFileTest", data);
+        Integer data2 = null;
+        try
+        {
+          data2 = (Integer) FileHandler.loadObjectFile("objectFileTest");
+        } catch ( ClassNotFoundException e )
+        {
+          e.printStackTrace();
+        }        
+        assertEquals( "Should be of the same value", data, data2 );
+
+
+      } catch ( IOException e )
+      {
+        e.printStackTrace();
+      }
+
+    }
 
 
 }

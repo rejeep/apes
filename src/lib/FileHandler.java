@@ -1,9 +1,6 @@
 package apes.lib;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
@@ -47,6 +44,37 @@ public class FileHandler
 
   public static void saveToFile( String fileName, byte[] data ) throws IOException
   {
-    saveToFile(".", fileName, data);
+    saveToFile( ".", fileName, data );
+  }
+
+  public static void saveObjectToFile( String path, String fileName, Object data ) throws IOException
+  {
+    File file = new File( path + "/" + fileName );
+    file.createNewFile();
+    FileOutputStream oStream = new FileOutputStream( file );
+
+    ObjectOutputStream obj_out = new ObjectOutputStream( oStream );
+    obj_out.writeObject( data );
+  }
+
+  public static void saveObjectToFile( String fileName, Object data ) throws IOException
+  {
+    saveObjectToFile( ".", fileName, data );
+  }
+
+
+  public static Object loadObjectFile( String path, String fileName ) throws IOException, ClassNotFoundException
+  {
+    File file = new File( path + "/" + fileName );
+    FileInputStream iStream = new FileInputStream( file );
+
+    ObjectInputStream obj_in = new ObjectInputStream (iStream);
+
+    return obj_in.readObject();
+  }
+
+  public static Object loadObjectFile( String fileName ) throws IOException, ClassNotFoundException
+  {
+    return loadObjectFile(".", fileName);
   }
 }
