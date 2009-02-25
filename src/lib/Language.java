@@ -7,7 +7,7 @@ import apes.interfaces.ApesObserver;
 import apes.lib.ApeLang;
 
 /**
- * Singleton class for setting the language of the application
+ * Singleton class for setting the language of the application also works as an observable for ApesObserver
  *
  * @author Simon Holm
  */
