@@ -1,6 +1,8 @@
 package apes.models;
 
+import apes.lib.FileHandler;
 import java.util.List;
+import java.io.IOException;
 
 /**
  * Describes the audio in a format suitable for internal representation in the program.
@@ -128,18 +130,18 @@ public class InternalFormat
    * @param filePath The location the file should be saved to.
    * @param fileName The name of the file to be stored.
    */
-  public void saveAs(String filePath, String fileName)
+  public void saveAs(String filePath, String fileName) throws IOException
   {    
-    //TODO: IMPLEMENT       
+    FileHandler.saveObjectToFile( filePath, fileName, this );      
   }
 
   /**
    * Save file
    * TODO: add error handling or some sort of response
    */
-  public void save()
+  public void save() throws IOException
   {
-    //TODO: IMPLEMENT
+    FileHandler.saveObjectToFile( fileStatus.getFilepath(), fileStatus.getFileName(), this);
   }
 
   /*
@@ -175,10 +177,9 @@ public class InternalFormat
    * @param fileName The name of the file.
    * @return
    */
-  public static InternalFormat load(String filePath, String fileName)
+  public static InternalFormat load(String filePath, String fileName) throws IOException, ClassNotFoundException
   {
-
-    //TODO: IMPLEMENT
-    return null;
+    // TODO: add error handling or some sort of response
+    return (InternalFormat) FileHandler.loadObjectFile( filePath, fileName );
   }
 }
