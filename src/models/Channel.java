@@ -63,7 +63,14 @@ public class Channel
       // Add to return object.
       for( int i = 0; i < s.getSize(); i++ )
       {
-        retSamp.setSample( sampCount++, s.getSample( i ) );
+        //TODO: Quick fix for the exception
+        try
+        {
+          retSamp.setSample( sampCount++, s.getSample( i ) );
+        } catch ( Exception e )
+        {
+          e.printStackTrace();
+        }
       }
     }
     
