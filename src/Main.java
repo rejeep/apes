@@ -15,12 +15,9 @@ import javax.swing.JTabbedPane;
 
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
-import apes.interfaces.AudioFormatPlugin;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.plugins.WaveFileFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 //import apes.views.InternalFormatView;

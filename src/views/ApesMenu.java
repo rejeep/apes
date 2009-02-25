@@ -2,7 +2,7 @@ package apes.views;
 
 import javax.swing.JMenu;
 
-import apes.interfaces.ApesObserver;
+import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
 
 /**
@@ -11,7 +11,7 @@ import apes.lib.Language;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ApesMenu extends JMenu implements ApesObserver 
+public class ApesMenu extends JMenu implements LanguageObserver
 {
   private String tag;
   

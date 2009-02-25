@@ -3,7 +3,7 @@ package apes.lib;
 import java.util.ArrayList;
 import java.util.List;
 
-import apes.interfaces.ApesObserver;
+import apes.interfaces.LanguageObserver;
 import apes.lib.ApeLang;
 
 /**
@@ -41,7 +41,7 @@ public class Language
   /**
    * The observers looking at the Language module.
    */
-  private static List<ApesObserver> observers = new ArrayList<ApesObserver>();
+  private static List<LanguageObserver> observers = new ArrayList<LanguageObserver>();
 
   private Language()
   {
@@ -110,7 +110,7 @@ public class Language
    *
    * @param observer The observable item that should be added to watch the language.
    */
-  public static void addObserver( ApesObserver observer )
+  public static void addObserver( LanguageObserver observer )
   {
     observers.add( observer );
   }
@@ -119,14 +119,14 @@ public class Language
    * Removes the specified observer form the language.
    * @param observer The observer to be removed.
    */
-  public static void removeObserver( ApesObserver observer )
+  public static void removeObserver( LanguageObserver observer )
   {
     observers.remove(observer);
   }
 
   private static void notifyAllObservers()
   {
-    for(ApesObserver o: observers)
+    for( LanguageObserver o: observers)
       o.update();
   }
 }
