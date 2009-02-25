@@ -21,7 +21,7 @@ import apes.lib.Language;
 import apes.models.Player;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
-import apes.views.InternalFormatView;
+//import apes.views.InternalFormatView;
 import apes.views.VolumePanel;
 import apes.views.VolumeSlider;
 import apes.views.buttons.BackwardButton;

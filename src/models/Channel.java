@@ -54,7 +54,7 @@ public class Channel
       return null;
     
     // Create Samples object of correct size.
-    Samples retSamp = new Samples( Samples.BITS_PER_SAMPLE, amount );
+    Samples retSamp = new Samples( amount );
     
     int sampCount = 0;
     // For each Samples object
@@ -93,7 +93,7 @@ public class Channel
       throw new Exception("Invalid interval");
     
     // Create object for returning.
-    Samples retObj = new Samples( Samples.BITS_PER_SAMPLE, stop - start + 1 );
+    Samples retObj = new Samples( stop - start + 1 );
     
     // What samples object are we looking at?
     int samplesCounter;
@@ -182,7 +182,7 @@ public class Channel
     // Make full chunks
     for( int i = 0; i < fullChunks; i++ )
     {
-      Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, SAMPLES_SIZE );
+      Samples sampObj = new Samples( SAMPLES_SIZE );
       for( int j = 0; j < SAMPLES_SIZE; j++ )
         //TODO: Had to add the try/catch, handle this in a better way maybe??
         try
@@ -196,7 +196,7 @@ public class Channel
     }
     
     // Add remainder in smaller chunk
-    Samples sampObj = new Samples( Samples.BITS_PER_SAMPLE, remainder );
+    Samples sampObj = new Samples( remainder );
     for( int i = 0; i < remainder; i++ )
     {
       //TODO: Had to add the try/catch, handle this in a better way maybe??

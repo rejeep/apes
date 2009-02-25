@@ -15,6 +15,11 @@ public class Samples
   public static final int BITS_PER_SAMPLE = 32;
   
   /**
+   * Size of a sample in bytes.
+   */
+  public static final int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
+  
+  /**
    * Amount of samples in this object.
    */
   private int size;
@@ -36,13 +41,12 @@ public class Samples
   
   /**
    * Constructs a <code>Samples</code> object with the desired size.
-   * @param bps bits per sample.
    * @param amount number of samples.
    */
-  public Samples(int bps, int amount)
+  public Samples( int amount )
   {
     size = amount;
-    sampleData = new byte[size*(bps/8)]; 
+    sampleData = new byte[size * BYTES_PER_SAMPLE]; 
     maxAmplitude = 0;
   }
   
@@ -62,9 +66,9 @@ public class Samples
     
     // Count bytes instead of bits
     int Bps = bps / 8;
-    size = data.length/Bps;
-    sampleData = new byte[size*(BITS_PER_SAMPLE/8)];
-    int BpsDiff = BITS_PER_SAMPLE/8 - Bps;
+    size = data.length / Bps;
+    sampleData = new byte[ size * BYTES_PER_SAMPLE ];
+    int BpsDiff = BYTES_PER_SAMPLE - Bps;
 
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
@@ -74,15 +78,13 @@ public class Samples
       // Pad as needed.
       for( j = 0; j < BpsDiff; j++ )
       {
-        sampleData[i * Bps + j] = 0; // dont make sense, sampledata are array of bytes but pad one byte for every bit diff
-        //System.out.println("Padding");
+        sampleData[i * BYTES_PER_SAMPLE + j] = 0; // pad one byte for every byte diff
       }
       
       // Handle supplied bytes.
-      for(; j < (BITS_PER_SAMPLE / 8) - BpsDiff; j++)
+      for(; j < BYTES_PER_SAMPLE - BpsDiff; j++)
       {
-        sampleData[i * Bps + j] = data[i * Bps + j];
-        //System.out.println("data");
+        sampleData[i * BYTES_PER_SAMPLE + j] = data[i * Bps + (j - BpsDiff)];
       }
       
       long samp;
@@ -132,9 +134,9 @@ public class Samples
   public long getSample( int index )
   {
     long value = 0;
-    for(int i = 0; i < BITS_PER_SAMPLE / 8; i++)
+    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
     {
-      value += sampleData[index] >> (8 * i);
+      value += sampleData[index * BYTES_PER_SAMPLE + i] << (8 * i);
     }
     return value;
   }
@@ -150,7 +152,7 @@ public class Samples
     if( value < 0 )
       throw new Exception("Amplitude must be non-negative!");
     
-    for(int i = 0; i < BITS_PER_SAMPLE / 8; i++)
+    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
     
     
