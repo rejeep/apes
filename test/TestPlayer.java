@@ -66,6 +66,7 @@ public class TestPlayer
    */
   @Test public void testPauseShouldSetStatusToPause()
   {
+    player.play();
     player.pause();
 
     assertEquals( "Pause should set status to pause", Player.Status.PAUSE, player.getStatus() );
@@ -76,6 +77,7 @@ public class TestPlayer
    */
   @Test public void testStopShouldSetStatusToStop()
   {
+    player.play();
     player.stop();
 
     assertEquals( "Stop should set status to stop", Player.Status.STOP, player.getStatus() );
