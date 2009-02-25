@@ -1,10 +1,11 @@
 package test;
 
-import apes.models.Player;
 import apes.models.InternalFormat;
-
-import org.junit.Test;
+import apes.models.Player;
 import org.junit.Before;
+import org.junit.Test;
+import apes.interfaces.AudioFormatPlugin;
+import apes.plugins.WaveFileFormat;
 
 import static org.junit.Assert.*;
 
@@ -25,7 +26,21 @@ public class TestPlayer
    */
   @Before public void createNewPlayer()
   {
-    player = Player.getInstance();
+    // Tests
+    AudioFormatPlugin wave = new WaveFileFormat();
+    InternalFormat internalFormat = null;
+    Player player = Player.getInstance();
+    
+    try
+    {
+      internalFormat = wave.importFile( ".", "test.wav" );
+
+      player.setInternalFormat( internalFormat );
+    }
+    catch( Exception e )
+    {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -127,5 +142,19 @@ public class TestPlayer
     player.setInternalFormat( new InternalFormat( null, 0, null ) );
     
     assertEquals( "Setting internal format should set status to stop", Player.Status.STOP, player.getStatus() );
+  }
+  
+  /**
+   * Tests that stopping playing will reset pause position.
+   */
+  @Test public void testStopShuoldResetPausePosition()
+  {
+    long expected = 0L;
+
+    player.play();
+    player.pause();
+    player.stop();
+    
+    assertEquals( "Stop should reset pause position", expected, player.getPausePosition() );
   }
 }
