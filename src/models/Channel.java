@@ -36,6 +36,40 @@ public class Channel
     samplesList = splitSamples( samples );
     maxAmplitude = samples.getMaxAmplitude();
   }
+  
+  /**
+   * Returns a Samples object containing all samples in the Channel.
+   * @return A Samples object containing all samples in the Samples objects of the Channel, in the same order.
+   */
+  public Samples getAllSamples()
+  {
+    int amount = 0;
+    
+    // Count samples
+    for( Samples s : samplesList )
+      amount += s.getSize();
+    
+    // No samples in channel
+    if( amount == 0 )
+      return null;
+    
+    // Create Samples object of correct size.
+    Samples retSamp = new Samples( Samples.BITS_PER_SAMPLE, amount );
+    
+    int sampCount = 0;
+    // For each Samples object
+    for( Samples s : samplesList )
+    {
+      // Add to return object.
+      for( int i = 0; i < s.getSize(); i++ )
+      {
+        retSamp.setSample( sampCount++, s.getSample( i ) );
+      }
+    }
+    
+    return retSamp;
+    
+  }
 
   /**
    * Returns a Samples object containing all samples in the specified interval, inclusively.<br>
