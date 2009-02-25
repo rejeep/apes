@@ -25,6 +25,11 @@ public class Samples
   private long maxAmplitude;
   
   /**
+   * The index of the sample due to which the maxAmplitude was last updated.
+   */
+  private int maxAmplitudeIndex;
+  
+  /**
    * Contains all the raw data of the samples.
    */
   private byte[] sampleData;
@@ -61,9 +66,6 @@ public class Samples
     sampleData = new byte[size*(BITS_PER_SAMPLE/8)];
     int BpsDiff = BITS_PER_SAMPLE/8 - Bps;
 
-    System.out.println("BpsDiff: " + BpsDiff);
-    System.out.println("Bytes per sample: " + BITS_PER_SAMPLE/8); 
-    System.out.println("size: " + size);
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
     {
@@ -85,7 +87,10 @@ public class Samples
       
       long samp;
       if( ( samp = getSample( i ) ) > maxAmplitude )
-        maxAmplitude = samp; 
+      {
+        maxAmplitude = samp;
+        maxAmplitudeIndex = i;
+      }
     }
   }
   
@@ -144,10 +149,46 @@ public class Samples
   {
     if( value < 0 )
       throw new Exception("Amplitude must be non-negative!");
+    
     for(int i = 0; i < BITS_PER_SAMPLE / 8; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
+    
+    
+    // If higher, we have a new max.
     if( value > maxAmplitude )
+    {
       maxAmplitude = value;
+      maxAmplitudeIndex = index;
+    }
+    // If same index, we may need to update. If not, we don't.
+    else if( index == maxAmplitudeIndex )
+    {
+      updateMaxAmplitude();
+    }
+  }
+  
+  /**
+   * Calculates the maximum amplitude, stores it in <code>maxAmplitude</code> and updates <code>maxAmplitudeIndex</code> 
+   */
+  private void updateMaxAmplitude()
+  {
+    
+    long max = 0;
+    int maxI = -1;
+    // Go through all samples
+    for( int i = 0; i < size; i++ )
+    {
+      long amp = getSample( i );
+     
+      // Update max as needed. 
+      if( amp > max )
+      {
+        max = amp;
+        maxI = i;
+      }
+    }
+    maxAmplitude = max;
+    maxAmplitudeIndex = maxI;
   }
   
 }
