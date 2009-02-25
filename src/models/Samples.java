@@ -66,9 +66,6 @@ public class Samples
     sampleData = new byte[size*(BITS_PER_SAMPLE/8)];
     int BpsDiff = BITS_PER_SAMPLE/8 - Bps;
 
-    System.out.println("BpsDiff: " + BpsDiff);
-    System.out.println("Bytes per sample: " + BITS_PER_SAMPLE/8); 
-    System.out.println("size: " + size);
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
     {
