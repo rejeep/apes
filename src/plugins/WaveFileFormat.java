@@ -11,6 +11,7 @@ import apes.models.Channel;
 import apes.models.InternalFormat;
 import apes.models.Samples;
 import apes.models.Tags;
+import apes.models.FileStatus;
 
 /**
  * Module used for converting .wav-files to the internal format
@@ -113,8 +114,12 @@ public class WaveFileFormat implements AudioFormatPlugin
     {
       channels.add( new Channel( new Samples( bitsPerSample, samples ) ) );
     }
-
-    return new InternalFormat( tag, sampleRate, channels );
+    
+    
+    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
+    internalFormat.setFileStatus( new FileStatus( path, filename ) );
+      
+    return internalFormat;
   }
 
 }
