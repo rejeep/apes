@@ -1,7 +1,7 @@
 package apes.controllers;
 
-import apes.controllers.ApplicationController;
 import apes.models.Player;
+import javax.swing.JSlider;
 
 /**
  * Controller for the player.
@@ -61,5 +61,15 @@ public class PlayerController extends ApplicationController
   public void forward()
   {
     player.forward();
+  }
+  
+  /**
+   * Change volume.
+   */
+  public void volume()
+  {
+    JSlider slider = (JSlider) event.getSource();
+    
+    player.setVolume( slider.getValue() );
   }
 }
