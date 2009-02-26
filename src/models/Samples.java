@@ -75,16 +75,18 @@ public class Samples
     {
       int j;
       
-      // Pad as needed.
-      for( j = 0; j < BpsDiff; j++ )
+      // Handle supplied bytes.
+      for( j = 0; j < Bps; j++ )
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = 0; // pad one byte for every byte diff
+        sampleData[i * BYTES_PER_SAMPLE + j] = data[i * Bps + j];
+       // System.out.println("Byte: " + sampleData[i * BYTES_PER_SAMPLE + j]);
       }
       
-      // Handle supplied bytes.
-      for(; j < BYTES_PER_SAMPLE - BpsDiff; j++)
+      // Pad as needed.
+      for(; j < BYTES_PER_SAMPLE; j++)
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = data[i * Bps + (j - BpsDiff)];
+        sampleData[i * BYTES_PER_SAMPLE + j] = 0; // pad one byte for every byte diff
+        //System.out.println("Padding");
       }
       
       long samp;
