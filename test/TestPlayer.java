@@ -41,6 +41,8 @@ public class TestPlayer
     {
       e.printStackTrace();
     }
+
+    player.setVolume( 0 );
   }
 
   /**
