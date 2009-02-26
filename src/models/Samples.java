@@ -193,4 +193,13 @@ public class Samples
     maxAmplitudeIndex = maxI;
   }
   
+  /**
+   * Returns all data.
+   *
+   * @return a <code>byte</code> array containing all data.
+   */
+  public byte[] getData()
+  {
+    return sampleData;
+  }
 }
