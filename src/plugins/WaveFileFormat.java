@@ -19,6 +19,15 @@ public class WaveFileFormat implements AudioFormatPlugin
 {
 
   /**
+   * Returns the extension of the file format
+   * @return extension
+   */
+  public String getExtension()
+  {
+    return "wav";
+  }
+  
+  /**
    * Converts a file from the internal file format to .wav and stores it on the disk
    *
    * @param internalFormat The file to be converted.
