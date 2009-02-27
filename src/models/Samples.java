@@ -1,5 +1,6 @@
 package apes.models;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -47,7 +48,8 @@ public class Samples
   {
     size = amount;
     sampleData = new byte[size * BYTES_PER_SAMPLE]; 
-    maxAmplitude = 0;
+    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitudeIndex = -1;
   }
   
   /**
@@ -62,7 +64,8 @@ public class Samples
       throw new Exception("Invalid amount of bits per sample");
     }
     
-    maxAmplitude = 0;
+    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitudeIndex = -1;
     
     // Count bytes instead of bits
     int Bps = bps / 8;
@@ -73,26 +76,23 @@ public class Samples
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
     {
-      int j;
-      
-      // Handle supplied bytes.
-      for( j = 0; j < Bps; j++ )
+      // Read value
+      byte[] val = new byte[Bps];
+      for(int j = 0; j < Bps; j++)
+        val[j] = data[(i + 1) * Bps - j -1];
+      BigInteger bigAmp = new BigInteger(val);
+      int amplitude = bigAmp.intValue();
+
+      // Write value
+      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = data[i * Bps + j];
-       // System.out.println("Byte: " + sampleData[i * BYTES_PER_SAMPLE + j]);
+        sampleData[i * BYTES_PER_SAMPLE + j] = (byte)((amplitude >> ( 8 * j )) & 0xff);
       }
       
-      // Pad as needed.
-      for(; j < BYTES_PER_SAMPLE; j++)
+      // Update max
+      if( amplitude > maxAmplitude )
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = 0; // pad one byte for every byte diff
-        //System.out.println("Padding");
-      }
-      
-      int samp;
-      if( ( samp = getSample( i ) ) > maxAmplitude )
-      {
-        maxAmplitude = samp;
+        maxAmplitude = amplitude;
         maxAmplitudeIndex = i;
       }
     }
@@ -136,9 +136,11 @@ public class Samples
   public int getSample( int index )
   {
     int value = 0;
+    byte[] amp = new byte[BYTES_PER_SAMPLE];
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
     {
-      value += sampleData[index * BYTES_PER_SAMPLE + i] << (8 * i);
+      amp[i] = sampleData[(index + 1) * BYTES_PER_SAMPLE - i - 1];
+      value = new BigInteger(amp).intValue();
     }
     return value;
   }
@@ -174,7 +176,7 @@ public class Samples
   private void updateMaxAmplitude()
   {
     
-    int max = 0;
+    int max = Integer.MIN_VALUE;
     int maxI = -1;
     // Go through all samples
     for( int i = 0; i < size; i++ )

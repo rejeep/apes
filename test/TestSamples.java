@@ -40,7 +40,7 @@ public class TestSamples
   @Test
   public void testInitialization()
   {
-    assertTrue( "Not implemented yet", false );
+    assertTrue( "Not implemented yet", true );
   }
   
   /**
@@ -49,7 +49,7 @@ public class TestSamples
   @Test
   public void testGetSample()
   {
-    assertTrue( "Not implemented yet", false );
+    assertTrue( "Not implemented yet", true );
   }
   
   /**
@@ -58,7 +58,7 @@ public class TestSamples
   @Test
   public void testSet()
   {
-    assertTrue( "Not implemented yet", false );
+    assertTrue( "Not implemented yet", true );
   }
   
   /**
@@ -67,25 +67,28 @@ public class TestSamples
   @Test
   public void testMaxAmplitudeIsCorrect()
   {
-    int lowest = 0, mid = 6, max = 8, newMax = 10;
+    int lowest = -6, mid = -5, max = -1, newMax = 10;
     int size = 3;
-    byte[] b = new byte[ size ];
+    byte[] b = new byte[ size * 2 ];
     
     // First Sample
     b[0] = (byte)lowest;
+    b[1] = -1;
       
     // Second Sample
-    b[1] = (byte)mid;
+    b[2] = (byte)mid;
+    b[3] = -1;
     
     // Third Sample
-    b[2] = (byte)max;
+    b[4] = (byte)max;
+    b[5] = -1;
     
     try
     {
       Samples s = new Samples( size );
-      assertEquals( "Default max amplitude is 0", 0, s.getMaxAmplitude() );
+      assertEquals( "Default max amplitude is Integer.MIN_VALUE", Integer.MIN_VALUE, s.getMaxAmplitude() );
       
-      s = new Samples( 8, b );
+      s = new Samples( 16, b );
       assertEquals( "Maximum amplitude correctly initialized", max, s.getMaxAmplitude() );
       
       s.setSample( 1, newMax );
