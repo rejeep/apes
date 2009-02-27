@@ -7,8 +7,13 @@ import apes.models.InternalFormat;
 /**
  * Simon Holm
  */
-public interface AudioFormatPlugin
+public interface AudioFormatPlugin extends Plugin
 {
+  /**
+   * Returns the extension of the file format.
+   * @return file extension a <code>String</code>
+   */
+  String getExtension ();
   
   /**
    * Describe <code>importFile</code> method here.
