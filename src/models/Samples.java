@@ -1,5 +1,6 @@
 package apes.models;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -27,7 +28,7 @@ public class Samples
   /**
    * Maximum amplitude of all samples in the Samples object.
    */
-  private long maxAmplitude;
+  private int maxAmplitude;
   
   /**
    * The index of the sample due to which the maxAmplitude was last updated.
@@ -47,7 +48,8 @@ public class Samples
   {
     size = amount;
     sampleData = new byte[size * BYTES_PER_SAMPLE]; 
-    maxAmplitude = 0;
+    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitudeIndex = -1;
   }
   
   /**
@@ -62,7 +64,8 @@ public class Samples
       throw new Exception("Invalid amount of bits per sample");
     }
     
-    maxAmplitude = 0;
+    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitudeIndex = -1;
     
     // Count bytes instead of bits
     int Bps = bps / 8;
@@ -73,26 +76,23 @@ public class Samples
     // Transfer data to sampleData array.
     for(int i = 0; i < size; i++)
     {
-      int j;
-      
-      // Handle supplied bytes.
-      for( j = 0; j < Bps; j++ )
+      // Read value
+      byte[] val = new byte[Bps];
+      for(int j = 0; j < Bps; j++)
+        val[j] = data[(i + 1) * Bps - j -1];
+      BigInteger bigAmp = new BigInteger(val);
+      int amplitude = bigAmp.intValue();
+
+      // Write value
+      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = data[i * Bps + j];
-       // System.out.println("Byte: " + sampleData[i * BYTES_PER_SAMPLE + j]);
+        sampleData[i * BYTES_PER_SAMPLE + j] = (byte)((amplitude >> ( 8 * j )) & 0xff);
       }
       
-      // Pad as needed.
-      for(; j < BYTES_PER_SAMPLE; j++)
+      // Update max
+      if( amplitude > maxAmplitude )
       {
-        sampleData[i * BYTES_PER_SAMPLE + j] = 0; // pad one byte for every byte diff
-        //System.out.println("Padding");
-      }
-      
-      long samp;
-      if( ( samp = getSample( i ) ) > maxAmplitude )
-      {
-        maxAmplitude = samp;
+        maxAmplitude = amplitude;
         maxAmplitudeIndex = i;
       }
     }
@@ -111,9 +111,9 @@ public class Samples
    * Returns an approximation of the average amplitude among all samples in this samples object.
    * @return An approximate average amplitude over all samples.
    */
-  public long getAverageAmplitude()
+  public int getAverageAmplitude()
   {
-    long total = 0;
+    int total = 0;
     for( int i = 0; i < size; i += 10 )
       total += getSample( i );
     return total / size;
@@ -123,7 +123,7 @@ public class Samples
    * Returns the maximum amplitude among all samples in this object.
    * @return The value of the highest amplitude of all samples in this object.
    */
-  public long getMaxAmplitude()
+  public int getMaxAmplitude()
   {
     return maxAmplitude;
   }
@@ -133,12 +133,14 @@ public class Samples
    * @param index The index of the desired sample. 
    * @return The amplitude of the requested sample.
    */
-  public long getSample( int index )
+  public int getSample( int index )
   {
-    long value = 0;
+    int value = 0;
+    byte[] amp = new byte[BYTES_PER_SAMPLE];
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
     {
-      value += sampleData[index * BYTES_PER_SAMPLE + i] << (8 * i);
+      amp[i] = sampleData[(index + 1) * BYTES_PER_SAMPLE - i - 1];
+      value = new BigInteger(amp).intValue();
     }
     return value;
   }
@@ -149,11 +151,8 @@ public class Samples
    * @param value The desired amplitude.
    * @throws Exception Throws an exception of the amplitude has a negative value.
    */
-  public void setSample( int index, long value ) throws Exception
-  {
-    if( value < 0 )
-      throw new Exception("Amplitude must be non-negative!");
-    
+  public void setSample( int index, int value ) throws Exception
+  { 
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
     
@@ -177,12 +176,12 @@ public class Samples
   private void updateMaxAmplitude()
   {
     
-    long max = 0;
+    int max = Integer.MIN_VALUE;
     int maxI = -1;
     // Go through all samples
     for( int i = 0; i < size; i++ )
     {
-      long amp = getSample( i );
+      int amp = getSample( i );
      
       // Update max as needed. 
       if( amp > max )
