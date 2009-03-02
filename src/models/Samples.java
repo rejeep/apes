@@ -154,8 +154,7 @@ public class Samples
   public void setSample( int index, int value ) throws Exception
   { 
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
-      sampleData[index] = (byte)((value >> i*8) & 0xff);
-    
+      sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
     
     // If higher, we have a new max.
     if( value > maxAmplitude )
