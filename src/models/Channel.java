@@ -23,7 +23,7 @@ public class Channel
   /**
    * Maximum amplitude of all samples in the Channel
    */
-  private long maxAmplitude;
+  private int maxAmplitude;
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -213,5 +213,30 @@ public class Channel
     // Return chunks.
     return split;
   }
+  
+  /**
+   * Get sample chunk at point <code>index</code>.
+   *
+   * @param index the index value
+   * @return a chunk of <code>Samples</code> for <code>index</code>.
+   */
+  public Samples getSamples( int index )
+  {
+    return samplesList.get( index );
+  }
 
+  /**
+   * Describe <code>getSamplesSize</code> method here.
+   *
+   * @return an <code>int</code> value
+   */
+  public int getSamplesSize()
+  {
+    return samplesList.size();
+  }
+
+  public int getMaxAmplitude()
+  {
+    return this.maxAmplitude;
+  }
 }
