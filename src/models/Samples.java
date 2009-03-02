@@ -90,7 +90,7 @@ public class Samples
       for(int j = 0; j < Bps; j++)
         val[j] = data[(i + 1) * Bps - j -1];
       BigInteger bigAmp = new BigInteger(val);
-      int amplitude = bigAmp.intValue();
+      int amplitude = bigAmp.intValue() << ( 8 * BpsDiff );
 
       // Write value
       for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
