@@ -19,16 +19,6 @@ public class Channel
    * A list containing all Samples structure, and thus all audio data of the channel.
    */
   private List<Samples> samplesList;
-  
-  /**
-   * Maximum amplitude of all samples in the Channel
-   */
-  private int maxAmplitude;
-  
-  /**
-   * Minimum amplitude of all samples in the Channel
-   */
-  private int minAmplitude;
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -248,7 +238,12 @@ public class Channel
    */
   public int getMinAmplitude()
   {
-    return this.minAmplitude;
+    int min = Integer.MAX_VALUE;
+    int value;
+    for( Samples s : samplesList )
+      if( (value = s.getMinAmplitude()) < min )
+        min = value;
+    return min;
   }
   
   /**
@@ -258,7 +253,12 @@ public class Channel
    */
   public int getMaxAmplitude()
   {
-    return this.maxAmplitude;
+    int max = Integer.MAX_VALUE;
+    int value;
+    for( Samples s : samplesList )
+      if( (value = s.getMaxAmplitude()) > max )
+        max = value;
+    return max;
   }
   
   /**
@@ -268,6 +268,6 @@ public class Channel
    */
   public int getDiffAmplitude()
   {
-    return this.maxAmplitude - this.minAmplitude;
+    return getMaxAmplitude() - getMinAmplitude();
   }
 }

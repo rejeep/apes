@@ -223,7 +223,7 @@ public class Samples
       int amp = getSample( i );
 
       // Update min as needed.
-      if( amp > min )
+      if( amp < min )
       {
         min = amp;
         minI = i;
