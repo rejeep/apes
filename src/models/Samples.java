@@ -132,10 +132,7 @@ public class Samples
     int total = 0;
     for( int i = 0; i < size; i += 10 )
       total += getSample( i );
-    
-    System.out.println( "size: " + size );
-    System.out.println( "total: " + total );
-    
+
     return total / ( size / 10 );
   }
 
@@ -184,7 +181,7 @@ public class Samples
   public void setSample( int index, int value ) throws Exception
   {
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
-      sampleData[index] = (byte)((value >> i*8) & 0xff);
+      sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
 
     // If smaller, we have a new min.
     if( value < minAmplitude )
@@ -198,7 +195,7 @@ public class Samples
       maxAmplitude = value;
       maxAmplitudeIndex = index;
     }
-    
+
     // If same index, we may need to update. If not, we don't.
     if( index == minAmplitudeIndex || index == maxAmplitudeIndex )
     {
@@ -216,22 +213,22 @@ public class Samples
   {
     int min = Integer.MAX_VALUE;
     int minI = -1;
-    
+
     int max = Integer.MIN_VALUE;
     int maxI = -1;
-    
+
     // Go through all samples
     for( int i = 0; i < size; i++ )
     {
       int amp = getSample( i );
-      
+
       // Update min as needed.
       if( amp > min )
       {
         min = amp;
         minI = i;
       }
-      
+
       // Update max as needed.
       if( amp > max )
       {
@@ -239,10 +236,10 @@ public class Samples
         maxI = i;
       }
     }
-    
+
     minAmplitude = min;
     minAmplitudeIndex = minI;
-    
+
     maxAmplitude = max;
     maxAmplitudeIndex = maxI;
   }
