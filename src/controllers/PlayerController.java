@@ -46,16 +46,7 @@ public class PlayerController extends ApplicationController
    */
   public void play()
   {
-    long pausePosition = player.getPausePosition();
-    
-    if( pausePosition == 0L )
-    {
-      player.play();
-    }
-    else
-    {
-      player.play( pausePosition );
-    }
+    player.play( player.getPausePosition() );
   }
 
   /**
