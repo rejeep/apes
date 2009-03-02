@@ -86,6 +86,7 @@ public class TestSamples
     try
     {
       Samples s = new Samples( size );
+      assertEquals( "Default min amplitude is Integer.MAX_VALUE", Integer.MAX_VALUE, s.getMinAmplitude() );
       assertEquals( "Default max amplitude is Integer.MIN_VALUE", Integer.MIN_VALUE, s.getMaxAmplitude() );
       
       s = new Samples( 16, b );
