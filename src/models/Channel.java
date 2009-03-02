@@ -24,6 +24,11 @@ public class Channel
    * Maximum amplitude of all samples in the Channel
    */
   private int maxAmplitude;
+  
+  /**
+   * Minimum amplitude of all samples in the Channel
+   */
+  private int minAmplitude;
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -35,6 +40,7 @@ public class Channel
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
     maxAmplitude = samples.getMaxAmplitude();
+    minAmplitude = samples.getMinAmplitude();
   }
   
   /**
@@ -234,9 +240,34 @@ public class Channel
   {
     return samplesList.size();
   }
-
+  
+  /**
+   * Returns that smallest amplitude for this channel.
+   *
+   * @return The smallest amplitude.
+   */
+  public int getMinAmplitude()
+  {
+    return this.minAmplitude;
+  }
+  
+  /**
+   * Returns that largest amplitude for this channel.
+   *
+   * @return The largest amplitude.
+   */
   public int getMaxAmplitude()
   {
     return this.maxAmplitude;
+  }
+  
+  /**
+   * Returns the diff between the largest and smallest amplitude.
+   *
+   * @return Diff between amplitues.
+   */
+  public int getDiffAmplitude()
+  {
+    return this.maxAmplitude - this.minAmplitude;
   }
 }
