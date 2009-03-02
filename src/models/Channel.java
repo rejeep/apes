@@ -29,8 +29,6 @@ public class Channel
   {
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
-    maxAmplitude = samples.getMaxAmplitude();
-    minAmplitude = samples.getMinAmplitude();
   }
   
   /**
