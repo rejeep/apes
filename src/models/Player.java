@@ -70,10 +70,15 @@ public class Player implements Runnable
   private long pausePosition;
 
   /**
+   * Keeps state of which samples that is currently playing.
+   */
+  private int currentSamples = 0;
+  
+  /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
    */
-  Thread thread;
+  private Thread thread;
 
   /**
    * Private so that an object of this class can not be created
@@ -92,9 +97,7 @@ public class Player implements Runnable
   {
     play( 0 );
   }
-
-  private int currentSamples = 0;
-
+  
   /**
    * Plays audio file starting from the given <code>position</code>.
    *
@@ -242,10 +245,11 @@ public class Player implements Runnable
         line.start();
 
         // For volume control
-        // gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
+        gainControl = (FloatControl) line.getControl( FloatControl.Type.VOLUME );
 
         this.line = line;
       }
+      catch( IllegalArgumentException e ) { /* Don't want warning... */ }
       catch( Exception e )
       {
         e.printStackTrace();
