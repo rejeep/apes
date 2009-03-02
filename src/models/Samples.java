@@ -14,32 +14,42 @@ public class Samples
    * Size of a sample in bits.
    */
   public static final int BITS_PER_SAMPLE = 32;
-  
+
   /**
    * Size of a sample in bytes.
    */
   public static final int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
-  
+
   /**
    * Amount of samples in this object.
    */
   private int size;
-  
+
   /**
    * Maximum amplitude of all samples in the Samples object.
    */
   private int maxAmplitude;
-  
+
   /**
    * The index of the sample due to which the maxAmplitude was last updated.
    */
   private int maxAmplitudeIndex;
-  
+
+  /**
+   * Minimum amplitude of all samples in the Samples object.
+   */
+  private int minAmplitude;
+
+  /**
+   * The index of the sample due to which the minAmplitude was last updated.
+   */
+  private int minAmplitudeIndex;
+
   /**
    * Contains all the raw data of the samples.
    */
   private byte[] sampleData;
-  
+
   /**
    * Constructs a <code>Samples</code> object with the desired size.
    * @param amount number of samples.
@@ -47,26 +57,25 @@ public class Samples
   public Samples( int amount )
   {
     size = amount;
-    sampleData = new byte[size * BYTES_PER_SAMPLE]; 
-    maxAmplitude = Integer.MIN_VALUE;
-    maxAmplitudeIndex = -1;
+    sampleData = new byte[size * BYTES_PER_SAMPLE];
+
+    setMinAndMaxDefaultValues();
   }
-  
+
   /**
-   * Constructs a <code>Samples</code> object from the given data. 
+   * Constructs a <code>Samples</code> object from the given data.
    * @param data sample data using the specified bps.
    */
-  public Samples(int bps, byte[] data) throws Exception  
+  public Samples(int bps, byte[] data) throws Exception
   {
     // Complain if bps is invalid
     if(bps <= 0 || bps%8 != 0 || bps > BITS_PER_SAMPLE)
     {
       throw new Exception("Invalid amount of bits per sample");
     }
-    
-    maxAmplitude = Integer.MIN_VALUE;
-    maxAmplitudeIndex = -1;
-    
+
+    setMinAndMaxDefaultValues();
+
     // Count bytes instead of bits
     int Bps = bps / 8;
     size = data.length / Bps;
@@ -88,7 +97,14 @@ public class Samples
       {
         sampleData[i * BYTES_PER_SAMPLE + j] = (byte)((amplitude >> ( 8 * j )) & 0xff);
       }
-      
+
+      // Update min
+      if( amplitude < minAmplitude )
+      {
+        minAmplitude = amplitude;
+        minAmplitudeIndex = i;
+      }
+
       // Update max
       if( amplitude > maxAmplitude )
       {
@@ -97,7 +113,7 @@ public class Samples
       }
     }
   }
-  
+
   /**
    * Returns amount of samples.
    * @return the amount of samples stored in this samples object.
@@ -106,7 +122,7 @@ public class Samples
   {
     return size;
   }
-  
+
   /**
    * Returns an approximation of the average amplitude among all samples in this samples object.
    * @return An approximate average amplitude over all samples.
@@ -116,9 +132,13 @@ public class Samples
     int total = 0;
     for( int i = 0; i < size; i += 10 )
       total += getSample( i );
-    return total / size;
+    
+    System.out.println( "size: " + size );
+    System.out.println( "total: " + total );
+    
+    return total / ( size / 10 );
   }
-  
+
   /**
    * Returns the maximum amplitude among all samples in this object.
    * @return The value of the highest amplitude of all samples in this object.
@@ -129,8 +149,18 @@ public class Samples
   }
 
   /**
+   * Returns the minimum amplitude among all samples in this object.
+   * @return The value of the highest amplitude of all samples in this
+   * object.
+   */
+  public int getMinAmplitude()
+  {
+    return minAmplitude;
+  }
+
+  /**
    * Returns the sample at given index.
-   * @param index The index of the desired sample. 
+   * @param index The index of the desired sample.
    * @return The amplitude of the requested sample.
    */
   public int getSample( int index )
@@ -144,7 +174,7 @@ public class Samples
     }
     return value;
   }
-  
+
   /**
    * Sets amplitude of selected sample.
    * @param index The index of the sample to affect.
@@ -152,48 +182,71 @@ public class Samples
    * @throws Exception Throws an exception of the amplitude has a negative value.
    */
   public void setSample( int index, int value ) throws Exception
-  { 
+  {
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index] = (byte)((value >> i*8) & 0xff);
-    
-    
+
+    // If smaller, we have a new min.
+    if( value < minAmplitude )
+    {
+      minAmplitude = value;
+      minAmplitudeIndex = index;
+    }
     // If higher, we have a new max.
-    if( value > maxAmplitude )
+    else if( value > maxAmplitude )
     {
       maxAmplitude = value;
       maxAmplitudeIndex = index;
     }
+    
     // If same index, we may need to update. If not, we don't.
-    else if( index == maxAmplitudeIndex )
+    if( index == minAmplitudeIndex || index == maxAmplitudeIndex )
     {
-      updateMaxAmplitude();
+      updateMinAndMaxAmplitude();
     }
   }
-  
+
   /**
-   * Calculates the maximum amplitude, stores it in <code>maxAmplitude</code> and updates <code>maxAmplitudeIndex</code> 
+   * Calculates the minimum and maximum amplitude, stores it in
+   * <code>minAmplitude</code> and <code>maxAmplitude</code> and
+   * updates <code>minAmplitudeIndex</code> and
+   * <code>maxAmplitudeIndex</code>.
    */
-  private void updateMaxAmplitude()
+  private void updateMinAndMaxAmplitude()
   {
+    int min = Integer.MAX_VALUE;
+    int minI = -1;
     
     int max = Integer.MIN_VALUE;
     int maxI = -1;
+    
     // Go through all samples
     for( int i = 0; i < size; i++ )
     {
       int amp = getSample( i );
-     
-      // Update max as needed. 
+      
+      // Update min as needed.
+      if( amp > min )
+      {
+        min = amp;
+        minI = i;
+      }
+      
+      // Update max as needed.
       if( amp > max )
       {
         max = amp;
         maxI = i;
       }
     }
+    
+    minAmplitude = min;
+    minAmplitudeIndex = minI;
+    
     maxAmplitude = max;
     maxAmplitudeIndex = maxI;
   }
-  
+
   /**
    * Returns all data.
    *
@@ -202,5 +255,17 @@ public class Samples
   public byte[] getData()
   {
     return sampleData;
+  }
+
+  /**
+   * Sets default min and max index and value.
+   */
+  private void setMinAndMaxDefaultValues()
+  {
+    minAmplitude = Integer.MAX_VALUE;
+    minAmplitudeIndex = -1;
+
+    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitudeIndex = -1;
   }
 }
