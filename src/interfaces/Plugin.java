@@ -2,8 +2,9 @@ package apes.interfaces;
 
 /**
  * Interface for plugins.
+ * TODO: What do to about locale?
  */
 public interface Plugin
 {
-  // needs name, identifier, description, locale?
+  // name and other texty things go here
 }

@@ -59,7 +59,11 @@ public class Samples
     size = amount;
     sampleData = new byte[size * BYTES_PER_SAMPLE];
 
-    setMinAndMaxDefaultValues();
+    for( int i = 0; i < amount; i++ )
+      setSample( i, Integer.MIN_VALUE );
+    
+    minAmplitude = maxAmplitude = Integer.MIN_VALUE;
+    minAmplitudeIndex = maxAmplitudeIndex = 0;
   }
 
   /**
@@ -92,25 +96,7 @@ public class Samples
       BigInteger bigAmp = new BigInteger(val);
       int amplitude = bigAmp.intValue() << ( 8 * BpsDiff );
 
-      // Write value
-      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
-      {
-        sampleData[i * BYTES_PER_SAMPLE + j] = (byte)((amplitude >> ( 8 * j )) & 0xff);
-      }
-
-      // Update min
-      if( amplitude < minAmplitude )
-      {
-        minAmplitude = amplitude;
-        minAmplitudeIndex = i;
-      }
-
-      // Update max
-      if( amplitude > maxAmplitude )
-      {
-        maxAmplitude = amplitude;
-        maxAmplitudeIndex = i;
-      }
+      setSample( i, amplitude );
     }
   }
 
@@ -183,6 +169,7 @@ public class Samples
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
 
+    int oldIndex = index;
     // If smaller, we have a new min.
     if( value < minAmplitude )
     {
@@ -197,7 +184,7 @@ public class Samples
     }
 
     // If same index, we may need to update. If not, we don't.
-    if( index == minAmplitudeIndex || index == maxAmplitudeIndex )
+    if( oldIndex == minAmplitudeIndex || oldIndex == maxAmplitudeIndex )
     {
       updateMinAndMaxAmplitude();
     }

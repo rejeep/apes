@@ -21,7 +21,9 @@ import apes.lib.Language;
 import apes.models.Player;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
-//import apes.views.InternalFormatView;
+import apes.views.InternalFormatView;
+import apes.models.InternalFormat;
+import apes.plugins.WaveFileFormat;
 import apes.views.VolumePanel;
 import apes.views.VolumeSlider;
 import apes.views.buttons.BackwardButton;
@@ -77,6 +79,16 @@ public class Main extends JFrame
     config.parse();
     
     Player player = Player.getInstance();
+    try
+    {
+    InternalFormat internalFormat = new WaveFileFormat().importFile( "C:\\Users\\Daniel\\Documents\\Audioeditor\\apes", "test.wav" );
+    
+    player.setInternalFormat( internalFormat );
+    }
+    catch( Exception e )
+    {
+    e.printStackTrace();
+    }
     player.setVolume( config.getIntOption( "volume" ) );
     
     // Set some instance variables.
@@ -112,8 +124,8 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
-    //InternalFormatView internalFormatView = new InternalFormatView();
-    //tabs.addTab( "Some file.wav", internalFormatView );
+    InternalFormatView internalFormatView = new InternalFormatView();
+    tabs.addTab( "Some file.wav", internalFormatView );
 
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
