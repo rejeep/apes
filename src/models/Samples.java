@@ -162,9 +162,8 @@ public class Samples
    * Sets amplitude of selected sample.
    * @param index The index of the sample to affect.
    * @param value The desired amplitude.
-   * @throws Exception Throws an exception of the amplitude has a negative value.
    */
-  public void setSample( int index, int value ) throws Exception
+  public void setSample( int index, int value )
   {
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
