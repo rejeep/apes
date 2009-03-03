@@ -3,7 +3,6 @@ package apes.lib;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
@@ -50,6 +49,10 @@ public class PluginHandler extends ClassLoader
   }
   
   /**
+   * Given a path pointing to a directory or a file, will try to add
+   * all plugins in the directory or the plugin the path was pointing
+   * to.
+   * 
    * @param str A path pointing to either a file or a directory.
    */
   public void addPlugin(String str)
@@ -62,7 +65,8 @@ public class PluginHandler extends ClassLoader
     }
     else if(file.isFile())
     {
-      loadPlugin(file.getPath(), file.getName());
+      //loadPlugin(file.getPath(), file.getName());
+      loadFile(file.getPath(), file.getName().substring(0, name.indexOf(".")));
     }
   }
   
@@ -71,18 +75,13 @@ public class PluginHandler extends ClassLoader
    */
   public void removePlugin(String name)
   {
-  }
-  
-  /**
-   * -
-   */
-  private void loadPlugin(String path, String name)
-  {
-    loadFile(path, name.substring(0, name.indexOf(".")));
+    // TODO
   }
 
   /**
-   * -
+   * Tries to load all plugins in a directory.
+   * 
+   * @param path Directory.
    */
   private void loadPluginsInPath(String path)
   {
@@ -112,7 +111,10 @@ public class PluginHandler extends ClassLoader
   }
   
   /**
-   * -
+   * Loads a single plugin, given a path and a name.
+   * 
+   * @param path Directory.
+   * @param name Name of class to load.
    */
   private void loadFile(String path, String name)
   {
@@ -134,7 +136,11 @@ public class PluginHandler extends ClassLoader
   }
 
   /**
-   * -
+   * Loads a class file.
+   * 
+   * @param location Directory.
+   * @param name Name of class to load.
+   * @throws ClassNotFoundException
    */
   private void loadClass(String location, String name) throws
     ClassNotFoundException
@@ -179,7 +185,11 @@ public class PluginHandler extends ClassLoader
   }
 
   /**
-   * -
+   * Loads a JAR file.
+   * 
+   * @param location Directory.
+   * @param name Name of JAR to load.
+   * @throws ClassNotFoundException
    */
   private void loadJAR(String location, String name) throws
     ClassNotFoundException
@@ -201,7 +211,10 @@ public class PluginHandler extends ClassLoader
   }
 
   /**
-   * -
+   * Creates a new instance of the class and adds it to the list
+   * of loaded plugins.
+   * 
+   * @param cls Class object.
    */
   private void instancePlugin(Class<?> cls)
   {
