@@ -4,6 +4,8 @@ import apes.models.Samples;
 
 /**
  * Interface for transform plugins.
+ * 
+ * TODO: Some plugins will want get/set some value(s).
  */
 public interface TransformPlugin extends Plugin
 {

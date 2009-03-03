@@ -20,7 +20,14 @@ import apes.interfaces.TransformPlugin;
  */
 public class PluginHandler extends ClassLoader
 {
+  /**
+   * ArrayList for TransformPlugins.
+   */
   private ArrayList<TransformPlugin> transforms;
+  
+  /**
+   * ArrayList for AudioFormatPlugins.
+   */
   private ArrayList<AudioFormatPlugin> formats;
 
   /**
@@ -34,6 +41,8 @@ public class PluginHandler extends ClassLoader
   
   /**
    * Returns an ArrayList of all the transform classes.
+   * 
+   * @return ArrayList containing TransformPlugins.
    */
   public ArrayList<TransformPlugin> getTransforms()
   {
@@ -42,6 +51,8 @@ public class PluginHandler extends ClassLoader
 
   /**
    * Returns an ArrayList of all the format classes.
+   * 
+   * @return ArrayList containing AudioFormatPlugins.
    */
   public ArrayList<AudioFormatPlugin> getFormats()
   {
