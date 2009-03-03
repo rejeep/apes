@@ -91,17 +91,17 @@ public class Player implements Runnable
   }
 
   /**
-   * Plays audio file from beginning.
+   * Plays audio file from pause position.
    */
   public void play()
   {
-    play( 0 );
+    play( pausePosition );
   }
   
   /**
-   * Plays audio file starting from the given <code>position</code>.
+   * Plays audio file starting from <code>position</code>.
    *
-   * @param position the position to start playing from in
+   * @param position The position to start playing from, in
    * milliseconds.
    */
   public void play( long position )
@@ -207,17 +207,6 @@ public class Player implements Runnable
   }
 
   /**
-   * Return pause position for this player. 0L means that there's no
-   * pausing.
-   *
-   * @return The pause position.
-   */
-  public long getPausePosition()
-  {
-    return this.pausePosition;
-  }
-
-  /**
    * Initializes this player. This must be done when setting a new
    * internal format.
    *
@@ -312,10 +301,7 @@ public class Player implements Runnable
     this.status = status;
   }
 
-  public void run()
-  {
-    
-  }
+  public void run() {}
 
   /**
    * Will return an instance of this class.

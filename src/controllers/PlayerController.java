@@ -46,7 +46,7 @@ public class PlayerController extends ApplicationController
    */
   public void play()
   {
-    player.play( player.getPausePosition() );
+    player.play();
   }
 
   /**
