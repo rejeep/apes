@@ -1,7 +1,9 @@
 package apes.interfaces;
 
-
+/**
+ * Interface for plugins.
+ */
 public interface Plugin
 {
-  // name, identifier, description, locale?
+  // needs name, identifier, description, locale?
 }
