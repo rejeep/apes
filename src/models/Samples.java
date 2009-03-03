@@ -58,8 +58,11 @@ public class Samples
   {
     size = amount;
     sampleData = new byte[size * BYTES_PER_SAMPLE];
+    for( int i = 0; i < amount; i++ )
+      setSample( i, Integer.MIN_VALUE );
 
-    setMinAndMaxDefaultValues();
+    minAmplitude = maxAmplitude = Integer.MIN_VALUE;
+    minAmplitudeIndex = maxAmplitudeIndex = 0;
   }
 
   /**
@@ -158,9 +161,8 @@ public class Samples
    * Sets amplitude of selected sample.
    * @param index The index of the sample to affect.
    * @param value The desired amplitude.
-   * @throws Exception Throws an exception of the amplitude has a negative value.
    */
-  public void setSample( int index, int value ) throws Exception
+  public void setSample( int index, int value )
   {
     for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
