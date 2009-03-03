@@ -17,7 +17,7 @@ public class TestPluginHandler
   @Before public void setupPluginHandler()
   {
     pluginobj = new PluginHandler();
-    pluginobj.addPlugin("test/WaveFileFormat.class");
+    pluginobj.addPlugin( "test/WaveFileFormat.class" );
   }
   
   /**
@@ -25,8 +25,8 @@ public class TestPluginHandler
    */
   @Test public void testDoesAddPluginAddAClass()
   {
-    assertEquals( "Transform plugins should not be loaded", 0, pluginobj.getTransforms().size());
-    assertEquals( "Format plugin should be loaded", 1, pluginobj.getFormats().size());
+    assertEquals( "Transform plugins should not be loaded", 0, pluginobj.getTransforms().size() );
+    assertEquals( "Format plugin should be loaded", 1, pluginobj.getFormats().size() );
   }
   
   /**
@@ -34,7 +34,7 @@ public class TestPluginHandler
    */
   @Test public void testDoesThePluginWork()
   {
-    AudioFormatPlugin plugin = pluginobj.getFormats().get(0);
+    AudioFormatPlugin plugin = pluginobj.getFormats().get( 0 );
     assertEquals( "Plugin should return 'wav'", "wav", plugin.getExtension() );
   }
 }
