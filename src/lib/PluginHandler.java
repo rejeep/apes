@@ -65,8 +65,7 @@ public class PluginHandler extends ClassLoader
     }
     else if(file.isFile())
     {
-      //loadPlugin(file.getPath(), file.getName());
-      loadFile(file.getPath(), file.getName().substring(0, name.indexOf(".")));
+      loadFile(file.getPath(), file.getName().substring(0, file.getName().indexOf(".")));
     }
   }
   
