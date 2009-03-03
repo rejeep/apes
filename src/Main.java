@@ -79,17 +79,6 @@ public class Main extends JFrame
     config.parse();
     
     Player player = Player.getInstance();
-    try
-    {
-    InternalFormat internalFormat = new WaveFileFormat().importFile( "C:\\Users\\Daniel\\Documents\\Audioeditor\\apes", "test.wav" );
-    
-    player.setInternalFormat( internalFormat );
-    }
-    catch( Exception e )
-    {
-    e.printStackTrace();
-    }
-    player.setVolume( config.getIntOption( "volume" ) );
     
     // Set some instance variables.
     helpController = new HelpController();
