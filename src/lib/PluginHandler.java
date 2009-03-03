@@ -66,24 +66,24 @@ public class PluginHandler extends ClassLoader
    * 
    * @param str A path pointing to either a file or a directory.
    */
-  public void addPlugin(String str)
+  public void addPlugin( String str )
   {    
-    File file = new File(str);
+    File file = new File( str );
     
     if(file.isDirectory())
     {
-      loadPluginsInPath(file.getPath());
+      loadPluginsInPath( file.getPath() );
     }
-    else if(file.isFile())
+    else if( file.isFile() )
     {
-      loadFile(file.getPath(), file.getName().substring(0, file.getName().indexOf(".")));
+      loadFile( file.getPath(), file.getName().substring( 0, file.getName().indexOf( "." ) ) );
     }
   }
   
   /**
    * -
    */
-  public void removePlugin(String name)
+  public void removePlugin( String name )
   {
     // TODO
   }
@@ -93,12 +93,12 @@ public class PluginHandler extends ClassLoader
    * 
    * @param path Directory.
    */
-  private void loadPluginsInPath(String path)
+  private void loadPluginsInPath( String path )
   {
-    File dir = new File(path);
+    File dir = new File( path );
     String[] files = dir.list();
 
-    if(files.length == 0)
+    if( files.length == 0 )
     {
       // -
     }
@@ -106,16 +106,16 @@ public class PluginHandler extends ClassLoader
     {
       FilenameFilter filter = new FilenameFilter() 
       {
-        public boolean accept(File d, String n)
+        public boolean accept( File d, String n )
         {
-          return !n.startsWith(".");
+          return !n.startsWith( "." );
         }
       };
 
-      files = dir.list(filter);
+      files = dir.list( filter );
       for (String f : files)
       {
-        loadFile(path + "/" + f, f.substring(0, f.indexOf(".")));
+        loadFile( path + "/" + f, f.substring( 0, f.indexOf( "." ) ) );
       }
     }
   }
@@ -126,20 +126,20 @@ public class PluginHandler extends ClassLoader
    * @param path Directory.
    * @param name Name of class to load.
    */
-  private void loadFile(String path, String name)
+  private void loadFile( String path, String name )
   {
     try
     {
-      if(path.endsWith(".class"))
+      if( path.endsWith( ".class" ) )
       {
-        loadClass(path, "apes.plugins." + name);
+        loadClass( path, "apes.plugins." + name );
       }
-      else if(path.endsWith(".jar"))
+      else if( path.endsWith( ".jar" ) )
       {
-        loadJAR(path, "apes.plugins." + name);
+        loadJAR( path, "apes.plugins." + name );
       }
     }
-    catch(ClassNotFoundException e)
+    catch( ClassNotFoundException e )
     {
       // -
     }
@@ -152,7 +152,7 @@ public class PluginHandler extends ClassLoader
    * @param name Name of class to load.
    * @throws ClassNotFoundException
    */
-  private void loadClass(String location, String name) throws
+  private void loadClass( String location, String name ) throws
     ClassNotFoundException
   {
     int BUFFER_SIZE = 4096;
@@ -161,36 +161,36 @@ public class PluginHandler extends ClassLoader
     // read the class file
     try {
       
-      FileInputStream in = new FileInputStream(location);
+      FileInputStream in = new FileInputStream( location );
       ByteArrayOutputStream buf = new ByteArrayOutputStream();
       int c;
-      while ((c = in.read()) != -1)
+      while ( ( c = in.read() ) != -1 )
       {
-        buf.write(c);
+        buf.write( c );
       }
       classBytes = buf.toByteArray();
       
     }
-    catch (IOException e)
+    catch ( IOException e )
     {
-      System.out.println("IOException\n");
+      System.out.println( "IOException\n" );
     }
 
-    if(classBytes == null)
+    if( classBytes == null )
     {
-      throw new ClassNotFoundException("Cannot load class");
+      throw new ClassNotFoundException( "Cannot load class" );
     }
 
     // turn it to a class
     try
     {
-      Class<?> cls = defineClass(name, classBytes, 0, classBytes.length);
-      resolveClass(cls);
-      instancePlugin(cls);
+      Class<?> cls = defineClass( name, classBytes, 0, classBytes.length );
+      resolveClass( cls );
+      instancePlugin( cls );
     }
-    catch (ClassFormatError e)
+    catch ( ClassFormatError e )
     {
-      System.out.println("ClassFormatError\n");
+      System.out.println( "ClassFormatError\n" );
     }
   }
 
@@ -201,20 +201,20 @@ public class PluginHandler extends ClassLoader
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
    */
-  private void loadJAR(String location, String name) throws
+  private void loadJAR( String location, String name ) throws
     ClassNotFoundException
   {
     try
     {
-      File pluginFile = new File(location);
-      URL[] locations = new URL[] {pluginFile.toURL()};
+      File pluginFile = new File( location );
+      URL[] locations = new URL[] { pluginFile.toURL() };
       URLClassLoader classloader = 
-        new URLClassLoader(locations);
+        new URLClassLoader( locations );
 
-      Class<?> cls = classloader.loadClass(name);
-      instancePlugin(cls);
+      Class<?> cls = classloader.loadClass( name );
+      instancePlugin( cls );
     }
-    catch (MalformedURLException e)
+    catch ( MalformedURLException e )
     {
       // -
     }
@@ -226,24 +226,24 @@ public class PluginHandler extends ClassLoader
    * 
    * @param cls Class object.
    */
-  private void instancePlugin(Class<?> cls)
+  private void instancePlugin( Class<?> cls )
   {
     try
     {
-      if(TransformPlugin.class.isAssignableFrom(cls))
+      if( TransformPlugin.class.isAssignableFrom( cls ) )
       {
         transforms.add( (TransformPlugin)cls.newInstance() );
       }
-      else if(AudioFormatPlugin.class.isAssignableFrom(cls))
+      else if( AudioFormatPlugin.class.isAssignableFrom( cls ) )
       {
         formats.add( (AudioFormatPlugin)cls.newInstance() );
       }
     }
-    catch(InstantiationException e)
+    catch( InstantiationException e )
     {
       // -
     }
-    catch(IllegalAccessException e)
+    catch( IllegalAccessException e )
     {
       // -
     }
