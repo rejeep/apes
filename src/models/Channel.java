@@ -264,8 +264,8 @@ public class Channel
    *
    * @return Diff between amplitues.
    */
-  public int getDiffAmplitude()
+  public long getDiffAmplitude()
   {
-    return getMaxAmplitude() - getMinAmplitude();
+    return (long)getMaxAmplitude() - getMinAmplitude();
   }
 }

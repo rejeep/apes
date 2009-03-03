@@ -161,18 +161,4 @@ public class TestPlayer
     
     assertEquals( "Setting internal format should set status to stop", Player.Status.STOP, player.getStatus() );
   }
-  
-  /**
-   * Tests that stopping playing will reset pause position.
-   */
-  @Test public void testStopShuoldResetPausePosition()
-  {
-    long expected = 0L;
-
-    player.play();
-    player.pause();
-    player.stop();
-    
-    assertEquals( "Stop should reset pause position", expected, player.getPausePosition() );
-  }
 }
