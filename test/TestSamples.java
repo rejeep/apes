@@ -69,19 +69,25 @@ public class TestSamples
   {
     int lowest = -6, mid = -5, max = -1, newMax = 10;
     int size = 3;
-    byte[] b = new byte[ size * 2 ];
+    byte[] b = new byte[ size * Samples.BYTES_PER_SAMPLE ];
     
     // First Sample
     b[0] = (byte)lowest;
     b[1] = -1;
+    b[2] = -1;
+    b[3] = -1;
       
     // Second Sample
-    b[2] = (byte)mid;
-    b[3] = -1;
+    b[4] = (byte)mid;
+    b[5] = -1;
+    b[6] = -1;
+    b[7] = -1;
     
     // Third Sample
-    b[4] = (byte)max;
-    b[5] = -1;
+    b[8] = (byte)max;
+    b[9] = -1;
+    b[10] = -1;
+    b[11] = -1;
     
     try
     {
@@ -89,7 +95,7 @@ public class TestSamples
       assertEquals( "Default min amplitude is Integer.MAX_VALUE", Integer.MAX_VALUE, s.getMinAmplitude() );
       assertEquals( "Default max amplitude is Integer.MIN_VALUE", Integer.MIN_VALUE, s.getMaxAmplitude() );
       
-      s = new Samples( 16, b );
+      s = new Samples( Samples.BYTES_PER_SAMPLE, b );
       assertEquals( "Maximum amplitude correctly initialized", max, s.getMaxAmplitude() );
       
       s.setSample( 1, newMax );
