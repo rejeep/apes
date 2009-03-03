@@ -42,7 +42,7 @@ public class TestPlayer
       e.printStackTrace();
     }
 
-    player.setVolume( 0 );
+    player.setVolume( 50 );
   }
 
   /**

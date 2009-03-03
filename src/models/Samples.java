@@ -92,25 +92,7 @@ public class Samples
       BigInteger bigAmp = new BigInteger(val);
       int amplitude = bigAmp.intValue() << ( 8 * BpsDiff );
 
-      // Write value
-      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
-      {
-        sampleData[i * BYTES_PER_SAMPLE + j] = (byte)((amplitude >> ( 8 * j )) & 0xff);
-      }
-
-      // Update min
-      if( amplitude < minAmplitude )
-      {
-        minAmplitude = amplitude;
-        minAmplitudeIndex = i;
-      }
-
-      // Update max
-      if( amplitude > maxAmplitude )
-      {
-        maxAmplitude = amplitude;
-        maxAmplitudeIndex = i;
-      }
+      setSample( i, amplitude );
     }
   }
 
