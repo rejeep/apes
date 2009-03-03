@@ -106,7 +106,7 @@ public class TestPlayer
    */
   @Test public void testValidVolumeShuoldBeSet()
   {
-    int volume = 50;
+    int volume = 0;
 
     player.setVolume( volume );
 
