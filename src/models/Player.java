@@ -147,14 +147,12 @@ public class Player implements Runnable
    */
   public void setVolume( int volume )
   {
-    System.out.println( volume );
     if( volume >= MIN_VALUE && volume <= MAX_VALUE )
     {
       this.volume = volume;
 
       float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
 
-      System.out.println( gainControl );
       if( gainControl != null )
       {
         gainControl.setValue( value );
