@@ -1,14 +1,19 @@
 package apes.models;
 
 import java.io.IOException;
+import java.lang.InterruptedException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Control;
+import javax.sound.sampled.Control.Type;
+import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import apes.exceptions.NoInternalFormatException;
+import apes.models.Player.Status;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 
 /**
  * This class plays a music file. Or more precise, an {@link
@@ -31,7 +36,7 @@ public class Player implements Runnable
   /**
    * This variable holds the current status for the player.
    */
-  private Status status = Status.STOP;
+  private Status status;
 
   /**
    * A Player is always connected to an internal format.
@@ -65,15 +70,10 @@ public class Player implements Runnable
   private FloatControl gainControl;
 
   /**
-   * Used to keep track of where in audio file the pause occurred.
-   */
-  private long pausePosition;
-
-  /**
    * Keeps state of which samples that is currently playing.
    */
   private int currentSamples = 0;
-  
+
   /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
@@ -95,37 +95,7 @@ public class Player implements Runnable
    */
   public void play()
   {
-    play( pausePosition );
-  }
-  
-  /**
-   * Plays audio file starting from <code>position</code>.
-   *
-   * @param position The position to start playing from, in
-   * milliseconds.
-   */
-  public void play( long position )
-  {
-    if( line != null )
-    {
-      if( status != Status.PLAY )
-      {
-        setStatus( Status.PLAY );
-
-        Channel channel = internalFormat.getChannel( 0 );
-
-        for( int i = currentSamples; i < channel.getSamplesSize(); i++ )
-        {
-          Samples samples = channel.getSamples( i );
-          byte[] data = samples.getData();
-
-          line.write( data, 0, data.length );
-        }
-
-        line.drain();
-        line.close();
-      }
-    }
+    setStatus( Status.PLAY );
   }
 
   /**
@@ -133,15 +103,7 @@ public class Player implements Runnable
    */
   public void pause()
   {
-    // If there's playing.
-    if( status == Status.PLAY )
-    {
-      setStatus( Status.PAUSE );
-
-      pausePosition = line.getMicrosecondPosition();
-
-      line.stop();
-    }
+    setStatus( Status.PAUSE );
   }
 
   /**
@@ -149,15 +111,7 @@ public class Player implements Runnable
    */
   public void stop()
   {
-    // If there's no playing.
-    if( status == Status.PLAY )
-    {
-      setStatus( Status.STOP );
-
-      pausePosition = 0L;
-
-      line.stop();
-    }
+    setStatus( Status.STOP );
   }
 
   /**
@@ -193,12 +147,14 @@ public class Player implements Runnable
    */
   public void setVolume( int volume )
   {
+    System.out.println( volume );
     if( volume >= MIN_VALUE && volume <= MAX_VALUE )
     {
       this.volume = volume;
 
       float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
 
+      System.out.println( gainControl );
       if( gainControl != null )
       {
         gainControl.setValue( value );
@@ -232,13 +188,16 @@ public class Player implements Runnable
         line = (SourceDataLine) AudioSystem.getLine( info );
         line.open( format );
         line.start();
-
+        
         // For volume control
-        gainControl = (FloatControl) line.getControl( FloatControl.Type.VOLUME );
+        gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
 
         this.line = line;
       }
-      catch( IllegalArgumentException e ) { /* Don't want warning... */ }
+      catch( IllegalArgumentException e )
+      {
+        e.printStackTrace();
+      }
       catch( Exception e )
       {
         e.printStackTrace();
@@ -265,12 +224,10 @@ public class Player implements Runnable
    * otherwise.
    * @exception Exception if {@link Player#init init} fails.
    */
-  public boolean setInternalFormat( InternalFormat internalFormat ) throws NoInternalFormatException, UnsupportedAudioFileException, IOException
+  public boolean setInternalFormat( InternalFormat internalFormat ) throws NoInternalFormatException
   {
     if( internalFormat != null )
     {
-      stop();
-
       this.internalFormat = internalFormat;
 
       init();
@@ -301,7 +258,58 @@ public class Player implements Runnable
     this.status = status;
   }
 
-  public void run() {}
+  /**
+   * Will run in a thread. And for each time in the loop the current
+   * status is checked. And depending on status, sound will be played,
+   * paused or stopped.
+   */
+  public void run()
+  {
+    while( true )
+    {
+      if( line != null )
+      {
+        if( status == Status.PLAY )
+        {
+          Channel channel = internalFormat.getChannel( 0 );
+
+          if( currentSamples < channel.getSamplesSize() )
+          {
+            Samples samples = channel.getSamples( currentSamples );
+            byte[] data = samples.getData();
+
+            line.write( data, 0, data.length );
+
+            currentSamples++;
+          }
+          else
+          {
+            status = null;
+          }
+        }
+        else
+        {
+          if( status == Status.STOP )
+          {
+            currentSamples = 0;
+          }
+
+          status = null;
+        }
+      }
+
+      // If this is not present there will be no playing.
+      try
+      {
+        Thread.sleep( 0 );
+      }
+      catch( InterruptedException e )
+      {
+        e.printStackTrace();
+      }
+
+    }
+  }
 
   /**
    * Will return an instance of this class.
