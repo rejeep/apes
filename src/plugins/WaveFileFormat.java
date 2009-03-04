@@ -32,7 +32,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    *
    * @param internalFormat The file to be converted.
    * @param path           The path to the folder were the file should be saved.
-   * @param filename       The name of the file to be saved.
+   * @param fileName       The name of the file to be saved.
    * @throws Exception
    */
   public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
@@ -93,7 +93,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     {
       for(int i = 0; i < numChannels; ++i)
       {
-        //TODO: Allow different bitsPerSample
+        //TODO: Allow different bitsPerSample        
         data.putInt( (int) channels[i].getSample(j) );
       
       }
@@ -163,9 +163,8 @@ public class WaveFileFormat implements AudioFormatPlugin
     for( int i = 0; i < subChunk2Size/bytesPerSample; ++i )
     {
       buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
-      channel = (++channel) % numChannels;
+      channel = (channel+1) % numChannels;
     }
-
 
     for ( int i = 0; i < numChannels; ++i )
     {
