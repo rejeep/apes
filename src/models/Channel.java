@@ -178,16 +178,13 @@ public class Channel
     {
       Samples sampObj = new Samples( SAMPLES_SIZE );
       for( int j = 0; j < SAMPLES_SIZE; j++ )
-        //TODO: Had to add the try/catch, handle this in a better way maybe??
-        try
-        {
-          sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
-        } catch ( Exception e )
-        {
-          e.printStackTrace();
-        }
+      {
+        sampObj.setSampleNoUpdate( j, samples.getSample( i * SAMPLES_SIZE + j ) );
+      }
+      sampObj.updateMinAndMaxAmplitude();
       split.add( sampObj );
     }
+    
     
     // Add remainder in smaller chunk
     Samples sampObj = new Samples( remainder );

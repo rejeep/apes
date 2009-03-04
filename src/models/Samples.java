@@ -204,7 +204,7 @@ public class Samples
    * updates <code>minAmplitudeIndex</code> and
    * <code>maxAmplitudeIndex</code>.
    */
-  private void updateMinAndMaxAmplitude()
+  public void updateMinAndMaxAmplitude()
   {
     int min = Integer.MAX_VALUE;
     int minI = -1;
