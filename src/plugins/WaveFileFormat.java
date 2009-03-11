@@ -62,21 +62,14 @@ public class WaveFileFormat implements AudioFormatPlugin
     for(int i = 0; i < numChannels; ++i)
       iterators[i] = internalFormat.getChannel( i ).getIterator();
 
-
-    System.out.print("Calculating nr samples");
     for( SampleIterator iterator : iterators)
     {
       while(iterator.hasNext())
       {
         iterator.next();
-        ++numSamples;
-        if((numSamples % 100000) == 0)
-          System.out.println(numSamples);
+        ++numSamples;        
       }
     }
-    System.out.print("Calculating nr samples done");
-
-    System.out.println("numSamples: "  + numSamples);
     
     subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
@@ -110,11 +103,9 @@ public class WaveFileFormat implements AudioFormatPlugin
     for(int i = 0; i < numChannels; ++i)
       iterators[i] = internalFormat.getChannel( i ).getIterator();
 
-    System.out.println("Writing data");
     while(iterators[0].hasNext())
       for( SampleIterator iterator : iterators)
         data.putInt( iterator.next() );
-    System.out.print("Writing data done");
     
     FileHandler.saveToFile( path, fileName, data.array() );
   }
