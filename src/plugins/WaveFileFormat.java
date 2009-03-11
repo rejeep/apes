@@ -38,7 +38,9 @@ public class WaveFileFormat implements AudioFormatPlugin
   public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
   {
     ByteBuffer data; // contians data to be exported
-    
+
+    //TODO; Add better support for different headers
+
     byte[] chunkID       = {'R','I','F','F'};
     int    chunkSize;
     byte[] format        = {'W','A','V','E'};
@@ -53,15 +55,29 @@ public class WaveFileFormat implements AudioFormatPlugin
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
+    int numSamples = 0; 
 
-    Samples[] channels = new Samples[numChannels];
-    for( int i = 0; i < numChannels; ++i)
-      channels[i] = internalFormat.getChannel(i).getAllSamples();
+    SampleIterator[] iterators = new SampleIterator[numChannels];
 
-    int numSamples = 0;
     for(int i = 0; i < numChannels; ++i)
-      numSamples += channels[i].getSize();
+      iterators[i] = internalFormat.getChannel( i ).getIterator();
 
+
+    System.out.print("Calculating nr samples");
+    for( SampleIterator iterator : iterators)
+    {
+      while(iterator.hasNext())
+      {
+        iterator.next();
+        ++numSamples;
+        if((numSamples % 100000) == 0)
+          System.out.println(numSamples);
+      }
+    }
+    System.out.print("Calculating nr samples done");
+
+    System.out.println("numSamples: "  + numSamples);
+    
     subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
 
@@ -89,15 +105,16 @@ public class WaveFileFormat implements AudioFormatPlugin
     data.order( ByteOrder.LITTLE_ENDIAN );
     data.putInt( subchunk2Size );
 
-    for(int j = 0; j < numSamples; ++j)
-    {
-      for(int i = 0; i < numChannels; ++i)
-      {
-        //TODO: Allow different bitsPerSample        
-        data.putInt( (int) channels[i].getSample(j) );
-      
-      }
-    }
+    iterators = new SampleIterator[numChannels];
+
+    for(int i = 0; i < numChannels; ++i)
+      iterators[i] = internalFormat.getChannel( i ).getIterator();
+
+    System.out.println("Writing data");
+    while(iterators[0].hasNext())
+      for( SampleIterator iterator : iterators)
+        data.putInt( iterator.next() );
+    System.out.print("Writing data done");
     
     FileHandler.saveToFile( path, fileName, data.array() );
   }
@@ -167,9 +184,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     }
 
     for ( int i = 0; i < numChannels; ++i )
-    {
       channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
-    }
 
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );

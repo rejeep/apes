@@ -1,11 +1,10 @@
-package models;
+package apes.models;
 
-import apes.models.Channel;
-import apes.models.Samples;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class SampleIterator<Integer> implements Iterator<Integer>
+
+public class SampleIterator
 {
   
   /**
@@ -30,11 +29,12 @@ public class SampleIterator<Integer> implements Iterator<Integer>
   /**
    * Returns the amplitude of the next sample.
    */
-  public Integer next()
+  public int next()
   {
+    int amplitude;
     if( hasNext() )
     {
-      Integer amplitude = new Integer(channel.getSamples(samplesObject).getSample(samplesIndex));
+      amplitude = channel.getSamples(samplesObject).getSample(samplesIndex);
       if(++samplesIndex >= channel.getSamples(samplesObject).getSize())
       {
         samplesObject++;
