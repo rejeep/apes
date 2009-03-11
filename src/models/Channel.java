@@ -31,6 +31,11 @@ public class Channel
     samplesList = splitSamples( samples );
   }
   
+  public SamplesIterator<Integer> getIterator()
+  {
+    return new SamplesIterator(this);
+  }
+  
   /**
    * Returns a Samples object containing all samples in the Channel.
    * @return A Samples object containing all samples in the Samples objects of the Channel, in the same order.
