@@ -182,4 +182,14 @@ public class InternalFormat
     // TODO: add error handling or some sort of response
     return (InternalFormat) FileHandler.loadObjectFile( filePath, fileName );
   }
+  
+  /**
+   * Returns the amount of time needed to play all samples in the given object, assuming the samplerate of <code>this</code>.
+   * @param s The samples to be checked.
+   * @return The time needed to play all samples in <code>s</code> given the samplerate of <code>this</code>, in milliseconds.
+   */
+  public int getPlayTime( Samples s )
+  {
+    return (1000 * s.getSize()) / sampleRate;
+  }
 }
