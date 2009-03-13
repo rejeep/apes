@@ -13,7 +13,7 @@ public class Samples
   /**
    * Size of a sample in bits.
    */
-  public static final int BITS_PER_SAMPLE = 32;
+  public static final int BITS_PER_SAMPLE = 16;
 
   /**
    * Size of a sample in bytes.
