@@ -2,6 +2,7 @@ package apes.models;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * Describes a single channel of audio information.
@@ -29,6 +30,11 @@ public class Channel
   {
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
+  }
+  
+  public SampleIterator getIterator()
+  {
+    return new SampleIterator(this);
   }
   
   /**
@@ -171,7 +177,7 @@ public class Channel
     // Remaining samples
     int remainder = samples.getSize() % SAMPLES_SIZE;
     
-    List<Samples> split = new LinkedList<Samples>();
+    List<Samples> split = new ArrayList<Samples>();
 
     // Make full chunks
     for( int i = 0; i < fullChunks; i++ )

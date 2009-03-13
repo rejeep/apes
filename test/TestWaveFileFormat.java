@@ -18,8 +18,12 @@ public class TestWaveFileFormat
     InternalFormat internal;
     try
     {
+      System.out.println("Importing file...");      
       internal = wav.importFile( ".", "test.wav" );
+      System.out.println("File imported.");
+      System.out.println("Exporting file....");
       wav.exportFile(internal, ".", "test2.wav" );
+      System.out.println("File exported.");
     } catch ( Exception e )
     {
       e.printStackTrace();
