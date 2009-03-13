@@ -186,7 +186,7 @@ public class Player implements Runnable
         line = (SourceDataLine) AudioSystem.getLine( info );
         line.open( format );
         line.start();
-        
+
         // For volume control
         gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
 
@@ -263,10 +263,14 @@ public class Player implements Runnable
    */
   public void run()
   {
+    int sleep = 0;
+
     while( true )
     {
       if( line != null )
       {
+        sleep = 0;
+
         if( status == Status.PLAY )
         {
           Channel channel = internalFormat.getChannel( 0 );
@@ -279,6 +283,8 @@ public class Player implements Runnable
             line.write( data, 0, data.length );
 
             currentSamples++;
+
+            sleep = internalFormat.getPlayTime( samples );
           }
           else
           {
@@ -299,13 +305,12 @@ public class Player implements Runnable
       // If this is not present there will be no playing.
       try
       {
-        Thread.sleep( 0 );
+        Thread.sleep( sleep / 2 );
       }
       catch( InterruptedException e )
       {
         e.printStackTrace();
       }
-
     }
   }
 
