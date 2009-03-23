@@ -8,7 +8,7 @@ import javax.swing.undo.AbstractUndoableEdit;
  * ChangeAction.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
- * @author Johan Ålander (johan.ahlander@gmail.com)
+ * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public class ChangeEdit extends AbstractUndoableEdit
 {
