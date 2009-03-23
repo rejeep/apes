@@ -91,24 +91,26 @@ public class InternalFormat
   /**
    * Inserts samples at the selected position.
    *
-   * @param start   Position of insertion in milliseconds.
+   * @param start   Position of insertion as sample index.
    * @param samples Sample data to insert into channel.
    */
   public void setSamples( int channel, int start, Samples samples )
   {
-    channels.get( channel ).setSamples( start * 1000 * Channel.SAMPLES_SIZE, samples );
+    channels.get( channel ).setSamples( start, samples );
+    // Do something about differing length of channels.
   }
 
   /**
    * Replaces selected interval with the specified samples.
    *
-   * @param start   of the interval in milliseconds.
-   * @param stop    of interval in milliseconds.
+   * @param start   of the interval as sample index.
+   * @param stop    of interval as sample index.
    * @param samples An object containing all sample data to replace selection with.
    */
-  public void setSamples( int channel, int start, int stop, Samples samples )
+  public void setSamples( int channel, int start, int stop, Samples samples ) throws IndexOutOfBoundsException
   {
-    
+    channels.get( channel ).setSamples( start, stop, samples );
+    // Do something about differing length of channels.
   }
 
   /**
@@ -190,6 +192,6 @@ public class InternalFormat
    */
   public int getPlayTime( Samples s )
   {
-    return (1000 * s.getSize()) / sampleRate;
+    return (Samples.MS_PER_SECOND * s.getSize()) / sampleRate;
   }
 }

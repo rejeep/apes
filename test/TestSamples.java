@@ -74,20 +74,14 @@ public class TestSamples
     // First Sample
     b[0] = (byte)lowest;
     b[1] = -1;
-    b[2] = -1;
-    b[3] = -1;
       
     // Second Sample
-    b[4] = (byte)mid;
-    b[5] = -1;
-    b[6] = -1;
-    b[7] = -1;
+    b[2] = (byte)mid;
+    b[3] = -1;
     
     // Third Sample
-    b[8] = (byte)max;
-    b[9] = -1;
-    b[10] = -1;
-    b[11] = -1;
+    b[4] = (byte)max;
+    b[5] = -1;
     
     try
     {
