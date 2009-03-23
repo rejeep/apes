@@ -19,13 +19,9 @@ import apes.controllers.PlayerController;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.models.Player;
-import apes.views.ApesMenu;
-import apes.views.ApesMenuItem;
-import apes.views.InternalFormatView;
 import apes.models.InternalFormat;
 import apes.plugins.WaveFileFormat;
-import apes.views.VolumePanel;
-import apes.views.VolumeSlider;
+import apes.views.*;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -79,7 +75,24 @@ public class Main extends JFrame
     config.parse();
     
     Player player = Player.getInstance();
-    
+
+    ///////////////////////////////////////////
+    /*    TEST                               */
+    ///////////////////////////////////////////
+
+    InternalFormat internal = null;
+    WaveFileFormat wav = new WaveFileFormat();
+    try
+    {
+      internal = wav.importFile( ".", "test.wav" );
+      player.setInternalFormat( internal );
+    } catch ( Exception e )
+    {
+      e.printStackTrace();
+    }
+
+
+
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
@@ -113,8 +126,6 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
-    InternalFormatView internalFormatView = new InternalFormatView();
-    tabs.addTab( "Some file.wav", internalFormatView );
 
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
@@ -122,6 +133,9 @@ public class Main extends JFrame
 
     // Set window dimensions.
     setWindowDimensions();
+
+    SamplesView internalFormatView = new SamplesView(internal.getChannel( 0 ), this.getWidth(),300);
+    tabs.addTab( "Some file.wav", internalFormatView );
 
     setVisible( true );
   }
@@ -361,16 +375,37 @@ public class Main extends JFrame
     ImageButton pause = new PauseButton();
     pause.addActionListener( playerController );
     pause.setName( "pause" );
+    pause.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        Player.getInstance().pause();
+      }
+    } );
     bottomPanel.add( pause );
 
     ImageButton play = new PlayButton();
     play.addActionListener( playerController );
     play.setName( "play" );
+    play.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        Player.getInstance().play();
+      }
+    } );
     bottomPanel.add( play );
 
     ImageButton stop = new StopButton();
     stop.addActionListener( playerController );
     stop.setName( "stop" );
+    stop.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        Player.getInstance().stop();
+      }
+    } );
     bottomPanel.add( stop );
 
     ImageButton forward = new ForwardButton();
