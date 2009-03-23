@@ -121,8 +121,8 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public InternalFormat importFile( String path, String filename ) throws Exception
   {
-    ByteBuffer buffer = FileHandler.loadFile( path, filename );
-
+    //ByteBuffer buffer = FileHandler.loadFile( path, filename );
+    ByteBuffer buffer = FileHandler.loadFileGraphical( );
     // Wave do not contain any tags
     Tags tag = null;
 

@@ -66,6 +66,16 @@ public class Main extends JFrame
   private Config config;
 
   /**
+   * The internal format representation. 
+   */
+  private InternalFormat internal = null;
+
+  /**
+   * The view of the samples.
+   */
+  private SamplesView internalFormatView;
+
+  /**
    * Starts the program.
    */
   public Main()
@@ -75,22 +85,6 @@ public class Main extends JFrame
     config.parse();
     
     Player player = Player.getInstance();
-
-    ///////////////////////////////////////////
-    /*    TEST                               */
-    ///////////////////////////////////////////
-
-    InternalFormat internal = null;
-    WaveFileFormat wav = new WaveFileFormat();
-    try
-    {
-      internal = wav.importFile( ".", "test.wav" );
-      player.setInternalFormat( internal );
-    } catch ( Exception e )
-    {
-      e.printStackTrace();
-    }
-
 
 
     // Set some instance variables.
@@ -134,7 +128,10 @@ public class Main extends JFrame
     // Set window dimensions.
     setWindowDimensions();
 
-    SamplesView internalFormatView = new SamplesView(internal.getChannel( 0 ), this.getWidth(),300);
+    if(internal == null)
+      internalFormatView = new SamplesView(null, this.getWidth(),300);
+    else
+      internalFormatView = new SamplesView(internal.getChannel( 0 ), this.getWidth(),300);
     tabs.addTab( "Some file.wav", internalFormatView );
 
     setVisible( true );
@@ -182,6 +179,20 @@ public class Main extends JFrame
     menuBar.add( file );
 
     JMenuItem open = new ApesMenuItem( "menu.file.open" );
+    open.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        WaveFileFormat wav = new WaveFileFormat();
+        try
+        {
+          internal = wav.importFile( ".", "test.wav" );
+          Player.getInstance().setInternalFormat( internal );
+          internalFormatView.setChannel( internal.getChannel(0));
+        } catch ( Exception exception ) { exception.printStackTrace(); };
+        internalFormatView.updateView();
+      }
+    } );
     file.add( open );
 
     JMenuItem newTab = new ApesMenuItem( "menu.file.new_tab" );

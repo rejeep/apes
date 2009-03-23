@@ -19,14 +19,26 @@ public class SamplesView extends JPanel
   public SamplesView( Channel ch, int width, int height )
   {
     super();
+
     channel = ch;
     this.width = width;
     this.height = height;
     this.setSize( width, height );
-    nrSamples = channel.getSamplesSize()*Channel.SAMPLES_SIZE;
-    visibleSamples = nrSamples;
+
+
     samples = new int[width];
-    updateView();
+
+    if(ch == null)
+    {
+      visibleSamples = 0;
+      nrSamples = 0;
+    }
+    else
+    {
+      nrSamples = channel.getSamplesSize()*Channel.SAMPLES_SIZE;
+      visibleSamples = nrSamples;
+      updateView();
+    }
   }
 
   public void paintComponent( Graphics g )
@@ -53,8 +65,24 @@ public class SamplesView extends JPanel
     centerSample = sample;  
   }
 
+  public void setChannel(Channel ch)
+  {
+    channel = ch;
+  }
+
   public void updateView()
   {
+    if(channel == null)
+    {
+      visibleSamples = 0;
+      nrSamples = 0;
+    }
+    else
+    {
+      nrSamples = channel.getSamplesSize()*Channel.SAMPLES_SIZE;
+      visibleSamples = nrSamples;
+    }
+
     SampleIterator iterator = channel.getIterator();
     long sample = 0;
     int x = 0;
@@ -83,7 +111,6 @@ public class SamplesView extends JPanel
       samples[i] = Math.round((height/2)+(float)(sample*heightScale));
       sample = 0;
     }
-
   }
 
 
