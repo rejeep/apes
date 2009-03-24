@@ -8,6 +8,7 @@ import java.util.List;
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
 import apes.models.*;
+import apes.views.ProgressView;
 
 /**
  * Module used for converting .wav-files to the internal format
@@ -122,7 +123,9 @@ public class WaveFileFormat implements AudioFormatPlugin
   public InternalFormat importFile( String path, String filename ) throws Exception
   {
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
+    //TODO: ugly
     ByteBuffer buffer = FileHandler.loadFileGraphical( );
+ 
     // Wave do not contain any tags
     Tags tag = null;
 
@@ -176,7 +179,7 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     for ( int i = 0; i < numChannels; ++i )
       channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
-
+    
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
 

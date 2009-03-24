@@ -351,9 +351,26 @@ public class Main extends JFrame
     topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
+    zoomIn.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        System.out.println(internalFormatView.getZoom());
+        internalFormatView.setZoom( internalFormatView.getZoom()-100000 );
+        internalFormatView.updateView();
+      }
+    } );
     topPanel.add( zoomIn );
 
     ImageButton zoomOut = new ZoomOutButton();
+    zoomOut.addActionListener( new ActionListener()
+    {
+      public void actionPerformed( ActionEvent e )
+      {
+        internalFormatView.setZoom( internalFormatView.getZoom()+100000 );
+        internalFormatView.updateView();
+      }
+    } );
     topPanel.add( zoomOut );
 
     ImageButton zoomReset = new ZoomResetButton();
