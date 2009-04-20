@@ -129,9 +129,9 @@ public class Main extends JFrame
     setWindowDimensions();
 
     if(internal == null)
-      internalFormatView = new SamplesView(null, this.getWidth(),300);
+      internalFormatView = new SamplesView(Player.getInstance(), null, this.getWidth(),300);
     else
-      internalFormatView = new SamplesView(internal.getChannel( 0 ), this.getWidth(),300);
+      internalFormatView = new SamplesView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
     tabs.addTab( "Some file.wav", internalFormatView );
 
     setVisible( true );
