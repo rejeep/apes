@@ -13,7 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
 import apes.controllers.TagsController;
@@ -92,8 +93,7 @@ public class Main extends JFrame
     config.parse();
     
     Player player = Player.getInstance();
-
-
+    
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
@@ -143,6 +143,13 @@ public class Main extends JFrame
     tabs.addTab( "Some file.wav", internalFormatView );
 
     setVisible( true );
+    
+    // Do something before close
+    addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        // Do before exit
+      }
+    });
   }
 
   /**
