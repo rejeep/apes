@@ -416,37 +416,16 @@ public class Main extends JFrame
     ImageButton pause = new PauseButton();
     pause.addActionListener( playerController );
     pause.setName( "pause" );
-    pause.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        Player.getInstance().pause();
-      }
-    } );
     bottomPanel.add( pause );
 
     ImageButton play = new PlayButton();
     play.addActionListener( playerController );
     play.setName( "play" );
-    play.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        Player.getInstance().play();
-      }
-    } );
     bottomPanel.add( play );
 
     ImageButton stop = new StopButton();
     stop.addActionListener( playerController );
     stop.setName( "stop" );
-    stop.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        Player.getInstance().stop();
-      }
-    } );
     bottomPanel.add( stop );
 
     ImageButton forward = new ForwardButton();
