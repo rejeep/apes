@@ -232,8 +232,11 @@ public class Channel
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex >= start && curIndex <= stop )
-          s.setSampleNoUpdate(i, value);
+        if(curIndex <= stop )
+        {
+          if(curIndex >= start)
+            s.setSampleNoUpdate(i, value);
+        }
         else
         {
           s.updateMinAndMaxAmplitude();
@@ -260,8 +263,11 @@ public class Channel
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex >= start && curIndex <= stop )
-          s.setSampleNoUpdate(i, s.getSample(i) + delta);
+        if( curIndex <= stop )
+        {
+          if(curIndex >= start)
+            s.setSampleNoUpdate(i, s.getSample(i) + delta);
+        }
         else
         {
           s.updateMinAndMaxAmplitude();
