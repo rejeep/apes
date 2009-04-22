@@ -238,13 +238,13 @@ public class Channel
   public void setSamples( int start, int stop, int value )
   {
     Point startPoint = findAbsoluteIndex( start );
-    int curIndex = 0;
+    int curIndex = start - startPoint.y;
     for( int objI = startPoint.x; objI < samplesList.size(); objI++ )
     {
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex <= stop )
+        if( curIndex >= start && curIndex <= stop )
           s.setSampleNoUpdate(i, value);
         else
           return;
@@ -262,13 +262,13 @@ public class Channel
   public void alterSamples( int start, int stop, int delta )
   {
     Point startPoint = findAbsoluteIndex( start );
-    int curIndex = 0;
+    int curIndex = start - startPoint.y;
     for( int objI = startPoint.x; objI < samplesList.size(); objI++ )
     {
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex <= stop )
+        if( curIndex >= start && curIndex <= stop )
           s.setSampleNoUpdate(i, s.getSample(i) + delta);
         else
           return;
