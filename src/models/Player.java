@@ -100,6 +100,9 @@ public class Player implements Runnable
 
   /**
    * Pause playing if any.
+   *
+   * TODO: Should stop at once when pause is pressed. But calling
+   * line.stop() does not help.
    */
   public void pause()
   {
