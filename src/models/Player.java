@@ -100,6 +100,9 @@ public class Player implements Runnable
 
   /**
    * Pause playing if any.
+   *
+   * TODO: Should stop at once when pause is pressed. But calling
+   * line.stop() does not help.
    */
   public void pause()
   {
@@ -111,6 +114,9 @@ public class Player implements Runnable
    */
   public void stop()
   {
+    line.stop();
+    line.flush();
+    
     setStatus( Status.STOP );
   }
 
@@ -263,14 +269,10 @@ public class Player implements Runnable
    */
   public void run()
   {
-    int sleep = 0;
-
     while( true )
     {
       if( line != null )
       {
-        sleep = 0;
-
         if( status == Status.PLAY )
         {
           Channel channel = internalFormat.getChannel( 0 );
@@ -283,8 +285,6 @@ public class Player implements Runnable
             line.write( data, 0, data.length );
 
             currentSamples++;
-
-            sleep = internalFormat.getPlayTime( samples );
           }
           else
           {
@@ -296,6 +296,8 @@ public class Player implements Runnable
           if( status == Status.STOP )
           {
             currentSamples = 0;
+            
+            line.start();
           }
 
           status = null;
@@ -305,7 +307,7 @@ public class Player implements Runnable
       // If this is not present there will be no playing.
       try
       {
-        Thread.sleep( sleep / 2 );
+        Thread.sleep( 0 );
       }
       catch( InterruptedException e )
       {
