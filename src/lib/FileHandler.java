@@ -138,7 +138,7 @@ public class FileHandler
   public static ByteBuffer loadFileGraphical() throws IOException
   {
     final JFileChooser fc = new JFileChooser();
-    
+    fc.setCurrentDirectory( new File(".") );
     fc.showOpenDialog(new JPanel());
     File file = fc.getSelectedFile();
     FileInputStream iStream = new FileInputStream( file );
