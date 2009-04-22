@@ -172,14 +172,14 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     return visibleSamples;
   }
 
-  public Samples getMarkedSamples()
+  public Point getMarkedSamples()
   {
     if(markBeginning > 0 && markEnd > 0)
     {
       int samplesPerPixel = visibleSamples/width;
       try {
-        return channel.getSamples((centerSample-visibleSamples/2)+samplesPerPixel*markBeginning,
-                                  (centerSample-visibleSamples/2)+samplesPerPixel*markEnd);
+        return new Point((centerSample-visibleSamples/2)+samplesPerPixel*markBeginning,
+                         (centerSample-visibleSamples/2)+samplesPerPixel*markEnd);
       } catch (Exception e) {
         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
       }

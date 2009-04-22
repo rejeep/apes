@@ -109,9 +109,9 @@ public class TagsGUI extends JFrame {
         
     }
 
-    public static void main(String[] args) {
-        TagsInterface ti = new TagsInterface();
-    }
+    //public static void main(String[] args) {
+        //TagsInterface ti = new TagsInterface();
+    //}
 
     class ExitHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
