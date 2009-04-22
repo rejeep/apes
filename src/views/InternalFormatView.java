@@ -54,7 +54,7 @@ public class InternalFormatView extends JPanel
         e.printStackTrace();
       }
       
-      long temp = (long)samples.getAverageAmplitude() - min;
+      long temp = (long)samples.getAverageAmplitude(10) - min;
 
       double part = (double)temp / diff;
       int y = (int)( part * height ) / 2;
