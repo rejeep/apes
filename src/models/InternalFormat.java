@@ -50,7 +50,7 @@ public class InternalFormat
    *
    * @return All tags of the audio file as a Tag object.
    */
-  public Tags getTag()
+  public Tags getTags()
   {
     return tags;
   }
