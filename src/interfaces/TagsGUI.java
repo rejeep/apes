@@ -103,12 +103,6 @@ public class TagsGUI extends JFrame
 
     }
     
-/*
-    public static void main(String[] args)
-    {
-        TagsGUI ti = new TagsGUI();
-    }
-*/
     class ExitHandler implements ActionListener
     {
         public void actionPerformed( ActionEvent e ) {

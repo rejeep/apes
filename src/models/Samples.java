@@ -21,6 +21,11 @@ public class Samples
   public static final int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
 
   /**
+   * Amount of milliseconds in a second. 
+   */
+  public static final int MS_PER_SECOND = 1000;
+  
+  /**
    * Amount of samples in this object.
    */
   private int size;

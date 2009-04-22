@@ -145,9 +145,61 @@ public class Channel
    * @param start   Position of insertion as sample index.
    * @param samples Sample data to insert into channel.
    */
-  public void setSamples( int start, Samples samples )
+  public void setSamples( int start, Samples samples ) throws IndexOutOfBoundsException
   {
-
+    if( start < 0 )
+      throw new IndexOutOfBoundsException("Sample index cannot be negative");
+    
+    int absIndex = 0;
+    int relIndex = 0;
+    int objIndex = 0;
+    
+    // Find start indices.
+    for(; objIndex < samplesList.size(); objIndex++ )
+    {
+      if( absIndex == start )
+        break;
+        
+      Samples s = samplesList.get( objIndex );
+      int newIndex = absIndex + s.getSize();
+      if( newIndex > start )
+      {
+        relIndex = start - absIndex;
+        break;
+      }
+      
+      absIndex = newIndex;
+    }
+    
+    Samples s = samplesList.get( objIndex );
+    
+    // Save part to be overwritten
+    int[] overwritten = new int[s.getSize() - relIndex];
+    for( int i = relIndex; i < s.getSize(); i++ )
+      overwritten[i - relIndex] = s.getSample( i ); 
+    
+    // Overwrite end of first Samples object. WARNING WHAT IF LESS THAN ONE SAMPLES OBJECT?
+    absIndex = 0;
+    for( int i = relIndex; i < s.getSize(); i++, absIndex++ )
+      s.setSampleNoUpdate( i, samples.getSample(absIndex) );
+    
+    s.updateMinAndMaxAmplitude();
+    
+    // Create new Samples objects.
+    while( absIndex + SAMPLES_SIZE < samples.getSize())
+    {
+      Samples newSamples = new Samples( SAMPLES_SIZE );
+      for( int i = 0; i < SAMPLES_SIZE; i++, absIndex++ )
+      {
+        newSamples.setSampleNoUpdate( i, samples.getSample( absIndex ) );
+      }
+      newSamples.updateMinAndMaxAmplitude();
+      samplesList.add( ++objIndex, newSamples );
+    }
+    
+    // Put back overwritten data.
+    
+    
   }
 
   /**
@@ -158,10 +210,21 @@ public class Channel
    * @param samples An object containing all sample data to replace selection with.
 
    */
-  public void setSamples( int start, int stop, Samples samples ) throws Exception
+  public void setSamples( int start, int stop, Samples samples ) throws IndexOutOfBoundsException
   { 
     if( start < 0 || stop < 0 || start > stop )
-      throw new Exception( "Invalid interval" );
+      throw new IndexOutOfBoundsException( "Invalid interval" );
+    
+    // Find start indices.
+    
+    // Overwrite beginning
+    
+    // Find end
+    
+    // Overwrite end
+    
+    // Remove old and add new
+    
     
   }
   
