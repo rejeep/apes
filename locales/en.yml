@@ -22,6 +22,7 @@ menu:
     copy: Copy
     paste: Paste
     delete: Delete
+    tags: Edit tags
   view:
     zoom:
       in: In
@@ -83,3 +84,5 @@ help:
     title: About apes
     name: apes - Audio Program for Editing Sound
     authors: Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm
+tags:
+  save: Save tags

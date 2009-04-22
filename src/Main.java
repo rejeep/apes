@@ -16,6 +16,7 @@ import javax.swing.JTabbedPane;
 
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
+import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.models.Player;
@@ -59,6 +60,12 @@ public class Main extends JFrame
    * Player controller.
    */
   private PlayerController playerController;
+  
+  /**
+   * Tags controller.
+   */
+  private TagsController tagsController;
+
 
   /**
    * Config object.
@@ -90,6 +97,7 @@ public class Main extends JFrame
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
+    tagsController = new TagsController();
 
     // Initiate the language with default and then load the
     // dictionary.
@@ -244,6 +252,11 @@ public class Main extends JFrame
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
     edit.add( delete );
+    
+    JMenuItem tags = new ApesMenuItem( "menu.edit.tags" );
+    tags.addActionListener( tagsController );
+    tags.setName( "edit" );
+    edit.add( tags );
     // Edit END
 
     // View START
