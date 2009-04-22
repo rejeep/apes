@@ -73,6 +73,8 @@ public class Player implements Runnable
    * Keeps state of which samples that is currently playing.
    */
   private int currentSamples = 0;
+  
+  private int currentSample = 0;
 
   /**
    * This class must be run as a thread. Otherwise nothing can be done
@@ -285,6 +287,7 @@ public class Player implements Runnable
             line.write( data, 0, data.length );
 
             currentSamples++;
+            currentSample += samples.getSize();
           }
           else
           {
@@ -296,6 +299,7 @@ public class Player implements Runnable
           if( status == Status.STOP )
           {
             currentSamples = 0;
+            currentSample = 0;
             
             line.start();
           }
@@ -324,6 +328,16 @@ public class Player implements Runnable
   public int getCurrentSamples()
   {
     return currentSamples;
+  }
+  
+  /**
+   * Returns currentSample.
+   *
+   * @return currentSample.
+   */
+  public int getCurrentSample()
+  {
+    return currentSample;
   }
 
   /**

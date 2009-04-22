@@ -114,15 +114,16 @@ public class Samples
 
   /**
    * Returns an approximation of the average amplitude among all samples in this samples object.
+   * @param resolution The function takes every <code>resolution</code>:th sample into account. 
    * @return An approximate average amplitude over all samples.
    */
-  public int getAverageAmplitude()
+  public int getAverageAmplitude(int resolution)
   {
     int total = 0;
-    for( int i = 0; i < size; i += 10 )
+    for( int i = 0; i < size; i += resolution )
       total += getSample( i );
 
-    return total / ( size / 10 );
+    return total / ( size / resolution );
   }
 
   /**
