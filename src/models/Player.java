@@ -313,6 +313,16 @@ public class Player implements Runnable
       }
     }
   }
+  
+  /**
+   * Returns currentSamples.
+   *
+   * @return currentSamples.
+   */
+  public int getCurrentSamples()
+  {
+    return currentSamples;
+  }
 
   /**
    * Will return an instance of this class.
