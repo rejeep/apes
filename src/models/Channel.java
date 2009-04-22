@@ -247,8 +247,12 @@ public class Channel
         if( curIndex >= start && curIndex <= stop )
           s.setSampleNoUpdate(i, value);
         else
+        {
+          s.updateMinAndMaxAmplitude();
           return;
+        }
       }
+      s.updateMinAndMaxAmplitude();
     }
       
   }
@@ -271,8 +275,12 @@ public class Channel
         if( curIndex >= start && curIndex <= stop )
           s.setSampleNoUpdate(i, s.getSample(i) + delta);
         else
+        {
+          s.updateMinAndMaxAmplitude();
           return;
+        }
       }
+      s.updateMinAndMaxAmplitude();
     }
   }
   
