@@ -31,7 +31,7 @@ public class Player implements Runnable
   /**
    * Different status a Player can be in.
    */
-  public enum Status { PLAY, PAUSE, STOP };
+  public enum Status { PLAY, PAUSE, STOP, WAIT };
 
   /**
    * This variable holds the current status for the player.
@@ -291,7 +291,7 @@ public class Player implements Runnable
           }
           else
           {
-            status = null;
+            status = Status.WAIT;
           }
         }
         else
@@ -304,7 +304,7 @@ public class Player implements Runnable
             line.start();
           }
 
-          status = null;
+          status = Status.WAIT;
         }
       }
 
