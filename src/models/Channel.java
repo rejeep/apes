@@ -1,5 +1,6 @@
 package apes.models;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -226,6 +227,82 @@ public class Channel
     // Remove old and add new
     
     
+  }
+  
+  /**
+   * Sets all samples within the specified range to <code>value</code> 
+   * @param start The absolute index of the first value to change.
+   * @param stop The absolute index of the last value to change.
+   * @param value The value to set selected samples to.
+   */
+  public void setSamples( int start, int stop, int value )
+  {
+    Point startPoint = findAbsoluteIndex( start );
+    int curIndex = 0;
+    for( int objI = startPoint.x; objI < samplesList.size(); objI++ )
+    {
+      Samples s = samplesList.get(objI);
+      for( int i = 0; i < s.getSize(); i++, curIndex++ )
+      {
+        if( curIndex <= stop )
+          s.setSampleNoUpdate(i, value);
+        else
+          return;
+      }
+    }
+      
+  }
+  
+  /**
+   * Changes the values of all samples within a specified range by adding <code>delta</code>.
+   * @param start The index of the first sample to affect.
+   * @param stop The index of the last sample to affect.
+   * @param delta Value added to each sample in the selected range. May be negative.
+   */
+  public void alterSamples( int start, int stop, int delta )
+  {
+    Point startPoint = findAbsoluteIndex( start );
+    int curIndex = 0;
+    for( int objI = startPoint.x; objI < samplesList.size(); objI++ )
+    {
+      Samples s = samplesList.get(objI);
+      for( int i = 0; i < s.getSize(); i++, curIndex++ )
+      {
+        if( curIndex <= stop )
+          s.setSampleNoUpdate(i, s.getSample(i) + delta);
+        else
+          return;
+      }
+    }
+  }
+  
+  /**
+   * Finds the sample with the given absolute index.
+   * @param absIndex The absolute index to find.
+   * @return A point with x being the SamplesObject of the requested sample 
+   */
+  public Point findAbsoluteIndex( int absIndex )
+  {
+    int sampObj = 0;
+    int curIndex = 0;
+    for(; sampObj < samplesList.size(); sampObj++ )
+    {
+      Samples s = samplesList.get(sampObj);
+      int newIndex = curIndex + s.getSize();
+      if( newIndex == absIndex )
+      {
+        return new Point(sampObj+1, 0);
+      }
+      
+      if( newIndex < absIndex )
+      {
+        return new Point(sampObj, absIndex - curIndex);
+      }
+      
+      curIndex = newIndex;
+    }
+    
+    return new Point(-1, -1);
   }
   
   /**
