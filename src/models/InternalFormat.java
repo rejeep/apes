@@ -54,7 +54,17 @@ public class InternalFormat
   {
     return tags;
   }
-
+  
+  /**
+   * Sets the tags object for this IF.
+   *
+   * @param tags The tags object.
+   */
+  public void setTags( Tags tags )
+  {
+    this.tags = tags;
+  }
+  
   /**
    * Returns the number of channels.
    *
