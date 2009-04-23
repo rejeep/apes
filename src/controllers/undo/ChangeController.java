@@ -1,9 +1,11 @@
 package apes.controllers.undo;
 
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
+import apes.models.undo.ChangeEdit;
 
 /**
  * Change controller for sample modifications/effects.
@@ -34,6 +36,8 @@ public class ChangeController extends ApplicationController
    */
   public void change()
   {
+    UndoableEdit edit = new ChangeEdit();
     
+    undoManager.addEdit( edit );
   }
 }

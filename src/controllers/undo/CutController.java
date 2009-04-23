@@ -4,6 +4,8 @@ import javax.swing.undo.UndoManager;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
+import javax.swing.undo.UndoableEdit;
+import apes.models.undo.CutEdit;
 
 /**
  * Cut action. Handles the cutting in the graph.
@@ -13,11 +15,11 @@ import apes.views.InternalFormatView;
  */
 public class CutController extends ApplicationController
 {
- /**
-  * The view over the internal format.
-  */
+  /**
+   * The view over the internal format.
+   */
   private InternalFormatView internalFormatView;
-  
+
   /**
    * The undo manager that keeps track of all changes.
    */
@@ -28,12 +30,14 @@ public class CutController extends ApplicationController
     this.internalFormatView = internalFormatView;
     this.undoManager = undoManager;
   }
-  
+
   /**
    *
    */
   public void cut()
   {
-    
+    UndoableEdit edit = new CutEdit();
+
+    undoManager.addEdit( edit );
   }
 }
