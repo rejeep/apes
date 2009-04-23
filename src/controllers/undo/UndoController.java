@@ -1,12 +1,12 @@
 package apes.controllers.undo;
 
 /**
- * Change action for sample modifications/effects.
+ * Performs an undo action in the undoManager.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
-public class ChangeAction
+public class UndoController
 {
   
 }
