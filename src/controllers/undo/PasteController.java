@@ -2,6 +2,7 @@ package apes.controllers.undo;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
+import apes.models.undo.PasteEdit;
 
 /**
  * Paste action.
@@ -16,9 +17,15 @@ public class PasteController extends ApplicationController
    */
   private InternalFormatView internalFormatView;
   
+  /**
+   * 
+   */
+  private PasteEdit pasteEdit;
+  
   public PasteController(InternalFormatView internalFormatView)
   {
     this.internalFormatView = internalFormatView;
+    this.pasteEdit = new PasteEdit();
   }
   
   /**

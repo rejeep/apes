@@ -2,6 +2,7 @@ package apes.controllers.undo;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
+import apes.models.undo.ChangeEdit;
 
 /**
  * Copy action.
@@ -16,9 +17,15 @@ public class CopyController extends ApplicationController
    */
   private InternalFormatView internalFormatView;
   
+  /**
+   * 
+   */
+  private ChangeEdit changeEdit;
+  
   public CopyController(InternalFormatView internalFormatView)
   {
     this.internalFormatView = internalFormatView;
+    this.changeEdit = new ChangeEdit();
   }
   
   /**
