@@ -32,7 +32,7 @@ public class PasteController extends ApplicationController
   }
 
   /**
-   *
+   * A piece was pasted to the graph.
    */
   public void paste()
   {

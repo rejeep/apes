@@ -32,7 +32,7 @@ public class CopyController extends ApplicationController
   }
 
   /**
-   *
+   * A piece was copied from the graph.
    */
   public void copy()
   {

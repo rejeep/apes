@@ -32,7 +32,7 @@ public class CutController extends ApplicationController
   }
 
   /**
-   *
+   * A piece was cut from the graph.
    */
   public void cut()
   {
