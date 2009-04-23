@@ -14,17 +14,17 @@ import javax.swing.undo.UndoManager;
 public class PasteController extends ApplicationController
 {
   /**
-   *
+   * The view over the internal format.
    */
   private InternalFormatView internalFormatView;
   
   /**
-   * 
+   * Paste edit model.
    */
   private PasteEdit pasteEdit;
   
   /**
-   * 
+   * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
   

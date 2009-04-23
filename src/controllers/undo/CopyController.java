@@ -1,9 +1,10 @@
 package apes.controllers.undo;
 
-import apes.controllers.ApplicationController;
-import apes.models.undo.ChangeEdit;
-import apes.views.InternalFormatView;
 import javax.swing.undo.UndoManager;
+
+import apes.controllers.ApplicationController;
+import apes.views.InternalFormatView;
+import apes.models.undo.CopyEdit;
 
 /**
  * Copy action.
@@ -14,24 +15,24 @@ import javax.swing.undo.UndoManager;
 public class CopyController extends ApplicationController
 {
   /**
-   *
+   * The view over the internal format.
    */
   private InternalFormatView internalFormatView;
   
   /**
-   * 
+   * Copy edit model.
    */
-  private ChangeEdit changeEdit;
+  private CopyEdit copyEdit;
   
   /**
-   * 
+   * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
   
   public CopyController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
-    this.changeEdit = new ChangeEdit();
+    this.copyEdit = new CopyEdit();
     this.undoManager = undoManager;
   }
   

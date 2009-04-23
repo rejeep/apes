@@ -14,17 +14,17 @@ import javax.swing.undo.UndoManager;
 public class CutController extends ApplicationController
 {
  /**
-  *
+  * The view over the internal format.
   */
   private InternalFormatView internalFormatView;
   
   /**
-   * 
+   * Cut edit model.
    */
   private CutEdit cutEdit;
   
   /**
-   * 
+   * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
 

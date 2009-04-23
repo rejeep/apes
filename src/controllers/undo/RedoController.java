@@ -13,12 +13,12 @@ import javax.swing.undo.UndoManager;
 public class RedoController extends ApplicationController
 {
   /**
-   *
+   * The view over the internal format.
    */
   private InternalFormatView internalFormatView;
   
   /**
-   * 
+   * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
   
