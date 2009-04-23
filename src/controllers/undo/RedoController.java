@@ -2,6 +2,7 @@ package apes.controllers.undo;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
+import javax.swing.undo.UndoManager;
 
 /**
  * Performs a redo action in the undoManager.
@@ -16,9 +17,15 @@ public class RedoController extends ApplicationController
    */
   private InternalFormatView internalFormatView;
   
-  public RedoController( InternalFormatView internalFormatView )
+  /**
+   * 
+   */
+  private UndoManager undoManager;
+  
+  public RedoController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
+    this.undoManager = undoManager;
   }
 
   /**

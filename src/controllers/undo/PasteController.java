@@ -1,8 +1,9 @@
 package apes.controllers.undo;
 
 import apes.controllers.ApplicationController;
-import apes.views.InternalFormatView;
 import apes.models.undo.PasteEdit;
+import apes.views.InternalFormatView;
+import javax.swing.undo.UndoManager;
 
 /**
  * Paste action.
@@ -22,10 +23,16 @@ public class PasteController extends ApplicationController
    */
   private PasteEdit pasteEdit;
   
-  public PasteController( InternalFormatView internalFormatView )
+  /**
+   * 
+   */
+  private UndoManager undoManager;
+  
+  public PasteController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.pasteEdit = new PasteEdit();
+    this.undoManager = undoManager;
   }
   
   /**

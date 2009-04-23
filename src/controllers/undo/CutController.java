@@ -1,8 +1,9 @@
 package apes.controllers.undo;
 
 import apes.controllers.ApplicationController;
-import apes.views.InternalFormatView;
 import apes.models.undo.CutEdit;
+import apes.views.InternalFormatView;
+import javax.swing.undo.UndoManager;
 
 /**
  * Cut action.
@@ -21,11 +22,17 @@ public class CutController extends ApplicationController
    * 
    */
   private CutEdit cutEdit;
+  
+  /**
+   * 
+   */
+  private UndoManager undoManager;
 
-  public CutController( InternalFormatView internalFormatView )
+  public CutController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.cutEdit = new CutEdit();
+    this.undoManager = undoManager;
   }
   
   /**
