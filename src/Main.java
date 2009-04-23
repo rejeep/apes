@@ -4,32 +4,31 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.undo.UndoManager;
+
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
 import apes.controllers.TagsController;
 import apes.controllers.undo.ChangeController;
 import apes.controllers.undo.CopyController;
 import apes.controllers.undo.CutController;
+import apes.controllers.undo.PasteController;
 import apes.controllers.undo.RedoController;
 import apes.controllers.undo.UndoController;
-import apes.controllers.undo.PasteController;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.Player;
 import apes.models.InternalFormat;
+import apes.models.Player;
 import apes.plugins.WaveFileFormat;
-import apes.views.*;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -49,6 +48,11 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
+import apes.views.ApesMenu;
+import apes.views.ApesMenuItem;
+import apes.views.InternalFormatView;
+import apes.views.SamplesView;
+import apes.views.VolumePanel;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -103,6 +107,10 @@ public class Main extends JFrame
    */
   private PasteController pasteController;
 
+  /**
+   * Undo manager (keeps history list)
+   */
+  private UndoManager undoManager;
 
   /**
    * Config object.
@@ -156,12 +164,13 @@ public class Main extends JFrame
     InternalFormatView internalFormatViews = new InternalFormatView();
 
     // "Undo" controllers.
-    changeController = new ChangeController( internalFormatViews );
-    copyController   = new CopyController( internalFormatViews );
-    cutController    = new CutController( internalFormatViews );
-    redoController   = new RedoController( internalFormatViews );
-    undoController   = new UndoController( internalFormatViews );
-    pasteController  = new PasteController( internalFormatViews );
+    undoManager      = new UndoManager();
+    changeController = new ChangeController( undoManager, internalFormatViews );
+    copyController   = new CopyController( undoManager, internalFormatViews );
+    cutController    = new CutController( undoManager, internalFormatViews );
+    redoController   = new RedoController( undoManager, internalFormatViews );
+    undoController   = new UndoController( undoManager, internalFormatViews );
+    pasteController  = new PasteController( undoManager, internalFormatViews );
 
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );
