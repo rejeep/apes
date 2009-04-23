@@ -22,7 +22,7 @@ public class CutController extends ApplicationController
    */
   private CutEdit cutEdit;
 
-  public CutController(InternalFormatView internalFormatView)
+  public CutController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.cutEdit = new CutEdit();

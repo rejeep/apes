@@ -156,12 +156,12 @@ public class Main extends JFrame
     InternalFormatView internalFormatViews = new InternalFormatView();
 
     // "Undo" controllers.
-    changeController = new ChangeController(internalFormatViews);
-    copyController   = new CopyController(internalFormatViews);
-    cutController    = new CutController(internalFormatViews);
-    redoController   = new RedoController(internalFormatViews);
-    undoController   = new UndoController(internalFormatViews);
-    pasteController  = new PasteController(internalFormatViews);
+    changeController = new ChangeController( internalFormatViews );
+    copyController   = new CopyController( internalFormatViews );
+    cutController    = new CutController( internalFormatViews );
+    redoController   = new RedoController( internalFormatViews );
+    undoController   = new UndoController( internalFormatViews );
+    pasteController  = new PasteController( internalFormatViews );
 
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );

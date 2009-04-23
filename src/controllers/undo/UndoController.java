@@ -16,7 +16,7 @@ public class UndoController extends ApplicationController
    */
   private InternalFormatView internalFormatView;
   
-  public UndoController(InternalFormatView internalFormatView)
+  public UndoController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
   }

@@ -16,7 +16,7 @@ public class RedoController extends ApplicationController
    */
   private InternalFormatView internalFormatView;
   
-  public RedoController(InternalFormatView internalFormatView)
+  public RedoController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
   }

@@ -22,7 +22,7 @@ public class PasteController extends ApplicationController
    */
   private PasteEdit pasteEdit;
   
-  public PasteController(InternalFormatView internalFormatView)
+  public PasteController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.pasteEdit = new PasteEdit();

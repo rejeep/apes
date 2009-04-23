@@ -22,7 +22,7 @@ public class CopyController extends ApplicationController
    */
   private ChangeEdit changeEdit;
   
-  public CopyController(InternalFormatView internalFormatView)
+  public CopyController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.changeEdit = new ChangeEdit();

@@ -22,7 +22,7 @@ public class ChangeController extends ApplicationController
    */
   private ChangeEdit changeEdit;
   
-  public ChangeController(InternalFormatView internalFormatView)
+  public ChangeController( InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
     this.changeEdit = new ChangeEdit();
