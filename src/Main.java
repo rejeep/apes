@@ -163,8 +163,11 @@ public class Main extends JFrame
     // TODO: Temp because holm created a SamplesView???
     InternalFormatView internalFormatViews = new InternalFormatView();
 
+    // Undomanager
+    undoManager = new UndoManager();
+    undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
+    
     // "Undo" controllers.
-    undoManager      = new UndoManager();
     changeController = new ChangeController( undoManager, internalFormatViews );
     copyController   = new CopyController( undoManager, internalFormatViews );
     cutController    = new CutController( undoManager, internalFormatViews );
