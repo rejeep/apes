@@ -29,10 +29,10 @@ public class RedoController extends ApplicationController
   }
 
   /**
-   *
+   * Performs a redo.
    */
   public void redo()
   {
-    
+    undoManager.redo();
   }
 }

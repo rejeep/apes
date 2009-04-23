@@ -29,10 +29,10 @@ public class UndoController extends ApplicationController
   }
 
   /**
-   *
+   * Performs an undo.
    */
   public void undo()
   {
-    
+    undoManager.undo();
   }
 }
