@@ -20,11 +20,6 @@ public class CopyController extends ApplicationController
   private InternalFormatView internalFormatView;
   
   /**
-   * Copy edit model.
-   */
-  private CopyEdit copyEdit;
-  
-  /**
    * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
@@ -32,7 +27,6 @@ public class CopyController extends ApplicationController
   public CopyController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
-    this.copyEdit = new CopyEdit();
     this.undoManager = undoManager;
   }
   

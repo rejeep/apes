@@ -1,9 +1,9 @@
 package apes.controllers.undo;
 
-import apes.controllers.ApplicationController;
-import apes.models.undo.ChangeEdit;
-import apes.views.InternalFormatView;
 import javax.swing.undo.UndoManager;
+
+import apes.controllers.ApplicationController;
+import apes.views.InternalFormatView;
 
 /**
  * Change action for sample modifications/effects.
@@ -19,11 +19,6 @@ public class ChangeController extends ApplicationController
   private InternalFormatView internalFormatView;
   
   /**
-   * Change edit model.
-   */
-  private ChangeEdit changeEdit;
-  
-  /**
    * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
@@ -31,7 +26,6 @@ public class ChangeController extends ApplicationController
   public ChangeController( UndoManager undoManager, InternalFormatView internalFormatView )
   {
     this.internalFormatView = internalFormatView;
-    this.changeEdit = new ChangeEdit();
     this.undoManager = undoManager;
   }
   
