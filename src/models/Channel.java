@@ -151,26 +151,12 @@ public class Channel
     if( start < 0 )
       throw new IndexOutOfBoundsException("Sample index cannot be negative");
     
-    int absIndex = 0;
-    int relIndex = 0;
-    int objIndex = 0;
-    
     // Find start indices.
-    for(; objIndex < samplesList.size(); objIndex++ )
-    {
-      if( absIndex == start )
-        break;
-        
-      Samples s = samplesList.get( objIndex );
-      int newIndex = absIndex + s.getSize();
-      if( newIndex > start )
-      {
-        relIndex = start - absIndex;
-        break;
-      }
-      
-      absIndex = newIndex;
-    }
+    Point p = findAbsoluteIndex(start);
+    int absIndex = 0;
+    int relIndex = p.y;
+    int objIndex = p.x;
+    
     
     Samples s = samplesList.get( objIndex );
     
@@ -217,6 +203,8 @@ public class Channel
       throw new IndexOutOfBoundsException( "Invalid interval" );
     
     // Find start indices.
+    Point startPoint = findAbsoluteIndex(start);
+    Point stopPoint = findAbsoluteIndex(stop);
     
     // Overwrite beginning
     
@@ -244,8 +232,11 @@ public class Channel
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex >= start && curIndex <= stop )
-          s.setSampleNoUpdate(i, value);
+        if(curIndex <= stop )
+        {
+          if(curIndex >= start)
+            s.setSampleNoUpdate(i, value);
+        }
         else
         {
           s.updateMinAndMaxAmplitude();
@@ -272,8 +263,11 @@ public class Channel
       Samples s = samplesList.get(objI);
       for( int i = 0; i < s.getSize(); i++, curIndex++ )
       {
-        if( curIndex >= start && curIndex <= stop )
-          s.setSampleNoUpdate(i, s.getSample(i) + delta);
+        if( curIndex <= stop )
+        {
+          if(curIndex >= start)
+            s.setSampleNoUpdate(i, s.getSample(i) + delta);
+        }
         else
         {
           s.updateMinAndMaxAmplitude();
