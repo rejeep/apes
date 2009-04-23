@@ -5,7 +5,7 @@ import apes.views.InternalFormatView;
 import javax.swing.undo.UndoManager;
 
 /**
- * Performs an undo action in the undoManager.
+ * Performs an undo action in the undo manager.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)

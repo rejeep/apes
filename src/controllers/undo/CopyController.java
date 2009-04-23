@@ -4,10 +4,9 @@ import javax.swing.undo.UndoManager;
 
 import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
-import apes.models.undo.CopyEdit;
 
 /**
- * Copy action.
+ * Copy controller. Handles the copying in the graph.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)

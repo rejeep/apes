@@ -6,7 +6,7 @@ import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
 
 /**
- * Cut action.
+ * Cut action. Handles the cutting in the graph.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)

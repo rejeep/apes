@@ -6,7 +6,7 @@ import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
 
 /**
- * Paste action.
+ * Paste action. Handles the paste in the graph.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)

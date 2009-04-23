@@ -6,7 +6,7 @@ import apes.controllers.ApplicationController;
 import apes.views.InternalFormatView;
 
 /**
- * Change action for sample modifications/effects.
+ * Change controller for sample modifications/effects.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)
