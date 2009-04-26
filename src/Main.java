@@ -18,12 +18,7 @@ import javax.swing.undo.UndoManager;
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
 import apes.controllers.TagsController;
-import apes.controllers.undo.ChangeController;
-import apes.controllers.undo.CopyController;
-import apes.controllers.undo.CutController;
-import apes.controllers.undo.PasteController;
-import apes.controllers.undo.RedoController;
-import apes.controllers.undo.UndoController;
+import apes.controllers.InternalFormatController;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.models.InternalFormat;
@@ -80,35 +75,10 @@ public class Main extends JFrame
   /**
    * Change controller.
    */
-  private ChangeController changeController;
+  private InternalFormatController internalFormatController;
 
   /**
-   * Copy controller.
-   */
-  private CopyController copyController;
-
-  /**
-   * Cut controller.
-   */
-  private CutController cutController;
-
-  /**
-   * Redo controller.
-   */
-  private RedoController redoController;
-
-  /**
-   * Undo controller.
-   */
-  private UndoController undoController;
-
-  /**
-   * Paste controller.
-   */
-  private PasteController pasteController;
-
-  /**
-   * Undo manager (keeps history list)
+   * Undo manager (keeps history list).
    */
   private UndoManager undoManager;
 
@@ -167,13 +137,8 @@ public class Main extends JFrame
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
     
-    // "Undo" controllers.
-    changeController = new ChangeController( undoManager, internalFormatViews );
-    copyController   = new CopyController( undoManager, internalFormatViews );
-    cutController    = new CutController( undoManager, internalFormatViews );
-    redoController   = new RedoController( undoManager, internalFormatViews );
-    undoController   = new UndoController( undoManager, internalFormatViews );
-    pasteController  = new PasteController( undoManager, internalFormatViews );
+    // Controller for the internal format.
+    internalFormatController = new InternalFormatController( undoManager, internalFormatViews );
 
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );
@@ -302,31 +267,33 @@ public class Main extends JFrame
     menuBar.add( edit );
 
     JMenuItem undo = new ApesMenuItem( "menu.edit.undo" );
-    undo.addActionListener( undoController );
+    undo.addActionListener( internalFormatController );
     undo.setName( "undo" );
     edit.add( undo );
 
     JMenuItem redo = new ApesMenuItem( "menu.edit.redo" );
-    redo.addActionListener( redoController );
+    redo.addActionListener( internalFormatController );
     redo.setName( "redo" );
     edit.add( redo );
 
     JMenuItem cut = new ApesMenuItem( "menu.edit.cut" );
-    cut.addActionListener( cutController );
+    cut.addActionListener( internalFormatController );
     cut.setName( "cut" );
     edit.add( cut );
 
     JMenuItem copy = new ApesMenuItem( "menu.edit.copy" );
-    copy.addActionListener( copyController );
+    copy.addActionListener( internalFormatController );
     copy.setName( "copy" );
     edit.add( copy );
 
     JMenuItem paste = new ApesMenuItem( "menu.edit.paste" );
-    paste.addActionListener( pasteController );
+    paste.addActionListener( internalFormatController );
     paste.setName( "paste" );
     edit.add( paste );
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
+    delete.addActionListener( internalFormatController );
+    delete.setName( "delete" );
     edit.add( delete );
 
     JMenuItem tags = new ApesMenuItem( "menu.edit.tags" );
@@ -422,31 +389,33 @@ public class Main extends JFrame
     topPanel.add( save );
 
     ImageButton undo = new UndoButton();
-    undo.addActionListener( undoController );
+    undo.addActionListener( internalFormatController );
     undo.setName( "undo" );
     topPanel.add( undo );
 
     ImageButton redo = new RedoButton();
-    redo.addActionListener( redoController );
+    redo.addActionListener( internalFormatController );
     redo.setName( "redo" );
     topPanel.add( redo );
 
     ImageButton copy = new CopyButton();
-    copy.addActionListener( copyController );
+    copy.addActionListener( internalFormatController );
     copy.setName( "copy" );
     topPanel.add( copy );
 
     ImageButton cut = new CutButton();
-    cut.addActionListener( cutController );
+    cut.addActionListener( internalFormatController );
     cut.setName( "cut" );
     topPanel.add( cut );
 
     ImageButton paste = new PasteButton();
-    paste.addActionListener( pasteController );
+    paste.addActionListener( internalFormatController );
     paste.setName( "paste" );
     topPanel.add( paste );
 
     ImageButton delete = new DeleteButton();
+    delete.addActionListener( internalFormatController );
+    delete.setName( "delete" );
     topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
