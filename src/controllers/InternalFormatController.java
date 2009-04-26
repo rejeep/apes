@@ -3,10 +3,11 @@ package apes.controllers;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-import apes.models.undo.CopyEdit;
-import apes.views.InternalFormatView;
 import apes.models.undo.ChangeEdit;
+import apes.models.undo.CopyEdit;
+import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
+import apes.views.InternalFormatView;
 
 /**
  * Controller for the internal format.
@@ -66,6 +67,16 @@ public class InternalFormatController extends ApplicationController
   }
 
   /**
+   * Performs a delete.
+   */
+  public void delete()
+  {
+    UndoableEdit edit = new DeleteEdit();
+    
+    undoManager.addEdit( edit );
+  }
+
+  /**
    * Performs some kind of change.
    */
   public void change()
@@ -89,13 +100,5 @@ public class InternalFormatController extends ApplicationController
   public void redo()
   {
     undoManager.redo();
-  }
-
-  /**
-   * Performs a delete.
-   */
-  public void delete()
-  {
-    
   }
 }
