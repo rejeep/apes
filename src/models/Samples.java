@@ -1,7 +1,6 @@
 package apes.models;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 
 /**
  * Class for containing a bunch of samples as used by the InternalFormat.
@@ -53,7 +52,7 @@ public class Samples
   /**
    * Contains all the raw data of the samples.
    */
-  private byte[] sampleData;
+  private int[] sampleData;
 
   /**
    * Constructs a <code>Samples</code> object with the desired size.
@@ -62,7 +61,7 @@ public class Samples
   public Samples( int amount )
   {
     size = amount;
-    sampleData = new byte[size * BYTES_PER_SAMPLE];
+    sampleData = new int[amount];
     
     minAmplitude = maxAmplitude = 0;
     minAmplitudeIndex = maxAmplitudeIndex = 0;
@@ -85,7 +84,7 @@ public class Samples
     // Count bytes instead of bits
     int Bps = bps / 8;
     size = data.length / Bps;
-    sampleData = new byte[ size * BYTES_PER_SAMPLE ];
+    sampleData = new int[size];
     int BpsDiff = BYTES_PER_SAMPLE - Bps;
 
     // Transfer data to sampleData array.
@@ -98,7 +97,7 @@ public class Samples
       BigInteger bigAmp = new BigInteger(val);
       int amplitude = bigAmp.intValue() << ( 8 * BpsDiff );
 
-      setSampleNoUpdate( i, amplitude );
+      sampleData[i] = amplitude;
     }
     updateMinAndMaxAmplitude();
   }
@@ -121,7 +120,7 @@ public class Samples
   {
     int total = 0;
     for( int i = 0; i < size; i += resolution )
-      total += getSample( i );
+      total += sampleData[i];
 
     return total / ( size / resolution );
   }
@@ -152,14 +151,7 @@ public class Samples
    */
   public int getSample( int index )
   {
-    int value = 0;
-    byte[] amp = new byte[BYTES_PER_SAMPLE];
-    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
-    {
-      amp[i] = sampleData[(index + 1) * BYTES_PER_SAMPLE - i - 1];
-      value = new BigInteger(amp).intValue();
-    }
-    return value;
+    return sampleData[index];
   }
 
   /**
@@ -169,8 +161,7 @@ public class Samples
    */
   public void setSampleNoUpdate( int index, int value )
   {
-    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
-      sampleData[index * BYTES_PER_SAMPLE + i] = (byte)((value >> (i * 8)) & 0xff);
+    sampleData[index] = value;
   }
   
   /**
@@ -180,7 +171,7 @@ public class Samples
    */
   public void setSample( int index, int value )
   {
-    setSampleNoUpdate( index, value );
+    sampleData[index] = value;
 
     int oldMaxIndex = maxAmplitudeIndex;
     int oldMinIndex = minAmplitudeIndex;
@@ -252,7 +243,15 @@ public class Samples
    */
   public byte[] getData()
   {
-    return sampleData;
+    byte[] retArray = new byte[ size * BYTES_PER_SAMPLE ];
+    for( int i = 0; i < size; i++ )
+    {
+      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
+      {
+        retArray[i * BYTES_PER_SAMPLE + j] = (byte)((sampleData[i] >> (j * 8)) & 0xff);
+      }
+    }
+    return retArray;
   }
 
   /**
