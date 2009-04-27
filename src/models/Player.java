@@ -200,8 +200,6 @@ public class Player implements Runnable
 
         // For volume control
         gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
-
-        this.line = line;
       }
       catch( IllegalArgumentException e )
       {
