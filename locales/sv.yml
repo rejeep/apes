@@ -25,7 +25,7 @@ menu:
     zoom:
       in: In
       out: Ut
-      reset: terstŠll
+      reset: ?terstŠll
     full_screen: FullskŠrm
   tools:
     properties: InstŠllningar
@@ -33,3 +33,13 @@ menu:
     manual: Manual
     bug: Reportera bug
     about: Om
+  tags:
+    save: Save tags
+    name: Namn
+    track: Spår
+    artist: Artist
+    album: Album
+    genre: Genre
+    composer: Kompositör
+    comments: Kommentarer
+    copyright: Copyright

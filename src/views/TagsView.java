@@ -75,14 +75,14 @@ public class TagsView extends JFrame
         close.setName( "close" );
         south.add( close );
 
-        n = new JTextField( tags.get("") );
-        t = new JTextField( tags.get("") );
-        ar = new JTextField( tags.get("") );
-        al = new JTextField( tags.get("") );
-        g = new JTextField( tags.get("") );
-        comp = new JTextField( tags.get("") );
-        com = new JTextField( tags.get("") );
-        copy = new JTextField( tags.get("") );
+        n = new JTextField( tags.get( "name" ) );
+        t = new JTextField( tags.get( "track" ) );
+        ar = new JTextField( tags.get( "artist" ) );
+        al = new JTextField( tags.get( "album" ) );
+        g = new JTextField( tags.get( "genre" ) );
+        comp = new JTextField( tags.get( "composer" ) );
+        com = new JTextField( tags.get( "comments" ) );
+        copy = new JTextField( tags.get( "copyright" ) );
 
         name = new JLabel( Language.get( "tags.name" ) );
         track = new JLabel( Language.get( "tags.track" ) );
