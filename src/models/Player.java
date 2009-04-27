@@ -74,6 +74,9 @@ public class Player implements Runnable
    */
   private int currentSamples = 0;
   
+  /**
+   * What sample (not samples are we on).
+   */
   private int currentSample = 0;
 
   /**
