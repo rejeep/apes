@@ -4,8 +4,7 @@ import javax.swing.JPanel;
 
 import apes.models.Player;
 import apes.models.InternalFormat;
-
-import apes.views.ChannelView;
+import apes.lib.Config;
 
 /**
  * Contains one ChannelView per channel in the internal format.
@@ -23,7 +22,9 @@ public class InternalFormatView extends JPanel
 
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
-      add( internalFormat.getChannel( i ) );
+      add( new ChannelView(Player.getInstance(), internalFormat.getChannel( i ),
+                           Config.getInstance().getIntOption( "graphwidth" ),
+                           Config.getInstance().getIntOption( "graphheight" )));
     }
   }
 }

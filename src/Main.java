@@ -5,13 +5,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -81,7 +79,7 @@ public class Main extends JFrame
   /**
    * The view of the samples.
    */
-  private SamplesView internalFormatView;
+  private ChannelView internalFormatView;
 
   /**
    * Starts the program.
@@ -137,9 +135,9 @@ public class Main extends JFrame
     setWindowDimensions();
 
     if(internal == null)
-      internalFormatView = new SamplesView(Player.getInstance(), null, this.getWidth(),300);
+      internalFormatView = new ChannelView(Player.getInstance(), null, this.getWidth(),300);
     else
-      internalFormatView = new SamplesView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
+      internalFormatView = new ChannelView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
     tabs.addTab( "Some file.wav", internalFormatView );
 
     setVisible( true );
