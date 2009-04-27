@@ -77,6 +77,7 @@ public class Config
     options.put( "volume_label_format", "%v %" );
     options.put( "graphwidth", "500" );
     options.put( "graphheight", "300" );
+    options.put( "undo", "10" );
   }
 
   /**
