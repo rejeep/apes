@@ -177,7 +177,9 @@ public class Main extends JFrame
 
         if( width > 0 && height > 0 )
         {
+          // Best do both JIC.
           setPreferredSize( new Dimension( width, height ) );
+          setSize( width, height );
         }
       }
       catch( NumberFormatException e ) {}
