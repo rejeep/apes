@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import apes.models.Tags;
 import javax.swing.JButton;
 import apes.controllers.TagsController;
+import apes.lib.Language;
 
 /**
  *
@@ -72,32 +73,30 @@ public class TagsView extends JFrame
         close = new JButton( "Close" );
         close.addActionListener( tagsController );
         close.setName( "close" );
-
-        System.out.println(tags);
-        System.out.println(tags.get("name"));
-        
         south.add( close );
-        n = new JTextField( "" );
-        t = new JTextField( "4" );
-        ar = new JTextField( "Hanson" );
-        al = new JTextField( "Middle of Nowhere" );
-        g = new JTextField( "Pop" );
-        comp = new JTextField( "Z. Hanson" );
-        com = new JTextField( "small kids" );
-        copy = new JTextField( "Hanson" );
 
-        name = new JLabel( "Name" );
-        track = new JLabel( "Track" );
-        artist = new JLabel( "Artist" );
-        album = new JLabel( "Album" );
-        genre = new JLabel( "Genre" );
-        composer = new JLabel( "Composer" );
-        comments = new JLabel( "Comments" );
-        copyright = new JLabel( "Copyright" );
+        n = new JTextField( tags.get("") );
+        t = new JTextField( tags.get("") );
+        ar = new JTextField( tags.get("") );
+        al = new JTextField( tags.get("") );
+        g = new JTextField( tags.get("") );
+        comp = new JTextField( tags.get("") );
+        com = new JTextField( tags.get("") );
+        copy = new JTextField( tags.get("") );
+
+        name = new JLabel( Language.get( "tags.name" ) );
+        track = new JLabel( Language.get( "tags.track" ) );
+        artist = new JLabel( Language.get( "tags.artist" ) );
+        album = new JLabel( Language.get( "tags.album" ) );
+        genre = new JLabel( Language.get( "tags.genre" ) );
+        composer = new JLabel( Language.get( "tags.composer" ) );
+        comments = new JLabel( Language.get( "tags.comments" ) );
+        copyright = new JLabel( Language.get( "tags.copyright" ) );
 
         center = new JPanel();
         center.setBackground( Color.GRAY );
         center.setLayout( new GridLayout( 8,2 ) );
+        center.setPreferredSize( new Dimension( 200, 170 ) );
         center.add( name );
         center.add( n );
         center.add( track );
