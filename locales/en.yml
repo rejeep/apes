@@ -86,3 +86,11 @@ help:
     authors: Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm
 tags:
   save: Save tags
+  name: Name
+  track: Track
+  artist: Artist
+  album: Album
+  genre: Genre
+  composer: Composer
+  comments: Comments
+  copyright: Copyright
