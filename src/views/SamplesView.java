@@ -7,13 +7,14 @@ import apes.models.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
-public class SamplesView extends JPanel implements MouseListener, MouseWheelListener
+public class SamplesView extends JPanel
+                         implements MouseListener,
+                                    MouseWheelListener,
+                                    MouseMotionListener,
+                                    Runnable
 {
   private Channel channel;
   private int nrSamples;
@@ -24,12 +25,15 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
   private Player player;
   private int markBeginning;
   private int markEnd;
+  private boolean mousePressed;
+  private boolean movEdgeLeft;
 
   public SamplesView( Player player, Channel ch, int width, int height )
   {
     super();
-    this.addMouseListener(this);
-    this.addMouseWheelListener(this);
+    this.addMouseListener( this );
+    this.addMouseWheelListener( this );
+    this.addMouseMotionListener( this );
     this.player = player;
     this.channel = ch;
     this.width = width;
@@ -38,19 +42,17 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     markBeginning = -1;
     markEnd       = -1;
     samples = new int[width];
+    mousePressed = false;
+    movEdgeLeft = true;
 
-    if(ch == null)
-    {
-      visibleSamples = 0;
-      nrSamples = 0;
-    }
-    else
+    if(ch != null)
     {
       nrSamples = channel.getSamplesSize()*Channel.SAMPLES_SIZE;
       visibleSamples = nrSamples;
       centerSample = nrSamples/2;
       updateView();
     }
+    new Thread(this).start();
   }
 
   public void paintComponent( Graphics g )
@@ -58,10 +60,13 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     super.paintComponent( g );
     Graphics2D g2 = (Graphics2D) g;
 
+    g2.setColor(Color.blue);
     for(int i = 0; i < samples.length-1; ++i)
     {
       g2.drawLine(i, samples[i], i+1, samples[i+1]);
     }
+    
+    g2.setColor(Color.black);
     g2.drawLine(0,height/2,width,height/2);
     g2.drawLine(0,height,width,height);
     g2.drawLine(0,0,width,0);
@@ -69,15 +74,23 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     if(markBeginning > 0)
       g2.drawLine(markBeginning,0,markBeginning,height);
     if(markEnd > 0)
-    g2.drawLine(markEnd,0,markEnd,height);
-
-    if(markEnd > 0 && markBeginning > 0)
+      g2.drawLine(markEnd,0,markEnd,height);
+    
+    if(markBeginning > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
-      g2.setColor(Color.blue);
-      g2.fillRect(markBeginning, 0, markEnd-markBeginning, height);
-    }  
-   // player.
+      g2.setColor(Color.green);
+      if(markEnd > 0 && markBeginning > 0)
+        g2.fillRect(markBeginning, 0, markEnd-markBeginning, height);
+    }
+    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    g2.setColor(Color.black);
+    if(nrSamples > 0)
+      g2.drawLine(( (int) ((long) width*player.getCurrentSample()/nrSamples) ),0,
+                  ( (int) ((long) width*player.getCurrentSample()/nrSamples) ),height);
+
+
+
   }
 
   public void setZoom(int samples)
@@ -95,75 +108,48 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     channel = ch;
     nrSamples = channel.getSamplesSize()*Channel.SAMPLES_SIZE;
     visibleSamples = nrSamples;
+    centerSample = nrSamples/2;
   }
 
   public void updateView()
   {
+    double time = System.currentTimeMillis();
+    
     if(channel == null)
-    {
-      visibleSamples = 0;
-      nrSamples = 0;
-    }
+      return;
+    
 
     //SampleIterator iterator = channel.getIterator();
     int sample = 0;
-    int x = 0;
-    int maxAmp = channel.getMaxAmplitude();
-    int minAmp = channel.getMinAmplitude();
+    int maxAmp = Integer.MIN_VALUE;
+    int minAmp = Integer.MAX_VALUE;
 
-    //TODO HACK
-    double heightScale = ((float)height/((long)(maxAmp)-(long)(minAmp)))*500; //0.0001f;//(float)height/(maxAmp);
-    int widthSamples = visibleSamples/width;
 
-    /*
-    int start;
-    int stop;
-
-    if(centerSample-visibleSamples/2 > 0)
-      start = centerSample - visibleSamples/2;
-    else
-      start = 0;
-
+    int samplesPerPixel = visibleSamples/width;
+    int sampleChunksPerPixel = (samplesPerPixel / Channel.SAMPLES_SIZE); 
 
     for(int i = 0; i < width; ++i)
     {
-      try
-      {
-        System.out.println("start: "+start);
-        System.out.println("start+widthSamples = "+start+widthSamples);
-        System.out.println("nrSampls: "+nrSamples);
-        sample = channel.getSamples( start, start+widthSamples );
-        samples[i] = Math.round((height/2)+(float)(sample.getAverageAmplitude()*heightScale));
-      } catch ( Exception e )
-      {
-        e.printStackTrace();
-      }
-
-      start += widthSamples;
-    }
-            */
-    SampleIterator iterator = channel.getIterator();
-    
-    if(centerSample-visibleSamples/2 > 0)
-      for(int i = 0; i < centerSample-visibleSamples/2; ++i)
-        if(iterator.hasNext())
-          iterator.next();
-        else
-          return;
-
-    for(int i = 0; i < width; ++i)
-    {
-      for(int j = 0; j < widthSamples; ++j)
-        if(iterator.hasNext())
-          sample = sample+iterator.next();
-        else
-          return;
-
-      samples[i] = Math.round((height/2)+(float)(sample*heightScale));
+      for(int j = 0; j < sampleChunksPerPixel; ++j)
+        sample = sample+channel.getSamples( j*i ).getAverageAmplitude( Channel.SAMPLES_SIZE );
+      sample = sample/sampleChunksPerPixel;
+      samples[i] = sample;
+      if(sample  > maxAmp)
+        maxAmp = sample;
+      if(sample < minAmp)
+        minAmp = sample;
       sample = 0;
     }
 
+    double heightScale = ((float)height/((long)(maxAmp)-(long)(minAmp)));
+
+    //Lowpass here?
+
+    for(int i = 0; i < samples.length; ++i)
+      samples[i] = Math.round((height/2)+(float)(samples[i]*heightScale));
+
     this.repaint();
+    //System.out.println("Time to update view(ms): " + (System.currentTimeMillis() - time));
   }
 
 
@@ -198,14 +184,15 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
     {
       int x = e.getX();
       int y = e.getY();
-      System.out.println(e.getX() + " " + e.getY() );
+    
       if(x < width && x > 0 && y < height)
       {
-        markBeginning = x;          
-        markEnd = -1;
+        markBeginning = x;
+        markEnd = x;
         this.repaint();
       }
-    } 
+    }
+    mousePressed = true;
   }
 
   //@Override
@@ -215,13 +202,24 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
       int x = e.getX();
       int y = e.getY();
 
-      if(x < width && x > 0 && x >= markBeginning && markBeginning != -1 && y < height)
-        markEnd = x;
-      else if(x < width && x > 0 && x <= markBeginning && markBeginning != -1 && y < height)
+      if(x < width && x > 0 && x > markEnd && y < height)
       {
-        markEnd = markBeginning;
-        markBeginning = x;
+        markEnd = x;
+        movEdgeLeft = false;
       }
+      else if(x < width && x > 0 && x < markBeginning && y < height)
+      {
+        markBeginning = x;
+        movEdgeLeft = true;
+      }
+      if(x < width && x > 0 && y < height)
+      {
+        if(movEdgeLeft)
+          markBeginning = x;
+        else
+          markEnd = x;
+      }
+         
       this.repaint();
     }
     else if( e.getButton() == MouseEvent.BUTTON3)
@@ -230,6 +228,7 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
       markEnd = -1;
       this.repaint();
     }
+    mousePressed = false;
   }
 
   //@Override
@@ -244,13 +243,66 @@ public class SamplesView extends JPanel implements MouseListener, MouseWheelList
 
   //@Override
   public void mouseWheelMoved(MouseWheelEvent e) {
-    System.out.println(e.getWheelRotation());
+    //System.out.println(e.getWheelRotation());
     //-1 scroll wheel up
     //1 scroll wheel down
+    Point marked = getMarkedSamples();
+    //System.out.println("start: " + marked.x + " end: " + marked.y);
     if(e.getWheelRotation() > 0)
     {
+      double time = System.currentTimeMillis();
+      channel.alterSamples( marked.x, marked.y, -100000 );
+      //System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
+
     }
     else
-    {}
+    {
+      double time = System.currentTimeMillis();
+      channel.alterSamples( marked.x, marked.y, 100000 );
+      //System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
+    }
+  }
+
+  //@Override
+  public void mouseDragged( MouseEvent mouseEvent )
+  {
+    int x = mouseEvent.getX();
+    int y = mouseEvent.getY();
+
+    if(x < width && x > 0 && x > markEnd && y < height)
+    {
+      markEnd = x;
+      movEdgeLeft = false;
+    }
+    else if(x < width && x > 0 && x < markBeginning && y < height)
+    {
+      markBeginning = x;
+      movEdgeLeft = true;
+    }
+    if(x < width && x > 0 && y < height)
+    {
+      //left movement
+      if(movEdgeLeft)
+        markBeginning = x;
+      else
+        markEnd = x;
+    }
+    
+    this.repaint();
+  }
+
+  //@Override
+  public void mouseMoved( MouseEvent mouseEvent )
+  {
+
+  }
+
+  //@Override
+  public void run()
+  {
+    while(true)
+    {      
+      this.repaint();
+    }
   }
 }
