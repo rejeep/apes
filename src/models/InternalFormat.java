@@ -38,9 +38,16 @@ public class InternalFormat
    * @param samplerate  Amount of samples per second.
    * @param channelList Channels containing all audio data.
    */
-  public InternalFormat( Tags tag, int samplerate, List<Channel> channelList )
+  public InternalFormat( Tags tags, int samplerate, List<Channel> channelList )
   {
-    tags = tag;
+    if(tags == null)
+    {
+        this.tags = new Tags();
+    }
+    else
+    {
+        this.tags = tags;
+    }
     sampleRate = samplerate;
     channels = channelList;
   }
