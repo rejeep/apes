@@ -75,6 +75,7 @@ public class Config
     options.put( "width", "600" );
     options.put( "height", "400" );
     options.put( "volume_label_format", "%v %" );
+    options.put( "undo", "10" );
   }
 
   /**

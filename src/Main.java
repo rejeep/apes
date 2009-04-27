@@ -4,26 +4,26 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.undo.UndoManager;
+
 import apes.controllers.HelpController;
 import apes.controllers.PlayerController;
 import apes.controllers.TagsController;
+import apes.controllers.InternalFormatController;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.Player;
 import apes.models.InternalFormat;
+import apes.models.Player;
 import apes.plugins.WaveFileFormat;
-import apes.views.*;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -43,6 +43,11 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
+import apes.views.ApesMenu;
+import apes.views.ApesMenuItem;
+import apes.views.InternalFormatView;
+import apes.views.SamplesView;
+import apes.views.VolumePanel;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -61,12 +66,21 @@ public class Main extends JFrame
    * Player controller.
    */
   private PlayerController playerController;
-  
+
   /**
    * Tags controller.
    */
   private TagsController tagsController;
 
+  /**
+   * Change controller.
+   */
+  private InternalFormatController internalFormatController;
+
+  /**
+   * Undo manager (keeps history list).
+   */
+  private UndoManager undoManager;
 
   /**
    * Config object.
@@ -74,7 +88,7 @@ public class Main extends JFrame
   private Config config;
 
   /**
-   * The internal format representation. 
+   * The internal format representation.
    */
   private InternalFormat internal = null;
 
@@ -91,9 +105,9 @@ public class Main extends JFrame
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
-    
+
     Player player = Player.getInstance();
-    
+
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
@@ -110,6 +124,21 @@ public class Main extends JFrame
     {
       e.printStackTrace();
     }
+
+    if(internal == null)
+      internalFormatView = new SamplesView(Player.getInstance(), null, this.getWidth(),300);
+    else
+      internalFormatView = new SamplesView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
+    
+    // TODO: Temp because holm created a SamplesView???
+    InternalFormatView internalFormatViews = new InternalFormatView();
+
+    // Undomanager
+    undoManager = new UndoManager();
+    undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
+    
+    // Controller for the internal format.
+    internalFormatController = new InternalFormatController( undoManager, internalFormatViews );
 
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );
@@ -128,6 +157,7 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
+    tabs.addTab( "Some file.wav", internalFormatView );
 
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
@@ -136,14 +166,8 @@ public class Main extends JFrame
     // Set window dimensions.
     setWindowDimensions();
 
-    if(internal == null)
-      internalFormatView = new SamplesView(Player.getInstance(), null, this.getWidth(),300);
-    else
-      internalFormatView = new SamplesView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
-    tabs.addTab( "Some file.wav", internalFormatView );
-
     setVisible( true );
-    
+
     // Do something before close
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
@@ -243,23 +267,35 @@ public class Main extends JFrame
     menuBar.add( edit );
 
     JMenuItem undo = new ApesMenuItem( "menu.edit.undo" );
+    undo.addActionListener( internalFormatController );
+    undo.setName( "undo" );
     edit.add( undo );
 
     JMenuItem redo = new ApesMenuItem( "menu.edit.redo" );
+    redo.addActionListener( internalFormatController );
+    redo.setName( "redo" );
     edit.add( redo );
 
     JMenuItem cut = new ApesMenuItem( "menu.edit.cut" );
+    cut.addActionListener( internalFormatController );
+    cut.setName( "cut" );
     edit.add( cut );
 
     JMenuItem copy = new ApesMenuItem( "menu.edit.copy" );
+    copy.addActionListener( internalFormatController );
+    copy.setName( "copy" );
     edit.add( copy );
 
     JMenuItem paste = new ApesMenuItem( "menu.edit.paste" );
+    paste.addActionListener( internalFormatController );
+    paste.setName( "paste" );
     edit.add( paste );
 
     JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
+    delete.addActionListener( internalFormatController );
+    delete.setName( "delete" );
     edit.add( delete );
-    
+
     JMenuItem tags = new ApesMenuItem( "menu.edit.tags" );
     tags.addActionListener( tagsController );
     tags.setName( "edit" );
@@ -353,21 +389,33 @@ public class Main extends JFrame
     topPanel.add( save );
 
     ImageButton undo = new UndoButton();
+    undo.addActionListener( internalFormatController );
+    undo.setName( "undo" );
     topPanel.add( undo );
 
     ImageButton redo = new RedoButton();
+    redo.addActionListener( internalFormatController );
+    redo.setName( "redo" );
     topPanel.add( redo );
 
     ImageButton copy = new CopyButton();
+    copy.addActionListener( internalFormatController );
+    copy.setName( "copy" );
     topPanel.add( copy );
 
     ImageButton cut = new CutButton();
+    cut.addActionListener( internalFormatController );
+    cut.setName( "cut" );
     topPanel.add( cut );
 
     ImageButton paste = new PasteButton();
+    paste.addActionListener( internalFormatController );
+    paste.setName( "paste" );
     topPanel.add( paste );
 
     ImageButton delete = new DeleteButton();
+    delete.addActionListener( internalFormatController );
+    delete.setName( "delete" );
     topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
@@ -445,7 +493,7 @@ public class Main extends JFrame
 
     JPanel volumePanel = new VolumePanel( playerController );
     bottomPanel.add( volumePanel );
-    
+
     return bottomPanel;
   }
 
