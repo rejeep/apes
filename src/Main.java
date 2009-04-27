@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -16,14 +14,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
 import apes.controllers.HelpController;
+import apes.controllers.InternalFormatController;
 import apes.controllers.PlayerController;
 import apes.controllers.TagsController;
-import apes.controllers.InternalFormatController;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.plugins.WaveFileFormat;
+import apes.views.ApesMenu;
+import apes.views.ApesMenuItem;
+import apes.views.VolumePanel;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -43,11 +42,8 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import apes.views.ApesMenu;
-import apes.views.ApesMenuItem;
-import apes.views.InternalFormatView;
-import apes.views.SamplesView;
-import apes.views.VolumePanel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -88,16 +84,6 @@ public class Main extends JFrame
   private Config config;
 
   /**
-   * The internal format representation.
-   */
-  private InternalFormat internal = null;
-
-  /**
-   * The view of the samples.
-   */
-  private InternalFormatView internalFormatView;
-
-  /**
    * Starts the program.
    */
   public Main()
@@ -125,15 +111,12 @@ public class Main extends JFrame
       e.printStackTrace();
     }
 
-    // TODO: Temp because holm created a SamplesView???
-    InternalFormatView internalFormatViews = new InternalFormatView();
-
     // Undomanager
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
     
     // Controller for the internal format.
-    internalFormatController = new InternalFormatController( undoManager, internalFormatViews );
+    internalFormatController = new InternalFormatController( undoManager );
 
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );
@@ -152,7 +135,7 @@ public class Main extends JFrame
     tabs.addTab( "*Default*", defaultPanel );
     add( tabs, BorderLayout.CENTER );
 
-    tabs.addTab( "Some file.wav", internalFormatView );
+    tabs.addTab( "Some file.wav", internalFormatController.getInternalFormatView() );
 
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
@@ -164,11 +147,11 @@ public class Main extends JFrame
     setVisible( true );
 
     // Do something before close
-    addWindowListener(new WindowAdapter() {
+    addWindowListener( new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
         // Do before exit
       }
-    });
+    } );
   }
 
   /**
@@ -213,20 +196,8 @@ public class Main extends JFrame
     menuBar.add( file );
 
     JMenuItem open = new ApesMenuItem( "menu.file.open" );
-    open.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        WaveFileFormat wav = new WaveFileFormat();
-        try
-        {
-          internal = wav.importFile( ".", "test.wav" );
-          Player.getInstance().setInternalFormat( internal );
-          internalFormatView.intsetInternalFormat( internal);
-        } catch ( Exception exception ) { exception.printStackTrace(); };
-        internalFormatView.updateView();
-      }
-    } );
+    open.addActionListener( internalFormatController );
+    open.setName( "open" );
     file.add( open );
 
     JMenuItem newTab = new ApesMenuItem( "menu.file.new_tab" );
@@ -414,26 +385,9 @@ public class Main extends JFrame
     topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
-    zoomIn.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        System.out.println(internalFormatView.getZoom());
-        internalFormatView.setZoom( internalFormatView.getZoom()-100000 );
-        internalFormatView.updateView();
-      }
-    } );
     topPanel.add( zoomIn );
 
     ImageButton zoomOut = new ZoomOutButton();
-    zoomOut.addActionListener( new ActionListener()
-    {
-      public void actionPerformed( ActionEvent e )
-      {
-        internalFormatView.setZoom( internalFormatView.getZoom()+100000 );
-        internalFormatView.updateView();
-      }
-    } );
     topPanel.add( zoomOut );
 
     ImageButton zoomReset = new ZoomResetButton();
