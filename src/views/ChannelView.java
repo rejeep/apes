@@ -125,30 +125,34 @@ public class ChannelView extends JPanel
 
 
     int samplesPerPixel = visibleSamples/width;
-    int sampleChunksPerPixel = (samplesPerPixel / Channel.SAMPLES_SIZE); 
+    float sampleChunksPerPixel = ((float)samplesPerPixel / Channel.SAMPLES_SIZE); 
 
-    for(int i = 0; i < width; ++i)
+    if(sampleChunksPerPixel > 0)
     {
-      for(int j = 0; j < sampleChunksPerPixel; ++j)
-        sample = sample+channel.getSamples( j*i ).getAverageAmplitude( samplesPerPixel % Channel.SAMPLES_SIZE );
-      sample = sample/sampleChunksPerPixel;
-      samples[i] = sample;
-      if(sample  > maxAmp)
-        maxAmp = sample;
-      if(sample < minAmp)
-        minAmp = sample;
-      sample = 0;
+
+      for(int i = 0; i < width; ++i)
+      {
+        for(int j = 0; j < sampleChunksPerPixel; ++j)
+          sample = sample+channel.getSamples( j*i ).getAverageAmplitude( samplesPerPixel % Channel.SAMPLES_SIZE );
+        sample = Math.round(sample/sampleChunksPerPixel);
+        samples[i] = sample;
+        if(sample  > maxAmp)
+          maxAmp = sample;
+        if(sample < minAmp)
+          minAmp = sample;
+        sample = 0;
+      }
+
+      double heightScale = ((float)height/((long)(maxAmp)-(long)(minAmp)));
+
+      //Lowpass here?
+
+      for(int i = 0; i < samples.length; ++i)
+        samples[i] = Math.round((height/2)+(float)(samples[i]*heightScale));
+
+      this.repaint();
+      //System.out.println("Time to update view(ms): " + (System.currentTimeMillis() - time));
     }
-
-    double heightScale = ((float)height/((long)(maxAmp)-(long)(minAmp)));
-
-    //Lowpass here?
-
-    for(int i = 0; i < samples.length; ++i)
-      samples[i] = Math.round((height/2)+(float)(samples[i]*heightScale));
-
-    this.repaint();
-    //System.out.println("Time to update view(ms): " + (System.currentTimeMillis() - time));
   }
 
 
