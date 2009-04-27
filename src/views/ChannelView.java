@@ -38,7 +38,7 @@ public class ChannelView extends JPanel
     this.channel = ch;
     this.width = width;
     this.height = height;
-    this.setSize( width, height );
+    this.setPreferredSize( new Dimension( width, height ) );
     markBeginning = -1;
     markEnd       = -1;
     samples = new int[width];
