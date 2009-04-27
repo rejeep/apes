@@ -95,7 +95,7 @@ public class Main extends JFrame
   /**
    * The view of the samples.
    */
-  private SamplesView internalFormatView;
+  private InternalFormatView internalFormatView;
 
   /**
    * Starts the program.
@@ -125,11 +125,6 @@ public class Main extends JFrame
       e.printStackTrace();
     }
 
-    if(internal == null)
-      internalFormatView = new SamplesView(Player.getInstance(), null, this.getWidth(),300);
-    else
-      internalFormatView = new SamplesView(Player.getInstance(), internal.getChannel( 0 ), this.getWidth(),300);
-    
     // TODO: Temp because holm created a SamplesView???
     InternalFormatView internalFormatViews = new InternalFormatView();
 
@@ -227,7 +222,7 @@ public class Main extends JFrame
         {
           internal = wav.importFile( ".", "test.wav" );
           Player.getInstance().setInternalFormat( internal );
-          internalFormatView.setChannel( internal.getChannel(0));
+          internalFormatView.intsetInternalFormat( internal);
         } catch ( Exception exception ) { exception.printStackTrace(); };
         internalFormatView.updateView();
       }

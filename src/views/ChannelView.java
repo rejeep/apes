@@ -250,14 +250,15 @@ public class ChannelView extends JPanel
     if(e.getWheelRotation() > 0)
     {
       double time = System.currentTimeMillis();
-      channel.alterSamples( marked.x, marked.y, -10000000 );
+      System.out.println("start: " + marked.x + " end: " + marked.y + " delta: -1000");
+      channel.alterSamples( marked.x, marked.y, -1000 );
       System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
 
     }
     else
     {
       double time = System.currentTimeMillis();
-      channel.alterSamples( marked.x, marked.y, 10000000 );
+      channel.alterSamples( marked.x, marked.y, 1000 );
       System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
     }
     this.repaint();
