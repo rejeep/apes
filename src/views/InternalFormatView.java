@@ -56,8 +56,8 @@ public class InternalFormatView extends JPanel
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
       channelViews.add(new ChannelView(Player.getInstance(), internalFormat.getChannel( i ),
-                                       Config.getInstance().getIntOption( "graphwidth" ),
-                                       Config.getInstance().getIntOption( "graphheight" )));
+                                       Config.getInstance().getIntOption( "graph_width" ),
+                                       Config.getInstance().getIntOption( "graph_height" )));
       add(channelViews.get(i));
     }
     
