@@ -164,25 +164,26 @@ public class Main extends JFrame
 
     boolean maximized = config.getBooleanOption( "maximized" );
 
+    try
+    {
+      int width = config.getIntOption( "frame_width" );
+      int height = config.getIntOption( "frame_height" );
+
+      if( width > 0 && height > 0 )
+      {
+        // Best do both JIC.
+        setPreferredSize( new Dimension( width, height ) );
+        setSize( width, height );
+      }
+    }
+    catch( NumberFormatException e )
+    {
+      e.printStackTrace();
+    }
+
     if( maximized )
     {
       setExtendedState( getExtendedState() | MAXIMIZED_BOTH );
-    }
-    else
-    {
-      try
-      {
-        int width = config.getIntOption( "width" );
-        int height = config.getIntOption( "height" );
-
-        if( width > 0 && height > 0 )
-        {
-          // Best do both JIC.
-          setPreferredSize( new Dimension( width, height ) );
-          setSize( width, height );
-        }
-      }
-      catch( NumberFormatException e ) {}
     }
   }
 
