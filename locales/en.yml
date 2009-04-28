@@ -94,3 +94,15 @@ tags:
   composer: Composer
   comments: Comments
   copyright: Copyright
+config:
+  properties:
+    save: Save
+    close: Close
+  volume: Volume
+  maximized: Maximized
+  frame_width: Frame Width
+  frame_height: Frame Height
+  volume_label_format: Volume Format
+  graph_width: Graph Width
+  graph_height: Graph Height
+  undo: Undo history size
