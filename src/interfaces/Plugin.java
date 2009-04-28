@@ -7,4 +7,6 @@ package apes.interfaces;
 public interface Plugin
 {
   // name and other texty things go here
+  public String getName();
+  public String getDescription();
 }

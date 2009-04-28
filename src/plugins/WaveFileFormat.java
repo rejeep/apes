@@ -18,6 +18,16 @@ import apes.views.ProgressView;
  */
 public class WaveFileFormat implements AudioFormatPlugin
 {
+  
+  public String getName()
+  {
+    return( "Wave" );
+  }
+  
+  public String getDescription()
+  {
+    return( "Support for .wav files." );
+  }
 
   /**
    * Returns the extension of the file format
