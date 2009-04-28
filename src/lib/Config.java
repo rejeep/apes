@@ -1,12 +1,23 @@
 package apes.lib;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.List;
+import java.util.ArrayList;
+
+
 
 /**
  * <p>This class handles the user specific configuration file. This class
@@ -52,10 +63,22 @@ public class Config
   private Map<String, String> options;
 
   /**
+   * Contains all option types. Examples:
+   *
+   * { "size" => Type.INTEGER, "maximized" => Type.BOOLEAN }
+   */
+  private Map<String, Type> types;
+
+  /**
    * Regexp to match an option in the configuration file. It uses
    * grouping to extract the key and value.
    */
   private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]{0,1})(.*)\\2$";
+
+  /**
+   * Different types an option can be.
+   */
+  public enum Type { BOOLEAN, STRING, INTEGER };
 
   /**
    * Creates a new <code>Config</code> instance. A default file name
@@ -69,15 +92,18 @@ public class Config
     // Initialize options map.
     options = new HashMap<String, String>();
 
+    // Initialize types map.
+    types = new HashMap<String, Type>();
+
     // Default settings.
-    options.put( "volume", "50" );
-    options.put( "maximized", "true" );
-    options.put( "width", "600" );
-    options.put( "height", "400" );
-    options.put( "volume_label_format", "%v %" );
-    options.put( "graphwidth", "500" );
-    options.put( "graphheight", "300" );
-    options.put( "undo", "10" );
+    addOption( "volume", "50", Type.INTEGER );
+    addOption( "volume_label_format", "%v %", Type.STRING );
+    addOption( "frame_width", "600", Type.INTEGER );
+    addOption( "frame_height", "400", Type.INTEGER );
+    addOption( "graph_width", "500", Type.INTEGER );
+    addOption( "graph_height", "300", Type.INTEGER );
+    addOption( "maximized", "true", Type.BOOLEAN );
+    addOption( "undo", "10", Type.INTEGER );
   }
 
   /**
@@ -108,6 +134,8 @@ public class Config
             options.put( matcher.group( 1 ), matcher.group( 3 ) );
           }
         }
+
+        scanner.close();
       }
       catch( FileNotFoundException e )
       {
@@ -172,6 +200,119 @@ public class Config
   public int getIntOption( String key ) throws NumberFormatException
   {
     return new Integer( getOption( key ) );
+  }
+
+  /**
+   * Adds an option.
+   *
+   * @param key The option key.
+   * @param default_value The default value.
+   * @param type The type (string, integer, boolean).
+   */
+  public void addOption( String key, String default_value, Type type )
+  {
+    options.put( key, default_value );
+
+    types.put( key, type );
+  }
+
+  /**
+   * Return the types map.
+   *
+   * @param key The configuration key.
+   * @return The map containing all types.
+   */
+  public Type getType( String key )
+  {
+    return types.get( key );
+  }
+
+  /**
+   * Return the options map.
+   *
+   * @return The map containing all options.
+   */
+  public Map<String, String> getOptions()
+  {
+    return this.options;
+  }
+
+  /**
+   * Save all options to the configuration files.
+   */
+  public void save()
+  {
+    try
+    {
+      // Read in the whole file. This must be done because a file can
+      // not be written to while read from.
+      List<String> lines = new ArrayList<String>();
+      Scanner scanner = new Scanner( file );
+      while( scanner.hasNextLine() )
+      {
+        lines.add(scanner.nextLine());
+      }
+      scanner.close();
+
+
+      PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( file ) ) );
+      Set<String> added = new HashSet<String>();
+      Pattern pattern = Pattern.compile( OPTION_REGEXP );
+      Matcher matcher;
+      String key;
+
+      for( String line : lines )
+      {
+        matcher = pattern.matcher( line );
+
+        if( matcher.matches() )
+        {
+          key = matcher.group( 1 );
+
+          out.write( toOption( key ) );
+
+          added.add( key );
+        }
+        else
+        {
+          out.write( line );
+        }
+
+        out.println();
+      }
+
+      // Add options that where not in the file already.
+      for( String option : options.keySet() )
+      {
+        if( !added.contains( option ) )
+        {
+          out.write( toOption( option ) );
+
+          out.println();
+        }
+      }
+
+      out.close();
+    }
+    catch( FileNotFoundException e )
+    {
+      e.printStackTrace();
+    }
+    catch( IOException e )
+    {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Returns a string of an option.
+   *
+   * @param key The key option.
+   * @return The option as a string (key = value).
+   */
+  private String toOption( String key )
+  {
+    return key + " = " + options.get( key );
   }
 
   /**

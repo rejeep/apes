@@ -13,6 +13,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
+import apes.controllers.ConfigController;
 import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
 import apes.controllers.PlayerController;
@@ -69,6 +70,11 @@ public class Main extends JFrame
   private TagsController tagsController;
 
   /**
+   * Config controller.
+   */
+  private ConfigController configController;
+
+  /**
    * Change controller.
    */
   private InternalFormatController internalFormatController;
@@ -98,6 +104,7 @@ public class Main extends JFrame
     helpController = new HelpController();
     playerController = new PlayerController();
     tagsController = new TagsController();
+    configController = new ConfigController();
 
     // Initiate the language with default and then load the
     // dictionary.
@@ -114,7 +121,7 @@ public class Main extends JFrame
     // Undomanager
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
-    
+
     // Controller for the internal format.
     internalFormatController = new InternalFormatController( undoManager );
 
@@ -319,6 +326,8 @@ public class Main extends JFrame
     menuBar.add( tools );
 
     JMenuItem properties = new ApesMenuItem( "menu.tools.properties" );
+    properties.addActionListener( configController );
+    properties.setName( "show" );
     tools.add( properties );
     // Tools END
 
