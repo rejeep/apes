@@ -136,6 +136,6 @@ public class InternalFormatController extends ApplicationController
     catch( Exception e )
     {
       e.printStackTrace();
-    };
+    }
   }
 }
