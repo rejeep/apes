@@ -1,16 +1,19 @@
 package apes.controllers;
 
+import java.util.Map;
+import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import apes.models.InternalFormat;
+import apes.models.Player;
 import apes.models.undo.ChangeEdit;
 import apes.models.undo.CopyEdit;
 import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
-import apes.views.InternalFormatView;
 import apes.plugins.WaveFileFormat;
-import apes.models.Player;
+import apes.views.InternalFormatView;
+import java.util.HashMap;
 
 /**
  * Controller for the internal format.
@@ -33,15 +36,28 @@ public class InternalFormatController extends ApplicationController
   private UndoManager undoManager;
 
   /**
+   * The main panel tabs.
+   */
+  private JTabbedPane tabsPane;
+
+  /**
+   * Contains all tabs and which internal format is has.
+   */
+  private Map<Integer, InternalFormat> tabs;
+
+
+  /**
    * Creates a new <code>InternalFormatController</code> instance.
    *
    * @param undoManager The undo manager.
    * @param internalFormatView The internal format view.
    */
-  public InternalFormatController( UndoManager undoManager )
+  public InternalFormatController( UndoManager undoManager, JTabbedPane tabsPane )
   {
+    this.tabsPane = tabsPane;
     this.undoManager = undoManager;
     this.internalFormatView = new InternalFormatView();
+    this.tabs = new HashMap<Integer, InternalFormat>();
   }
 
   /**
@@ -124,18 +140,35 @@ public class InternalFormatController extends ApplicationController
   public void open()
   {
     WaveFileFormat wav = new WaveFileFormat();
-    
+
     try
     {
       internalFormat = wav.importFile( ".", "test.wav" );
-      
+
       Player.getInstance().setInternalFormat( internalFormat );
-      
+
       internalFormatView.setInternalFormat( internalFormat );
+
+      addInternalFormatToTab();
     }
     catch( Exception e )
     {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Adds the internal format in a new tab.
+   */
+  private void addInternalFormatToTab()
+  {
+    String tabName = internalFormat.getFileStatus().getFileName();
+    int index = tabs.keySet().size();
+    
+    tabs.put( index, internalFormat );
+    
+    tabsPane.addTab( tabName, internalFormatView );
+    // TODO: Do not change tab.
+    tabsPane.setEnabledAt( index, true );
   }
 }

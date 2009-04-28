@@ -122,13 +122,18 @@ public class Main extends JFrame
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
 
-    // Controller for the internal format.
-    internalFormatController = new InternalFormatController( undoManager );
-
     // Frame options.
     setTitle( Language.get( "help.about.name" ) );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
+    
+    JTabbedPane tabs = new JTabbedPane();
+    JPanel defaultPanel = new JPanel();
+    tabs.addTab( "*Default*", defaultPanel );
+    add( tabs, BorderLayout.CENTER );
+    
+    // Controller for the internal format.
+    internalFormatController = new InternalFormatController( undoManager, tabs );
 
     // Create and add menu.
     createMenu();
@@ -136,14 +141,7 @@ public class Main extends JFrame
     // Create and add top panel.
     JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
-
-    JTabbedPane tabs = new JTabbedPane();
-    JPanel defaultPanel = new JPanel();
-    tabs.addTab( "*Default*", defaultPanel );
-    add( tabs, BorderLayout.CENTER );
-
-    tabs.addTab( "Some file.wav", internalFormatController.getInternalFormatView() );
-
+    
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
