@@ -205,22 +205,25 @@ public class ChannelView extends JPanel
       int x = e.getX();
       int y = e.getY();
 
-      if(x < width && x > 0 && x > markEnd && y < height)
+      if( x < width && x > 0 && y < height)
       {
-        markEnd = x;
-        movEdgeLeft = false;
-      }
-      else if(x < width && x > 0 && x < markBeginning && y < height)
-      {
-        markBeginning = x;
-        movEdgeLeft = true;
-      }
-      if(x < width && x > 0 && y < height)
-      {
-        if(movEdgeLeft)
-          markBeginning = x;
-        else
+        if( x > markEnd )
+        {
           markEnd = x;
+          movEdgeLeft = false;
+        }
+        else if( x < markBeginning )
+        {
+          markBeginning = x;
+          movEdgeLeft = true;
+        }
+        else
+        {
+          if(movEdgeLeft)
+            markBeginning = x;
+          else
+            markEnd = x;
+        }
       }
          
       this.repaint();

@@ -1,7 +1,7 @@
 package apes.controllers;
 
 import java.util.Map;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
@@ -14,6 +14,7 @@ import apes.models.undo.PasteEdit;
 import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
 import java.util.HashMap;
+import java.io.File;
 
 /**
  * Controller for the internal format.
@@ -143,7 +144,13 @@ public class InternalFormatController extends ApplicationController
 
     try
     {
-      internalFormat = wav.importFile( ".", "test.wav" );
+      // TODO ok to have here?
+      final JFileChooser fc = new JFileChooser();
+      fc.setCurrentDirectory( new File(".") );
+      fc.showOpenDialog(new JPanel());
+      File file = fc.getSelectedFile();
+            
+      internalFormat = wav.importFile( file.getParent(), file.getName() );
 
       Player.getInstance().setInternalFormat( internalFormat );
 
