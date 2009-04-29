@@ -41,7 +41,7 @@ public class InternalFormatView extends JPanel
    *
    * @param internalFormat The internal format.
    */
-  public void setInternalFormat( InternalFormat internalFormat )
+  private void setInternalFormat( InternalFormat internalFormat )
   {
     channelViews.clear();
 
