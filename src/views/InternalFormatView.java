@@ -37,14 +37,6 @@ public class InternalFormatView extends JPanel
   }
   
   /**
-   * This is used so that the program can be run without an internal
-   * format.
-   */
-  public InternalFormatView()
-  {
-  }
-  
-  /**
    * Adds some channel views to this pannel.
    *
    * @param internalFormat The internal format.
