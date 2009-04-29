@@ -21,13 +21,6 @@ public class TabsController extends ApplicationController
    */
   private TabsView tabsView;
 
-  /**
-   * Keeps track of which button that is on which tab index. This is
-   * needed since when a close button on a tab is clicked we must know
-   * the index of it.
-   */
-  private Map<CloseButton, Integer> indexes;
-  
   
   /**
    * Creates a new <code>TabsController</code>.
@@ -35,7 +28,6 @@ public class TabsController extends ApplicationController
    */
   public TabsController()
   {
-    this.indexes = new HashMap<CloseButton, Integer>();
     this.tabsView = new TabsView();
   }
 
@@ -45,14 +37,12 @@ public class TabsController extends ApplicationController
   public void close()
   {
     CloseButton button = (CloseButton)event.getSource();
-    int index = indexes.get( button );
+    int index = tabsView.indexOfTabComponent( button.getButtonTabPanel() );
 
     if( index != -1 )
     {
       tabsView.remove( index );
     }
-    
-    indexes.remove( button );
   }
 
   /**
@@ -67,8 +57,6 @@ public class TabsController extends ApplicationController
 
     tabsView.setTabComponentAt( index, buttonTabPanel );
     tabsView.setEnabledAt( index, true );
-
-    indexes.put( buttonTabPanel.getCloseButton(), index );
   }
 
   /**
