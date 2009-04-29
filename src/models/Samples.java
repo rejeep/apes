@@ -161,7 +161,7 @@ public class Samples
    */
   public void setSampleNoUpdate( int index, int value )
   {
-    sampleData[index] = value;
+    sampleData[index] = Math.max(Short.MIN_VALUE, Math.min(value, Short.MAX_VALUE));
   }
   
   /**
@@ -171,7 +171,8 @@ public class Samples
    */
   public void setSample( int index, int value )
   {
-    sampleData[index] = value;
+    setSampleNoUpdate(index,value);
+    value = getSample(index);
 
     int oldMaxIndex = maxAmplitudeIndex;
     int oldMinIndex = minAmplitudeIndex;
