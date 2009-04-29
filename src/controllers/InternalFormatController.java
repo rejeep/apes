@@ -26,11 +26,6 @@ public class InternalFormatController extends ApplicationController
   private InternalFormat internalFormat;
 
   /**
-   * The view over the internal format.
-   */
-  private InternalFormatView internalFormatView;
-
-  /**
    * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
@@ -51,7 +46,6 @@ public class InternalFormatController extends ApplicationController
   {
     this.tabsController = tabsController;
     this.undoManager = undoManager;
-    this.internalFormatView = new InternalFormatView();
   }
 
   /**
@@ -143,8 +137,8 @@ public class InternalFormatController extends ApplicationController
       Player.getInstance().setInternalFormat( internalFormat );
       
       // Set the new internal format for the view.
-      internalFormatView.setInternalFormat( internalFormat );
-
+      InternalFormatView internalFormatView = new InternalFormatView( internalFormat );
+      
       // Add the view to a new tab.
       tabsController.add( internalFormatView, name );
     }

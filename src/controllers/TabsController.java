@@ -55,8 +55,8 @@ public class TabsController extends ApplicationController
     ButtonTabPanel buttonTabPanel = new ButtonTabPanel( this, tabsView );
     int index = tabsView.getTabCount() - 1;
 
+    tabsView.setSelectedIndex( index );
     tabsView.setTabComponentAt( index, buttonTabPanel );
-    tabsView.setEnabledAt( index, true );
   }
 
   /**
