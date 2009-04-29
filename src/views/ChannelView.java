@@ -254,21 +254,11 @@ public class ChannelView extends JPanel
     //1 scroll wheel down
     Point marked = getMarkedSamples();
     //System.out.println("start: " + marked.x + " end: " + marked.y);
-    if(e.getWheelRotation() > 0)
-    {
-      double time = System.currentTimeMillis();
-      System.out.println("start: " + marked.x + " end: " + marked.y + " delta: -1000");
-      channel.alterSamples( marked.x, marked.y, -1000 );
-      System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
+    
+    double time = System.currentTimeMillis();
+    channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
 
-    }
-    else
-    {
-      double time = System.currentTimeMillis();
-      channel.alterSamples( marked.x, marked.y, 1000 );
-      System.out.println("Time to update " + (marked.y - marked.x) + " samples in alterSamples(ms): " + (System.currentTimeMillis() - time));
-    }
-    this.repaint();
+    this.updateView();
   }
 
   //@Override

@@ -132,6 +132,37 @@ public class Channel
   }
   
   /**
+   * Changes the values of all samples within a specified range by scaling with <code>alpha</code>.
+   * @param start The index of the first sample to affect.
+   * @param stop The index of the last sample to affect.
+   * @param alpha Value multiplied with each sample in the selected range. May be negative.
+   */
+  public void scaleSamples( int start, int stop, float alpha )
+  {
+    Point startPoint = findAbsoluteIndex( start );
+    int curIndex = start - startPoint.y;
+    for( int objI = startPoint.x; objI < samplesList.size(); objI++ )
+    {
+      Samples s = samplesList.get(objI);
+      for( int i = 0; i < s.getSize(); i++, curIndex++ )
+      {
+        if( curIndex <= stop )
+        {
+          if(curIndex >= start)
+            s.setSampleNoUpdate(i, Math.round(s.getSample(i) * alpha ));
+        }
+        else
+        {
+          s.updateMinAndMaxAmplitude();
+          return;
+        }
+      }
+      s.updateMinAndMaxAmplitude();
+    }
+  }
+  
+  
+  /**
    * Finds the sample with the given absolute index.
    * @param absIndex The absolute index to find.
    * @return A point with x being the SamplesObject of the requested sample 
