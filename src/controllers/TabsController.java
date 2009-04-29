@@ -44,12 +44,15 @@ public class TabsController extends ApplicationController
    */
   public void close()
   {
-    int index = indexes.get( (CloseButton)event.getSource() );
+    CloseButton button = (CloseButton)event.getSource();
+    int index = indexes.get( button );
 
     if( index != -1 )
     {
       tabsView.remove( index );
     }
+    
+    indexes.remove( button );
   }
 
   /**
