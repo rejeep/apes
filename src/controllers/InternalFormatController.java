@@ -2,15 +2,18 @@ package apes.controllers;
 
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
-
+import javax.swing.JFileChooser;
+import java.io.File;
+import javax.swing.JPanel;
+import apes.plugins.WaveFileFormat;
 import apes.models.InternalFormat;
 import apes.models.Player;
 import apes.models.undo.ChangeEdit;
 import apes.models.undo.CopyEdit;
 import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
-import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
+
 
 /**
  * Controller for the internal format.
@@ -126,10 +129,16 @@ public class InternalFormatController extends ApplicationController
 
     try
     {
-      // Get the internal format.
-      internalFormat = wav.importFile( ".", "test.wav" );
-      
-      // Set the new internal format for the player.
+      // Chose file.
+      final JFileChooser fc = new JFileChooser();
+      fc.setCurrentDirectory( new File(".") );
+      fc.showOpenDialog( new JPanel() );
+      File file = fc.getSelectedFile();
+            
+      // Set internal format.
+      internalFormat = wav.importFile( file.getParent(), file.getName() );
+
+      // Set the new  internal format for the player.
       Player.getInstance().setInternalFormat( internalFormat );
       
       // Set the new internal format for the view.
