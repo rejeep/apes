@@ -4,19 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
 import apes.controllers.ConfigController;
 import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
 import apes.controllers.PlayerController;
+import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
@@ -43,8 +45,6 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -127,13 +127,12 @@ public class Main extends JFrame
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
     
-    JTabbedPane tabs = new JTabbedPane();
-    JPanel defaultPanel = new JPanel();
-    tabs.addTab( "*Default*", defaultPanel );
-    add( tabs, BorderLayout.CENTER );
+    // Tab related stuff.
+    TabsController tabsController = new TabsController();
+    add( tabsController.getTabsView(), BorderLayout.CENTER );
     
     // Controller for the internal format.
-    internalFormatController = new InternalFormatController( undoManager, tabs );
+    internalFormatController = new InternalFormatController( undoManager, tabsController );
 
     // Create and add menu.
     createMenu();
