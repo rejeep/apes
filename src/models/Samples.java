@@ -203,10 +203,10 @@ public class Samples
    */
   public void updateMinAndMaxAmplitude()
   {
-    int min = Integer.MAX_VALUE;
+    int min = Short.MAX_VALUE;
     int minI = -1;
 
-    int max = Integer.MIN_VALUE;
+    int max = Short.MIN_VALUE;
     int maxI = -1;
 
     // Go through all samples
@@ -259,10 +259,10 @@ public class Samples
    */
   private void setMinAndMaxDefaultValues()
   {
-    minAmplitude = Integer.MAX_VALUE;
+    minAmplitude = Short.MAX_VALUE;
     minAmplitudeIndex = -1;
 
-    maxAmplitude = Integer.MIN_VALUE;
+    maxAmplitude = Short.MIN_VALUE;
     maxAmplitudeIndex = -1;
   }
 }
