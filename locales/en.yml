@@ -9,8 +9,6 @@ menu:
     help: Help
   file:
     open: Open
-    new_tab: New tab
-    close_tab: Close tab
     save: Save
     save_as: Save as
     export: Export
@@ -28,19 +26,16 @@ menu:
       in: In
       out: Out
       reset: Reset
-    full_screen: Full screen
   player:
     play: Play
     pause: Pause
     stop: Stop
     forward: Forward
     backward: Backward
-    record: Record
   tools:
     properties: Properties
   help:
     manual: Manual
-    bug: Report bug
     about: About
 button:
   open:

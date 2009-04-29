@@ -2,16 +2,19 @@ package apes;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.undo.UndoManager;
 
 import apes.controllers.ConfigController;
@@ -22,7 +25,6 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.Player;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.views.VolumePanel;
@@ -31,13 +33,11 @@ import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
 import apes.views.buttons.DeleteButton;
 import apes.views.buttons.ForwardButton;
-import apes.views.buttons.FullScreenButton;
 import apes.views.buttons.ImageButton;
 import apes.views.buttons.OpenButton;
 import apes.views.buttons.PasteButton;
 import apes.views.buttons.PauseButton;
 import apes.views.buttons.PlayButton;
-import apes.views.buttons.RecordButton;
 import apes.views.buttons.RedoButton;
 import apes.views.buttons.SaveButton;
 import apes.views.buttons.StopButton;
@@ -70,6 +70,11 @@ public class Main extends JFrame
   private TagsController tagsController;
 
   /**
+   * Tabs controller.
+   */
+  private TabsController tabsController;
+
+  /**
    * Config controller.
    */
   private ConfigController configController;
@@ -98,8 +103,6 @@ public class Main extends JFrame
     config = Config.getInstance();
     config.parse();
 
-    Player player = Player.getInstance();
-
     // Set some instance variables.
     helpController = new HelpController();
     playerController = new PlayerController();
@@ -126,11 +129,11 @@ public class Main extends JFrame
     setTitle( Language.get( "help.about.name" ) );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
-    
+
     // Tab related stuff.
-    TabsController tabsController = new TabsController();
+    tabsController = new TabsController();
     add( tabsController.getTabsView(), BorderLayout.CENTER );
-    
+
     // Controller for the internal format.
     internalFormatController = new InternalFormatController( undoManager, tabsController );
 
@@ -140,7 +143,7 @@ public class Main extends JFrame
     // Create and add top panel.
     JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
-    
+
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
@@ -148,6 +151,13 @@ public class Main extends JFrame
     // Set window dimensions.
     setWindowDimensions();
 
+    // Set a title.
+    setTitle( Language.get( "help.about.name" ) );
+
+    // Set icon.
+    setIconImage( Toolkit.getDefaultToolkit().createImage("images/apes.png") );
+
+    // Make frame visible.
     setVisible( true );
 
     // Do something before close
@@ -206,12 +216,6 @@ public class Main extends JFrame
     open.addActionListener( internalFormatController );
     open.setName( "open" );
     file.add( open );
-
-    JMenuItem newTab = new ApesMenuItem( "menu.file.new_tab" );
-    file.add( newTab );
-
-    JMenuItem closeTab = new ApesMenuItem( "menu.file.close_tab" );
-    file.add( closeTab );
 
     JMenuItem save = new ApesMenuItem( "menu.file.save" );
     file.add( save );
@@ -290,9 +294,6 @@ public class Main extends JFrame
 
     JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
     zoom.add( zoomReset );
-
-    JMenuItem fullScreen = new ApesMenuItem( "menu.view.full_screen" );
-    view.add( fullScreen );
     // View END
 
     // Player START
@@ -313,9 +314,6 @@ public class Main extends JFrame
 
     JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
     player.add( backward );
-
-    JMenuItem record = new ApesMenuItem( "menu.player.record" );
-    player.add( record );
     // Player END
 
     // Tools START
@@ -334,9 +332,6 @@ public class Main extends JFrame
 
     JMenuItem manual = new ApesMenuItem( "menu.help.manual" );
     help.add( manual );
-
-    JMenuItem bug = new ApesMenuItem( "menu.help.bug" );
-    help.add( bug );
 
     JMenuItem about = new ApesMenuItem( "menu.help.about" );
     about.addActionListener( helpController );
@@ -402,9 +397,6 @@ public class Main extends JFrame
     ImageButton zoomReset = new ZoomResetButton();
     topPanel.add( zoomReset );
 
-    ImageButton fullScreen = new FullScreenButton();
-    topPanel.add( fullScreen );
-
     return topPanel;
   }
 
@@ -417,9 +409,6 @@ public class Main extends JFrame
   private JPanel bottomPanel()
   {
     JPanel bottomPanel = new JPanel();
-
-    JProgressBar progressBar = new JProgressBar();
-    bottomPanel.add( progressBar );
 
     ImageButton backward = new BackwardButton();
     backward.addActionListener( playerController );
@@ -445,9 +434,6 @@ public class Main extends JFrame
     forward.addActionListener( playerController );
     forward.setName( "forward" );
     bottomPanel.add( forward );
-
-    ImageButton record = new RecordButton();
-    bottomPanel.add( record );
 
     JPanel volumePanel = new VolumePanel( playerController );
     bottomPanel.add( volumePanel );
