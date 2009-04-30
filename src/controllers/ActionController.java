@@ -81,7 +81,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ActionController implements ActionListener, ChangeListener
+public abstract class ActionController implements ActionListener, ChangeListener
 {
   /**
    * The event that was fired. Controllers can via this variable get

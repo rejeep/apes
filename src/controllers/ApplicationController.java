@@ -7,7 +7,7 @@ package apes.controllers;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ApplicationController extends ActionController
+public abstract class ApplicationController extends ActionController
 {
   /**
    * If there's an event connected that is to be called by the
