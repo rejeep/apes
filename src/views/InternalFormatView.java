@@ -1,13 +1,13 @@
 package apes.views;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 
 import apes.lib.Config;
+import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.views.ChannelView;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Contains one ChannelView per channel in the internal format.
@@ -27,12 +27,20 @@ public class InternalFormatView extends JPanel
   private List<ChannelView> channelViews = new ArrayList<ChannelView>();
   
   /**
+   * The player handler.
+   */
+  private PlayerHandler playerHandler;
+  
+  /**
    * Places one ChannelView for each channel on this panel.
    *
    * @param internalFormat an <code>InternalFormat</code> value
    */
-  public InternalFormatView( InternalFormat internalFormat )
+  public InternalFormatView( PlayerHandler playerHandler, InternalFormat internalFormat )
   {
+    this.internalFormat = internalFormat;
+    this.playerHandler = playerHandler;
+    
     setInternalFormat( internalFormat );
   }
   
@@ -44,10 +52,12 @@ public class InternalFormatView extends JPanel
   private void setInternalFormat( InternalFormat internalFormat )
   {
     channelViews.clear();
+    
+    Player player = playerHandler.getPlayer( internalFormat );
 
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
-      channelViews.add( new ChannelView( Player.getInstance(), internalFormat.getChannel( i ),
+      channelViews.add( new ChannelView( player, internalFormat.getChannel( i ),
                                          Config.getInstance().getIntOption( "graph_width" ),
                                          Config.getInstance().getIntOption( "graph_height" ) ) );
       add( channelViews.get( i ) );
@@ -65,5 +75,13 @@ public class InternalFormatView extends JPanel
     {
       channelView.updateView();
     }
+  }
+  
+  /**
+   * Returns the internal format for this view.
+   */
+  public InternalFormat getInternalFormat()
+  {
+    return this.internalFormat;
   }
 }

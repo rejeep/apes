@@ -7,14 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.undo.UndoManager;
 
 import apes.controllers.ConfigController;
@@ -25,6 +22,7 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
+import apes.lib.PlayerHandler;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.views.VolumePanel;
@@ -103,11 +101,15 @@ public class Main extends JFrame
     config = Config.getInstance();
     config.parse();
 
-    // Set some instance variables.
-    helpController = new HelpController();
-    playerController = new PlayerController();
-    tagsController = new TagsController();
+    // Initialize a player handler.
+    PlayerHandler playerHandler = new PlayerHandler();
+    
+    // Set some controllers.
     configController = new ConfigController();
+    helpController = new HelpController();
+    playerController = new PlayerController( playerHandler );
+    tagsController = new TagsController( playerHandler );
+    tabsController = new TabsController( playerHandler );
 
     // Initiate the language with default and then load the
     // dictionary.
@@ -130,8 +132,7 @@ public class Main extends JFrame
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
 
-    // Tab related stuff.
-    tabsController = new TabsController();
+    // Add tabpanel.
     add( tabsController.getTabsView(), BorderLayout.CENTER );
 
     // Controller for the internal format.

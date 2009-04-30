@@ -2,7 +2,7 @@ package apes.controllers;
 
 import javax.swing.JSlider;
 
-import apes.models.Player;
+import apes.lib.PlayerHandler;
 import apes.views.VolumePanel;
 
 /**
@@ -13,16 +13,16 @@ import apes.views.VolumePanel;
 public class PlayerController extends ApplicationController
 {
   /**
-   * Player model.
+   * The player handler.
    */
-  private Player player;
+  private PlayerHandler playerHandler;
 
   /**
    * Creates a new Player controller.
    */
-  public PlayerController()
+  public PlayerController( PlayerHandler playerHandler )
   {
-    this.player = Player.getInstance();
+    this.playerHandler = playerHandler;
   }
 
   /**
@@ -30,7 +30,15 @@ public class PlayerController extends ApplicationController
    */
   public void backward()
   {
-    player.backward();
+    
+  }
+  
+  /**
+   * Forward playing.
+   */
+  public void forward()
+  {
+    
   }
 
   /**
@@ -38,7 +46,7 @@ public class PlayerController extends ApplicationController
    */
   public void pause()
   {
-    player.pause();
+    playerHandler.pause();
   }
 
   /**
@@ -46,7 +54,7 @@ public class PlayerController extends ApplicationController
    */
   public void play()
   {
-    player.play();
+    playerHandler.play();
   }
 
   /**
@@ -54,15 +62,7 @@ public class PlayerController extends ApplicationController
    */
   public void stop()
   {
-    player.stop();
-  }
-
-  /**
-   * Forward playing.
-   */
-  public void forward()
-  {
-    player.forward();
+    playerHandler.stop();
   }
   
   /**
@@ -72,7 +72,7 @@ public class PlayerController extends ApplicationController
   {
     VolumePanel panel = (VolumePanel) ( (JSlider) event.getSource() ).getParent();
     
-    player.setVolume( panel.getVolume() );
+    playerHandler.setVolume( panel.getVolume() );
     
     panel.updateLabelVolume();
   }
