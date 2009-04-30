@@ -42,6 +42,11 @@ public class ConfigView extends JFrame
   private Map<String, Component> newOptions;
   
   /**
+   * A language object.
+   */
+  private Language language;
+  
+  /**
    * Creates a new <code>ConfigView</code> instance.
    *
    * @param config The model.
@@ -49,6 +54,7 @@ public class ConfigView extends JFrame
    */
   public ConfigView( Config config, ConfigController configController )
   {
+    this.language = Language.getInstance();
     this.config = config;
     this.configController = configController;
     this.newOptions = new HashMap<String, Component>();
@@ -88,7 +94,7 @@ public class ConfigView extends JFrame
 
     for( String key : keys )
     {
-      String name = Language.get( "config." + key );
+      String name = language.get( "config." + key );
       Config.Type type = config.getType( key );
       
       panel.add( new JLabel( name ) );
@@ -124,12 +130,12 @@ public class ConfigView extends JFrame
   {
     JPanel panel = new JPanel();
 
-    JButton close = new JButton( Language.get( "config.properties.close" ) );
+    JButton close = new JButton( language.get( "config.properties.close" ) );
     close.addActionListener( configController );
     close.setName( "close" );
     panel.add( close );
 
-    JButton save = new JButton( Language.get( "config.properties.save" ) );
+    JButton save = new JButton( language.get( "config.properties.save" ) );
     save.addActionListener( configController );
     save.setName( "save" );
     panel.add( save );

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Locale;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,6 +21,7 @@ import apes.controllers.InternalFormatController;
 import apes.controllers.PlayerController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
+import apes.controllers.LanguageController;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.lib.PlayerHandler;
@@ -78,6 +80,11 @@ public class Main extends JFrame
   private ConfigController configController;
 
   /**
+   * Language controller.
+   */
+  private LanguageController languageController;
+
+  /**
    * Change controller.
    */
   private InternalFormatController internalFormatController;
@@ -93,6 +100,11 @@ public class Main extends JFrame
   private Config config;
 
   /**
+   * Config object.
+   */
+  private Language language;
+
+  /**
    * Starts the program.
    */
   public Main()
@@ -103,20 +115,20 @@ public class Main extends JFrame
 
     // Initialize a player handler.
     PlayerHandler playerHandler = new PlayerHandler();
-    
+
     // Set some controllers.
     configController = new ConfigController();
     helpController = new HelpController();
     playerController = new PlayerController( playerHandler );
     tagsController = new TagsController( playerHandler );
     tabsController = new TabsController( playerHandler );
+    languageController = new LanguageController();
 
-    // Initiate the language with default and then load the
-    // dictionary.
-    Language.initLanguage();
+    language = Language.getInstance();
+
     try
     {
-      Language.load();
+      language.load();
     }
     catch ( Exception e )
     {
@@ -128,7 +140,7 @@ public class Main extends JFrame
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
 
     // Frame options.
-    setTitle( Language.get( "help.about.name" ) );
+    setTitle( language.get( "help.about.name" ) );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout() );
 
@@ -153,7 +165,7 @@ public class Main extends JFrame
     setWindowDimensions();
 
     // Set a title.
-    setTitle( Language.get( "help.about.name" ) );
+    setTitle( language.get( "help.about.name" ) );
 
     // Set icon.
     setIconImage( Toolkit.getDefaultToolkit().createImage("images/apes.png") );
@@ -295,6 +307,19 @@ public class Main extends JFrame
 
     JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
     zoom.add( zoomReset );
+
+    JMenu languages = new ApesMenu( "menu.view.languages" );
+    view.add( languages );
+    
+    for( String lang : language.getLanguages() )
+    {
+      Locale locale = new Locale( lang );
+      
+      JMenuItem menuItem = new JMenuItem( locale.getDisplayName() );
+      menuItem.addActionListener( languageController );
+      menuItem.setName( lang );
+      languages.add( menuItem );
+    }
     // View END
 
     // Player START

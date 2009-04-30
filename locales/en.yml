@@ -26,6 +26,7 @@ menu:
       in: In
       out: Out
       reset: Reset
+    languages: Languages
   player:
     play: Play
     pause: Pause

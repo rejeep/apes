@@ -38,12 +38,19 @@ public abstract class ImageButton extends JButton implements LanguageObserver
   private static final String DEFAULT_EXTENSION = "png";
 
   /**
+   * A language object.
+   */
+  private Language language;
+
+  /**
    * Default operations for a button with an image on it.
    */
   public ImageButton()
   {
-    setToolTipText( Language.get( getDescription() ) );
-    Language.addObserver( this );
+    this.language = Language.getInstance();
+
+    setToolTipText( language.get( getDescription() ) );
+    language.addObserver( this );
 
     // Set default button path.
     setButtonPath( "images/buttons" );
@@ -168,7 +175,7 @@ public abstract class ImageButton extends JButton implements LanguageObserver
 
   public void update()
   {
-    setToolTipText( Language.get( getDescription() ) );
+    setToolTipText( language.get( getDescription() ) );
     this.updateUI();
   }
 

@@ -13,7 +13,16 @@ import apes.lib.Language;
  */
 public class ApesMenuItem extends JMenuItem implements LanguageObserver
 {
+  /**
+   * TODO:
+   */
   private String tag;
+  
+  /**
+   * A language object.
+   */
+  private Language language;
+  
   /**
    * Creates a new <code>ApesMenuItem</code> instance.
    *
@@ -21,9 +30,11 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
    */
   public ApesMenuItem( String tag )
   {
+    this.language = Language.getInstance();
     this.tag = tag;
-    setText( Language.get( tag ) );
-    Language.addObserver( this );
+    
+    setText( language.get( tag ) );
+    language.addObserver( this );
   }
 
   /**
@@ -31,7 +42,8 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
    */
   public void update()
   {    
-    setText( Language.get( tag ) );
+    setText( language.get( tag ) );
+    
     this.updateUI();
   }
 }

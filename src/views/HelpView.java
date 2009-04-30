@@ -17,9 +17,11 @@ public class HelpView
    */
   public void about()
   {
+    Language language = Language.getInstance();
+
     JOptionPane.showMessageDialog( new JLabel(),
-                                   Language.get( "help.about.name" ) + "\n" + Language.get( "help.about.authors" ),
-                                   Language.get( "help.about.title" ),
+                                   language.get( "help.about.name" ) + "\n" + language.get( "help.about.authors" ),
+                                   language.get( "help.about.title" ),
                                    JOptionPane.INFORMATION_MESSAGE,
                                    new ImageIcon( "images/apes.png" ) );
   }
