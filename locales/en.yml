@@ -102,3 +102,4 @@ config:
   graph_width: Graph Width
   graph_height: Graph Height
   undo: Undo history size
+  language: Default Language

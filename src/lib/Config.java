@@ -104,6 +104,7 @@ public class Config
     addOption( "graph_height", "300", Type.INTEGER );
     addOption( "maximized", "true", Type.BOOLEAN );
     addOption( "undo", "10", Type.INTEGER );
+    addOption( "language", "en", Type.STRING );
   }
 
   /**

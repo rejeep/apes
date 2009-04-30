@@ -128,6 +128,7 @@ public class Main extends JFrame
 
     try
     {
+      language.setLanguage( config.getOption( "language" ) );
       language.load();
     }
     catch ( Exception e )
