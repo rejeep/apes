@@ -165,7 +165,7 @@ public class Channel
    * Removes everything from <code>start</code> to <code>stop</code> from the <code>Channel</code> and returns it in an array of Samples objects.
    * @param start
    * @param stop
-   * @return null if start > stop. Otherwise all samples removed in an array of <code>Samples</code>.
+   * @return null if start > stop. Otherwise all samples removed in an array of <code>Samples</code>. <br>Note: returned array may contain Samples of size 0. 
    */
   public Samples[] cutSamples( int start, int stop )
   {
@@ -272,12 +272,58 @@ public class Channel
   }
   
   /**
+   * Inserts all data in samplesArray into the channel at <code>start</code>.
+   * @param start Index where to insert the samples.
+   * @param samplesArray All samples to be inserted. <code>Samples</code> of size 0 are ignored.
+   * @return Returns the absolute index of the first sample after the inserted data. If start was an invalid index, instead returns -1.
+   */
+  public int pasteSamples( int start, Samples[] samplesArray )
+  {
+    Point startPoint = findAbsoluteIndex( start );
+    if(startPoint.x == -1)
+      return -1;
+    
+    // Declare some stuff.
+    int insertSize = 0;
+    Samples startSamples   = null; // Samples object before insertion.
+    Samples stopSamples    = null; // Samples object after insertion.
+    Samples samples        = null; // Samples object currently in Channel.
+    
+    // Do we need start and stop Samples?
+    if(startPoint.y > 0)
+    {
+      samples = samplesList.get( startPoint.x );
+      startSamples = new Samples( startPoint.y );
+      for( int i = 0; i < startPoint.y; i++ )
+        startSamples.setSample( 0, samples.getSample(i) );
+      samplesList.set( startPoint.x, startSamples );
+      
+      stopSamples = new Samples( samples.getSize() - startPoint.y );
+      for( int i = startPoint.y, j = 0; i < samples.getSize(); i++, j++)
+        stopSamples.setSample( j, samples.getSample(i) );
+      samplesList.add(  startPoint.x + 1, stopSamples );
+    }
+    
+    // Actual insertion
+    for( int i = 0, j = startPoint.x + 1; i < samplesArray.length; i++, j++ )
+    {
+      samplesList.add( j, samplesArray[i] );
+      insertSize += samplesArray[i].getSize();
+    }
+    
+    return start + insertSize;
+    
+  }
+  
+  /**
    * Finds the sample with the given absolute index.
    * @param absIndex The absolute index to find.
    * @return A point with x being the SamplesObject of the requested sample 
    */
   public Point findAbsoluteIndex( int absIndex )
   {
+    if( absIndex < 0 )
+      return new Point(-1, -1);
     int sampObj = 0;
     int curIndex = 0;
     for(; sampObj < samplesList.size(); sampObj++ )
