@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import apes.interfaces.LanguageObserver;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.Arrays;
 
 /**
  * Singleton class for setting the language of the application also works as an observable for ApesObserver
@@ -66,7 +67,21 @@ public class Language
    */
   public void setLanguage( String language )
   {
-    this.language = language;
+    String[] languages = getLanguages();
+    Arrays.sort( languages );
+
+    int index = Arrays.binarySearch( languages, language );
+
+    if( index >= 0 )
+    {
+      this.language = language;
+    }
+    else
+    {
+      this.language = DEFAULT_LANGUAGE;
+      
+      System.err.println( "Cannot set language " + language + ". Locale does not exist." );
+    }
   }
 
   /**
