@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import java.util.EventObject;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>This class handles all actions. All controller should extend
@@ -102,8 +101,9 @@ public class ActionController implements ActionListener, ChangeListener
    */
   private void callActionByName()
   {
-    // The action is determined by the component name.
-    this.name = ( ( Component ) ( event.getSource() ) ).getName();
+    // The action that is to be called is the method with the same
+    // name as the name for the component that triggered the event.
+    this.name = ((Component)event.getSource()).getName();
 
     try
     {
@@ -132,17 +132,10 @@ public class ActionController implements ActionListener, ChangeListener
    *
    * @param name a <code>String</code> value
    *
-   * @exception NoSuchMethodException if an error occurs
-   * @exception IllegalAccessException if an error occurs
-   * @exception IllegalArgumentException if an error occurs
-   * @exception InvocationTargetException if an error occurs
-   * @exception NullPointerException if an error occurs
+   * @exception NoSuchMethodException If method does not exits.
+   * @exception Exception If any other error occurs.
    */
-  private void callAction( String name ) throws NoSuchMethodException,
-    IllegalAccessException,
-    IllegalArgumentException,
-    InvocationTargetException,
-    NullPointerException
+  private void callAction( String name ) throws NoSuchMethodException, Exception
   {
     Method method = this.getClass().getMethod( name );
 
