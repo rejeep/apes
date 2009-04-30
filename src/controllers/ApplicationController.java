@@ -10,10 +10,10 @@ package apes.controllers;
 public class ApplicationController extends ActionController
 {
   /**
-   *
+   * If there's an event connected that is to be called by the
+   * component name and there's no method with the same name, this
+   * method is called. Override it in your controllers to implement a
+   * special behavior in these cases.
    */
-  public ApplicationController()
-  {
-
-  }
+  public void methodMissing() {}
 }

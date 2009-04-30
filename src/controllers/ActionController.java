@@ -5,8 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.EventObject;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>This class handles all actions. All controller should extend
@@ -31,6 +32,19 @@ import javax.swing.event.ChangeEvent;
  * connected to the event. So for the above example the "action"
  * method will be called when the button is clicked.</p>
  *
+ * <p>However. If there is no method named action. A method defined in
+ * {@link ApplicationController#methodMissing ApplicationController}
+ * called methodMissing is called. This is handy for dynamic action
+ * calling. So in your controller, you can override that method to get
+ * some behavior.</p>
+ *
+ * <p>Two variables are by default accessible in the controllers.
+ * <ul>
+ *   <li>event - Is the event that occurred.</li>
+ *   <li>name - Is the name of the component.</li>
+ * </ul>
+ * </p>
+ *
  * <p>If the above do not work, start by reading the comments in
  * {@link ApplicationController ApplicationController}.</p>
  *
@@ -39,15 +53,20 @@ import javax.swing.event.ChangeEvent;
  * example that you want to add a <code>ComponentListener</code> to
  * your controller. Then this class must implement ComponentListener
  * and have all methods from that interface. In this case:
- * <pre>void componentHidden(ComponentEvent e)
- *void componentMoved(ComponentEvent e)
- *void componentResized(ComponentEvent e)
- *void componentShown(ComponentEvent e)</pre>
+ * <ul>
+ *   <li>void componentHidden(ComponentEvent e)</li>
+ *   <li>void componentMoved(ComponentEvent e)</li>
+ *   <li>void componentResized(ComponentEvent e)</li>
+ *   <li>void componentShown(ComponentEvent e)</li>
+ * </ul>
  *
  * And in each of these methods you should first set the event
  * instance variable to the event that is passed to the method. And
  * then call {@link ActionController#callActionByName callActionByName}.</p>
  *
+ * One more thing to check. Is your controller initialized? Because if
+ * you send null to addActionListener, you don't get any error.
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ActionController implements ActionListener, ChangeListener
@@ -57,6 +76,11 @@ public class ActionController implements ActionListener, ChangeListener
    * the Component who fired the event.
    */
   protected EventObject event;
+  
+  /**
+   * The name of the component.
+   */
+  protected String name;
 
   public void actionPerformed( ActionEvent e )
   {
@@ -79,18 +103,49 @@ public class ActionController implements ActionListener, ChangeListener
   private void callActionByName()
   {
     // The action is determined by the component name.
-    String action = ( ( Component ) ( event.getSource() ) ).getName();
+    this.name = ( ( Component ) ( event.getSource() ) ).getName();
 
     try
     {
-      // Call that method on this (the controller the view is
-      // connected to) class.
-      Method method = this.getClass().getMethod( action );
-      method.invoke( this );
+      callAction( name );
+    }
+    catch( NoSuchMethodException e )
+    {
+      try
+      {
+        callAction( "methodMissing" );
+      }
+      catch( Exception ex )
+      {
+        ex.printStackTrace();
+      }
     }
     catch( Exception e )
     {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Call that method on this (the controller the view is connected
+   * to) class.
+   *
+   * @param name a <code>String</code> value
+   *
+   * @exception NoSuchMethodException if an error occurs
+   * @exception IllegalAccessException if an error occurs
+   * @exception IllegalArgumentException if an error occurs
+   * @exception InvocationTargetException if an error occurs
+   * @exception NullPointerException if an error occurs
+   */
+  private void callAction( String name ) throws NoSuchMethodException,
+    IllegalAccessException,
+    IllegalArgumentException,
+    InvocationTargetException,
+    NullPointerException
+  {
+    Method method = this.getClass().getMethod( name );
+
+    method.invoke( this );
   }
 }
