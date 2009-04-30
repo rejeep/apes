@@ -1,32 +1,25 @@
 package apes.models;
 
-import java.io.IOException;
 import java.lang.InterruptedException;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Control;
-import javax.sound.sampled.Control.Type;
-import javax.sound.sampled.DataLine.Info;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import apes.exceptions.NoInternalFormatException;
-import apes.models.Player.Status;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.SourceDataLine;
+
+import apes.models.Player.Status;
 
 /**
- * This class plays a music file. Or more precise, an {@link
- * InternalFormat InternalFormat}.
+ * This class plays an internal format. It implements Runnable rather
+ * than extending Thread because methods such as stop and pause is in
+ * the Thread class aswell as in this (with a different meaning).
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Player implements Runnable
 {
   /**
-   * An instance of this class.
+   * The data line.
    */
-  private static Player instance = null;
+  private SourceDataLine line;
 
   /**
    * Different status a Player can be in.
@@ -44,59 +37,39 @@ public class Player implements Runnable
   private InternalFormat internalFormat;
 
   /**
-   * Current volume.
-   */
-  private int volume;
-
-  /**
-   * Minimum value for the player.
-   */
-  public static final int MIN_VALUE = 0;
-
-  /**
-   * Maximum value for the player.
-   */
-  public static final int MAX_VALUE = 100;
-
-  /**
-   * Represents a special kind of data line whose audio data can be
-   * loaded prior to playback.
-   */
-  private SourceDataLine line;
-
-  /**
-   * Keeps track over floating-point values.
-   */
-  private FloatControl gainControl;
-
-  /**
    * Keeps state of which samples that is currently playing.
    */
-  private int currentSamples = 0;
-  
+  private int currentSamples;
+
   /**
    * What sample (not samples are we on).
    */
-  private int currentSample = 0;
+  private int currentSample;
 
   /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
    */
   private Thread thread;
-
+  
   /**
-   * Private so that an object of this class can not be created
-   * without using the Singleton pattern.
+   * Creates a new <code>Player</code>.
+   *
+   * @param internalFormat The internal format that is to be played.
    */
-  private Player()
+  public Player( InternalFormat internalFormat )
   {
+    this.internalFormat = internalFormat;
+
+    reset();
+    setStatus( Status.WAIT );
+
     thread = new Thread( this );
     thread.start();
   }
 
   /**
-   * Plays audio file from pause position.
+   * Plays the internal format.
    */
   public void play()
   {
@@ -104,7 +77,7 @@ public class Player implements Runnable
   }
 
   /**
-   * Pause playing if any.
+   * Pauses playing if any.
    *
    * TODO: Should stop at once when pause is pressed. But calling
    * line.stop() does not help.
@@ -115,18 +88,15 @@ public class Player implements Runnable
   }
 
   /**
-   * Stop playing of any.
+   * Stops playing if any.
    */
   public void stop()
   {
-    line.stop();
-    line.flush();
-    
     setStatus( Status.STOP );
   }
 
   /**
-   *
+   * TODO: Implements
    */
   public void forward()
   {
@@ -134,82 +104,11 @@ public class Player implements Runnable
   }
 
   /**
-   *
+   * TODO: Implements
    */
   public void backward()
   {
 
-  }
-
-  /**
-   * Get the volume for this player.
-   *
-   * @return the volume.
-   */
-  public int getVolume()
-  {
-    return volume;
-  }
-
-  /**
-   * Set the volume for this player.
-   *
-   * @param volume The new volume.
-   */
-  public void setVolume( int volume )
-  {
-    if( volume >= MIN_VALUE && volume <= MAX_VALUE )
-    {
-      this.volume = volume;
-
-      float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
-
-      if( gainControl != null )
-      {
-        gainControl.setValue( value );
-      }
-    }
-  }
-
-  /**
-   * Initializes this player. This must be done when setting a new
-   * internal format.
-   *
-   * @exception NoInternalFormatException If there's no internal
-   * format.
-   * @exception UnsupportedAudioFileException if the File does not
-   * point to valid audio file.
-   * @exception IOException if any I/O exception occurs.
-   */
-  private void init() throws NoInternalFormatException
-  {
-    if( internalFormat == null )
-    {
-      throw new NoInternalFormatException();
-    }
-    else
-    {
-      try
-      {
-        AudioFormat format = new AudioFormat( internalFormat.getSampleRate(), Samples.BITS_PER_SAMPLE, internalFormat.getNumChannels(), true, false );
-        DataLine.Info info = new DataLine.Info( SourceDataLine.class, format );
-
-        line = (SourceDataLine) AudioSystem.getLine( info );
-        line.open( format );
-        line.start();
-
-        // For volume control
-        gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
-      }
-      catch( IllegalArgumentException e )
-      {
-        e.printStackTrace();
-      }
-      catch( Exception e )
-      {
-        e.printStackTrace();
-      }
-    }
   }
 
   /**
@@ -219,30 +118,15 @@ public class Player implements Runnable
    */
   public InternalFormat getInternalFormat()
   {
-    return this.internalFormat;
+    return internalFormat;
   }
 
   /**
-   * Set the <code>InternalFormat</code> for this player and
-   * initialize it.
-   *
-   * @param internalFormat the <code>InternalFormat</code> to use.
-   * @return true if <code>internalFormat</code> is not null. False
-   * otherwise.
-   * @exception Exception if {@link Player#init init} fails.
+   * Set the <code>InternalFormat</code> for this player.
    */
-  public boolean setInternalFormat( InternalFormat internalFormat ) throws NoInternalFormatException
+  public void setInternalFormat( InternalFormat internalFormat )
   {
-    if( internalFormat != null )
-    {
-      this.internalFormat = internalFormat;
-
-      init();
-
-      return true;
-    }
-
-    return false;
+    this.internalFormat = internalFormat;
   }
 
   /**
@@ -274,12 +158,14 @@ public class Player implements Runnable
   {
     while( true )
     {
-      if( line != null )
+      if( status != Status.WAIT )
       {
         if( status == Status.PLAY )
         {
+          // TODO: Play from all channels.
           Channel channel = internalFormat.getChannel( 0 );
 
+          // Do the playing.
           if( currentSamples < channel.getSamplesSize() )
           {
             Samples samples = channel.getSamples( currentSamples );
@@ -295,32 +181,30 @@ public class Player implements Runnable
             status = Status.WAIT;
           }
         }
+        else if( status == Status.STOP )
+        {
+          reset();
+
+          setStatus( Status.WAIT );
+        }
         else
         {
-          if( status == Status.STOP )
-          {
-            currentSamples = 0;
-            currentSample = 0;
-            
-            line.start();
-          }
-
-          status = Status.WAIT;
+          // Status is PAUSE
         }
-      }
 
-      // If this is not present there will be no playing.
-      try
-      {
-        Thread.sleep( 0 );
-      }
-      catch( InterruptedException e )
-      {
-        e.printStackTrace();
+        // If this is not present there will be no playing.
+        try
+        {
+          Thread.sleep( 0 );
+        }
+        catch( InterruptedException e )
+        {
+          e.printStackTrace();
+        }
       }
     }
   }
-  
+
   /**
    * Returns currentSamples.
    *
@@ -330,7 +214,7 @@ public class Player implements Runnable
   {
     return currentSamples;
   }
-  
+
   /**
    * Returns currentSample.
    *
@@ -342,17 +226,21 @@ public class Player implements Runnable
   }
 
   /**
-   * Will return an instance of this class.
+   * Sets the line for this player.
    *
-   * @return An instance of this class.
+   * @param line The line.
    */
-  public static Player getInstance()
+  public void setLine( SourceDataLine line )
   {
-    if( instance == null )
-    {
-      instance = new Player();
-    }
+    this.line = line;
+  }
 
-    return instance;
+  /**
+   * Resets this player by setting starting points to 0.
+   */
+  private void reset()
+  {
+    currentSamples = 0;
+    currentSample = 0;
   }
 }

@@ -125,22 +125,16 @@ public class InternalFormatController extends ApplicationController
     {
       // Chose file.
       final JFileChooser fc = new JFileChooser();
-      fc.setCurrentDirectory( new File(".") );
-      fc.showOpenDialog( new JPanel() );
+      fc.setCurrentDirectory( new File( "." ) );
+      fc.showOpenDialog( null );
       File file = fc.getSelectedFile();
       String name = file.getName();
       
       // Set internal format.
       internalFormat = wav.importFile( file.getParent(), name );
-
-      // Set the new  internal format for the player.
-      Player.getInstance().setInternalFormat( internalFormat );
-      
-      // Set the new internal format for the view.
-      InternalFormatView internalFormatView = new InternalFormatView( internalFormat );
       
       // Add the view to a new tab.
-      tabsController.add( internalFormatView, name );
+      tabsController.add( internalFormat, name );
     }
     catch( Exception e )
     {

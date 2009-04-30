@@ -7,7 +7,7 @@ import javax.swing.JSlider;
 
 import apes.controllers.PlayerController;
 import apes.lib.Config;
-import apes.models.Player;
+import apes.lib.PlayerHandler;
 
 /**
  * <p>This is a panel that volume components are placed on.</p>
@@ -58,8 +58,8 @@ public class VolumePanel extends JPanel
 
     // This can be set here since these values never change when the
     // program is running.
-    volumeLabelFormat = substituteLabel( "m", Player.MIN_VALUE );
-    volumeLabelFormat = substituteLabel( "M", Player.MAX_VALUE );
+    volumeLabelFormat = substituteLabel( "m", PlayerHandler.MIN_VALUE );
+    volumeLabelFormat = substituteLabel( "M", PlayerHandler.MAX_VALUE );
 
     this.playerController = playerController;
 

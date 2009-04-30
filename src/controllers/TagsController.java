@@ -1,9 +1,9 @@
 package apes.controllers;
 
-import apes.views.TagsView;
-import apes.models.Player;
-import apes.models.Tags;
+import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
+import apes.models.Tags;
+import apes.views.TagsView;
 
 /**
  *
@@ -14,26 +14,34 @@ public class TagsController extends ApplicationController
    *
    */
   private TagsView tagsView;
-  
+
   /**
    *
    */
-  private InternalFormat internalFormat;
+  private PlayerHandler playerHandler;
 
-  
+  /**
+   *
+   */
+  public TagsController( PlayerHandler playerHandler )
+  {
+    this.playerHandler = playerHandler;
+  }
+
   /**
    *
    */
   public void edit()
   {
-    setInternalFormat();
-
-    this.tagsView = new TagsView( this, internalFormat.getTags() );
+    this.tagsView = new TagsView( this, getInternalFormat().getTags() );
   }
-  
+
+  /**
+   *
+   */
   public void close()
   {
-    tagsView.setVisible(false);
+    tagsView.setVisible( false );
     tagsView.dispose();
   }
 
@@ -52,17 +60,15 @@ public class TagsController extends ApplicationController
     tags.put( "composer", tagsView.getComposer() );
     tags.put( "comments", tagsView.getComments() );
     tags.put( "copyright", tagsView.getCopyright() );
-    
-    System.out.println(tags);
-//    System.out.println(s);
-    internalFormat.setTags(tags);
+
+    getInternalFormat().setTags( tags );
   }
-  
+
   /**
    *
    */
-  private void setInternalFormat()
+  public InternalFormat getInternalFormat()
   {
-    this.internalFormat = Player.getInstance().getInternalFormat();
+    return playerHandler.getInternalFormat();
   }
 }
