@@ -162,6 +162,76 @@ public class Channel
   }
   
   /**
+   * Returns Samples objects containing the data in the given interval.
+   * @param start The absolute index of the first sample to copy. 
+   * @param stop The absolute index of the final sample to copy.
+   * @return An array containing all samples between start and stop. Returns null if stop < start or either one of stop and start is an invalid index. 
+   *         <br>The Samples will be of size SAMPLES_SIZE with the possible exception of the last one.
+   */
+  public Samples[] copySamles( int start, int stop )
+  {
+    // Bad interval
+    if( start < 0 || stop < start )
+      return null;
+    
+    // Find start
+    Point startPoint = findAbsoluteIndex( start );
+    if( startPoint.x == -1 )
+      return null;
+    
+    // Find stop
+    Point stopPoint = findAbsoluteIndex( stop );
+    if( stopPoint.x == -1 )
+      return null;
+    
+    // Count samples
+    int sampleAmount = 0;
+    for( int i = startPoint.x; i < stopPoint.x; i++ )
+      sampleAmount += samplesList.get( i ).getSize();
+    
+    // Correct for edge Samples.
+    sampleAmount += stopPoint.y - startPoint.y + 1;
+    
+    int samplesAmount = sampleAmount / SAMPLES_SIZE + (((sampleAmount % SAMPLES_SIZE) == 0) ? 0 : 1);
+    
+    // Declare some variables.
+    Samples[] retArray = new Samples[samplesAmount];           // Array for getting return type.
+    Samples samples;                                           // Current Samples being filled.
+    int arrIndex = 0;                                          // Index into retArray.
+    int sampIndex = 0;                                         // Index into samples.
+    
+    int remaining = stop - start + 1;
+    samples = new Samples ( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
+    
+    int absIndex = start;
+    for( int i = startPoint.x; i <= startPoint.y; i++ )
+    {
+      Samples s = samplesList.get( i );
+      for( int j = 0; j < s.getSize(); j++, sampIndex++, absIndex++ )
+      {
+        if( absIndex <= stop )
+        {
+          if( absIndex > start)
+            samples.setSample( sampIndex, s.getSample( j ) );
+        }
+        else
+        {
+          return retArray;
+        }
+        
+        if( sampIndex == SAMPLES_SIZE )
+        {
+          sampIndex = 0;
+          remaining = (stop - absIndex); 
+          samples = new Samples( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
+          retArray[arrIndex++] = samples;
+        }
+      }
+    }
+    return retArray; // Won't happen.
+  }
+  
+  /**
    * Removes everything from <code>start</code> to <code>stop</code> from the <code>Channel</code> and returns it in an array of Samples objects.
    * @param start
    * @param stop
@@ -307,8 +377,11 @@ public class Channel
     // Actual insertion
     for( int i = 0, j = startPoint.x + 1; i < samplesArray.length; i++, j++ )
     {
-      samplesList.add( j, samplesArray[i] );
-      insertSize += samplesArray[i].getSize();
+      if( samplesArray[i].getSize() > 0 )
+      {
+        samplesList.add( j, samplesArray[i] );
+        insertSize += samplesArray[i].getSize();
+      }
     }
     
     return start + insertSize;
