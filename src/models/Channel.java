@@ -161,6 +161,115 @@ public class Channel
     }
   }
   
+  /**
+   * Removes everything from <code>start</code> to <code>stop</code> from the <code>Channel</code> and returns it in an array of Samples objects.
+   * @param start
+   * @param stop
+   * @return null if start > stop. Otherwise all samples removed in an array of <code>Samples</code>.
+   */
+  public Samples[] cutSamples( int start, int stop )
+  {
+    // Invalid indexes.
+    if( stop < start )
+      return null;
+    
+    //  Declare some variables.
+    Samples samples;            // Currently in samplesList.
+    Samples newSamples;         // To replace samples in samplesList.
+    Samples retSamples;         // To be added to retArray.
+    
+    // Find indexes
+    Point startPoint = findAbsoluteIndex(start);
+    Point stopPoint = findAbsoluteIndex(stop);
+    
+    // Create sufficient array.
+    Samples[] retArray;
+    retArray = new Samples[stopPoint.x - startPoint.x + 1];
+    
+    // Only one Samples affected.
+    if( retArray.length == 1 )
+    {
+      // Find Samples affected.
+      samples = samplesList.get(startPoint.x);
+      
+      // Extrmely unlikely
+      /*if(startPoint.y == 0 && stopPoint.y == samples.getSize()-1)
+      {
+        retArray[0] = samples;
+        samplesList.remove(samples);
+        return retArray;
+      }*/
+      
+      // Create Samples to return.
+      retSamples = new Samples( stopPoint.y - startPoint.y + 1 );
+      retArray[0] = retSamples;
+      
+      // Fill in retSamp
+      for( int i = startPoint.y, j = 0; i <= stopPoint.y; i++, j++ )
+      {
+        retSamples.setSample( j, samples.getSample(i) );
+      }
+      
+      // Create Samples to replace affected.
+      newSamples = new Samples( samples.getSize() - retSamples.getSize() );
+      
+      // Fill in newSamples.
+      int j = 0;
+      for( int i = 0; i < startPoint.y; i++, j++ )
+        newSamples.setSample(j, samples.getSample( i ) );
+      for( int i = stopPoint.y; i < samples.getSize(); i++, j++ )
+        newSamples.setSample(j, samples.getSample( i ) );
+      
+      // Substitute new for old.
+      samplesList.set( startPoint.x, newSamples );
+      
+      return retArray;
+    }
+    
+    //// Several Samples affected. ////
+    
+    // Get edge Samples.
+    Samples firstSamples = samplesList.get( startPoint.x );
+    Samples lastSamples = samplesList.get( stopPoint.x );
+    
+    // Fix first
+    samples = samplesList.get( startPoint.x );
+    newSamples = new Samples( startPoint.y );
+    for(int i = 0; i < startPoint.y; i++)
+      newSamples.setSample( i, samples.getSample(i) );
+    samplesList.set( startPoint.x, newSamples );
+    
+    // Copy from first
+    retSamples = new Samples( samples.getSize() - startPoint.x );
+    for( int i = startPoint.x, j = 0; i < samples.getSize(); i++, j++ )
+    {
+      retSamples.setSample( j, samples.getSample(i) );
+    }
+    retArray[0] = retSamples;
+    
+    // Handle middle
+    int midIndex = startPoint.x + 1;
+    for( int index = 1; index < retArray.length - 1; index++ )
+    {
+      retArray[index] = samplesList.get( midIndex );
+      samplesList.remove( midIndex );
+    }
+    
+    // Fix last
+    samples = samplesList.get( midIndex );
+    newSamples = new Samples( samples.getSize() - stopPoint.y );
+    for( int i = stopPoint.y, j = 0; i < samples.getSize(); i++, j++ )
+      newSamples.setSample(j, samples.getSample( i ) );
+    samplesList.set( midIndex, newSamples );
+    
+    // Copy from last
+    retSamples = new Samples( stopPoint.y );
+    for( int i = 0; i < stopPoint.y; i++ )
+      retSamples.setSample( i, samples.getSample(i) );
+    retArray[ retArray.length - 1] = retSamples;
+    
+    return retArray;
+  }
   
   /**
    * Finds the sample with the given absolute index.
