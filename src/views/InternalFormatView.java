@@ -111,4 +111,13 @@ public class InternalFormatView extends JPanel
 
     return selected;
   }
+  
+  /**
+   * Returns the list of all ChannelViews.
+   * @return The list of all ChannelViews.
+   */
+  public List<ChannelView> getChannelViews()
+  {
+    return channelViews;
+  }
 }

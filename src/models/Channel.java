@@ -168,7 +168,7 @@ public class Channel
    * @return An array containing all samples between start and stop. Returns null if stop < start or either one of stop and start is an invalid index. 
    *         <br>The Samples will be of size SAMPLES_SIZE with the possible exception of the last one.
    */
-  public Samples[] copySamles( int start, int stop )
+  public Samples[] copySamples( int start, int stop )
   {
     // Bad interval
     if( start < 0 || stop < start )
