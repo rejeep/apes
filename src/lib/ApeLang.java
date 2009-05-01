@@ -19,10 +19,12 @@ public class ApeLang
    * Contains the keys with the corresponding words.
    */
   private Map<String, String> dictionary;
+
   /**
    * Number of blankspaces before a new group.
    */
   private static final int INDENTATION = 2;
+
 
   /**
    * Constructor, parses an ApeLang file.
@@ -37,6 +39,13 @@ public class ApeLang
     parse( path, file );
   }
 
+  /**
+   * TODO: Comment
+   *
+   * @param path a <code>String</code> value
+   * @param file a <code>String</code> value
+   * @exception Exception if an error occurs
+   */
   private void parse( String path, String file ) throws Exception
   {
     InputStreamReader inputStreamReader;
@@ -108,7 +117,8 @@ public class ApeLang
    * Looks for the value corresponding to the key.
    *
    * @param key The key for the word.
-   * @return Returns the word that corresponds to the key in the dictionary.
+   * @return Returns the word that corresponds to the key in the
+   * dictionary.
    */
   public String get( String key )
   {

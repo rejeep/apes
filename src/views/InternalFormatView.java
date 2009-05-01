@@ -11,7 +11,6 @@ import apes.models.Player;
 import java.util.Set;
 import java.util.HashSet;
 import java.awt.Point;
-import apes.models.Channel;
 
 /**
  * Contains one ChannelView per channel in the internal format.
@@ -24,31 +23,32 @@ public class InternalFormatView extends JPanel
    * Internal format.
    */
   private InternalFormat internalFormat;
-  
+
   /**
    * List of all channel views.
    */
   private List<ChannelView> channelViews;
-  
+
   /**
    * The player handler.
    */
   private PlayerHandler playerHandler;
-  
+
+
   /**
    * Places one ChannelView for each channel on this panel.
    *
-   * @param internalFormat an <code>InternalFormat</code> value
+   * @param internalFormat an <code>InternalFormat</code> value.
    */
   public InternalFormatView( PlayerHandler playerHandler, InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
     this.playerHandler = playerHandler;
     this.channelViews = new ArrayList<ChannelView>();
-    
+
     setInternalFormat( internalFormat );
   }
-  
+
   /**
    * Adds some channel views to this pannel.
    *
@@ -57,7 +57,7 @@ public class InternalFormatView extends JPanel
   private void setInternalFormat( InternalFormat internalFormat )
   {
     channelViews.clear();
-    
+
     Player player = playerHandler.getPlayer( internalFormat );
 
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
@@ -81,15 +81,17 @@ public class InternalFormatView extends JPanel
       channelView.updateView();
     }
   }
-  
+
   /**
    * Returns the internal format for this view.
+   *
+   * @return The internal format.
    */
   public InternalFormat getInternalFormat()
   {
     return this.internalFormat;
   }
-  
+
   /**
    * Return a set of all channel views that are selected.
    *
@@ -98,11 +100,11 @@ public class InternalFormatView extends JPanel
   public Set<ChannelView> getSelectedChannels()
   {
     Set<ChannelView> selected = new HashSet<ChannelView>();
-    
+
     for( ChannelView channelView : channelViews )
     {
       Point point = channelView.getMarkedSamples();
-      
+
       if( point != null )
       {
         selected.add( channelView );

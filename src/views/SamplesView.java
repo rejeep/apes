@@ -10,11 +10,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * TODO: Comment
+ */
 public class SamplesView extends JPanel
-                         implements MouseListener,
-                                    MouseWheelListener,
-                                    MouseMotionListener,
-                                    Runnable
+  implements MouseListener,
+  MouseWheelListener,
+  MouseMotionListener,
+  Runnable
 {
   private Channel channel;
   private int nrSamples;
@@ -65,7 +68,7 @@ public class SamplesView extends JPanel
     {
       g2.drawLine(i, samples[i], i+1, samples[i+1]);
     }
-    
+
     g2.setColor(Color.black);
     g2.drawLine(0,height/2,width,height/2);
     g2.drawLine(0,height,width,height);
@@ -75,7 +78,7 @@ public class SamplesView extends JPanel
       g2.drawLine(markBeginning,0,markBeginning,height);
     if(markEnd > 0)
       g2.drawLine(markEnd,0,markEnd,height);
-    
+
     if(markBeginning > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
@@ -95,12 +98,12 @@ public class SamplesView extends JPanel
 
   public void setZoom(int samples)
   {
-    visibleSamples = samples;    
+    visibleSamples = samples;
   }
 
   public void setCenter(int sample)
   {
-    centerSample = sample;  
+    centerSample = sample;
   }
 
   public void setChannel(Channel ch)
@@ -114,10 +117,10 @@ public class SamplesView extends JPanel
   public void updateView()
   {
     double time = System.currentTimeMillis();
-    
+
     if(channel == null)
       return;
-    
+
 
     //SampleIterator iterator = channel.getIterator();
     int sample = 0;
@@ -126,7 +129,7 @@ public class SamplesView extends JPanel
 
 
     int samplesPerPixel = visibleSamples/width;
-    int sampleChunksPerPixel = (samplesPerPixel / Channel.SAMPLES_SIZE); 
+    int sampleChunksPerPixel = (samplesPerPixel / Channel.SAMPLES_SIZE);
 
     for(int i = 0; i < width; ++i)
     {
@@ -175,7 +178,7 @@ public class SamplesView extends JPanel
 
   //@Override
   public void mouseClicked(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
@@ -184,7 +187,7 @@ public class SamplesView extends JPanel
     {
       int x = e.getX();
       int y = e.getY();
-    
+
       if(x < width && x > 0 && y < height)
       {
         markBeginning = x;
@@ -219,7 +222,7 @@ public class SamplesView extends JPanel
         else
           markEnd = x;
       }
-         
+
       this.repaint();
     }
     else if( e.getButton() == MouseEvent.BUTTON3)
@@ -233,12 +236,12 @@ public class SamplesView extends JPanel
 
   //@Override
   public void mouseEntered(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
   public void mouseExited(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
@@ -287,7 +290,7 @@ public class SamplesView extends JPanel
       else
         markEnd = x;
     }
-    
+
     this.repaint();
   }
 
@@ -301,7 +304,7 @@ public class SamplesView extends JPanel
   public void run()
   {
     while(true)
-    {      
+    {
       this.repaint();
     }
   }

@@ -40,12 +40,13 @@ public class ConfigView extends JFrame
    * component.
    */
   private Map<String, Component> newOptions;
-  
+
   /**
    * A language object.
    */
   private Language language;
-  
+
+
   /**
    * Creates a new <code>ConfigView</code> instance.
    *
@@ -77,7 +78,7 @@ public class ConfigView extends JFrame
     setVisible( true );
     pack();
   }
-  
+
   /**
    * Returns the top panel with all configuration options.
    *
@@ -86,7 +87,7 @@ public class ConfigView extends JFrame
   private JPanel topPanel()
   {
     Map<String, String> options = config.getOptions();
-    
+
     JPanel panel = new JPanel();
     panel.setLayout( new GridLayout( options.size(), 2 ) );
 
@@ -96,31 +97,31 @@ public class ConfigView extends JFrame
     {
       String name = language.get( "config." + key );
       Config.Type type = config.getType( key );
-      
+
       panel.add( new JLabel( name ) );
 
       if( type == Config.Type.INTEGER || type == Config.Type.STRING )
       {
         JTextField textField = new JTextField( options.get( key ) );
-          
+
         panel.add( textField );
-        
+
         newOptions.put( key, textField );
       }
       else if( type == Config.Type.BOOLEAN )
       {
         JCheckBox checkBox = new JCheckBox();
         checkBox.setSelected( config.getBooleanOption( key ) );
-        
+
         panel.add( checkBox );
-        
+
         newOptions.put( key, checkBox );
       }
     }
-    
+
     return panel;
   }
-  
+
   /**
    * Returns the bottom panel with a save and a close button.
    *

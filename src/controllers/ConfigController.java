@@ -49,12 +49,12 @@ public class ConfigController extends ApplicationController
   public void save()
   {
     Map<String, Component> newOptions = configView.getNewOptions();
-    
+
     for( String key : newOptions.keySet() )
     {
       Config.Type type = config.getType( key );
       String value = null;
-      
+
       if( type == Config.Type.INTEGER || type == Config.Type.STRING )
       {
         value = ((JTextField)newOptions.get( key )).getText();
@@ -62,13 +62,13 @@ public class ConfigController extends ApplicationController
       else if( type == Config.Type.BOOLEAN )
       {
         JCheckBox checkBox = (JCheckBox)newOptions.get( key );
-        
+
         value = checkBox.isSelected() ? "true" : "false";
       }
-      
+
       config.addOption( key, value, type );
     }
-    
+
     config.save();
   }
 

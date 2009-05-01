@@ -12,7 +12,7 @@ public class BackwardButton extends ImageButton
   {
     return "backward";
   }
-  
+
   @Override
   protected String getDescription()
   {

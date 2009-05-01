@@ -8,22 +8,26 @@ import java.util.List;
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
 import apes.models.*;
-import apes.views.ProgressView;
 
 /**
- * Module used for converting .wav-files to the internal format
- * and converting the internal format to .wav-files.
+ * Module used for converting .wav-files to the internal format and
+ * converting the internal format to .wav-files.
  *
  * @author Simon Holm
  */
 public class WaveFileFormat implements AudioFormatPlugin
 {
-  
+  /**
+   * TODO: Comment
+   */
   public String getName()
   {
     return( "Wave" );
   }
-  
+
+  /**
+   * TODO: Comment
+   */
   public String getDescription()
   {
     return( "Support for .wav files." );
@@ -31,19 +35,21 @@ public class WaveFileFormat implements AudioFormatPlugin
 
   /**
    * Returns the extension of the file format
+   *
    * @return extension
    */
   public String getExtension()
   {
     return "wav";
   }
-  
+
   /**
-   * Converts a file from the internal file format to .wav and stores it on the disk
+   * Converts a file from the internal file format to .wav and stores
+   * it on the disk
    *
    * @param internalFormat The file to be converted.
-   * @param path           The path to the folder were the file should be saved.
-   * @param fileName       The name of the file to be saved.
+   * @param path The path to the folder were the file should be saved.
+   * @param fileName The name of the file to be saved.
    * @throws Exception
    */
   public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
@@ -66,7 +72,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
-    int numSamples = 0; 
+    int numSamples = 0;
 
     SampleIterator[] iterators = new SampleIterator[numChannels];
 
@@ -78,10 +84,10 @@ public class WaveFileFormat implements AudioFormatPlugin
       while(iterator.hasNext())
       {
         iterator.next();
-        ++numSamples;        
+        ++numSamples;
       }
     }
-    
+
     subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
 
@@ -117,25 +123,27 @@ public class WaveFileFormat implements AudioFormatPlugin
     while(iterators[0].hasNext())
       for( SampleIterator iterator : iterators)
         data.putInt( iterator.next() );
-    
+
     FileHandler.saveToFile( path, fileName, data.array() );
   }
 
   //TODO: Create a more detailed description of exception
   /**
-   * Imports a wave file, converts it to the internal format and returns it.
+   * Imports a wave file, converts it to the internal format and
+   * returns it.
    *
-   * @param path     The path to the folder with the file to be loaded.
+   * @param path The path to the folder with the file to be loaded.
    * @param filename The name of the file to be imported.
    * @return Returns the file converted to the internal format
-   * @throws Exception Will throw an exception if something bad happens
+   * @throws Exception Will throw an exception if something bad
+   * happens
    */
   public InternalFormat importFile( String path, String filename ) throws Exception
   {
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
-    
+
     ByteBuffer buffer = FileHandler.loadFile( path, filename );
- 
+
     // Wave do not contain any tags
     Tags tag = null;
 
@@ -189,7 +197,7 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     for ( int i = 0; i < numChannels; ++i )
       channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
-    
+
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
 

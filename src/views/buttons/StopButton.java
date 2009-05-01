@@ -12,7 +12,7 @@ public class StopButton extends ImageButton
   {
     return "stop";
   }
-  
+
   @Override
   protected String getDescription()
   {

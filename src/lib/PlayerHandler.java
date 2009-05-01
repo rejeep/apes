@@ -63,7 +63,7 @@ public class PlayerHandler
    */
   private InternalFormat internalFormat;
 
-  
+
   /**
    * Creates a new <code>PlayerHandler</code>.
    */
@@ -136,7 +136,7 @@ public class PlayerHandler
       currentPlayer.stop();
     }
   }
-  
+
   /**
    * Go forward.
    */
@@ -147,7 +147,7 @@ public class PlayerHandler
       currentPlayer.forward();
     }
   }
-  
+
   /**
    * Go backward.
    */
@@ -196,7 +196,12 @@ public class PlayerHandler
    */
   public InternalFormat getInternalFormat()
   {
-    return currentPlayer.getInternalFormat();
+    if( currentPlayer != null )
+    {
+      return currentPlayer.getInternalFormat();
+    }
+
+    return null;
   }
 
   /**
@@ -248,7 +253,7 @@ public class PlayerHandler
 
     return null;
   }
-  
+
   /**
    * Remove the Player that has <code>internalFormat</code> as
    * internal format.
@@ -258,12 +263,12 @@ public class PlayerHandler
   public void remove( InternalFormat internalFormat )
   {
     Player player = getPlayer( internalFormat );
-    
+
     if( player.equals( currentPlayer ) )
     {
       currentPlayer = null;
     }
-    
+
     players.remove( player );
   }
 }

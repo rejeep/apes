@@ -2,10 +2,10 @@ package apes.interfaces;
 
 import apes.models.InternalFormat;
 
-// TODO: Comment this interface.
-
 /**
- * Simon Holm
+ * TODO: Comment
+ *
+ * @author Simon Holm
  */
 public interface AudioFormatPlugin extends Plugin
 {
@@ -14,7 +14,7 @@ public interface AudioFormatPlugin extends Plugin
    * @return file extension a <code>String</code>
    */
   String getExtension ();
-  
+
   /**
    * Describe <code>importFile</code> method here.
    *

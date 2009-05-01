@@ -11,7 +11,8 @@ import apes.interfaces.LanguageObserver;
 import java.util.Arrays;
 
 /**
- * Singleton class for setting the language of the application also works as an observable for ApesObserver
+ * Singleton class for setting the language of the application also
+ * works as an observable for ApesObserver.
  *
  * @author Simon Holm
  */
@@ -79,7 +80,7 @@ public class Language
     else
     {
       this.language = DEFAULT_LANGUAGE;
-      
+
       System.err.println( "Cannot set language " + language + ". Locale does not exist." );
     }
   }
@@ -192,12 +193,17 @@ public class Language
   }
 
   /**
-   *
+   * Filter for language files.
    */
   private class LanguageFileFilter implements FilenameFilter
   {
     /**
+     * Returns true if the given file matches a valid language file. False otherwise.
      *
+     * @param dir The directory.
+     * @param name The file name.
+     *
+     * @return True if valid. False otherwise.
      */
     public boolean accept( File dir, String name )
     {

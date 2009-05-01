@@ -10,11 +10,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * TODO: Comment
+ */
 public class ChannelView extends JPanel
-                         implements MouseListener,
-                                    MouseWheelListener,
-                                    MouseMotionListener,
-                                    Runnable
+  implements MouseListener,
+  MouseWheelListener,
+  MouseMotionListener,
+  Runnable
 {
   private Channel channel;
   private int nrSamples;
@@ -65,7 +68,7 @@ public class ChannelView extends JPanel
     {
       g2.drawLine(i, samples[i], i+1, samples[i+1]);
     }
-    
+
     g2.setColor(Color.black);
     g2.drawLine(0,height/2,width,height/2);
     g2.drawLine(0,height,width,height);
@@ -75,7 +78,7 @@ public class ChannelView extends JPanel
       g2.drawLine(markBeginning,0,markBeginning,height);
     if(markEnd > 0)
       g2.drawLine(markEnd,0,markEnd,height);
-    
+
     if(markBeginning > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
@@ -95,12 +98,12 @@ public class ChannelView extends JPanel
 
   public void setZoom(int samples)
   {
-    visibleSamples = samples;    
+    visibleSamples = samples;
   }
 
   public void setCenter(int sample)
   {
-    centerSample = sample;  
+    centerSample = sample;
   }
 
   public void setChannel(Channel ch)
@@ -114,10 +117,10 @@ public class ChannelView extends JPanel
   public void updateView()
   {
     double time = System.currentTimeMillis();
-    
+
     if(channel == null)
       return;
-    
+
 
     int sample = 0;
     int maxAmp = Integer.MIN_VALUE;
@@ -125,7 +128,7 @@ public class ChannelView extends JPanel
 
 
     int samplesPerPixel = visibleSamples/width;
-    float sampleChunksPerPixel = ((float)samplesPerPixel / Channel.SAMPLES_SIZE); 
+    float sampleChunksPerPixel = ((float)samplesPerPixel / Channel.SAMPLES_SIZE);
 
     if(sampleChunksPerPixel > 0)
     {
@@ -178,7 +181,7 @@ public class ChannelView extends JPanel
 
   //@Override
   public void mouseClicked(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
@@ -187,7 +190,7 @@ public class ChannelView extends JPanel
     {
       int x = e.getX();
       int y = e.getY();
-    
+
       if(x < width && x > 0 && y < height)
       {
         markBeginning = x;
@@ -225,7 +228,7 @@ public class ChannelView extends JPanel
             markEnd = x;
         }
       }
-         
+
       this.repaint();
     }
     else if( e.getButton() == MouseEvent.BUTTON3)
@@ -239,12 +242,12 @@ public class ChannelView extends JPanel
 
   //@Override
   public void mouseEntered(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
   public void mouseExited(MouseEvent e) {
-      //To change body of implemented methods use File | Settings | File Templates.
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   //@Override
@@ -254,7 +257,7 @@ public class ChannelView extends JPanel
     //1 scroll wheel down
     Point marked = getMarkedSamples();
     //System.out.println("start: " + marked.x + " end: " + marked.y);
-    
+
     double time = System.currentTimeMillis();
     channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
 
@@ -285,7 +288,7 @@ public class ChannelView extends JPanel
       else
         markEnd = x;
     }
-    
+
     this.repaint();
   }
 

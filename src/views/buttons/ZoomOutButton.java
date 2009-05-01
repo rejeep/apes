@@ -12,7 +12,7 @@ public class ZoomOutButton extends ImageButton
   {
     return "zoom_out";
   }
-  
+
   @Override
   protected String getDescription()
   {

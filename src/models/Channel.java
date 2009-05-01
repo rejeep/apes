@@ -2,7 +2,6 @@ package apes.models;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
 
 /**
@@ -16,16 +15,19 @@ public class Channel
    * Amount of samples in each Samples object in the samplesList.
    */
   public static final int SAMPLES_SIZE = 1000;
-  
+
   /**
-   * Contains size of silent padding object in SamplesList, if 0 there is no padding object.
+   * Contains size of silent padding object in SamplesList, if 0 there
+   * is no padding object.
    */
   private int padLength;
 
   /**
-   * A list containing all Samples structure, and thus all audio data of the channel.
+   * A list containing all Samples structure, and thus all audio data
+   * of the channel.
    */
   private List<Samples> samplesList;
+
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -37,25 +39,35 @@ public class Channel
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
   }
-  
+
+  /**
+   * TODO: Comment
+   *
+   * @return a <code>SampleIterator</code> value
+   */
   public SampleIterator getIterator()
   {
     return new SampleIterator(this);
   }
-  
+
   /**
    * Returns the amount of silent padding at the end of the Channel.
+   *
    * @return Returns <code>padLength</code>.
    */
   public int getPadLength()
   {
     return padLength;
   }
-  
+
   /**
-   * Adjust the amount of silent padding at end of file to reach the specified amount of samples.
-   * @param length The wanted padding after the function returns. The function simply returns if <code>length</code> is negative.
-   * @return The amount of padding, in samples, after the call. -1 if <code>length</code> is negative.
+   * Adjust the amount of silent padding at end of file to reach the
+   * specified amount of samples.
+   *
+   * @param length The wanted padding after the function returns. The
+   * function simply returns if <code>length</code> is negative.
+   * @return The amount of padding, in samples, after the call. -1 if
+   * <code>length</code> is negative.
    */
   public int adjustPadding( int length )
   {
@@ -69,9 +81,11 @@ public class Channel
     padLength = length;
     return padLength;
   }
-  
+
   /**
-   * Sets all samples within the specified range to <code>value</code> 
+   * Sets all samples within the specified range to
+   * <code>value</code>.
+   *
    * @param start The absolute index of the first value to change.
    * @param stop The absolute index of the last value to change.
    * @param value The value to set selected samples to.
@@ -98,14 +112,16 @@ public class Channel
       }
       s.updateMinAndMaxAmplitude();
     }
-      
   }
-  
+
   /**
-   * Changes the values of all samples within a specified range by adding <code>delta</code>.
+   * Changes the values of all samples within a specified range by
+   * adding <code>delta</code>.
+   *
    * @param start The index of the first sample to affect.
    * @param stop The index of the last sample to affect.
-   * @param delta Value added to each sample in the selected range. May be negative.
+   * @param delta Value added to each sample in the selected
+   * range. May be negative.
    */
   public void alterSamples( int start, int stop, int delta )
   {
@@ -130,12 +146,15 @@ public class Channel
       s.updateMinAndMaxAmplitude();
     }
   }
-  
+
   /**
-   * Changes the values of all samples within a specified range by scaling with <code>alpha</code>.
+   * Changes the values of all samples within a specified range by
+   * scaling with <code>alpha</code>.
+   *
    * @param start The index of the first sample to affect.
    * @param stop The index of the last sample to affect.
-   * @param alpha Value multiplied with each sample in the selected range. May be negative.
+   * @param alpha Value multiplied with each sample in the selected
+   * range. May be negative.
    */
   public void scaleSamples( int start, int stop, float alpha )
   {
@@ -160,49 +179,53 @@ public class Channel
       s.updateMinAndMaxAmplitude();
     }
   }
-  
+
   /**
-   * Returns Samples objects containing the data in the given interval.
-   * @param start The absolute index of the first sample to copy. 
+   * Returns Samples objects containing the data in the given
+   * interval.
+   * @param start The absolute index of the first sample to copy.
    * @param stop The absolute index of the final sample to copy.
-   * @return An array containing all samples between start and stop. Returns null if stop < start or either one of stop and start is an invalid index. 
-   *         <br>The Samples will be of size SAMPLES_SIZE with the possible exception of the last one.
+   * @return An array containing all samples between start and
+   *         stop. Returns null if stop < start or either one of stop
+   *         and start is an invalid index.  <br>The Samples will be
+   *         of size SAMPLES_SIZE with the possible exception of the
+   *         last one.
    */
   public Samples[] copySamles( int start, int stop )
   {
     // Bad interval
     if( start < 0 || stop < start )
       return null;
-    
+
     // Find start
     Point startPoint = findAbsoluteIndex( start );
     if( startPoint.x == -1 )
       return null;
-    
+
     // Find stop
     Point stopPoint = findAbsoluteIndex( stop );
     if( stopPoint.x == -1 )
       return null;
-    
+
     // Count samples
     int sampleAmount = 0;
     for( int i = startPoint.x; i < stopPoint.x; i++ )
       sampleAmount += samplesList.get( i ).getSize();
-    
+
     // Correct for edge Samples.
     sampleAmount += stopPoint.y - startPoint.y + 1;
-    
+
     int samplesAmount = sampleAmount / SAMPLES_SIZE + (((sampleAmount % SAMPLES_SIZE) == 0) ? 0 : 1);
-    
+
     // Declare some variables.
     Samples[] retArray = new Samples[samplesAmount];           // Array for getting return type.
     Samples samples;                                           // Current Samples being filled.
     int arrIndex = 0;                                          // Index into retArray.
     int sampIndex = 0;                                         // Index into samples.
-    
+
     int remaining = stop - start + 1;
     samples = new Samples ( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
-    
+
     int absIndex = start;
     for( int i = startPoint.x; i <= startPoint.y; i++ )
     {
@@ -218,11 +241,11 @@ public class Channel
         {
           return retArray;
         }
-        
+
         if( sampIndex == SAMPLES_SIZE )
         {
           sampIndex = 0;
-          remaining = (stop - absIndex); 
+          remaining = (stop - absIndex);
           samples = new Samples( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
           retArray[arrIndex++] = samples;
         }
@@ -230,85 +253,91 @@ public class Channel
     }
     return retArray; // Won't happen.
   }
-  
+
   /**
-   * Removes everything from <code>start</code> to <code>stop</code> from the <code>Channel</code> and returns it in an array of Samples objects.
+   * TODO: Comment
+   * Removes everything from <code>start</code> to <code>stop</code>
+   * from the <code>Channel</code> and returns it in an array of
+   * Samples objects.
+   *
    * @param start
    * @param stop
-   * @return null if start > stop. Otherwise all samples removed in an array of <code>Samples</code>. <br>Note: returned array may contain Samples of size 0. 
+   * @return null if start > stop. Otherwise all samples removed in an
+   * array of <code>Samples</code>. <br>Note: returned array may
+   * contain Samples of size 0.
    */
   public Samples[] cutSamples( int start, int stop )
   {
     // Invalid indexes.
     if( stop < start )
       return null;
-    
+
     //  Declare some variables.
     Samples samples;            // Currently in samplesList.
     Samples newSamples;         // To replace samples in samplesList.
     Samples retSamples;         // To be added to retArray.
-    
+
     // Find indexes
     Point startPoint = findAbsoluteIndex(start);
     Point stopPoint = findAbsoluteIndex(stop);
-    
+
     // Create sufficient array.
     Samples[] retArray;
     retArray = new Samples[stopPoint.x - startPoint.x + 1];
-    
+
     // Only one Samples affected.
     if( retArray.length == 1 )
     {
       // Find Samples affected.
       samples = samplesList.get(startPoint.x);
-      
+
       // Extrmely unlikely
       /*if(startPoint.y == 0 && stopPoint.y == samples.getSize()-1)
-      {
+        {
         retArray[0] = samples;
         samplesList.remove(samples);
         return retArray;
-      }*/
-      
+        }*/
+
       // Create Samples to return.
       retSamples = new Samples( stopPoint.y - startPoint.y + 1 );
       retArray[0] = retSamples;
-      
+
       // Fill in retSamp
       for( int i = startPoint.y, j = 0; i <= stopPoint.y; i++, j++ )
       {
         retSamples.setSample( j, samples.getSample(i) );
       }
-      
+
       // Create Samples to replace affected.
       newSamples = new Samples( samples.getSize() - retSamples.getSize() );
-      
+
       // Fill in newSamples.
       int j = 0;
       for( int i = 0; i < startPoint.y; i++, j++ )
         newSamples.setSample(j, samples.getSample( i ) );
       for( int i = stopPoint.y; i < samples.getSize(); i++, j++ )
         newSamples.setSample(j, samples.getSample( i ) );
-      
+
       // Substitute new for old.
       samplesList.set( startPoint.x, newSamples );
-      
+
       return retArray;
     }
-    
+
     //// Several Samples affected. ////
-    
+
     // Get edge Samples.
     Samples firstSamples = samplesList.get( startPoint.x );
     Samples lastSamples = samplesList.get( stopPoint.x );
-    
+
     // Fix first
     samples = samplesList.get( startPoint.x );
     newSamples = new Samples( startPoint.y );
     for(int i = 0; i < startPoint.y; i++)
       newSamples.setSample( i, samples.getSample(i) );
     samplesList.set( startPoint.x, newSamples );
-    
+
     // Copy from first
     retSamples = new Samples( samples.getSize() - startPoint.x );
     for( int i = startPoint.x, j = 0; i < samples.getSize(); i++, j++ )
@@ -316,7 +345,7 @@ public class Channel
       retSamples.setSample( j, samples.getSample(i) );
     }
     retArray[0] = retSamples;
-    
+
     // Handle middle
     int midIndex = startPoint.x + 1;
     for( int index = 1; index < retArray.length - 1; index++ )
@@ -324,41 +353,45 @@ public class Channel
       retArray[index] = samplesList.get( midIndex );
       samplesList.remove( midIndex );
     }
-    
+
     // Fix last
     samples = samplesList.get( midIndex );
     newSamples = new Samples( samples.getSize() - stopPoint.y );
     for( int i = stopPoint.y, j = 0; i < samples.getSize(); i++, j++ )
       newSamples.setSample(j, samples.getSample( i ) );
     samplesList.set( midIndex, newSamples );
-    
+
     // Copy from last
     retSamples = new Samples( stopPoint.y );
     for( int i = 0; i < stopPoint.y; i++ )
       retSamples.setSample( i, samples.getSample(i) );
     retArray[ retArray.length - 1] = retSamples;
-    
+
     return retArray;
   }
-  
+
   /**
-   * Inserts all data in samplesArray into the channel at <code>start</code>.
+   * Inserts all data in samplesArray into the channel at
+   * <code>start</code>.
+   *
    * @param start Index where to insert the samples.
-   * @param samplesArray All samples to be inserted. <code>Samples</code> of size 0 are ignored.
-   * @return Returns the absolute index of the first sample after the inserted data. If start was an invalid index, instead returns -1.
+   * @param samplesArray All samples to be
+   * inserted. <code>Samples</code> of size 0 are ignored.
+   * @return Returns the absolute index of the first sample after the
+   * inserted data. If start was an invalid index, instead returns -1.
    */
   public int pasteSamples( int start, Samples[] samplesArray )
   {
     Point startPoint = findAbsoluteIndex( start );
     if(startPoint.x == -1)
       return -1;
-    
+
     // Declare some stuff.
     int insertSize = 0;
     Samples startSamples   = null; // Samples object before insertion.
     Samples stopSamples    = null; // Samples object after insertion.
     Samples samples        = null; // Samples object currently in Channel.
-    
+
     // Do we need start and stop Samples?
     if(startPoint.y > 0)
     {
@@ -367,13 +400,13 @@ public class Channel
       for( int i = 0; i < startPoint.y; i++ )
         startSamples.setSample( 0, samples.getSample(i) );
       samplesList.set( startPoint.x, startSamples );
-      
+
       stopSamples = new Samples( samples.getSize() - startPoint.y );
       for( int i = startPoint.y, j = 0; i < samples.getSize(); i++, j++)
         stopSamples.setSample( j, samples.getSample(i) );
       samplesList.add(  startPoint.x + 1, stopSamples );
     }
-    
+
     // Actual insertion
     for( int i = 0, j = startPoint.x + 1; i < samplesArray.length; i++, j++ )
     {
@@ -383,15 +416,17 @@ public class Channel
         insertSize += samplesArray[i].getSize();
       }
     }
-    
+
     return start + insertSize;
-    
+
   }
-  
+
   /**
    * Finds the sample with the given absolute index.
+   *
    * @param absIndex The absolute index to find.
-   * @return A point with x being the SamplesObject of the requested sample 
+   * @return A point with x being the SamplesObject of the requested
+   * sample.
    */
   public Point findAbsoluteIndex( int absIndex )
   {
@@ -407,22 +442,26 @@ public class Channel
       {
         return new Point(sampObj+1, 0);
       }
-      
+
       if( absIndex < newIndex )
       {
         return new Point(sampObj, newIndex - absIndex);
       }
-      
+
       curIndex = newIndex;
     }
-    
+
     return new Point(-1, -1);
   }
-  
+
   /**
-   * Splits a <code>Samples</code> object into chunks of size <code>SAMPLES_SIZE</code>.
+   * Splits a <code>Samples</code> object into chunks of size
+   * <code>SAMPLES_SIZE</code>.
+   *
    * @param samples The samples object to split.
-   * @return A samples object containing all samples in <code>samples</code> divided into Samples objects of size <code>SAMPLES_SIZE</code>
+   * @return A samples object containing all samples in
+   * <code>samples</code> divided into Samples objects of size
+   * <code>SAMPLES_SIZE</code>.
    */
   private List<Samples> splitSamples( Samples samples )
   {
@@ -430,7 +469,7 @@ public class Channel
     int fullChunks = samples.getSize() / SAMPLES_SIZE;
     // Remaining samples
     int remainder = samples.getSize() % SAMPLES_SIZE;
-    
+
     List<Samples> split = new ArrayList<Samples>();
 
     // Make full chunks
@@ -444,8 +483,8 @@ public class Channel
       sampObj.updateMinAndMaxAmplitude();
       split.add( sampObj );
     }
-    
-    
+
+
     // Add remainder in smaller chunk
     Samples sampObj = new Samples( remainder );
     for( int i = 0; i < remainder; i++ )
@@ -460,15 +499,15 @@ public class Channel
       }
     }
     split.add(sampObj);
-    
+
     // Return chunks.
     return split;
   }
-  
+
   /**
    * Get sample chunk at point <code>index</code>.
    *
-   * @param index the index value
+   * @param index the index value.
    * @return a chunk of <code>Samples</code> for <code>index</code>.
    */
   public Samples getSamples( int index )
@@ -479,13 +518,13 @@ public class Channel
   /**
    * Describe <code>getSamplesSize</code> method here.
    *
-   * @return an <code>int</code> value
+   * @return an <code>int</code> value.
    */
   public int getSamplesSize()
   {
     return samplesList.size();
   }
-  
+
   /**
    * Returns that smallest amplitude for this channel.
    *
@@ -500,7 +539,7 @@ public class Channel
         min = value;
     return min;
   }
-  
+
   /**
    * Returns that largest amplitude for this channel.
    *
@@ -515,7 +554,7 @@ public class Channel
         max = value;
     return max;
   }
-  
+
   /**
    * Returns the diff between the largest and smallest amplitude.
    *

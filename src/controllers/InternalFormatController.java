@@ -28,7 +28,7 @@ public class InternalFormatController extends ApplicationController
    * The main panel tabs.
    */
   private TabsController tabsController;
-  
+
 
   /**
    * Creates a new <code>InternalFormatController</code>.
@@ -123,10 +123,10 @@ public class InternalFormatController extends ApplicationController
       fc.showOpenDialog( null );
       File file = fc.getSelectedFile();
       String name = file.getName();
-      
+
       // Set internal format.
       InternalFormat internalFormat = wav.importFile( file.getParent(), name );
-      
+
       // Add the view to a new tab.
       tabsController.add( internalFormat, name );
     }
@@ -135,7 +135,7 @@ public class InternalFormatController extends ApplicationController
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Returns the <code>InternalFormatView</code> that is active. null
    * is returned if no tab is open.

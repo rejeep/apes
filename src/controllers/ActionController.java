@@ -88,7 +88,7 @@ public abstract class ActionController implements ActionListener, ChangeListener
    * the Component who fired the event.
    */
   protected EventObject event;
-  
+
   /**
    * The name of the component.
    */

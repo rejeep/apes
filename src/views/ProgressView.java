@@ -1,11 +1,14 @@
 package apes.views;
 
-import apes.models.Channel;
-import apes.models.SampleIterator;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
-import javax.swing.*;
-import java.awt.*;
 
+/**
+ * TODO: Comment
+ * TODO: What is this anyway?
+ */
 public class ProgressView extends JFrame
 {
   private static ProgressView instance = new ProgressView();
@@ -33,8 +36,7 @@ public class ProgressView extends JFrame
   }
 
   public void setValue(int procent)
-
   {
-    progressBar.setValue(procent);      
+    progressBar.setValue(procent);
   }
 }

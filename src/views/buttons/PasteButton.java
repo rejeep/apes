@@ -12,7 +12,7 @@ public class PasteButton extends ImageButton
   {
     return "paste";
   }
-  
+
   @Override
   protected String getDescription()
   {

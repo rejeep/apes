@@ -21,7 +21,7 @@ public class HelpController extends ApplicationController
   {
     helpView = new HelpView();
   }
-  
+
   /**
    * About apes.
    */

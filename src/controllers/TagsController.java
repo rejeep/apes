@@ -6,38 +6,41 @@ import apes.models.Tags;
 import apes.views.TagsView;
 
 /**
- *
+ * This class handles events related to tags.
  */
 public class TagsController extends ApplicationController
 {
   /**
-   *
+   * The view.
    */
   private TagsView tagsView;
 
   /**
-   *
+   * The internal format that the tags should be edited on.
    */
-  private PlayerHandler playerHandler;
+  private InternalFormat internalFormat;
+
 
   /**
+   * Creates a new <code>TagsController</code> instance.
    *
+   * @param playerHandler The playser handler.
    */
   public TagsController( PlayerHandler playerHandler )
   {
-    this.playerHandler = playerHandler;
+    internalFormat = playerHandler.getInternalFormat();
   }
 
   /**
-   *
+   * Creates a new tags view (frame) where tags can be edited.
    */
   public void edit()
   {
-    this.tagsView = new TagsView( this, getInternalFormat().getTags() );
+    this.tagsView = new TagsView( this, internalFormat.getTags() );
   }
 
   /**
-   *
+   * Closes the tags window.
    */
   public void close()
   {
@@ -46,7 +49,7 @@ public class TagsController extends ApplicationController
   }
 
   /**
-   *
+   * Saves the new tag values to the tag.
    */
   public void save()
   {
@@ -61,14 +64,6 @@ public class TagsController extends ApplicationController
     tags.put( "comments", tagsView.getComments() );
     tags.put( "copyright", tagsView.getCopyright() );
 
-    getInternalFormat().setTags( tags );
-  }
-
-  /**
-   *
-   */
-  public InternalFormat getInternalFormat()
-  {
-    return playerHandler.getInternalFormat();
+    internalFormat.setTags( tags );
   }
 }

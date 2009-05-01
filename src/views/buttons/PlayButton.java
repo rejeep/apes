@@ -12,7 +12,7 @@ public class PlayButton extends ImageButton
   {
     return "play";
   }
-  
+
   @Override
   protected String getDescription()
   {

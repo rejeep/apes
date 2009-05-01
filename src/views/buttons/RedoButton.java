@@ -12,7 +12,7 @@ public class RedoButton extends ImageButton
   {
     return "redo";
   }
-  
+
   @Override
   protected String getDescription()
   {

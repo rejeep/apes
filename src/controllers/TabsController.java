@@ -66,19 +66,16 @@ public class TabsController extends ApplicationController
     {
       tabsView.remove( index );
     }
-    
+
     // Remove player from player handler.
     playerHandler.remove( buttons.get( closeButton ) );
   }
-  
+
   /**
-   * Adds an <code>internalFormatView</code> to a new tab and returns
-   * it.
+   * Adds an <code>internalFormatView</code> to a new tab.
    *
    * @param internalFormat The internal format to create a view from.
    * @param title The tab title (name).
-   *
-   * @return The <code>InternalFormatView</code> that was added.
    */
   public void add( InternalFormat internalFormat, String title )
   {
@@ -111,7 +108,7 @@ public class TabsController extends ApplicationController
    */
   public TabsView getTabsView()
   {
-    return this.tabsView;
+    return tabsView;
   }
 
   /**

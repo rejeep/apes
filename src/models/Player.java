@@ -53,13 +53,13 @@ public class Player implements Runnable
    * TODO: Must be able to play from many channels.
    */
   private Channel channel;
-  
+
   /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
    */
   private Thread thread;
-  
+
   /**
    * Creates a new <code>Player</code>.
    *
@@ -68,7 +68,7 @@ public class Player implements Runnable
   public Player( InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
-    
+
     channel = internalFormat.getChannel( 0 );
     numSamples = channel.getSamplesSize();
 
@@ -113,16 +113,16 @@ public class Player implements Runnable
   {
     int start = currentSamples;
     int stop = start + ( numSamples / 20 );
-    
+
     if( stop > numSamples )
     {
       stop = numSamples;
     }
-    
+
     for( int i = start; i < stop; i++ )
     {
       Samples samples = channel.getSamples( currentSamples );
-        
+
       currentSamples++;
       currentSample += samples.getSize();
     }
@@ -135,16 +135,16 @@ public class Player implements Runnable
   {
     int start = currentSamples;
     int stop = start - ( numSamples / 20 );
-    
+
     if( stop < 0 )
     {
       stop = 0;
     }
-    
+
     for( int i = start; i > stop; i-- )
     {
       Samples samples = channel.getSamples( currentSamples );
-        
+
       currentSamples--;
       currentSample -= samples.getSize();
     }

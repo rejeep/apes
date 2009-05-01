@@ -12,7 +12,7 @@ public class CopyButton extends ImageButton
   {
     return "copy";
   }
-  
+
   @Override
   protected String getDescription()
   {

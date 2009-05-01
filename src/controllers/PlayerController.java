@@ -32,7 +32,7 @@ public class PlayerController extends ApplicationController
   {
     playerHandler.backward();
   }
-  
+
   /**
    * Go forward.
    */
@@ -64,16 +64,16 @@ public class PlayerController extends ApplicationController
   {
     playerHandler.stop();
   }
-  
+
   /**
    * Change volume and update label that shows volume percentage.
    */
   public void volume()
   {
     VolumePanel panel = (VolumePanel) ( (JSlider) event.getSource() ).getParent();
-    
+
     playerHandler.setVolume( panel.getVolume() );
-    
+
     panel.updateLabelVolume();
   }
 }

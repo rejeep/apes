@@ -12,7 +12,7 @@ public class CutButton extends ImageButton
   {
     return "cut";
   }
-  
+
   @Override
   protected String getDescription()
   {
