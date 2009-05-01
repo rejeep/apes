@@ -30,15 +30,15 @@ public class PlayerController extends ApplicationController
    */
   public void backward()
   {
-    
+    playerHandler.backward();
   }
   
   /**
-   * Forward playing.
+   * Go forward.
    */
   public void forward()
   {
-    
+    playerHandler.forward();
   }
 
   /**

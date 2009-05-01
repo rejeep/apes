@@ -136,6 +136,28 @@ public class PlayerHandler
       currentPlayer.stop();
     }
   }
+  
+  /**
+   * Go forward.
+   */
+  public void forward()
+  {
+    if( currentPlayer != null )
+    {
+      currentPlayer.forward();
+    }
+  }
+  
+  /**
+   * Go backward.
+   */
+  public void backward()
+  {
+    if( currentPlayer != null )
+    {
+      currentPlayer.backward();
+    }
+  }
 
   /**
    * Get the current volume.

@@ -72,10 +72,13 @@ public class TabsController extends ApplicationController
   }
   
   /**
-   * Adds an <code>internalFormatView</code> to a new tab.
+   * Adds an <code>internalFormatView</code> to a new tab and returns
+   * it.
    *
    * @param internalFormat The internal format to create a view from.
    * @param title The tab title (name).
+   *
+   * @return The <code>InternalFormatView</code> that was added.
    */
   public void add( InternalFormat internalFormat, String title )
   {
