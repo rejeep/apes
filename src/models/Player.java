@@ -1,11 +1,7 @@
 package apes.models;
 
 import java.lang.InterruptedException;
-import javax.sound.sampled.Control;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
-
-import apes.models.Player.Status;
 
 /**
  * This class plays an internal format. It implements Runnable rather
