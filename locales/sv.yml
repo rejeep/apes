@@ -1,45 +1,101 @@
 menu:
   head:
     file: Arkiv
-    edit: Redigera
+    edit: Ändra
     view: Visa
-    zoom: Zoom
+    player: Spelare
+    zoom: Zooma
     tools: Verktyg
-    help: Hj�lp
+    help: Hjälp
   file:
-    open: �ppna
-    new_tab: Ny tab
-    close_tab: St�ng tab
+    open: Öppna
     save: Spara
-    save_as: Spara som...
+    save_as: Spara som
     export: Exportera
     quit: Avsluta
   edit:
-    undo: Stega bak�t
-    redo: Stega fram�t
+    undo: Ångra
+    redo: Ångra ångring
     cut: Klipp ut
     copy: Kopiera
     paste: Klistra in
     delete: Ta bort
+    tags: Ändra taggar
   view:
     zoom:
       in: In
       out: Ut
-      reset: ?terst�ll
-    full_screen: Fullsk�rm
+      reset: Återställ
+    languages: Språk
+  player:
+    play: Spela
+    pause: Pausa
+    stop: Stoppa
+    forward: Gå frammåt
+    backward: Gå bakåt
   tools:
-    properties: Inst�llningar
+    properties: Inställningar
   help:
     manual: Manual
-    bug: Reportera bug
     about: Om
-  tags:
-    save: Save tags
-    name: Namn
-    track: Sp�r
-    artist: Artist
-    album: Album
-    genre: Genre
-    composer: Komposit�r
-    comments: Kommentarer
-    copyright: Copyright
+button:
+  open:
+    description: Öppna musikfil
+  save:
+    description: Sparar fil till disken
+  undo:
+    description: Ångrar senaste ändring
+  redo:
+    description: Ångrar senaste ångring
+  copy:
+    description: Kopierar markerat stycke
+  cut:
+    description: Klipper ut markerat stycke
+  paste:
+    description: Klipper in vid markering
+  delete:
+    description: Tar bort markerat stycke
+  zoom_in:
+    description: Zoomar in
+  zoom_out:
+    description: Zoomar ut
+  zoom_reset:
+    description: Återställer zoom
+  play:
+    description: Spelar upp markerat stycke eller hela musikfilen
+  pause:
+    description: Pausar uppspelning
+  stop:
+    description: Stoppar uppspelning
+  forward:
+    description: Stegar frammåt
+  backward:
+    description: Stegar bakåt
+help:
+  about:
+    title: Om apes
+    name: apes - Audio Program for Editing Sound
+    authors: Författare: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores och Simon Holm
+tags:
+  save: Spara taggar
+  name: Namn
+  track: Låt
+  artist: Artist
+  album: Album
+  genre: Genre
+  composer: Kompositör
+  comments: Kommentarer
+  copyright: Copyright
+config:
+  properties:
+    save: Spara
+    close: Stäng
+  volume: Volym
+  maximized: Maximerat
+  frame_width: Fönster bredd
+  frame_height: Fönster höjd
+  volume_label_format: Volym Format
+  graph_width: Graf bredd
+  graph_height: Graf höjd
+  undo: Ångrahistorik storlek
+  language: Standardspråk

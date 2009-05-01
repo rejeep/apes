@@ -61,8 +61,6 @@ button:
     description: Zooms out
   zoom_reset:
     description: Resets the zoom to default size
-  full_screen:
-    description: Opens a full screen view
   play:
     description: Plays selected region or whole music filex
   pause:
@@ -73,8 +71,6 @@ button:
     description: Goes forward
   backward:
     description: Goes backward
-  record:
-    description: Starts a recording
 help:
   about:
     title: About apes
