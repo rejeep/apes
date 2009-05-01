@@ -8,6 +8,10 @@ import apes.lib.Config;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
+import java.util.Set;
+import java.util.HashSet;
+import java.awt.Point;
+import apes.models.Channel;
 
 /**
  * Contains one ChannelView per channel in the internal format.
@@ -24,7 +28,7 @@ public class InternalFormatView extends JPanel
   /**
    * List of all channel views.
    */
-  private List<ChannelView> channelViews = new ArrayList<ChannelView>();
+  private List<ChannelView> channelViews;
   
   /**
    * The player handler.
@@ -40,6 +44,7 @@ public class InternalFormatView extends JPanel
   {
     this.internalFormat = internalFormat;
     this.playerHandler = playerHandler;
+    this.channelViews = new ArrayList<ChannelView>();
     
     setInternalFormat( internalFormat );
   }
@@ -83,5 +88,27 @@ public class InternalFormatView extends JPanel
   public InternalFormat getInternalFormat()
   {
     return this.internalFormat;
+  }
+  
+  /**
+   * Return a set of all channel views that are selected.
+   *
+   * @return A set of all selected channel views.
+   */
+  public Set<ChannelView> getSelectedChannels()
+  {
+    Set<ChannelView> selected = new HashSet<ChannelView>();
+    
+    for( ChannelView channelView : channelViews )
+    {
+      Point point = channelView.getMarkedSamples();
+      
+      if( point != null )
+      {
+        selected.add( channelView );
+      }
+    }
+
+    return selected;
   }
 }

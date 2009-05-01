@@ -1,17 +1,16 @@
 package apes.controllers;
 
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
-import javax.swing.JFileChooser;
-import java.io.File;
-import javax.swing.JPanel;
-import apes.plugins.WaveFileFormat;
+
 import apes.models.InternalFormat;
-import apes.models.Player;
 import apes.models.undo.ChangeEdit;
 import apes.models.undo.CopyEdit;
 import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
+import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
 
 
@@ -21,11 +20,6 @@ import apes.views.InternalFormatView;
 public class InternalFormatController extends ApplicationController
 {
   /**
-   * Internal format.
-   */
-  private InternalFormat internalFormat;
-
-  /**
    * The undo manager that keeps track of all changes.
    */
   private UndoManager undoManager;
@@ -34,7 +28,7 @@ public class InternalFormatController extends ApplicationController
    * The main panel tabs.
    */
   private TabsController tabsController;
-
+  
 
   /**
    * Creates a new <code>InternalFormatController</code>.
@@ -131,7 +125,7 @@ public class InternalFormatController extends ApplicationController
       String name = file.getName();
       
       // Set internal format.
-      internalFormat = wav.importFile( file.getParent(), name );
+      InternalFormat internalFormat = wav.importFile( file.getParent(), name );
       
       // Add the view to a new tab.
       tabsController.add( internalFormat, name );
@@ -140,5 +134,16 @@ public class InternalFormatController extends ApplicationController
     {
       e.printStackTrace();
     }
+  }
+  
+  /**
+   * Returns the <code>InternalFormatView</code> that is active. null
+   * is returned if no tab is open.
+   *
+   * @return The currently active <code>InternalFormatView</code>.
+   */
+  public InternalFormatView getCurrentInternalFormatView()
+  {
+    return (InternalFormatView) tabsController.getTabsView().getSelectedComponent();
   }
 }
