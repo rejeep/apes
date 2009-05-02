@@ -3,7 +3,7 @@
 # Lists all occurances of method calls or definitions that does not
 # follow the standard method( Type arg ).
 
-REGEX="([A-Za-z]+)\([^ ].*[^ ]\)"
+REGEX="\(([A-Za-z]+([\]\)?\( [A-Za-z]+)?(, ?)?)+\)"
 ACK=/usr/bin/ack
 GREP=/bin/grep
 
