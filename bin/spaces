@@ -4,7 +4,7 @@
 # follow the standard method( Type arg ).
 
 REGEX="([A-Za-z]+)\([^ ].*[^ ]\)"
-ACK=/usr/bin/ack2
+ACK=/usr/bin/ack
 GREP=/bin/grep
 
 if [[ -x $ACK ]]; then
