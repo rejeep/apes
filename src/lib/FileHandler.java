@@ -5,15 +5,15 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
- * A helper class to load and save files from and to the disk
+ * A helper class to load and save files from and to the disk.
  *
  * @author Simon Holm
  */
-public class FileHandler 
+public class FileHandler
 {
 
   /**
-   * Loads a file from the disk and stores the data into a ByteBuffer
+   * Loads a file from the disk and stores the data into a ByteBuffer.
    *
    * @param path     The path to the folder with the file to be loaded.
    * @param fileName The name of the file to be loaded.
@@ -31,7 +31,8 @@ public class FileHandler
   }
 
   /**
-   * Loads a file at the root path from the disk and stores the data into a ByteBuffer
+   * Loads a file at the root path from the disk and stores the data
+   * into a ByteBuffer.
    *
    * @param fileName The name of the file to be loaded.
    * @return Returns a ByteBuffer with all the data from the file
@@ -44,6 +45,7 @@ public class FileHandler
 
   /**
    * Saves data to a file.
+   *
    * @param path The path to the folder were the file will be save.
    * @param fileName The name of the file to be saved.
    * @param data The data to be saved.
@@ -59,6 +61,7 @@ public class FileHandler
 
   /**
    * Saves data to a file in the folder ".".
+   *
    * @param fileName The name of the file.
    * @param data The data to be saved.
    * @throws IOException Throws an IOException if something unexpected happens.
@@ -70,6 +73,7 @@ public class FileHandler
 
   /**
    * Saves an object to a file.
+   *
    * @param path The path to were the file will be saved.
    * @param fileName The name of the file.
    * @param data The object to be saved.
@@ -87,6 +91,7 @@ public class FileHandler
 
   /**
    * Saves an object to a file in the folder ".".
+   *
    * @param fileName The name of the file.
    * @param data The object to be saved.
    * @throws IOException Throws an IOException if something unexpected happens.
@@ -96,9 +101,9 @@ public class FileHandler
     saveObjectToFile( ".", fileName, data );
   }
 
-
   /**
    * Loads an object from a file.
+   *
    * @param path The path to the folder were to load the file.
    * @param fileName The name of the file to be loaded.
    * @return Returns the loaded object.
@@ -117,6 +122,7 @@ public class FileHandler
 
   /**
    * Loads an object form the folder ".".
+   *
    * @param fileName The name of the file to be loaded.
    * @return Returns the loaded object.
    * @throws IOException Throws an IOException if something unexpected happens.
@@ -130,7 +136,8 @@ public class FileHandler
   ///////////////////////////////////////////////////////
 
   /**
-   * Loads a file from the disk and stores the data into a ByteBuffer with a dialogbox.
+   * Loads a file from the disk and stores the data into a ByteBuffer
+   * with a dialogbox.
    *
    * @return Returns a ByteBuffer with all the data from the file.
    * @throws IOException Throws an IOException if something unexpected happens.
@@ -150,6 +157,7 @@ public class FileHandler
 
   /**
    * Saves data to a file with a dialogbox.
+   *
    * @param path The path to the folder were the file will be save.
    * @param fileName The name of the file to be saved.
    * @param data The data to be saved.
@@ -165,6 +173,7 @@ public class FileHandler
 
   /**
    * Saves an object to a file with a dialogbox.
+   *
    * @param path The path to were the file will be saved.
    * @param fileName The name of the file.
    * @param data The object to be saved.
@@ -182,6 +191,7 @@ public class FileHandler
 
   /**
    * Loads an object from a file with a dialogbox.
+   *
    * @param path The path to the folder were to load the file.
    * @param fileName The name of the file to be loaded.
    * @return Returns the loaded object.

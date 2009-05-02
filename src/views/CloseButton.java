@@ -5,24 +5,27 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
- * 
+ * A tab close button.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class CloseButton extends JButton
 {
   /**
-   * 
+   * The panel the button is placed on.
    */
   private ButtonTabPanel buttonTabPanel;
-  
+
+
   /**
-   * 
+   * Creates a new <code>CloseButton</code> instance.
+   *
+   * @param buttonTabPanel The panel the button is placed on.
    */
   public CloseButton( ButtonTabPanel buttonTabPanel )
   {
     this.buttonTabPanel = buttonTabPanel;
-    
+
     ImageIcon icon = new ImageIcon( "images/close_tab.png" );
 
     int width = icon.getIconWidth();
@@ -40,7 +43,9 @@ public class CloseButton extends JButton
   }
 
   /**
+   * Returns the panel this button is placed on.
    *
+   * @return The panel.
    */
   public ButtonTabPanel getButtonTabPanel()
   {

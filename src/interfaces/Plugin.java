@@ -3,6 +3,7 @@ package apes.interfaces;
 /**
  * Interface for plugins.
  * TODO: What do to about locale?
+ * TODO: Comment
  */
 public interface Plugin
 {

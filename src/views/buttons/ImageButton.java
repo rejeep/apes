@@ -9,9 +9,10 @@ import apes.lib.Language;
 import apes.interfaces.LanguageObserver;
 
 /**
- * <p>Creates a button with an icon on it. The button is stripped down so
- * that all that is visible is the icon. All buttons should have it's
- * own button class and extend this class which does the base job.</p>
+ * <p>Creates a button with an icon on it. The button is stripped down
+ * so that all that is visible is the icon. All buttons should have
+ * it's own button class and extend this class which does the base
+ * job.</p>
  *
  * <p>The reason all buttons are in a separate class and that this
  * class does not handle all cases (because it would have been easy),
@@ -172,10 +173,13 @@ public abstract class ImageButton extends JButton implements LanguageObserver
     this.buttonPath = buttonPath;
   }
 
-
+  /**
+   * Updates the button tooltip.
+   */
   public void update()
   {
     setToolTipText( language.get( getDescription() ) );
+
     this.updateUI();
   }
 

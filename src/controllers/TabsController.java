@@ -66,11 +66,11 @@ public class TabsController extends ApplicationController
     {
       tabsView.remove( index );
     }
-    
+
     // Remove player from player handler.
     playerHandler.remove( buttons.get( closeButton ) );
   }
-  
+
   /**
    * Adds an <code>internalFormatView</code> to a new tab.
    *
@@ -108,7 +108,7 @@ public class TabsController extends ApplicationController
    */
   public TabsView getTabsView()
   {
-    return this.tabsView;
+    return tabsView;
   }
 
   /**

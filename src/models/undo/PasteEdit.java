@@ -8,16 +8,14 @@ import java.awt.Point;
 import javax.swing.undo.AbstractUndoableEdit;
 
 /**
- * PasteEdit records changes which occurs after performing a
- * paste action. PasteEdit provides undo/redo support for
- * PasteAction.
+ * PasteEdit records changes which occurs after performing a paste
+ * action. PasteEdit provides undo/redo support for PasteAction.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public class PasteEdit extends AbstractUndoableEdit
-{
-  
+{ 
   private Channel channel;
   private Samples[] paste;
   private int start, stop;

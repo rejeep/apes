@@ -20,7 +20,7 @@ menu:
     copy: Kopiera
     paste: Klistra in
     delete: Ta bort
-    tags: Ändra taggar
+    tags: Taggar
   view:
     zoom:
       in: In

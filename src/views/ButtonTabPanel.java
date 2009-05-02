@@ -64,6 +64,8 @@ public class ButtonTabPanel extends JPanel
 
   /**
    * Return the close button.
+   *
+   * @return The close button.
    */
   public CloseButton getCloseButton()
   {

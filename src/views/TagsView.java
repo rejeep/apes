@@ -16,117 +16,57 @@ import apes.lib.Language;
 import apes.models.Tags;
 
 /**
- * TODO: Comment this
+ * View where tags can be changed.
  */
 public class TagsView extends JFrame
 {
   /**
-   *
+   * A language object.
    */
   private Language language;
 
   /**
-   *
-   */
-  private JPanel north;
-
-  /**
-   *
-   */
-  private JPanel south;
-
-  /**
-   *
-   */
-  private JPanel center;
-
-  /**
-   *
+   * TODO: Comment
    */
   private JLabel head;
 
   /**
-   *
-   */
-  private JLabel name;
-
-  /**
-   *
-   */
-  private JLabel track;
-
-  /**
-   *
-   */
-  private JLabel artist;
-
-  /**
-   *
-   */
-  private JLabel album;
-
-  /**
-   *
-   */
-  private JLabel genre;
-
-  /**
-   *
-   */
-  private JLabel composer;
-
-  /**
-   *
-   */
-  private JLabel comments;
-
-  /**
-   *
-   */
-  private JLabel copyright;
-
-  /**
-   *
-   */
-  private JButton close;
-
-  /**
-   *
+   * The name.
    */
   private JTextField n;
 
   /**
-   *
+   * The track.
    */
   private JTextField t;
 
   /**
-   *
+   * The artist.
    */
   private JTextField ar;
 
   /**
-   *
+   * The album.
    */
   private JTextField al;
 
   /**
-   *
+   * The genre.
    */
   private JTextField g;
 
   /**
-   *
+   * The composer.
    */
   private JTextField comp;
 
   /**
-   *
+   * The comments.
    */
   private JTextField com;
 
   /**
-   *
+   * The copyright.
    */
   private JTextField copy;
 
@@ -136,21 +76,27 @@ public class TagsView extends JFrame
   public TagsView( TagsController tagsController, Tags tags )
   {
     this.language = Language.getInstance();
-    
+
     setLayout( new BorderLayout() );
-    /*NORTH*/
-    north = new JPanel();
+
+    // North panel
+    JPanel north = new JPanel();
     north.setLayout( new FlowLayout() );
     head = new JLabel( "This is the information" );
     north.add( head );
-    /*SOUTH*/
-    south = new JPanel();
+
+    // South panel
+    JPanel south = new JPanel();
     south.setLayout( new FlowLayout() );
+
+    // Save button
     JButton save = new JButton( "Save" );
     save.addActionListener( tagsController );
     save.setName( "save" );
     south.add(save);
-    close = new JButton( "Close" );
+
+    // Close button
+    JButton close = new JButton( "Close" );
     close.addActionListener( tagsController );
     close.setName( "close" );
     south.add( close );
@@ -164,16 +110,16 @@ public class TagsView extends JFrame
     com = new JTextField( tags.get( "comments" ) );
     copy = new JTextField( tags.get( "copyright" ) );
 
-    name = new JLabel( language.get( "tags.name" ) );
-    track = new JLabel( language.get( "tags.track" ) );
-    artist = new JLabel( language.get( "tags.artist" ) );
-    album = new JLabel( language.get( "tags.album" ) );
-    genre = new JLabel( language.get( "tags.genre" ) );
-    composer = new JLabel( language.get( "tags.composer" ) );
-    comments = new JLabel( language.get( "tags.comments" ) );
-    copyright = new JLabel( language.get( "tags.copyright" ) );
+    JLabel name = new JLabel( language.get( "tags.name" ) );
+    JLabel track = new JLabel( language.get( "tags.track" ) );
+    JLabel artist = new JLabel( language.get( "tags.artist" ) );
+    JLabel album = new JLabel( language.get( "tags.album" ) );
+    JLabel genre = new JLabel( language.get( "tags.genre" ) );
+    JLabel composer = new JLabel( language.get( "tags.composer" ) );
+    JLabel comments = new JLabel( language.get( "tags.comments" ) );
+    JLabel copyright = new JLabel( language.get( "tags.copyright" ) );
 
-    center = new JPanel();
+    JPanel center = new JPanel();
     center.setBackground( Color.GRAY );
     center.setLayout( new GridLayout( 8,2 ) );
     center.setPreferredSize( new Dimension( 200, 170 ) );
@@ -193,7 +139,8 @@ public class TagsView extends JFrame
     center.add( com );
     center.add( copyright );
     center.add( copy );
-    /*PLACING*/
+
+    // Placing
     add( south, BorderLayout.SOUTH );
     add( new JPanel(), BorderLayout.WEST );
     add( center, BorderLayout.CENTER );
@@ -206,90 +153,82 @@ public class TagsView extends JFrame
   }
 
   /**
-   * Describe <code>getName</code> method here.
+   * Returns the name.
    *
-   * @return a <code>String</code> value
+   * @return The name.
    */
   public String getName()
   {
     return n.getText();
-
   }
 
   /**
-   * Describe <code>getTrack</code> method here.
+   * Returns the track.
    *
-   * @return a <code>String</code> value
+   * @return The track.
    */
   public String getTrack()
   {
     return t.getText();
-
   }
 
   /**
-   * Describe <code>getArtist</code> method here.
+   * Returns the artist.
    *
-   * @return a <code>String</code> value
+   * @return The artist.
    */
   public String getArtist()
   {
     return ar.getText();
-
   }
 
   /**
-   * Describe <code>getAlbum</code> method here.
+   * Returns the album.
    *
-   * @return a <code>String</code> value
+   * @return The album.
    */
   public String getAlbum()
   {
     return al.getText();
-
   }
 
   /**
-   * Describe <code>getGenre</code> method here.
+   * Returns the genre.
    *
-   * @return a <code>String</code> value
+   * @return The genre.
    */
   public String getGenre()
   {
     return g.getText();
-
   }
 
   /**
-   * Describe <code>getComposer</code> method here.
+   * Returns the composer.
    *
-   * @return a <code>String</code> value
+   * @return The composer.
    */
   public String getComposer()
   {
     return comp.getText();
-
   }
 
   /**
-   * Describe <code>getComments</code> method here.
+   * Returns the comment.
    *
-   * @return a <code>String</code> value
+   * @return The comments.
    */
   public String getComments()
   {
     return com.getText();
-
   }
 
   /**
-   * Describe <code>getCopyright</code> method here.
+   * Returns the copyright.
    *
-   * @return a <code>String</code> value
+   * @return The copyright.
    */
   public String getCopyright()
   {
     return copy.getText();
-
   }
 }

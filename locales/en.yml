@@ -20,7 +20,7 @@ menu:
     copy: Copy
     paste: Paste
     delete: Delete
-    tags: Edit tags
+    tags: Tags
   view:
     zoom:
       in: In

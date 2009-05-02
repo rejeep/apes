@@ -6,9 +6,26 @@ import java.util.NoSuchElementException;
 
 public class SampleIterator
 {
-  
   /**
-   * Consts a SampleIterator iterating over all samples in the given <code>Channel</code>.
+   * The channel to iterate over.
+   */
+  private Channel channel;
+
+  /**
+   * Which Samples object is currently being iterated over.
+   */
+  private int samplesObject;
+
+  /**
+   * Current index within the current samples object.
+   */
+  private int samplesIndex;
+
+
+  /**
+   * Consts a SampleIterator iterating over all samples in the given
+   * <code>Channel</code>.
+   *
    * @param c The <code>Channel</code> to iterate over.
    */
   public SampleIterator( Channel c )
@@ -17,7 +34,7 @@ public class SampleIterator
     samplesObject = 0;
     samplesIndex = 0;
   }
-  
+
   /**
    * Creates a SampleIterator iterating over all samples in the given <code>Channel</code> starting from the given sample if it exists, otherwise from the beginning of the channel.
    * @param c
@@ -41,7 +58,7 @@ public class SampleIterator
   {
     return samplesObject < channel.getSamplesSize();
   }
-  
+
   /**
    * Returns the amplitude of the next sample.
    */
@@ -60,7 +77,7 @@ public class SampleIterator
     }
     throw new NoSuchElementException();
   }
-  
+
   /**
    * Not implemented.
    */
@@ -68,19 +85,4 @@ public class SampleIterator
   {
     throw new UnsupportedOperationException();
   }
-  
-  /**
-   * The channel to iterate over.
-   */
-  private Channel channel;
-  
-  /**
-   * Which Samples object is currently being iterated over.
-   */
-  private int samplesObject;
-  
-  /**
-   * Current index within the current samples object. 
-   */
-  private int samplesIndex;
 }

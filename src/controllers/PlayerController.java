@@ -30,15 +30,15 @@ public class PlayerController extends ApplicationController
    */
   public void backward()
   {
-    
+    playerHandler.backward();
   }
-  
+
   /**
-   * Forward playing.
+   * Go forward.
    */
   public void forward()
   {
-    
+    playerHandler.forward();
   }
 
   /**
@@ -64,16 +64,16 @@ public class PlayerController extends ApplicationController
   {
     playerHandler.stop();
   }
-  
+
   /**
    * Change volume and update label that shows volume percentage.
    */
   public void volume()
   {
     VolumePanel panel = (VolumePanel) ( (JSlider) event.getSource() ).getParent();
-    
+
     playerHandler.setVolume( panel.getVolume() );
-    
+
     panel.updateLabelVolume();
   }
 }

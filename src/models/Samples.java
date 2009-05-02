@@ -3,9 +3,10 @@ package apes.models;
 import java.math.BigInteger;
 
 /**
- * Class for containing a bunch of samples as used by the InternalFormat.
- * @author Daniel Kvick (kvick@student.chalmers.se)
+ * Class for containing a bunch of samples as used by the
+ * InternalFormat.
  *
+ * @author Daniel Kvick (kvick@student.chalmers.se)
  */
 public class Samples
 {
@@ -20,10 +21,10 @@ public class Samples
   public static final int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
 
   /**
-   * Amount of milliseconds in a second. 
+   * Amount of milliseconds in a second.
    */
   public static final int MS_PER_SECOND = 1000;
-  
+
   /**
    * Amount of samples in this object.
    */
@@ -54,21 +55,24 @@ public class Samples
    */
   private int[] sampleData;
 
+
   /**
    * Constructs a <code>Samples</code> object with the desired size.
+   *
    * @param amount number of samples.
    */
   public Samples( int amount )
   {
     size = amount;
     sampleData = new int[amount];
-    
+
     minAmplitude = maxAmplitude = 0;
     minAmplitudeIndex = maxAmplitudeIndex = 0;
   }
 
   /**
    * Constructs a <code>Samples</code> object from the given data.
+   *
    * @param data sample data using the specified bps.
    */
   public Samples(int bps, byte[] data) throws Exception
@@ -104,6 +108,7 @@ public class Samples
 
   /**
    * Returns amount of samples.
+   *
    * @return the amount of samples stored in this samples object.
    */
   public int getSize()
@@ -112,8 +117,11 @@ public class Samples
   }
 
   /**
-   * Returns an approximation of the average amplitude among all samples in this samples object.
-   * @param resolution The function takes every <code>resolution</code>:th sample into account. 
+   * Returns an approximation of the average amplitude among all
+   * samples in this samples object.
+   *
+   * @param resolution The function takes every
+   * <code>resolution</code>:th sample into account.
    * @return An approximate average amplitude over all samples.
    */
   public int getAverageAmplitude(int resolution)
@@ -127,7 +135,9 @@ public class Samples
 
   /**
    * Returns the maximum amplitude among all samples in this object.
-   * @return The value of the highest amplitude of all samples in this object.
+   *
+   * @return The value of the highest amplitude of all samples in this
+   * object.
    */
   public int getMaxAmplitude()
   {
@@ -136,6 +146,7 @@ public class Samples
 
   /**
    * Returns the minimum amplitude among all samples in this object.
+   *
    * @return The value of the highest amplitude of all samples in this
    * object.
    */
@@ -146,6 +157,7 @@ public class Samples
 
   /**
    * Returns the sample at given index.
+   *
    * @param index The index of the desired sample.
    * @return The amplitude of the requested sample.
    */
@@ -156,6 +168,7 @@ public class Samples
 
   /**
    * Sets amplitude of selected sample.
+   *
    * @param index The index of the sample to affect.
    * @param value The desired amplitude.
    */
@@ -163,9 +176,11 @@ public class Samples
   {
     sampleData[index] = Math.max(Short.MIN_VALUE, Math.min(value, Short.MAX_VALUE));
   }
-  
+
   /**
-   * Sets amplitude of selected sample and update minimum and maximum amplitude.
+   * Sets amplitude of selected sample and update minimum and maximum
+   * amplitude.
+   *
    * @param index The index of the sample to affect.
    * @param value The desired amplitude.
    */

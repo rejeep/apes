@@ -1,11 +1,7 @@
 package apes.models;
 
 import java.lang.InterruptedException;
-import javax.sound.sampled.Control;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
-
-import apes.models.Player.Status;
 
 /**
  * This class plays an internal format. It implements Runnable rather
@@ -47,11 +43,23 @@ public class Player implements Runnable
   private int currentSample;
 
   /**
+   * The number of samples in a channel.
+   */
+  private int numSamples;
+
+  /**
+   * Current channel.
+   *
+   * TODO: Must be able to play from many channels.
+   */
+  private Channel channel;
+
+  /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
    */
   private Thread thread;
-  
+
   /**
    * Creates a new <code>Player</code>.
    *
@@ -60,6 +68,9 @@ public class Player implements Runnable
   public Player( InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
+
+    channel = internalFormat.getChannel( 0 );
+    numSamples = channel.getSamplesSize();
 
     reset();
     setStatus( Status.WAIT );
@@ -96,19 +107,47 @@ public class Player implements Runnable
   }
 
   /**
-   * TODO: Implements
+   * Goes forward.
    */
   public void forward()
   {
+    int start = currentSamples;
+    int stop = start + ( numSamples / 20 );
 
+    if( stop > numSamples )
+    {
+      stop = numSamples;
+    }
+
+    for( int i = start; i < stop; i++ )
+    {
+      Samples samples = channel.getSamples( currentSamples );
+
+      currentSamples++;
+      currentSample += samples.getSize();
+    }
   }
 
   /**
-   * TODO: Implements
+   * Goes backward.
    */
   public void backward()
   {
+    int start = currentSamples;
+    int stop = start - ( numSamples / 20 );
 
+    if( stop < 0 )
+    {
+      stop = 0;
+    }
+
+    for( int i = start; i > stop; i-- )
+    {
+      Samples samples = channel.getSamples( currentSamples );
+
+      currentSamples--;
+      currentSample -= samples.getSize();
+    }
   }
 
   /**
@@ -162,9 +201,6 @@ public class Player implements Runnable
       {
         if( status == Status.PLAY )
         {
-          // TODO: Play from all channels.
-          Channel channel = internalFormat.getChannel( 0 );
-
           // Do the playing.
           if( currentSamples < channel.getSamplesSize() )
           {

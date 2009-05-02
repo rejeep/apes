@@ -12,7 +12,7 @@ public class PauseButton extends ImageButton
   {
     return "pause";
   }
-  
+
   @Override
   protected String getDescription()
   {

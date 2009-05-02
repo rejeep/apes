@@ -123,7 +123,7 @@ public class VolumePanel extends JPanel
   {
     return substituteLabel( target, new Integer( replacement ).toString() );
   }
-  
+
   /**
    * Returns <code>volumeLabelFormat</code> but with
    * <code>target</code> substituted with <code>replacement</code>.

@@ -12,7 +12,7 @@ public class DeleteButton extends ImageButton
   {
     return "delete";
   }
-  
+
   @Override
   protected String getDescription()
   {

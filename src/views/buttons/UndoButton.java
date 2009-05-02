@@ -12,7 +12,7 @@ public class UndoButton extends ImageButton
   {
     return "undo";
   }
-  
+
   @Override
   protected String getDescription()
   {

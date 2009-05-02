@@ -14,15 +14,16 @@ import apes.lib.Language;
 public class ApesMenu extends JMenu implements LanguageObserver
 {
   /**
-   * TODO:
+   * The locale tag.
    */
   private String tag;
-  
+
   /**
    * A language object.
    */
   private Language language;
-  
+
+
   /**
    * Creates a new <code>ApesMenu</code> instance.
    *
@@ -32,7 +33,7 @@ public class ApesMenu extends JMenu implements LanguageObserver
   {
     this.tag = tag;
     this.language = Language.getInstance();
-    
+
     setText( language.get( tag ) );
     language.addObserver(this);
   }
