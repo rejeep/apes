@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Lists all occurances of method calls or definitions that does not
+# follow the standard method( Type arg ).
+
+REGEX="([A-Za-z]+)\([^ ].*[^ ]\)"
+ACK=/usr/bin/ack2
+GREP=/bin/grep
+
+if [[ -x $ACK ]]; then
+  ack "$REGEX" ${1:-src}
+elif [[ -x $GREP ]]; then
+  grep -E "$REGEX" $(find ${1:-src} -type f | grep -vRE '\.(svn|git)')
+else
+  echo "You do not have the necessary programs to run this command!"
+
+  exit 1
+fi
