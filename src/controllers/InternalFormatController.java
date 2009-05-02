@@ -75,6 +75,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void cut()
   {
+    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -83,7 +84,7 @@ public class InternalFormatController extends ApplicationController
     
     Point marked = firstSelection.getMarkedSamples();
     
-    CutEdit edit = new CutEdit( firstSelection.getChannel(), marked );
+    CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
     
@@ -98,6 +99,7 @@ public class InternalFormatController extends ApplicationController
     if( clipboard == null )
       return;
     
+    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -106,7 +108,7 @@ public class InternalFormatController extends ApplicationController
     
     Point marked = firstSelection.getMarkedSamples();
     
-    UndoableEdit edit = new PasteEdit( firstSelection.getChannel(), marked, clipboard );
+    UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
 
     undoManager.addEdit( edit );
   }
@@ -116,6 +118,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void delete()
   {
+    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -124,7 +127,7 @@ public class InternalFormatController extends ApplicationController
     
     Point marked = firstSelection.getMarkedSamples();
     
-    CutEdit edit = new CutEdit( firstSelection.getChannel(), marked );
+    CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
   }

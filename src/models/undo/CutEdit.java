@@ -1,5 +1,6 @@
 package apes.models.undo;
 
+import apes.models.InternalFormat;
 import apes.models.Samples;
 import apes.models.Channel;
 
@@ -17,6 +18,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 public class CutEdit extends AbstractUndoableEdit
 {
   private Samples[] cutout;
+  private InternalFormat internalFormat;
   private Channel channel;
   private int start, stop;
   
@@ -25,8 +27,9 @@ public class CutEdit extends AbstractUndoableEdit
    * @param c Channel to be affected.
    * @param marked A point where [x,y] describes the interval to cut as absolute indexes.
    */
-  public CutEdit( Channel c, Point marked )
+  public CutEdit( InternalFormat intForm, Channel c, Point marked )
   {
+    internalFormat = intForm;
     channel = c;
     start = marked.x;
     stop = marked.y;
@@ -39,7 +42,7 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void redo()
   {
-    cutout = channel.cutSamples( start, stop );
+    cutout = internalFormat.cutSamples( channel, start, stop );
   }
   
   /**
@@ -47,7 +50,7 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void undo()
   {
-    channel.pasteSamples( start, cutout );
+    internalFormat.pasteSamples( channel, start, cutout );
     cutout = null;
   }
   

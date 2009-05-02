@@ -69,22 +69,44 @@ public class Channel
   }
 
   /**
-   * Adjust the amount of silent padding at end of file to reach the
-   * specified amount of samples.
+   * Adjust the amount of silent padding at end of file by adding an additional <code>length</code> samples.
    *
-   * @param length The wanted padding after the function returns. The
-   * function simply returns if <code>length</code> is negative.
-   * @return The amount of padding, in samples, after the call. -1 if
-   * <code>length</code> is negative.
+   * @param length The wanted amount of additional padding. May be negative for shortening padding.
+   * @return The amount of padding, in samples, after the call. If current padding length - <code>length</code> is negative, that number is returned and all padding is removed.
    */
   public int adjustPadding( int length )
   {
-    if(length < 0)
-      return -1;
-    if(padding.getSize() > 0)
-      samplesList.remove(samplesList.size()-1);
+    // Do nothing
+    if( length == 0 )
+      return padding.getSize();
+    
+    // Remove old.
+    if( padding != null )
+    {
+      length += padding.getSize();
+      samplesList.remove( samplesList.size() - 1 );
+    }
+    
+    // Remove padding
+    if( length < 0 )
+    {
+      removePadding();
+      return length;
+    }
+    
+    // Add padding.
     padding = new Samples(length);
+    samplesList.add( padding );
     return length;
+  }
+  
+  /**
+   * Removes all padding from the Channel.
+   */
+  public void removePadding()
+  {
+    samplesList.remove(samplesList.size()-1);
+    padding = null;
   }
 
   /**

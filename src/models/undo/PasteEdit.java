@@ -1,5 +1,6 @@
 package apes.models.undo;
 
+import apes.models.InternalFormat;
 import apes.models.Channel;
 import apes.models.Samples;
 
@@ -16,12 +17,14 @@ import javax.swing.undo.AbstractUndoableEdit;
  */
 public class PasteEdit extends AbstractUndoableEdit
 { 
+  private InternalFormat internalFormat;
   private Channel channel;
   private Samples[] paste;
   private int start, stop;
   
-  public PasteEdit( Channel c, Point marked, Samples[] p )
+  public PasteEdit( InternalFormat intForm, Channel c, Point marked, Samples[] p )
   {
+    internalFormat = intForm;
     channel = c;
     start = marked.x;
     stop = marked.y;
@@ -31,11 +34,11 @@ public class PasteEdit extends AbstractUndoableEdit
   
   public void redo()
   {
-    stop = channel.pasteSamples( start, paste );
+    stop = internalFormat.pasteSamples( channel, start, paste );
   }
   
   public void undo()
   {
-    paste = channel.cutSamples( start, stop );
+    paste = internalFormat.cutSamples( channel, start, stop );
   }
 }
