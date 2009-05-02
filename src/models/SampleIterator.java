@@ -36,10 +36,23 @@ public class SampleIterator
   }
 
   /**
-   * Returns false if there are no more samples in the
-   * Iterator. Otherwise, returns true.
-   *
-   * @return TODO
+   * Creates a SampleIterator iterating over all samples in the given <code>Channel</code> starting from the given sample if it exists, otherwise from the beginning of the channel.
+   * @param c
+   * @param obj
+   * @param i
+   */
+  public SampleIterator( Channel c, int obj, int i )
+  {
+    channel = c;
+    samplesObject = obj;
+    samplesIndex = i;
+    
+    if( c.getSamplesSize() < obj || c.getSamples( obj ).getSize() < i )
+      samplesObject = samplesIndex = 0;
+  }
+  
+  /**
+   * Returns false if there are no more samples in the Iterator. Otherwise, returns true.
    */
   public boolean hasNext()
   {

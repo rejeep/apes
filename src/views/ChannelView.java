@@ -106,6 +106,15 @@ public class ChannelView extends JPanel
     centerSample = sample;
   }
 
+  /**
+   * Returns the channel of the view.
+   * @return Returns <code>channel</code>.
+   */
+  public Channel getChannel()
+  {
+    return channel;
+  }
+  
   public void setChannel(Channel ch)
   {
     channel = ch;

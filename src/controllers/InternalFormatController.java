@@ -1,17 +1,24 @@
 package apes.controllers;
 
+import java.awt.Point;
 import java.io.File;
+import java.util.List;
+
 import javax.swing.JFileChooser;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import apes.models.InternalFormat;
+import apes.models.Samples;
+import apes.models.Channel;
 import apes.models.undo.ChangeEdit;
 import apes.models.undo.CopyEdit;
+import apes.models.undo.CutEdit;
 import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
 import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
+import apes.views.ChannelView;
 
 
 /**
@@ -31,6 +38,11 @@ public class InternalFormatController extends ApplicationController
 
 
   /**
+   * Values copied or cut.
+   */
+  private Samples[] clipboard;
+  
+  /**
    * Creates a new <code>InternalFormatController</code>.
    *
    * @param undoManager The undo manager.
@@ -47,9 +59,15 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    UndoableEdit edit = new CopyEdit();
-
-    undoManager.addEdit( edit );
+   ChannelView firstSelection = getFirstSelectedChannelView();
+    
+    // No selection?
+    if( firstSelection == null )
+      return;
+    
+    Point marked = firstSelection.getMarkedSamples();
+    
+    clipboard = firstSelection.getChannel().copySamples( marked.x, marked.y );
   }
 
   /**
@@ -57,9 +75,19 @@ public class InternalFormatController extends ApplicationController
    */
   public void cut()
   {
-    UndoableEdit edit = new CopyEdit();
+    ChannelView firstSelection = getFirstSelectedChannelView();
+    
+    // No selection?
+    if( firstSelection == null )
+      return;
+    
+    Point marked = firstSelection.getMarkedSamples();
+    
+    CutEdit edit = new CutEdit( firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
+    
+    clipboard = edit.getCutout();
   }
 
   /**
@@ -67,7 +95,18 @@ public class InternalFormatController extends ApplicationController
    */
   public void paste()
   {
-    UndoableEdit edit = new PasteEdit();
+    if( clipboard == null )
+      return;
+    
+    ChannelView firstSelection = getFirstSelectedChannelView();
+    
+    // No selection?
+    if( firstSelection == null )
+      return;
+    
+    Point marked = firstSelection.getMarkedSamples();
+    
+    UndoableEdit edit = new PasteEdit( firstSelection.getChannel(), marked, clipboard );
 
     undoManager.addEdit( edit );
   }
@@ -77,7 +116,15 @@ public class InternalFormatController extends ApplicationController
    */
   public void delete()
   {
-    UndoableEdit edit = new DeleteEdit();
+    ChannelView firstSelection = getFirstSelectedChannelView();
+    
+    // No selection?
+    if( firstSelection == null )
+      return;
+    
+    Point marked = firstSelection.getMarkedSamples();
+    
+    CutEdit edit = new CutEdit( firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
   }
@@ -145,5 +192,25 @@ public class InternalFormatController extends ApplicationController
   public InternalFormatView getCurrentInternalFormatView()
   {
     return (InternalFormatView) tabsController.getTabsView().getSelectedComponent();
+  }
+  
+  /**
+   * Returns a reference to the ChannelView of the lowest index such that there is a selection. 
+   * @return First ChannelView with a selection. Returns null if no ChannelView contains a selection.
+   */
+  public ChannelView getFirstSelectedChannelView()
+  {
+    // Get all Channels
+    List<ChannelView> channelViews = getCurrentInternalFormatView().getChannelViews();
+    
+    // Fins first selection.
+    ChannelView firstSelection = null;
+    for( ChannelView c : channelViews )
+      if( c.getMarkedSamples() != null )
+      {
+        firstSelection = c;
+        break;
+      }
+    return firstSelection;
   }
 }

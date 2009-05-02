@@ -17,17 +17,15 @@ public class Channel
   public static final int SAMPLES_SIZE = 1000;
 
   /**
-   * Contains size of silent padding object in SamplesList, if 0 there
-   * is no padding object.
+   * Padding element at the end of Channel. If null, there is no padding.
    */
-  private int padLength;
+  private Samples padding;
 
   /**
    * A list containing all Samples structure, and thus all audio data
    * of the channel.
    */
   private List<Samples> samplesList;
-
 
   /**
    * Constructor which adds a list of samples to the Channel.
@@ -39,11 +37,10 @@ public class Channel
     // Divide samples into chunks of SAMPLES_SIZE.
     samplesList = splitSamples( samples );
   }
-
+  
   /**
-   * TODO: Comment
-   *
-   * @return a <code>SampleIterator</code> value
+   * Returns an iterator for <code>this</code> starting from the beginning of the channel.
+   * @return Returns an iterator for this Channel.
    */
   public SampleIterator getIterator()
   {
@@ -51,13 +48,24 @@ public class Channel
   }
 
   /**
+   * Returns an iterator for <code>this</code> starting from the specified indexes.
+   * @param obj The Samples to begin iteration at.
+   * @param i Index within the given Samples to begin iteration at.
+   * @return An iterator for this channel starting from the given index if valid, otherwise from beginning of the channel.
+   */
+  public SampleIterator getIteratorFromIndex( int obj, int i )
+  {
+    return new SampleIterator( this, obj, i );
+  }
+  
+  /**
    * Returns the amount of silent padding at the end of the Channel.
    *
    * @return Returns <code>padLength</code>.
    */
   public int getPadLength()
   {
-    return padLength;
+    return padding.getSize();
   }
 
   /**
@@ -73,13 +81,10 @@ public class Channel
   {
     if(length < 0)
       return -1;
-    if(padLength > 0)
+    if(padding.getSize() > 0)
       samplesList.remove(samplesList.size()-1);
-    Samples s = new Samples(length);
-    for( int i = 0; i < length; i++ )
-      s.setSampleNoUpdate(i, Short.MIN_VALUE);
-    padLength = length;
-    return padLength;
+    padding = new Samples(length);
+    return length;
   }
 
   /**
@@ -191,7 +196,7 @@ public class Channel
    *         of size SAMPLES_SIZE with the possible exception of the
    *         last one.
    */
-  public Samples[] copySamles( int start, int stop )
+  public Samples[] copySamples( int start, int stop )
   {
     // Bad interval
     if( start < 0 || stop < start )
@@ -206,15 +211,9 @@ public class Channel
     Point stopPoint = findAbsoluteIndex( stop );
     if( stopPoint.x == -1 )
       return null;
-
-    // Count samples
-    int sampleAmount = 0;
-    for( int i = startPoint.x; i < stopPoint.x; i++ )
-      sampleAmount += samplesList.get( i ).getSize();
-
-    // Correct for edge Samples.
-    sampleAmount += stopPoint.y - startPoint.y + 1;
-
+    
+    // Calculate necessary array length.
+    int sampleAmount = stop - start + 1;
     int samplesAmount = sampleAmount / SAMPLES_SIZE + (((sampleAmount % SAMPLES_SIZE) == 0) ? 0 : 1);
 
     // Declare some variables.
@@ -223,35 +222,39 @@ public class Channel
     int arrIndex = 0;                                          // Index into retArray.
     int sampIndex = 0;                                         // Index into samples.
 
-    int remaining = stop - start + 1;
-    samples = new Samples ( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
-
-    int absIndex = start;
-    for( int i = startPoint.x; i <= startPoint.y; i++ )
+    SampleIterator sampIt;                                     // Iterator for simplicity of code.
+    
+    // Set the iterator.
+    sampIt = getIteratorFromIndex( startPoint.x, startPoint.y );
+    
+    // Set up first Samples.
+    samples = new Samples ( sampleAmount >= SAMPLES_SIZE ? SAMPLES_SIZE : sampleAmount );
+    retArray[0] = samples;
+    
+    // Fill in samples
+    for( int remaining = sampleAmount; remaining > 0; remaining--, sampIndex++ )
     {
-      Samples s = samplesList.get( i );
-      for( int j = 0; j < s.getSize(); j++, sampIndex++, absIndex++ )
+      // Filled a Samples.
+      if( sampIndex >= SAMPLES_SIZE )
       {
-        if( absIndex <= stop )
-        {
-          if( absIndex > start)
-            samples.setSample( sampIndex, s.getSample( j ) );
-        }
+        sampIndex = 0;
+        arrIndex++;
+        
+        // Enough left for full size.
+        if( remaining >= SAMPLES_SIZE )
+          samples = new Samples( SAMPLES_SIZE );
+        // Final, smaller Samples.
         else
-        {
-          return retArray;
-        }
+          samples = new Samples( remaining );
+        
+        retArray[arrIndex] = samples;
 
-        if( sampIndex == SAMPLES_SIZE )
-        {
-          sampIndex = 0;
-          remaining = (stop - absIndex);
-          samples = new Samples( remaining >= SAMPLES_SIZE ? SAMPLES_SIZE : remaining );
-          retArray[arrIndex++] = samples;
-        }
       }
+      
+      samples.setSample(sampIndex, sampIt.next());
     }
-    return retArray; // Won't happen.
+    
+    return retArray;
   }
 
   /**
