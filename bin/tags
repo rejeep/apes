@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This class creates an Emacs TAGS file for this project and puts it
+# This script creates an Emacs TAGS file for this project and puts it
 # in the project root.
 
 # Parse options.
