@@ -2,6 +2,8 @@ package apes.views;
 
 import apes.models.Channel;
 import apes.models.Player;
+import apes.models.SampleIterator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -74,14 +76,12 @@ public class ChannelView extends JPanel
     super.paintComponent( g );
     Graphics2D g2 = (Graphics2D) g;
 
+    g2.setBackground(Color.WHITE);    
+    g2.clearRect(0,0, getWidth()-1, getHeight()-1);
+
     g2.setColor(Color.blue);
     for(int i = 0; i < samples.length; ++i)
-    {
-      //System.out.println("+: " + samples[i]);
-      //System.out.println("-: " + (-samples[i]));
       g2.drawLine(i, -samples[i]+(height/2), i,  samples[i]+(height/2));
-      //g2.drawLine(i, height/2, i, -samples[i]);
-    }
 
     g2.setColor(Color.black);
     g2.drawLine(0,height/2,width,height/2);
@@ -165,21 +165,43 @@ public class ChannelView extends JPanel
     Point index;
     int prevSample = 0;
 
-    for(int i = 0; i < width; ++i)
+    if(channel.getSamplesSize() > width)
     {
-      index = channel.findAbsoluteIndex(i*samplesPerPixel);
-      for(int j = prevSample; j < index.x; ++j)
+      for(int i = 0; i < width; ++i)
       {
-        samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
+        index = channel.findAbsoluteIndex(i*samplesPerPixel);
+        
+        for(int j = prevSample; j < index.x; ++j)
+        {
+          samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
+        }
+
+        if(samples[i]  > maxAmp)
+          maxAmp = samples[i];
+        if(samples[i] < minAmp)
+          minAmp = samples[i];
+
+        prevSample = index.x;
       }
-
-      if(samples[i]  > maxAmp)
-        maxAmp = samples[i];
-      if(samples[i] < minAmp)
-        minAmp = samples[i];
-
-      prevSample = index.x;
     }
+    else
+    {
+      SampleIterator iterator = channel.getIterator();
+      for(int i = 0; i < width; ++i)
+      {
+        for(int j = 0; j < samplesPerPixel && iterator.hasNext(); ++j)
+          samples[i] += iterator.next();
+
+        samples[i] = samples[i]/samplesPerPixel;
+        
+        if(samples[i]  > maxAmp)
+          maxAmp = samples[i];
+        if(samples[i] < minAmp)
+          minAmp = samples[i];
+      }
+      
+    }
+
     double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
 
     //Lowpass here? / Highpass here?
