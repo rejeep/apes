@@ -173,11 +173,11 @@ public class ChannelView extends JPanel
         //System.out.println(index.x);
         for(int j = prevSample; j < index.x; ++j)
         {
-          sample += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
+          samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
         }
 
         //System.out.println("si: " + i + " : " + sample);
-        samples[i] = Math.round(sample/samplesPerPixel);
+        //samples[i] = Math.round(sample/samplesPerPixel);
         //System.out.println("i: " + i + " : " + samples[i]);
 
 
