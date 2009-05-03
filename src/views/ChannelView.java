@@ -1,17 +1,15 @@
 package apes.views;
 
 import apes.models.Channel;
-import apes.models.SampleIterator;
-import apes.models.Samples;
 import apes.models.Player;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 
 /**
- * TODO: Comment
+ * Views a single channel.
+ *
+ * @author Simon Holm
  */
 public class ChannelView extends JPanel
   implements MouseListener,
@@ -31,6 +29,13 @@ public class ChannelView extends JPanel
   private boolean mousePressed;
   private boolean movEdgeLeft;
 
+  /**
+   * Constructor to create a view for a channel.
+   * @param player A player to keep track of what is played. 
+   * @param ch A channel contianing the data to be viewed.
+   * @param width The width of the view.
+   * @param height The height of the view.
+   */
   public ChannelView( Player player, Channel ch, int width, int height )
   {
     super();
@@ -60,6 +65,10 @@ public class ChannelView extends JPanel
     new Thread(this).start();
   }
 
+  /**
+   * Draws the view.
+   * @param g A graphics object.
+   */
   public void paintComponent( Graphics g )
   {
     super.paintComponent( g );
@@ -101,11 +110,19 @@ public class ChannelView extends JPanel
 
   }
 
+  /**
+   * Sets the level of zoom.
+   * @param samples The number of samples to be viewed in the view.
+   */
   public void setZoom(int samples)
   {
     visibleSamples = samples;
   }
 
+  /**
+   * Sets the center of the view.
+   * @param sample The sample that should be in the center of the view.
+   */
   public void setCenter(int sample)
   {
     centerSample = sample;
@@ -119,7 +136,11 @@ public class ChannelView extends JPanel
   {
     return channel;
   }
-  
+
+  /**
+   * Sets the channel of the view.
+   * @param ch The channel to be viewed.
+   */
   public void setChannel(Channel ch)
   {
     channel = ch;
@@ -128,85 +149,62 @@ public class ChannelView extends JPanel
     centerSample = nrSamples/2;
   }
 
+  /**
+   * Updates the view form the channel and repaints it.
+   */
   public void updateView()
   {
-    double time = System.currentTimeMillis();
-
     if(channel == null)
       return;
 
-    
-    int sample = 0;
     int maxAmp = Integer.MIN_VALUE;
     int minAmp = Integer.MAX_VALUE;
 
-
     int samplesPerPixel = visibleSamples/width;
 
-    //float sampleChunksPerPixel = ((float)samplesPerPixel / Channel.SAMPLES_SIZE);
+    Point index;
+    int prevSample = 0;
 
-    //if(sampleChunksPerPixel > 0)
+    for(int i = 0; i < width; ++i)
     {
-      /*
-      for(int i = 0; i < width; ++i)
+      index = channel.findAbsoluteIndex(i*samplesPerPixel);
+      for(int j = prevSample; j < index.x; ++j)
       {
-        for(int j = 0; j < sampleChunksPerPixel; ++j)
-        {
-          sample = sample+channel.getSamples( j*i ).getAverageAmplitude( channel.getSamples( j*i ).getSize() );
-          System.out.println(channel.findAbsoluteIndex());
-        }
-        sample = Math.round(sample/sampleChunksPerPixel);
-        samples[i] = sample;
-        if(sample  > maxAmp)
-          maxAmp = sample;
-        if(sample < minAmp)
-          minAmp = sample;
-        sample = 0;
+        samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
       }
-      */
-      Point index;
-      int prevSample = 0;
-      //System.out.println("number of sample objects; " + channel.getSamplesSize());
-      for(int i = 0; i < width; ++i)
-      {
-        index = channel.findAbsoluteIndex(i*samplesPerPixel);
-        //System.out.println(index.x);
-        for(int j = prevSample; j < index.x; ++j)
-        {
-          sample += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
-        }
 
-        //System.out.println("si: " + i + " : " + sample);
-        samples[i] = Math.round(sample/samplesPerPixel);
-        //System.out.println("i: " + i + " : " + samples[i]);
+      if(samples[i]  > maxAmp)
+        maxAmp = samples[i];
+      if(samples[i] < minAmp)
+        minAmp = samples[i];
 
-
-        if(samples[i]  > maxAmp)
-          maxAmp = samples[i];
-        if(samples[i] < minAmp)
-          minAmp = samples[i];
-          
-        sample = 0;
-        prevSample = index.x;
-      }
-      double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
-
-      //Lowpass here? / Highpass here?
-
-      for(int i = 0; i < samples.length; ++i)
-        samples[i] = Math.round((float)(samples[i]*heightScale));
-
-      this.repaint();
-      //System.out.println("Time to update view(ms): " + (System.currentTimeMillis() - time));
+      prevSample = index.x;
     }
+    double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
+
+    //Lowpass here? / Highpass here?
+
+    for(int i = 0; i < samples.length; ++i)
+      samples[i] = Math.round((float)(samples[i]*heightScale));
+
+    this.repaint();
   }
 
-
+  /**
+   * Returns the level of zoom.
+   * @return Number of samples visible.
+   */
   public int getZoom()
   {
     return visibleSamples;
   }
 
+  /**
+   * Returns the interval of marked samples.
+   * point.x = the start of the marked area
+   * point.y = the end of the marked area
+   * @return The intervall.
+   */
   public Point getMarkedSamples()
   {
     if(markBeginning > 0 && markEnd > 0)
@@ -298,15 +296,12 @@ public class ChannelView extends JPanel
 
   //@Override
   public void mouseWheelMoved(MouseWheelEvent e) {
-    //System.out.println(e.getWheelRotation());
     //-1 scroll wheel up
     //1 scroll wheel down
     Point marked = getMarkedSamples();
-    //System.out.println("start: " + marked.x + " end: " + marked.y);
 
     double time = System.currentTimeMillis();
-    //channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
-    channel.setSamples(marked.x, marked.y, 0);
+    channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
     this.updateView();
   }
 
@@ -350,7 +345,6 @@ public class ChannelView extends JPanel
     //double time;
     while(true)
     {
-      //time = System.currentTimeMillis();
       this.repaint();
       try
       {
@@ -359,7 +353,6 @@ public class ChannelView extends JPanel
       {
         e.printStackTrace();
       }
-      //System.out.println("Time to repaint(ms): " + (System.currentTimeMillis() - time));
     }
   }
 }
