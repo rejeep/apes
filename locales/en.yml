@@ -104,3 +104,4 @@ config:
   color_graph: Graph color
   color_selection: Selection color
   color_lines: Line color
+  color_background: Background color

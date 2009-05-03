@@ -103,4 +103,5 @@ config:
   color_play: Färg spelningslinje
   color_graph: Färg graf
   color_selection: Färg Valt område
-  color_lines: Färj linjer
+  color_lines: Färg linjer
+  color_background: Bakgrundsfärg
