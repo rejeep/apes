@@ -3,6 +3,7 @@ package apes.views;
 import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
+import apes.lib.Config;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,11 +80,11 @@ public class ChannelView extends JPanel
     g2.setBackground(Color.WHITE);    
     g2.clearRect(0,0, getWidth()-1, getHeight()-1);
 
-    g2.setColor(Color.blue);
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
     for(int i = 0; i < samples.length; ++i)
       g2.drawLine(i, -samples[i]+(height/2), i,  samples[i]+(height/2));
 
-    g2.setColor(Color.black);
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
     g2.drawLine(0,height/2,width,height/2);
     g2.drawLine(0,height,width,height);
     g2.drawLine(0,0,width,0);
@@ -96,12 +97,12 @@ public class ChannelView extends JPanel
     if(markBeginning > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
-      g2.setColor(Color.green);
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
       if(markEnd > 0 && markBeginning > 0)
         g2.fillRect(markBeginning, 0, markEnd-markBeginning, height);
     }
     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-    g2.setColor(Color.black);
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
     if(nrSamples > 0)
       g2.drawLine(( (int) ((long) width*player.getCurrentSample()/nrSamples) ),0,
                   ( (int) ((long) width*player.getCurrentSample()/nrSamples) ),height);
