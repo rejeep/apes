@@ -323,12 +323,18 @@ public class Main extends JFrame
     view.add( zoom );
 
     JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in" );
+    zoomIn.addActionListener( internalFormatController );
+    zoomIn.setName( "zoomIn" );
     zoom.add( zoomIn );
 
     JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out" );
+    zoomOut.addActionListener( internalFormatController );
+    zoomOut.setName( "zoomOut" );
     zoom.add( zoomOut );
 
     JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
+    zoomReset.addActionListener( internalFormatController );
+    zoomReset.setName( "zoomReset" );
     zoom.add( zoomReset );
 
     JMenu languages = new ApesMenu( "menu.view.languages" );
@@ -438,12 +444,18 @@ public class Main extends JFrame
     topPanel.add( delete );
 
     ImageButton zoomIn = new ZoomInButton();
+    zoomIn.addActionListener( internalFormatController );
+    zoomIn.setName( "zoomIn" );
     topPanel.add( zoomIn );
 
     ImageButton zoomOut = new ZoomOutButton();
+    zoomOut.addActionListener( internalFormatController );
+    zoomOut.setName( "zoomOut" );
     topPanel.add( zoomOut );
 
     ImageButton zoomReset = new ZoomResetButton();
+    zoomReset.addActionListener( internalFormatController );
+    zoomReset.setName( "zoomReset" );
     topPanel.add( zoomReset );
 
     return topPanel;
