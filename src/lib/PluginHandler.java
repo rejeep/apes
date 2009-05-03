@@ -33,7 +33,6 @@ public class PluginHandler
   {
     plugins = new ArrayList<PluginInfo>();
     cl = new PluginLoader();
-    //addPluginsInPath("/home/jfa/apes/build/apes/plugins");
     addPluginsInPath(path);
   }
   
@@ -166,9 +165,6 @@ public class PluginHandler
     return null;
   }
 
-  /**
-   * TODO: Comment and implement
-   */
   public void unloadPlugin( String name )
   {
     for(int i=0; i<plugins.size(); i++)
@@ -178,6 +174,9 @@ public class PluginHandler
         if(plugins.get(i).isLoaded())
         {
           plugins.get(i).unLoad();
+          /* discard the old classloader to remove any references 
+           * to the class. Read somewhere that two gc() should
+           * do the trick :-) */
           cl = new PluginLoader();
           System.gc();
           System.gc();
@@ -193,8 +192,8 @@ public class PluginHandler
     {
       if(p.getName().equals(name))
       {
-        loadFile(p.getPath(), name, p);
-        //addPlugin(p.getPath());
+        File file = new File( p.getPath() );
+        loadFile( file.getPath(), file.getName().substring( 0, file.getName().indexOf( "." )), p);
       }
     }
   }
@@ -240,8 +239,6 @@ public class PluginHandler
    */
   private void loadFile( String path, String name, PluginInfo pi )
   {
-    //try
-    //{
       if(!plugins.contains(pi))
       {
         pi.setPath(path);
@@ -259,11 +256,6 @@ public class PluginHandler
       {
         System.out.println("Wrong filename for plugin");
       }
-    //}
-    //catch( ClassNotFoundException e )
-    //{
-      // -
-    //}
   }
   
   private void loadClass( String location, String name, PluginInfo pi)
@@ -279,85 +271,6 @@ public class PluginHandler
       System.out.println("Exception " + e);
     }
   }
-
-  /**
-   * Loads a class file.
-   *
-   * @param location Directory.
-   * @param name Name of class to load.
-   * @throws ClassNotFoundException
-   */
-  /*
-  private void loadClass( String location, String name, PluginInfo pi ) throws
-    ClassNotFoundException
-  {
-    int BUFFER_SIZE = 4096;
-    byte[] classBytes = null;
-
-    // read the class file
-    try {
-
-      FileInputStream in = new FileInputStream( location );
-      ByteArrayOutputStream buf = new ByteArrayOutputStream();
-      int c;
-      while ( ( c = in.read() ) != -1 )
-      {
-        buf.write( c );
-      }
-      classBytes = buf.toByteArray();
-
-    }
-    catch ( IOException e )
-    {
-      System.out.println( "IOException\n" );
-    }
-
-    if( classBytes == null )
-    {
-      throw new ClassNotFoundException( "Cannot load class" );
-    }
-
-    // turn it to a class
-    try
-    {
-      Class<?> cls = defineClass( name, classBytes, 0, classBytes.length );
-      resolveClass( cls );
-      instancePlugin( cls, pi );
-    }
-    catch ( ClassFormatError e )
-    {
-      System.out.println( "ClassFormatError\n" );
-    }
-  }
-  */
-
-  /**
-   * Loads a JAR file. Untested :-)
-   *
-   * @param location Directory.
-   * @param name Name of JAR to load.
-   * @throws ClassNotFoundException
-   */
-  /*
-  private void loadJAR( String location, String name, PluginInfo pi ) throws
-    ClassNotFoundException
-  {
-    try
-    {
-      File pluginFile = new File( location );
-      URL[] locations = new URL[] { pluginFile.toURL() };
-      URLClassLoader classloader =
-        new URLClassLoader( locations );
-
-      Class<?> cls = classloader.loadClass( name );
-      instancePlugin( cls, pi );
-    }
-    catch ( MalformedURLException e )
-    {
-      // -
-    }
-  }
-  */
 
   /**
    * Creates a new instance of the class and adds it to the list
@@ -421,6 +334,7 @@ class PluginLoader extends ClassLoader
   {
     int BUFFER_SIZE = 4096;
     byte[] classBytes = null;
+    System.out.println("loadClass(): " + location + " | " + name);
 
     // read the class file
     try {
@@ -460,6 +374,34 @@ class PluginLoader extends ClassLoader
     
     return null;
   }
+  
+  /**
+   * Loads a JAR file. Untested :-)
+   *
+   * @param location Directory.
+   * @param name Name of JAR to load.
+   * @throws ClassNotFoundException
+   */
+  /*
+  private void loadJAR( String location, String name, PluginInfo pi ) throws
+    ClassNotFoundException
+  {
+    try
+    {
+      File pluginFile = new File( location );
+      URL[] locations = new URL[] { pluginFile.toURL() };
+      URLClassLoader classloader =
+        new URLClassLoader( locations );
+
+      Class<?> cls = classloader.loadClass( name );
+      instancePlugin( cls, pi );
+    }
+    catch ( MalformedURLException e )
+    {
+      // -
+    }
+  }
+  */
 }
 
 class PluginInfo
