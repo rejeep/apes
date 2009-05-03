@@ -35,6 +35,7 @@ menu:
     backward: Gå bakåt
   tools:
     properties: Inställningar
+    plugins: Plugins
   help:
     manual: Manual
     about: Om
@@ -105,3 +106,6 @@ config:
   color_selection: Färg Valt område
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
+plugins:
+  apply: Verkställ
+  close: Stäng
