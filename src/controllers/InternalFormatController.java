@@ -174,6 +174,30 @@ public class InternalFormatController extends ApplicationController
   }
 
   /**
+   * Zoom in.
+   */
+  public void zoomIn()
+  {
+    System.out.println( "in" );
+  }
+
+  /**
+   * Zoom out.
+   */
+  public void zoomOut()
+  {
+    System.out.println( "out" );
+  }
+  
+  /**
+   * Reset zoom to normal size.
+   */
+  public void zoomReset()
+  {
+    System.out.println( "reset" );
+  }
+
+  /**
    * Opens a new file.
    */
   public void open()
