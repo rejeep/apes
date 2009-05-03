@@ -34,6 +34,8 @@ public class PluginHandler
 
   /**
    * Constructor.
+   * 
+   * @param path The path to load plugins from.
    */
   public PluginHandler (String path)
   {
@@ -42,6 +44,11 @@ public class PluginHandler
     addPluginsInPath(path);
   }
   
+  /**
+   * Returns an ArrayList of the plugin names.
+   * 
+   * @return The plugin names.
+   */
   public ArrayList<String> getPluginNames()
   {
     ArrayList list = new ArrayList<String>();
@@ -53,6 +60,13 @@ public class PluginHandler
     
     return list;
   }
+  
+  /**
+   * Returns the description of a plugin.
+   * 
+   * @param name Name of the plugin.
+   * @return The description.
+   */
   
   public String getDescription(String name)
   {
@@ -67,6 +81,11 @@ public class PluginHandler
     return null;
   }
   
+  /**
+   * Returns true if the plugin is loaded.
+   * 
+   * @param name The name of the plugin.
+   */
   public Boolean isLoaded(String name)
   {
     for(PluginInfo p : plugins)
@@ -83,7 +102,7 @@ public class PluginHandler
   /**
    * Returns an ArrayList of all the transform classes.
    *
-   * @return ArrayList containing TransformPlugins.
+   * @return ArrayList of TransformPlugins.
    */
   public ArrayList<TransformPlugin> getTransforms()
   {    
@@ -103,7 +122,7 @@ public class PluginHandler
   /**
    * Returns an ArrayList of all the format classes.
    *
-   * @return ArrayList containing AudioFormatPlugins.
+   * @return ArrayList of AudioFormatPlugins.
    */
   public ArrayList<AudioFormatPlugin> getFormats()
   {    
@@ -143,6 +162,12 @@ public class PluginHandler
     }
   }
   
+  /**
+   * Returns a TransformPlugin object.
+   * 
+   * @param name The name of the plugin.
+   * @return The TransformPlugin object.
+   */
   public TransformPlugin getTransform(String name)
   {
     for(int i=0; i<plugins.size(); i++)
@@ -153,10 +178,15 @@ public class PluginHandler
           return plugins.get(i).getTransformObject();
         }
     }
-    
     return null;
   }
   
+  /**
+   * Returns a AudioFormatPlugin object.
+   * 
+   * @param name The name of the plugin.
+   * @return The AudioFormatPlugin object.
+   */
   public AudioFormatPlugin getAudioFormat(String name)
   {
     for(int i=0; i<plugins.size(); i++)
@@ -167,10 +197,14 @@ public class PluginHandler
           return plugins.get(i).getAudioFormatObject();
         }
     }
-    
     return null;
   }
 
+  /**
+   * Unloads a plugin.
+   * 
+   * @param name The name of the plugin.
+   */
   public void unloadPlugin( String name )
   {
     for(int i=0; i<plugins.size(); i++)
@@ -192,6 +226,11 @@ public class PluginHandler
     }
   }
   
+  /**
+   * Loads an unloaded plugin.
+   * 
+   * @param name The name of the plugin.
+   */
   public void loadPlugin( String name )
   {
     for(PluginInfo p : plugins)
@@ -242,6 +281,7 @@ public class PluginHandler
    *
    * @param path Directory.
    * @param name Name of class to load.
+   * @param pi PluginInfo object.
    */
   private void loadFile( String path, String name, PluginInfo pi )
   {
@@ -264,6 +304,13 @@ public class PluginHandler
       }
   }
   
+  /**
+   * Loads a class.
+   * 
+   * @param location The path to the file.
+   * @param name The name.
+   * @param pi The PluginInfo object to assign it to.
+   */
   private void loadClass( String location, String name, PluginInfo pi)
   {
     try
@@ -283,6 +330,7 @@ public class PluginHandler
    * of loaded plugins.
    *
    * @param cls Class object.
+   * @param pi The PluginInfo object to assign it to.
    */
   private void instancePlugin( Class<?> cls, PluginInfo pi )
   {
