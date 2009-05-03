@@ -31,6 +31,7 @@ public class ChannelView extends JPanel
   private int markEnd;
   private boolean mousePressed;
   private boolean movEdgeLeft;
+  private float samplesPerPixel;
 
   /**
    * Constructor to create a view for a channel.
@@ -81,8 +82,12 @@ public class ChannelView extends JPanel
     g2.clearRect(0,0, getWidth()-1, getHeight()-1);
 
     g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
-    for(int i = 0; i < samples.length; ++i)
-      g2.drawLine(i, -samples[i]+(height/2), i,  samples[i]+(height/2));
+    if(samplesPerPixel < 1)
+      for(int i = 0; i < samples.length-1; ++i)
+        g2.drawLine(i, samples[i]+(height/2), i+1,  samples[i+1]+(height/2));
+    else
+      for(int i = 0; i < samples.length; ++i)
+        g2.drawLine(i, -samples[i]+(height/2), i,  samples[i]+(height/2));
 
     g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
     g2.drawLine(0,height/2,width,height/2);
@@ -162,22 +167,41 @@ public class ChannelView extends JPanel
     for(int i = 0; i < channel.getSamplesSize(); ++i)
         nrSamples += channel.getSamples(i).getSize();
 
-    visibleSamples = nrSamples;
-    centerSample = nrSamples/2;
+    //visibleSamples = nrSamples;
+    //centerSample = nrSamples/2;
 
     int maxAmp = Integer.MIN_VALUE;
     int minAmp = Integer.MAX_VALUE;
 
-    int samplesPerPixel = visibleSamples/width;
+    samplesPerPixel = visibleSamples/width;
 
     Point index;
     int prevSample = 0;
 
-    if(channel.getSamplesSize() > width)
+    if(samplesPerPixel < 1)
+    {
+      SampleIterator iterator = channel.getIterator();
+      int j = 0;
+      for(int i = 0; i < width; ++i)
+      {
+        if(j == 0 && iterator.hasNext())
+          samples[i] = iterator.next();
+        j += samplesPerPixel;
+        if(j > 1)
+          j = 0;
+
+        if(samples[i]  > maxAmp)
+          maxAmp = samples[i];
+        if(samples[i] < minAmp)
+          minAmp = samples[i];
+      }
+
+    }
+    else if(channel.getSamplesSize() > width)
     {
       for(int i = 0; i < width; ++i)
       {
-        index = channel.findAbsoluteIndex(i*samplesPerPixel);
+        index = channel.findAbsoluteIndex(Math.round(i*samplesPerPixel));
         
         for(int j = prevSample; j < index.x; ++j)
         {
@@ -200,7 +224,7 @@ public class ChannelView extends JPanel
         for(int j = 0; j < samplesPerPixel && iterator.hasNext(); ++j)
           samples[i] += iterator.next();
 
-        samples[i] = samples[i]/samplesPerPixel;
+        samples[i] = Math.round(samples[i]/samplesPerPixel);
         
         if(samples[i]  > maxAmp)
           maxAmp = samples[i];

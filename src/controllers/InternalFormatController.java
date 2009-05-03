@@ -179,6 +179,9 @@ public class InternalFormatController extends ApplicationController
   public void zoomIn()
   {
     System.out.println( "in" );
+    for(int i = 0; i < getCurrentInternalFormatView().getChannelViews().size(); ++i)
+      getCurrentInternalFormatView().getChannelViews().get(i).setZoom(100);
+    getCurrentInternalFormatView().updateView();
   }
 
   /**
@@ -186,7 +189,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomOut()
   {
-    System.out.println( "out" );
+    System.out.println("out");
   }
   
   /**
