@@ -14,7 +14,7 @@ public class PluginController extends ApplicationController
   public PluginController()
   {
     pluginHandler = new PluginHandler();
-		pluginView = new PluginView(pluginHandler, this);
+    pluginView = new PluginView(pluginHandler, this);
   }
   
   public void plugin()
@@ -22,28 +22,28 @@ public class PluginController extends ApplicationController
     pluginView.create();
   }
   
-	public void apply()
-	{
-		Map<String, JCheckBox> choices = pluginView.getChoices();
-		ArrayList<String> names = pluginHandler.getPluginNames();
-		
-		for(String name : names)
-		{
-			if( !(pluginHandler.isLoaded(name) == choices.get(name).isSelected()) )
-			{
-				if(pluginHandler.isLoaded(name))
-				{
-					pluginHandler.unloadPlugin(name);
-				}
-				else
-				{
-					pluginHandler.loadPlugin(name);
-				}
-			}
-		}
-	}
-	
-	public void close()
+  public void apply()
+  {
+    Map<String, JCheckBox> choices = pluginView.getChoices();
+    ArrayList<String> names = pluginHandler.getPluginNames();
+    
+    for(String name : names)
+    {
+      if( !(pluginHandler.isLoaded(name) == choices.get(name).isSelected()) )
+      {
+        if(pluginHandler.isLoaded(name))
+        {
+          pluginHandler.unloadPlugin(name);
+        }
+        else
+        {
+          pluginHandler.loadPlugin(name);
+        }
+      }
+    }
+  }
+  
+  public void close()
   {
     pluginView.setVisible(false);
     pluginView.dispose();

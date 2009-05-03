@@ -20,57 +20,57 @@ import apes.interfaces.TransformPlugin;
  */
 public class PluginHandler extends ClassLoader
 {
-	/**
-	 * 
-	 */
-	private ArrayList<PluginInfo> plugins;
+  /**
+   * 
+   */
+  private ArrayList<PluginInfo> plugins;
 
   /**
    * Constructor.
    */
   public PluginHandler ()
   {
-		plugins = new ArrayList<PluginInfo>();
-		addPluginsInPath("/home/jfa/apes/build/apes/plugins");
+    plugins = new ArrayList<PluginInfo>();
+    addPluginsInPath("/home/jfa/apes/build/apes/plugins");
   }
-	
-	public ArrayList<String> getPluginNames()
-	{
-		ArrayList list = new ArrayList<String>();
-		
-		for(PluginInfo p : plugins)
-		{
-			list.add(p.getName());
-		}
-		
-		return list;
-	}
-	
-	public String getDescription(String name)
-	{
-		for(PluginInfo p : plugins)
-		{
-			if(p.getName().equals(name))
-			{
-				return p.getDescription();
-			}
-		}
-		
-		return null;
-	}
-	
-	public Boolean isLoaded(String name)
-	{
-		for(PluginInfo p : plugins)
-		{
-			if(p.getName().equals(name))
-			{
-				return p.isLoaded();
-			}
-		}
-		
-		return false;
-	}
+  
+  public ArrayList<String> getPluginNames()
+  {
+    ArrayList list = new ArrayList<String>();
+    
+    for(PluginInfo p : plugins)
+    {
+      list.add(p.getName());
+    }
+    
+    return list;
+  }
+  
+  public String getDescription(String name)
+  {
+    for(PluginInfo p : plugins)
+    {
+      if(p.getName().equals(name))
+      {
+        return p.getDescription();
+      }
+    }
+    
+    return null;
+  }
+  
+  public Boolean isLoaded(String name)
+  {
+    for(PluginInfo p : plugins)
+    {
+      if(p.getName().equals(name))
+      {
+        return p.isLoaded();
+      }
+    }
+    
+    return false;
+  }
 
   /**
    * Returns an ArrayList of all the transform classes.
@@ -78,18 +78,18 @@ public class PluginHandler extends ClassLoader
    * @return ArrayList containing TransformPlugins.
    */
   public ArrayList<TransformPlugin> getTransforms()
-  {		
-		ArrayList list = new ArrayList<TransformPlugin>();
-		
-		for(PluginInfo p : plugins)
-		{
-			if(p.getType().equals("transform"))
-			{
-				list.add(p.getTransformObject());
-			}
-		}
-		
-		return list;
+  {    
+    ArrayList list = new ArrayList<TransformPlugin>();
+    
+    for(PluginInfo p : plugins)
+    {
+      if(p.getType().equals("transform"))
+      {
+        list.add(p.getTransformObject());
+      }
+    }
+    
+    return list;
   }
 
   /**
@@ -98,18 +98,18 @@ public class PluginHandler extends ClassLoader
    * @return ArrayList containing AudioFormatPlugins.
    */
   public ArrayList<AudioFormatPlugin> getFormats()
-  {		
-		ArrayList list = new ArrayList<AudioFormatPlugin>();
-		
-		for(PluginInfo p : plugins)
-		{
-			if(p.getType().equals("format"))
-			{
-				list.add(p.getAudioFormatObject());
-			}
-		}
-		
-		return list;
+  {    
+    ArrayList list = new ArrayList<AudioFormatPlugin>();
+    
+    for(PluginInfo p : plugins)
+    {
+      if(p.getType().equals("format"))
+      {
+        list.add(p.getAudioFormatObject());
+      }
+    }
+    
+    return list;
   }
 
   /**
@@ -129,68 +129,68 @@ public class PluginHandler extends ClassLoader
     }
     else if( file.isFile() )
     {
-			PluginInfo pi = new PluginInfo();
+      PluginInfo pi = new PluginInfo();
       loadFile( file.getPath(), file.getName().substring( 0, file.getName().indexOf( "." ) ),
-				pi );
+        pi );
     }
   }
-	
-	public TransformPlugin getTransform(String name)
-	{
-		for(int i=0; i<plugins.size(); i++)
-		{
-			if(plugins.get(i).getName().equals(name) &&
-				plugins.get(i).getType().equals("transform"))
-				{
-					return plugins.get(i).getTransformObject();
-				}
-		}
-		
-		return null;
-	}
-	
-	public AudioFormatPlugin getAudioFormat(String name)
-	{
-		for(int i=0; i<plugins.size(); i++)
-		{
-			if(plugins.get(i).getName().equals(name) &&
-				plugins.get(i).getType().equals("format"))
-				{
-					return plugins.get(i).getAudioFormatObject();
-				}
-		}
-		
-		return null;
-	}
+  
+  public TransformPlugin getTransform(String name)
+  {
+    for(int i=0; i<plugins.size(); i++)
+    {
+      if(plugins.get(i).getName().equals(name) &&
+        plugins.get(i).getType().equals("transform"))
+        {
+          return plugins.get(i).getTransformObject();
+        }
+    }
+    
+    return null;
+  }
+  
+  public AudioFormatPlugin getAudioFormat(String name)
+  {
+    for(int i=0; i<plugins.size(); i++)
+    {
+      if(plugins.get(i).getName().equals(name) &&
+        plugins.get(i).getType().equals("format"))
+        {
+          return plugins.get(i).getAudioFormatObject();
+        }
+    }
+    
+    return null;
+  }
 
   /**
    * TODO: Comment and implement
    */
   public void unloadPlugin( String name )
   {
-		for(int i=0; i<plugins.size(); i++)
-		{
-			if(plugins.get(i).getName().equals(name))
-			{
-				if(plugins.get(i).isLoaded())
-				{
-					plugins.get(i).unLoad();
-					return;
-				}
-			}
-		}
+    for(int i=0; i<plugins.size(); i++)
+    {
+      if(plugins.get(i).getName().equals(name))
+      {
+        if(plugins.get(i).isLoaded())
+        {
+          plugins.get(i).unLoad();
+          return;
+        }
+      }
+    }
   }
-	
-	public void loadPlugin( String name )
-	{
-		for(PluginInfo p : plugins)
-		{
-			if(p.getName().equals(name))
-			{
-				loadFile(p.getPath(), name, p);
-			}
-		}
-	}
+  
+  public void loadPlugin( String name )
+  {
+    for(PluginInfo p : plugins)
+    {
+      if(p.getName().equals(name))
+      {
+        loadFile(p.getPath(), name, p);
+      }
+    }
+  }
 
   /**
    * Tries to load all plugins in a directory.
@@ -220,7 +220,7 @@ public class PluginHandler extends ClassLoader
       for (String f : files)
       {
         loadFile( path + "/" + f, f.substring( 0, f.indexOf( "." ) ), 
-					new PluginInfo() );
+          new PluginInfo() );
       }
     }
   }
@@ -235,11 +235,11 @@ public class PluginHandler extends ClassLoader
   {
     try
     {
-			if(!plugins.contains(pi))
-			{
-				pi.setPath(path);
-			}
-			
+      if(!plugins.contains(pi))
+      {
+        pi.setPath(path);
+      }
+      
       if( path.endsWith( ".class" ) )
       {
         loadClass( path, "apes.plugins." + name, pi );
@@ -343,32 +343,32 @@ public class PluginHandler extends ClassLoader
       if( TransformPlugin.class.isAssignableFrom( cls ) )
       {
         //transforms.add( (TransformPlugin)cls.newInstance() );
-				TransformPlugin tp = (TransformPlugin)cls.newInstance();
-				pi.setTransformObject(tp);
-				
-				if(!plugins.contains(pi))
-				{
-					pi.setName(tp.getName());
-					pi.setDescription(tp.getDescription());
-					pi.setType("transform");
-					pi.setTransformObject(tp);
-					plugins.add(pi);
-				}
+        TransformPlugin tp = (TransformPlugin)cls.newInstance();
+        pi.setTransformObject(tp);
+        
+        if(!plugins.contains(pi))
+        {
+          pi.setName(tp.getName());
+          pi.setDescription(tp.getDescription());
+          pi.setType("transform");
+          pi.setTransformObject(tp);
+          plugins.add(pi);
+        }
       }
       else if( AudioFormatPlugin.class.isAssignableFrom( cls ) )
       {
         //formats.add( (AudioFormatPlugin)cls.newInstance() );
-				AudioFormatPlugin afp = (AudioFormatPlugin)cls.newInstance();
-				pi.setAudioFormatObject(afp);
-				
-				if(!plugins.contains(pi))
-				{
-					pi.setName(afp.getName());
-					pi.setDescription(afp.getDescription());
-					pi.setType("format");
-					pi.setAudioFormatObject(afp);
-					plugins.add(pi);
-				}
+        AudioFormatPlugin afp = (AudioFormatPlugin)cls.newInstance();
+        pi.setAudioFormatObject(afp);
+        
+        if(!plugins.contains(pi))
+        {
+          pi.setName(afp.getName());
+          pi.setDescription(afp.getDescription());
+          pi.setType("format");
+          pi.setAudioFormatObject(afp);
+          plugins.add(pi);
+        }
       }
     }
     catch( InstantiationException e )
@@ -384,85 +384,85 @@ public class PluginHandler extends ClassLoader
 
 class PluginInfo
 {
-	private String path;
-	private String name;
-	private String desc;
-	private String type;
-	private Boolean loaded;
-	private AudioFormatPlugin fObject;
-	private TransformPlugin tObject;
-	
-	public String getPath()
-	{
-		return path;
-	}
-	
-	public void setPath(String str)
-	{
-		path = str;
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public void setName(String str)
-	{
-		name = str;
-	}
-	
-	public String getDescription()
-	{
-		return desc;
-	}
-	
-	public void setDescription(String str)
-	{
-		desc = str;
-	}
-	
-	public String getType()
-	{
-		return type;
-	}
-	
-	public void setType(String str)
-	{
-		type = str;
-	}
-	
-	public Boolean isLoaded()
-	{
-		return loaded;
-	}
-	
-	public AudioFormatPlugin getAudioFormatObject()
-	{
-		return fObject;
-	}
-	
-	public void setAudioFormatObject(AudioFormatPlugin obj)
-	{
-		fObject = obj;
-		loaded = true;
-	}
-	
-	public TransformPlugin getTransformObject()
-	{
-		return tObject;
-	}
-	
-	public void setTransformObject(TransformPlugin obj)
-	{
-		tObject = obj;
-		loaded = true;
-	}
-	
-	public void unLoad()
-	{
-		tObject = null;
-		fObject = null;
-		loaded = false;
-	}
+  private String path;
+  private String name;
+  private String desc;
+  private String type;
+  private Boolean loaded;
+  private AudioFormatPlugin fObject;
+  private TransformPlugin tObject;
+  
+  public String getPath()
+  {
+    return path;
+  }
+  
+  public void setPath(String str)
+  {
+    path = str;
+  }
+  
+  public String getName()
+  {
+    return name;
+  }
+  
+  public void setName(String str)
+  {
+    name = str;
+  }
+  
+  public String getDescription()
+  {
+    return desc;
+  }
+  
+  public void setDescription(String str)
+  {
+    desc = str;
+  }
+  
+  public String getType()
+  {
+    return type;
+  }
+  
+  public void setType(String str)
+  {
+    type = str;
+  }
+  
+  public Boolean isLoaded()
+  {
+    return loaded;
+  }
+  
+  public AudioFormatPlugin getAudioFormatObject()
+  {
+    return fObject;
+  }
+  
+  public void setAudioFormatObject(AudioFormatPlugin obj)
+  {
+    fObject = obj;
+    loaded = true;
+  }
+  
+  public TransformPlugin getTransformObject()
+  {
+    return tObject;
+  }
+  
+  public void setTransformObject(TransformPlugin obj)
+  {
+    tObject = obj;
+    loaded = true;
+  }
+  
+  public void unLoad()
+  {
+    tObject = null;
+    fObject = null;
+    loaded = false;
+  }
 }
