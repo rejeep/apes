@@ -107,5 +107,6 @@ config:
   color_lines: Line color
   color_background: Background color
 plugins:
+  header: Plugins
   apply: Apply
   close: Close

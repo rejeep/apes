@@ -107,5 +107,6 @@ config:
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
 plugins:
+  header: Plugins
   apply: Verkställ
   close: Stäng
