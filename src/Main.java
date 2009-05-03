@@ -23,6 +23,7 @@ import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
+import apes.controllers.PluginController;
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.ApesFile;
 import apes.lib.Config;
@@ -92,6 +93,11 @@ public class Main extends JFrame
    * Change controller.
    */
   private InternalFormatController internalFormatController;
+  
+  /**
+   * Plugin controller.
+   */
+  private PluginController pluginController;
 
   /**
    * Undo manager (keeps history list).
@@ -127,6 +133,7 @@ public class Main extends JFrame
     tagsController = new TagsController( playerHandler );
     tabsController = new TabsController( playerHandler );
     languageController = new LanguageController();
+    pluginController = new PluginController();
 
     // Open all files passed in as arguments.
     for( int i = 0; i < args.length; i++)
@@ -379,6 +386,11 @@ public class Main extends JFrame
     properties.addActionListener( configController );
     properties.setName( "show" );
     tools.add( properties );
+    
+    JMenuItem plugins = new ApesMenuItem( "menu.tools.plugins" );
+    plugins.addActionListener( pluginController );
+    plugins.setName( "plugin" );
+    tools.add( plugins);
     // Tools END
 
     // Help START
