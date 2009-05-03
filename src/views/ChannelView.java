@@ -1,17 +1,15 @@
 package apes.views;
 
 import apes.models.Channel;
-import apes.models.SampleIterator;
-import apes.models.Samples;
 import apes.models.Player;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 
 /**
- * TODO: Comment
+ * Views a single channel.
+ *
+ * @author Simon Holm
  */
 public class ChannelView extends JPanel
   implements MouseListener,
@@ -31,6 +29,13 @@ public class ChannelView extends JPanel
   private boolean mousePressed;
   private boolean movEdgeLeft;
 
+  /**
+   * Constructor to create a view for a channel.
+   * @param player A player to keep track of what is played. 
+   * @param ch A channel contianing the data to be viewed.
+   * @param width The width of the view.
+   * @param height The height of the view.
+   */
   public ChannelView( Player player, Channel ch, int width, int height )
   {
     super();
@@ -60,6 +65,10 @@ public class ChannelView extends JPanel
     new Thread(this).start();
   }
 
+  /**
+   * Draws the view.
+   * @param g A graphics object.
+   */
   public void paintComponent( Graphics g )
   {
     super.paintComponent( g );
@@ -101,11 +110,19 @@ public class ChannelView extends JPanel
 
   }
 
+  /**
+   * Sets the level of zoom.
+   * @param samples The number of samples to be viewed in the view.
+   */
   public void setZoom(int samples)
   {
     visibleSamples = samples;
   }
 
+  /**
+   * Sets the center of the view.
+   * @param sample The sample that should be in the center of the view.
+   */
   public void setCenter(int sample)
   {
     centerSample = sample;
@@ -119,7 +136,11 @@ public class ChannelView extends JPanel
   {
     return channel;
   }
-  
+
+  /**
+   * Sets the channel of the view.
+   * @param ch The channel to be viewed.
+   */
   public void setChannel(Channel ch)
   {
     channel = ch;
@@ -128,6 +149,9 @@ public class ChannelView extends JPanel
     centerSample = nrSamples/2;
   }
 
+  /**
+   * Updates the view form the channel and repaints it.
+   */
   public void updateView()
   {
     if(channel == null)
@@ -166,12 +190,21 @@ public class ChannelView extends JPanel
     this.repaint();
   }
 
-
+  /**
+   * Returns the level of zoom.
+   * @return Number of samples visible.
+   */
   public int getZoom()
   {
     return visibleSamples;
   }
 
+  /**
+   * Returns the interval of marked samples.
+   * point.x = the start of the marked area
+   * point.y = the end of the marked area
+   * @return The intervall.
+   */
   public Point getMarkedSamples()
   {
     if(markBeginning > 0 && markEnd > 0)
