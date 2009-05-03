@@ -16,14 +16,20 @@ import apes.interfaces.AudioFormatPlugin;
 import apes.interfaces.TransformPlugin;
 
 /**
- * Class for loading plugins.
+ * Class for loading/unloading plugins.
+ * 
+ * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public class PluginHandler
 {
   /**
-   * 
+   * Arraylist of plugins.
    */
   private ArrayList<PluginInfo> plugins;
+  
+  /**
+   * Custom classloader.
+   */
   private PluginLoader cl;
 
   /**
@@ -324,11 +330,18 @@ public class PluginHandler
   }
 }
 
-/*
+/**
  * Custom loader to avoid loading with the system ClassLoader.
  */
 class PluginLoader extends ClassLoader
 {
+  /**
+   * Loads the class.
+   * 
+   * @param location The path.
+   * @param name The name.
+   * @return The class.
+   */
   public Class loadClass( String location, String name) throws
     ClassNotFoundException
   {
@@ -403,83 +416,181 @@ class PluginLoader extends ClassLoader
   */
 }
 
+/**
+ * Class to hold plugin information.
+ */
 class PluginInfo
 {
+  /**
+   * The path to the plugin file.
+   */
   private String path;
+  
+  /**
+   * The name of the plugin.
+   */
   private String name;
+  
+  /**
+   * The description of the plugin.
+   */
   private String desc;
+  
+  /**
+   * The type of the plugin, "format" or "transform".
+   */
   private String type;
+  
+  /**
+   * The state of the plugin.
+   */
   private Boolean loaded;
+  
+  /**
+   * Holder for a AudioFormatPlugin object.
+   */
   private AudioFormatPlugin fObject;
+  
+  /**
+   * Holder for a TransformPlugin object.
+   */
   private TransformPlugin tObject;
   
+  /**
+   * Returns path to plugin.
+   * 
+   * @return The path.
+   */
   public String getPath()
   {
     return path;
   }
   
+  /**
+   * Sets the path to the plugin.
+   * 
+   * @param str The path.
+   */
   public void setPath(String str)
   {
     path = str;
   }
   
+  /**
+   * Returns the name of the plugin.
+   * 
+   * @return The plugin name.
+   */
   public String getName()
   {
     return name;
   }
   
+  /**
+   * Sets the name of the plugin.
+   * 
+   * @param str The name.
+   */
   public void setName(String str)
   {
     name = str;
   }
   
+  /**
+   * Returns the plugin description.
+   * 
+   * @return The description.
+   */
   public String getDescription()
   {
     return desc;
   }
   
+  /**
+   * Sets the plugin description.
+   * 
+   * @param str The description.
+   */
   public void setDescription(String str)
   {
     desc = str;
   }
   
+  /**
+   * Returns the type.
+   * 
+   * @return The type.
+   */
   public String getType()
   {
     return type;
   }
   
+  /**
+   * Sets the plugin type.
+   * 
+   * @param str The type.
+   */
   public void setType(String str)
   {
     type = str;
   }
   
+  /**
+   * Returns true if the plugin is loaded.
+   * 
+   * @return 
+   */
   public Boolean isLoaded()
   {
     return loaded;
   }
   
+  /**
+   * Returns the AudioFormatPlugin object.
+   * 
+   * @return Plugin object.
+   */
   public AudioFormatPlugin getAudioFormatObject()
   {
     return fObject;
   }
   
+  /**
+   * Sets the AudioFormatPlugin object.
+   * 
+   * @param obj The object.
+   */
   public void setAudioFormatObject(AudioFormatPlugin obj)
   {
     fObject = obj;
     loaded = true;
   }
   
+  /**
+   * Returns the TransformPlugin object.
+   * 
+   * @return Plugin object.
+   */
   public TransformPlugin getTransformObject()
   {
     return tObject;
   }
   
+  /**
+   * Sets the TransformPlugin object.
+   * 
+   * @param obj The object.
+   */
   public void setTransformObject(TransformPlugin obj)
   {
     tObject = obj;
     loaded = true;
   }
   
+  /**
+   * Unloads the plugin object.
+   */
   public void unLoad()
   {
     tObject = null;
