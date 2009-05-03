@@ -1,27 +1,50 @@
 package apes.controllers;
 
-import apes.views.PluginView;
-import apes.lib.PluginHandler;
 import java.util.Map;
 import java.util.ArrayList;
-import javax.swing.*;
+import javax.swing.JCheckBox;
 
+import apes.views.PluginView;
+import apes.lib.PluginHandler;
+
+/**
+ * Plugin controller.
+ *
+ * @author Johan Åhlander (johan.ahlander@gmail.com)
+ */
 public class PluginController extends ApplicationController
 {
+  /**
+   * The plugin view.
+   */
   PluginView pluginView;
+  
+  /**
+   * The plugin handler.
+   */
   PluginHandler pluginHandler;
 
+  /**
+   * Creates a new plugin controller.
+   */
   public PluginController()
   {
-    pluginHandler = new PluginHandler("build/apes/plugins"); //config option
+    //config option probably
+    pluginHandler = new PluginHandler("build/apes/plugins");
     pluginView = new PluginView(pluginHandler, this);
   }
   
+  /**
+   * Create and show the frame.
+   */
   public void plugin()
   {
     pluginView.create();
   }
   
+  /**
+   * Apply any changes made to selected plugins.
+   */
   public void apply()
   {
     Map<String, JCheckBox> choices = pluginView.getChoices();
@@ -43,6 +66,9 @@ public class PluginController extends ApplicationController
     }
   }
   
+  /**
+   * Closes the frame.
+   */
   public void close()
   {
     pluginView.setVisible(false);
