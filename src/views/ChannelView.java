@@ -130,75 +130,40 @@ public class ChannelView extends JPanel
 
   public void updateView()
   {
-    double time = System.currentTimeMillis();
-
     if(channel == null)
       return;
 
-    
-    int sample = 0;
     int maxAmp = Integer.MIN_VALUE;
     int minAmp = Integer.MAX_VALUE;
 
-
     int samplesPerPixel = visibleSamples/width;
 
-    //float sampleChunksPerPixel = ((float)samplesPerPixel / Channel.SAMPLES_SIZE);
+    Point index;
+    int prevSample = 0;
 
-    //if(sampleChunksPerPixel > 0)
+    for(int i = 0; i < width; ++i)
     {
-      /*
-      for(int i = 0; i < width; ++i)
+      index = channel.findAbsoluteIndex(i*samplesPerPixel);
+      for(int j = prevSample; j < index.x; ++j)
       {
-        for(int j = 0; j < sampleChunksPerPixel; ++j)
-        {
-          sample = sample+channel.getSamples( j*i ).getAverageAmplitude( channel.getSamples( j*i ).getSize() );
-          System.out.println(channel.findAbsoluteIndex());
-        }
-        sample = Math.round(sample/sampleChunksPerPixel);
-        samples[i] = sample;
-        if(sample  > maxAmp)
-          maxAmp = sample;
-        if(sample < minAmp)
-          minAmp = sample;
-        sample = 0;
+        samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
       }
-      */
-      Point index;
-      int prevSample = 0;
-      //System.out.println("number of sample objects; " + channel.getSamplesSize());
-      for(int i = 0; i < width; ++i)
-      {
-        index = channel.findAbsoluteIndex(i*samplesPerPixel);
-        //System.out.println(index.x);
-        for(int j = prevSample; j < index.x; ++j)
-        {
-          samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
-        }
 
-        //System.out.println("si: " + i + " : " + sample);
-        //samples[i] = Math.round(sample/samplesPerPixel);
-        //System.out.println("i: " + i + " : " + samples[i]);
+      if(samples[i]  > maxAmp)
+        maxAmp = samples[i];
+      if(samples[i] < minAmp)
+        minAmp = samples[i];
 
-
-        if(samples[i]  > maxAmp)
-          maxAmp = samples[i];
-        if(samples[i] < minAmp)
-          minAmp = samples[i];
-          
-        sample = 0;
-        prevSample = index.x;
-      }
-      double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
-
-      //Lowpass here? / Highpass here?
-
-      for(int i = 0; i < samples.length; ++i)
-        samples[i] = Math.round((float)(samples[i]*heightScale));
-
-      this.repaint();
-      //System.out.println("Time to update view(ms): " + (System.currentTimeMillis() - time));
+      prevSample = index.x;
     }
+    double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
+
+    //Lowpass here? / Highpass here?
+
+    for(int i = 0; i < samples.length; ++i)
+      samples[i] = Math.round((float)(samples[i]*heightScale));
+
+    this.repaint();
   }
 
 
@@ -298,15 +263,12 @@ public class ChannelView extends JPanel
 
   //@Override
   public void mouseWheelMoved(MouseWheelEvent e) {
-    //System.out.println(e.getWheelRotation());
     //-1 scroll wheel up
     //1 scroll wheel down
     Point marked = getMarkedSamples();
-    //System.out.println("start: " + marked.x + " end: " + marked.y);
 
     double time = System.currentTimeMillis();
-    //channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
-    channel.setSamples(marked.x, marked.y, 0);
+    channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
     this.updateView();
   }
 
@@ -350,7 +312,6 @@ public class ChannelView extends JPanel
     //double time;
     while(true)
     {
-      //time = System.currentTimeMillis();
       this.repaint();
       try
       {
@@ -359,7 +320,6 @@ public class ChannelView extends JPanel
       {
         e.printStackTrace();
       }
-      //System.out.println("Time to repaint(ms): " + (System.currentTimeMillis() - time));
     }
   }
 }
