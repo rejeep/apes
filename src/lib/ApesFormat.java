@@ -37,11 +37,23 @@ public class ApesFormat
    */
   public AudioFormatPlugin getAudioFile() throws UnidentifiedLanguageException
   {
-    if( file.getName().endsWith( ".wav" ) )
+    if( isWave() )
     {
       return new WaveFileFormat();
     }
     
     throw new UnidentifiedLanguageException();
+  }
+  
+  /**
+   * Returns true if file is a wave file. False otherwise.
+   *
+   * @return True if wave. False otherwise.
+   */
+  public boolean isWave()
+  {
+    String name = file.getName().toLowerCase();
+    
+    return name.matches( ".*wave?$" );
   }
 }
