@@ -106,6 +106,12 @@ config:
   color_selection: Selection color
   color_lines: Line color
   color_background: Background color
+  gui_error_messages: Use GUI to show error messages
 plugins:
   apply: Apply
   close: Close
+error:
+  format:
+    unsupported:
+      title: Format error
+      message: The format you are trying to use is not supported.

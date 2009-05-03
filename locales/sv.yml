@@ -106,6 +106,12 @@ config:
   color_selection: Färg Valt område
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
+  gui_error_messages: Använd GUI för att visa felmeddelanden
 plugins:
   apply: Verkställ
   close: Stäng
+error:
+  format:
+    unsupported:
+      title: Format fel
+      message: Programmet har inte stöd för filformatet.

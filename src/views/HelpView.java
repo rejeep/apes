@@ -19,7 +19,7 @@ public class HelpView
   {
     Language language = Language.getInstance();
 
-    JOptionPane.showMessageDialog( new JLabel(),
+    JOptionPane.showMessageDialog( null,
                                    language.get( "help.about.name" ) + "\n" + language.get( "help.about.authors" ),
                                    language.get( "help.about.title" ),
                                    JOptionPane.INFORMATION_MESSAGE,

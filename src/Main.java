@@ -23,15 +23,14 @@ import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
-import apes.interfaces.AudioFormatPlugin;
 import apes.lib.ApesFile;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.lib.PlayerHandler;
-import apes.models.InternalFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.views.VolumePanel;
+import apes.views.ApesError;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -49,6 +48,7 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
+import apes.exceptions.UnidentifiedLanguageException;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -127,21 +127,7 @@ public class Main extends JFrame
     tagsController = new TagsController( playerHandler );
     tabsController = new TabsController( playerHandler );
     languageController = new LanguageController();
-
-    // Open all files passed in as arguments.
-    for( int i = 0; i < args.length; i++)
-    {
-      try
-      {
-        ApesFile apesFile = new ApesFile( args[i] );
-        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
-      }
-      catch( Exception e )
-      {
-        e.printStackTrace();
-      }
-    }
-
+    
     // Fix language
     language = Language.getInstance();
 
@@ -155,6 +141,24 @@ public class Main extends JFrame
       e.printStackTrace();
     }
 
+    // Open all files passed in as arguments.
+    for( int i = 0; i < args.length; i++)
+    {
+      try
+      {
+        ApesFile apesFile = new ApesFile( args[i] );
+        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+      }
+      catch( UnidentifiedLanguageException e )
+      {
+        ApesError.unsupportedFormat();
+      }
+      catch( Exception e )
+      {
+        e.printStackTrace();
+      }
+    }
+    
     // Undomanager
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
