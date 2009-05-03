@@ -179,8 +179,11 @@ public class ChannelView extends JPanel
     {
       int samplesPerPixel = visibleSamples/width;
       try {
-        return new Point((centerSample-visibleSamples/2)+samplesPerPixel*markBeginning,
-                         (centerSample-visibleSamples/2)+samplesPerPixel*markEnd);
+        int beginning = (centerSample-visibleSamples/2)+samplesPerPixel*markBeginning, end = (centerSample-visibleSamples/2)+samplesPerPixel*markEnd; 
+        if( beginning <= end )
+          return new Point( beginning, end );
+        else
+          return new Point( end, beginning );
       } catch (Exception e) {
         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
       }

@@ -66,6 +66,8 @@ public class InternalFormatController extends ApplicationController
       return;
     
     Point marked = firstSelection.getMarkedSamples();
+    if( marked == null || marked.x == marked.y )
+      return;
     
     clipboard = firstSelection.getChannel().copySamples( marked.x, marked.y );
   }
@@ -83,6 +85,8 @@ public class InternalFormatController extends ApplicationController
       return;
     
     Point marked = firstSelection.getMarkedSamples();
+    if( marked == null || marked.x == marked.y )
+      return;
     
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
@@ -107,6 +111,8 @@ public class InternalFormatController extends ApplicationController
       return;
     
     Point marked = firstSelection.getMarkedSamples();
+    if( marked == null )
+      return;
     
     UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
 
@@ -126,6 +132,8 @@ public class InternalFormatController extends ApplicationController
       return;
     
     Point marked = firstSelection.getMarkedSamples();
+    if( marked == null || marked.x == marked.y )
+      return;
     
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
