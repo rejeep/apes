@@ -158,6 +158,13 @@ public class ChannelView extends JPanel
     if(channel == null)
       return;
 
+    nrSamples = 0;
+    for(int i = 0; i < channel.getSamplesSize(); ++i)
+        nrSamples += channel.getSamples(i).getSize();
+
+    visibleSamples = nrSamples;
+    centerSample = nrSamples/2;
+
     int maxAmp = Integer.MIN_VALUE;
     int minAmp = Integer.MAX_VALUE;
 
