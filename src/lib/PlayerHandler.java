@@ -263,7 +263,8 @@ public class PlayerHandler
   public void remove( InternalFormat internalFormat )
   {
     Player player = getPlayer( internalFormat );
-
+    player.stop();
+    
     if( player.equals( currentPlayer ) )
     {
       currentPlayer = null;
