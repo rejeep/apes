@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Locale;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -18,13 +19,16 @@ import javax.swing.undo.UndoManager;
 import apes.controllers.ConfigController;
 import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
+import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
-import apes.controllers.LanguageController;
+import apes.interfaces.AudioFormatPlugin;
+import apes.lib.ApesFile;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.lib.PlayerHandler;
+import apes.models.InternalFormat;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.views.VolumePanel;
@@ -107,7 +111,7 @@ public class Main extends JFrame
   /**
    * Starts the program.
    */
-  public Main()
+  public Main( String[] args )
   {
     // Parse the configuration file and set default values.
     config = Config.getInstance();
@@ -124,6 +128,21 @@ public class Main extends JFrame
     tabsController = new TabsController( playerHandler );
     languageController = new LanguageController();
 
+    // Open all files passed in as arguments.
+    for( int i = 0; i < args.length; i++)
+    {
+      try
+      {
+        ApesFile apesFile = new ApesFile( args[i] );
+        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+      }
+      catch( Exception e )
+      {
+        e.printStackTrace();
+      }
+    }
+
+    // Fix language
     language = Language.getInstance();
 
     try
@@ -173,10 +192,10 @@ public class Main extends JFrame
 
     // Start in center on screen.
     setLocationRelativeTo( null );
-    
+
     // Make frame visible.
     setVisible( true );
-    
+
     // Do something before close
     addWindowListener( new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
@@ -314,11 +333,11 @@ public class Main extends JFrame
 
     JMenu languages = new ApesMenu( "menu.view.languages" );
     view.add( languages );
-    
+
     for( String lang : language.getLanguages() )
     {
       Locale locale = new Locale( lang );
-      
+
       JMenuItem menuItem = new JMenuItem( locale.getDisplayName() );
       menuItem.addActionListener( languageController );
       menuItem.setName( lang );
@@ -473,6 +492,6 @@ public class Main extends JFrame
 
   public static void main( String[] args )
   {
-    new Main();
+    new Main( args );
   }
 }
