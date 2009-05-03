@@ -166,19 +166,19 @@ public class ChannelView extends JPanel
       */
       Point index;
       int prevSample = 0;
-      System.out.println("number of sample objects; " + channel.getSamplesSize());
+      //System.out.println("number of sample objects; " + channel.getSamplesSize());
       for(int i = 0; i < width; ++i)
       {
         index = channel.findAbsoluteIndex(i*samplesPerPixel);
-        System.out.println(index.x);
+        //System.out.println(index.x);
         for(int j = prevSample; j < index.x; ++j)
         {
           sample += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
         }
 
-        System.out.println("si: " + i + " : " + sample);
+        //System.out.println("si: " + i + " : " + sample);
         samples[i] = Math.round(sample/samplesPerPixel);
-        System.out.println("i: " + i + " : " + samples[i]);
+        //System.out.println("i: " + i + " : " + samples[i]);
 
 
         if(samples[i]  > maxAmp)
