@@ -32,7 +32,6 @@ public class PluginView extends JFrame
   
   public void create()
   {      
-    //setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
     setLayout(new BorderLayout());
     add(createPluginPanel(), BorderLayout.NORTH);
     add(createButtonPanel(), BorderLayout.SOUTH);
@@ -45,14 +44,11 @@ public class PluginView extends JFrame
     JPanel panel = new JPanel();
     ArrayList<String> names = pluginHandler.getPluginNames();
     panel.setLayout(new GridLayout(names.size(), 2));
-    //panel.setLayout(new BorderLayout());
     for(int i=0; i<names.size(); i++)
     {
       JCheckBox pBox = new JCheckBox(names.get(i), pluginHandler.isLoaded(names.get(i)));
-      //JLabel pLabel = new JLabel(pluginHandler.getDescription(names.get(i)));
       JTextArea pText = new JTextArea(pluginHandler.getDescription(names.get(i)));
       panel.add(pBox, BorderLayout.WEST);
-      //panel.add(pLabel, BorderLayout.EAST);
       panel.add(pText, BorderLayout.EAST);
       choices.put(names.get(i), pBox);
     }

@@ -18,12 +18,13 @@ import apes.interfaces.TransformPlugin;
 /**
  * Class for loading plugins.
  */
-public class PluginHandler extends ClassLoader
+public class PluginHandler
 {
   /**
    * 
    */
   private ArrayList<PluginInfo> plugins;
+  private PluginLoader cl;
 
   /**
    * Constructor.
@@ -31,6 +32,7 @@ public class PluginHandler extends ClassLoader
   public PluginHandler (String path)
   {
     plugins = new ArrayList<PluginInfo>();
+    cl = new PluginLoader();
     //addPluginsInPath("/home/jfa/apes/build/apes/plugins");
     addPluginsInPath(path);
   }
@@ -176,6 +178,9 @@ public class PluginHandler extends ClassLoader
         if(plugins.get(i).isLoaded())
         {
           plugins.get(i).unLoad();
+          cl = new PluginLoader();
+          System.gc();
+          System.gc();
           return;
         }
       }
@@ -189,6 +194,7 @@ public class PluginHandler extends ClassLoader
       if(p.getName().equals(name))
       {
         loadFile(p.getPath(), name, p);
+        //addPlugin(p.getPath());
       }
     }
   }
@@ -234,8 +240,8 @@ public class PluginHandler extends ClassLoader
    */
   private void loadFile( String path, String name, PluginInfo pi )
   {
-    try
-    {
+    //try
+    //{
       if(!plugins.contains(pi))
       {
         pi.setPath(path);
@@ -247,12 +253,30 @@ public class PluginHandler extends ClassLoader
       }
       else if( path.endsWith( ".jar" ) )
       {
-        loadJAR( path, "apes.plugins." + name, pi );
+        //loadJAR( path, "apes.plugins." + name, pi );
       }
+      else
+      {
+        System.out.println("Wrong filename for plugin");
+      }
+    //}
+    //catch( ClassNotFoundException e )
+    //{
+      // -
+    //}
+  }
+  
+  private void loadClass( String location, String name, PluginInfo pi)
+  {
+    try
+    {
+      Class cls;
+      cls = cl.loadClass(location, name);
+      instancePlugin(cls, pi);
     }
     catch( ClassNotFoundException e )
     {
-      // -
+      System.out.println("Exception " + e);
     }
   }
 
@@ -263,6 +287,7 @@ public class PluginHandler extends ClassLoader
    * @param name Name of class to load.
    * @throws ClassNotFoundException
    */
+  /*
   private void loadClass( String location, String name, PluginInfo pi ) throws
     ClassNotFoundException
   {
@@ -304,6 +329,7 @@ public class PluginHandler extends ClassLoader
       System.out.println( "ClassFormatError\n" );
     }
   }
+  */
 
   /**
    * Loads a JAR file. Untested :-)
@@ -312,6 +338,7 @@ public class PluginHandler extends ClassLoader
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
    */
+  /*
   private void loadJAR( String location, String name, PluginInfo pi ) throws
     ClassNotFoundException
   {
@@ -330,6 +357,7 @@ public class PluginHandler extends ClassLoader
       // -
     }
   }
+  */
 
   /**
    * Creates a new instance of the class and adds it to the list
@@ -380,6 +408,57 @@ public class PluginHandler extends ClassLoader
     {
       // -
     }
+  }
+}
+
+/*
+ * Custom loader to avoid loading with the system ClassLoader.
+ */
+class PluginLoader extends ClassLoader
+{
+  public Class loadClass( String location, String name) throws
+    ClassNotFoundException
+  {
+    int BUFFER_SIZE = 4096;
+    byte[] classBytes = null;
+
+    // read the class file
+    try {
+
+      FileInputStream in = new FileInputStream( location );
+      ByteArrayOutputStream buf = new ByteArrayOutputStream();
+      int c;
+      while ( ( c = in.read() ) != -1 )
+      {
+        buf.write( c );
+      }
+      classBytes = buf.toByteArray();
+
+    }
+    catch ( IOException e )
+    {
+      System.out.println( "IOException\n" );
+    }
+
+    if( classBytes == null )
+    {
+      throw new ClassNotFoundException( "Cannot load class" );
+    }
+
+    // turn it to a class
+    try
+    {
+      Class<?> cls = defineClass( name, classBytes, 0, classBytes.length );
+      resolveClass( cls );
+      return cls;
+      //instancePlugin( cls, pi );
+    }
+    catch ( ClassFormatError e )
+    {
+      System.out.println( "ClassFormatError\n" );
+    }
+    
+    return null;
   }
 }
 
