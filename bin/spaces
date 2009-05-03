@@ -10,7 +10,7 @@ GREP=/bin/grep
 if [[ -x $ACK ]]; then
   ack "$REGEX" ${1:-src}
 elif [[ -x $GREP ]]; then
-  grep -E "$REGEX" $(find ${1:-src} -type f | grep -vRE '\.(svn|git)')
+  grep -E "$REGEX" $(find ${1:-src} -type f | grep -vR '\.git')
 else
   echo "You do not have the necessary programs to run this command!"
 
