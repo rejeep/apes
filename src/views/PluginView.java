@@ -36,8 +36,8 @@ public class PluginView extends JFrame
     setLayout(new BorderLayout());
     add(createPluginPanel(), BorderLayout.NORTH);
     add(createButtonPanel(), BorderLayout.SOUTH);
-    setVisible(true);
     pack();
+    setVisible(true);
   }
   
   public JPanel createPluginPanel()
@@ -63,12 +63,12 @@ public class PluginView extends JFrame
   {
     JPanel panel = new JPanel();
     
-    JButton applyButton = new JButton( "Apply" );
+    JButton applyButton = new JButton( language.get( "plugins.apply" ) );
     applyButton.addActionListener(pluginController);
     applyButton.setName("apply");
     panel.add(applyButton);
     
-    JButton closeButton = new JButton( "Close" );
+    JButton closeButton = new JButton( language.get( "plugins.close" ) );
     closeButton.addActionListener(pluginController);
     closeButton.setName("close");
     panel.add(closeButton);
