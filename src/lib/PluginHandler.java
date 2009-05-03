@@ -334,8 +334,7 @@ class PluginLoader extends ClassLoader
   {
     int BUFFER_SIZE = 4096;
     byte[] classBytes = null;
-    System.out.println("loadClass(): " + location + " | " + name);
-
+    
     // read the class file
     try {
 
