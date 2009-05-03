@@ -15,6 +15,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.TreeMap;
 
 /**
  * <p>This class handles the user specific configuration file. This class
@@ -87,7 +88,7 @@ public class Config
     setFilePath( System.getProperty( "user.home" ) + File.separator + ".apes" );
 
     // Initialize options map.
-    options = new HashMap<String, String>();
+    options = new TreeMap<String, String>();
 
     // Initialize types map.
     types = new HashMap<String, Type>();
@@ -102,6 +103,10 @@ public class Config
     addOption( "maximized", "true", Type.BOOLEAN );
     addOption( "undo", "10", Type.INTEGER );
     addOption( "language", "en", Type.STRING );
+    addOption( "color_play", "#ff0000", Type.STRING );
+    addOption( "color_graph", "#00ff00", Type.STRING );
+    addOption( "color_selection", "#0000ff", Type.STRING );
+    addOption( "color_lines", "#ffff00", Type.STRING );
   }
 
   /**

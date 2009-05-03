@@ -87,6 +87,7 @@ tags:
   comments: Comments
   copyright: Copyright
 config:
+  header: Properties
   properties:
     save: Save
     close: Close
@@ -99,3 +100,7 @@ config:
   graph_height: Graph Height
   undo: Undo history size
   language: Default Language
+  color_play: Play line color
+  color_graph: Graph color
+  color_selection: Selection color
+  color_lines: Line color

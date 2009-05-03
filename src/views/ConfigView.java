@@ -2,10 +2,13 @@ package apes.views;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -16,6 +19,9 @@ import javax.swing.JTextField;
 import apes.controllers.ConfigController;
 import apes.lib.Config;
 import apes.lib.Language;
+import java.awt.Font;
+
+
 
 /**
  * A graphical view for the configuration file.
@@ -76,10 +82,12 @@ public class ConfigView extends JFrame
     add( bottomPanel, BorderLayout.SOUTH );
 
     pack();
-    
+
+    setDefaultCloseOperation( EXIT_ON_CLOSE );
+
     // Start in center on screen.
     setLocationRelativeTo( null );
-    
+
     setVisible( true );
   }
 
@@ -91,24 +99,37 @@ public class ConfigView extends JFrame
   private JPanel topPanel()
   {
     Map<String, String> options = config.getOptions();
-
-    JPanel panel = new JPanel();
-    panel.setLayout( new GridLayout( options.size(), 2 ) );
-
     Set<String> keys = options.keySet();
-
+    
+    JPanel panel = new JPanel();
+    panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
+    panel.setLayout( new BorderLayout() );
+    
+    JPanel top = new JPanel( new FlowLayout() );
+    panel.add( top, BorderLayout.NORTH );
+    
+    JLabel header = new ApesLabel( "config.header" );
+    header.setFont( new Font( "verdana", 1, 20 ) );
+    top.add( header );
+    
+    JPanel bottom = new JPanel( new GridLayout( options.size(), 2 ) );
+    panel.add( bottom, BorderLayout.SOUTH );
+    
     for( String key : keys )
     {
-      String name = language.get( "config." + key );
+      JLabel label = new ApesLabel( "config." + key );
+      label.setBorder( BorderFactory.createEmptyBorder( 0, 0, 0, 10 ) );
+      bottom.add( label );
+      
+      String value = options.get( key );
+      
       Config.Type type = config.getType( key );
-
-      panel.add( new JLabel( name ) );
 
       if( type == Config.Type.INTEGER || type == Config.Type.STRING )
       {
-        JTextField textField = new JTextField( options.get( key ) );
+        JTextField textField = new JTextField( value );
 
-        panel.add( textField );
+        bottom.add( textField );
 
         newOptions.put( key, textField );
       }
@@ -117,7 +138,7 @@ public class ConfigView extends JFrame
         JCheckBox checkBox = new JCheckBox();
         checkBox.setSelected( config.getBooleanOption( key ) );
 
-        panel.add( checkBox );
+        bottom.add( checkBox );
 
         newOptions.put( key, checkBox );
       }
