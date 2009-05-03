@@ -3,22 +3,18 @@ package apes.controllers;
 import java.awt.Point;
 import java.io.File;
 import java.util.List;
-
 import javax.swing.JFileChooser;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import apes.models.InternalFormat;
 import apes.models.Samples;
-import apes.models.Channel;
 import apes.models.undo.ChangeEdit;
-import apes.models.undo.CopyEdit;
 import apes.models.undo.CutEdit;
-import apes.models.undo.DeleteEdit;
 import apes.models.undo.PasteEdit;
-import apes.plugins.WaveFileFormat;
-import apes.views.InternalFormatView;
 import apes.views.ChannelView;
+import apes.views.InternalFormatView;
+import apes.lib.ApesFile;
 
 
 /**
@@ -41,7 +37,7 @@ public class InternalFormatController extends ApplicationController
    * Values copied or cut.
    */
   private Samples[] clipboard;
-  
+
   /**
    * Creates a new <code>InternalFormatController</code>.
    *
@@ -59,16 +55,16 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-   ChannelView firstSelection = getFirstSelectedChannelView();
-    
+    ChannelView firstSelection = getFirstSelectedChannelView();
+
     // No selection?
     if( firstSelection == null )
       return;
-    
+
     Point marked = firstSelection.getMarkedSamples();
     if( marked == null || marked.x == marked.y )
       return;
-    
+
     clipboard = firstSelection.getChannel().copySamples( marked.x, marked.y );
   }
 
@@ -79,19 +75,19 @@ public class InternalFormatController extends ApplicationController
   {
     InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
-    
+
     // No selection?
     if( firstSelection == null )
       return;
-    
+
     Point marked = firstSelection.getMarkedSamples();
     if( marked == null || marked.x == marked.y )
       return;
-    
+
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
-    
+
     clipboard = edit.getCutout();
   }
 
@@ -102,18 +98,18 @@ public class InternalFormatController extends ApplicationController
   {
     if( clipboard == null )
       return;
-    
+
     InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
-    
+
     // No selection?
     if( firstSelection == null )
       return;
-    
+
     Point marked = firstSelection.getMarkedSamples();
     if( marked == null )
       return;
-    
+
     UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
 
     undoManager.addEdit( edit );
@@ -126,15 +122,15 @@ public class InternalFormatController extends ApplicationController
   {
     InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
-    
+
     // No selection?
     if( firstSelection == null )
       return;
-    
+
     Point marked = firstSelection.getMarkedSamples();
     if( marked == null || marked.x == marked.y )
       return;
-    
+
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
@@ -171,8 +167,6 @@ public class InternalFormatController extends ApplicationController
    */
   public void open()
   {
-    WaveFileFormat wav = new WaveFileFormat();
-
     try
     {
       // Chose file.
@@ -182,11 +176,8 @@ public class InternalFormatController extends ApplicationController
       File file = fc.getSelectedFile();
       String name = file.getName();
 
-      // Set internal format.
-      InternalFormat internalFormat = wav.importFile( file.getParent(), name );
-
-      // Add the view to a new tab.
-      tabsController.add( internalFormat, name );
+      ApesFile apesFile = new ApesFile( file );
+      tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
     }
     catch( Exception e )
     {
@@ -204,16 +195,16 @@ public class InternalFormatController extends ApplicationController
   {
     return (InternalFormatView) tabsController.getTabsView().getSelectedComponent();
   }
-  
+
   /**
-   * Returns a reference to the ChannelView of the lowest index such that there is a selection. 
+   * Returns a reference to the ChannelView of the lowest index such that there is a selection.
    * @return First ChannelView with a selection. Returns null if no ChannelView contains a selection.
    */
   public ChannelView getFirstSelectedChannelView()
   {
     // Get all Channels
     List<ChannelView> channelViews = getCurrentInternalFormatView().getChannelViews();
-    
+
     // Fins first selection.
     ChannelView firstSelection = null;
     for( ChannelView c : channelViews )
