@@ -77,7 +77,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void cut()
   {
-    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
+    InternalFormatView ifView = getCurrentInternalFormatView();
+    InternalFormat intForm = ifView.getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -93,6 +94,8 @@ public class InternalFormatController extends ApplicationController
     undoManager.addEdit( edit );
     
     clipboard = edit.getCutout();
+    
+    ifView.updateView();
   }
 
   /**
@@ -103,7 +106,8 @@ public class InternalFormatController extends ApplicationController
     if( clipboard == null )
       return;
     
-    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
+    InternalFormatView ifView = getCurrentInternalFormatView();
+    InternalFormat intForm = ifView.getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -117,6 +121,8 @@ public class InternalFormatController extends ApplicationController
     UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
 
     undoManager.addEdit( edit );
+    
+    ifView.updateView();
   }
 
   /**
@@ -124,7 +130,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void delete()
   {
-    InternalFormat intForm = getCurrentInternalFormatView().getInternalFormat();
+    InternalFormatView ifView = getCurrentInternalFormatView();
+    InternalFormat intForm = ifView.getInternalFormat();
     ChannelView firstSelection = getFirstSelectedChannelView();
     
     // No selection?
@@ -138,6 +145,8 @@ public class InternalFormatController extends ApplicationController
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
 
     undoManager.addEdit( edit );
+    
+    ifView.updateView();
   }
 
   /**
@@ -156,6 +165,7 @@ public class InternalFormatController extends ApplicationController
   public void undo()
   {
     undoManager.undo();
+    getCurrentInternalFormatView().updateView();
   }
 
   /**
@@ -164,6 +174,7 @@ public class InternalFormatController extends ApplicationController
   public void redo()
   {
     undoManager.redo();
+    getCurrentInternalFormatView().updateView();
   }
 
   /**
