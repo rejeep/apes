@@ -77,7 +77,7 @@ public class ChannelView extends JPanel
     super.paintComponent( g );
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setBackground(Color.WHITE);    
+    g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));    
     g2.clearRect(0,0, getWidth()-1, getHeight()-1);
 
     g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));

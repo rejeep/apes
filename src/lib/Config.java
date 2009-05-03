@@ -103,10 +103,11 @@ public class Config
     addOption( "maximized", "true", Type.BOOLEAN );
     addOption( "undo", "10", Type.INTEGER );
     addOption( "language", "en", Type.STRING );
-    addOption( "color_play", "#FF0000", Type.STRING );
+    addOption( "color_play", "#FF00FF", Type.STRING );
     addOption( "color_graph", "#00FF00", Type.STRING );
     addOption( "color_selection", "#0000FF", Type.STRING );
     addOption( "color_lines", "#FFFF00", Type.STRING );
+    addOption( "color_background", "#FF0000", Type.STRING );
   }
 
   /**
