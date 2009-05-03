@@ -28,10 +28,11 @@ public class PluginHandler extends ClassLoader
   /**
    * Constructor.
    */
-  public PluginHandler ()
+  public PluginHandler (String path)
   {
     plugins = new ArrayList<PluginInfo>();
-    addPluginsInPath("/home/jfa/apes/build/apes/plugins");
+    //addPluginsInPath("/home/jfa/apes/build/apes/plugins");
+    addPluginsInPath(path);
   }
   
   public ArrayList<String> getPluginNames()

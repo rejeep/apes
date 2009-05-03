@@ -13,7 +13,7 @@ public class PluginController extends ApplicationController
 
   public PluginController()
   {
-    pluginHandler = new PluginHandler();
+    pluginHandler = new PluginHandler("build/apes/plugins"); //config option
     pluginView = new PluginView(pluginHandler, this);
   }
   
