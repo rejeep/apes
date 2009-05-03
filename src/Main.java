@@ -171,9 +171,12 @@ public class Main extends JFrame
     // Set icon.
     setIconImage( Toolkit.getDefaultToolkit().createImage("images/apes.png") );
 
+    // Start in center on screen.
+    setLocationRelativeTo( null );
+    
     // Make frame visible.
     setVisible( true );
-
+    
     // Do something before close
     addWindowListener( new WindowAdapter() {
       public void windowClosing(WindowEvent e) {

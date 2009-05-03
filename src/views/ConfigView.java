@@ -75,8 +75,12 @@ public class ConfigView extends JFrame
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
 
-    setVisible( true );
     pack();
+    
+    // Start in center on screen.
+    setLocationRelativeTo( null );
+    
+    setVisible( true );
   }
 
   /**
