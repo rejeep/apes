@@ -129,7 +129,7 @@ public class Channel
         if(curIndex <= stop )
         {
           if(curIndex >= start)
-            s.setSampleNoUpdate(i, value);
+            s.setSample(i, value);
         }
         else
         {
@@ -162,7 +162,7 @@ public class Channel
         if( curIndex <= stop )
         {
           if(curIndex >= start)
-            s.setSampleNoUpdate(i, s.getSample(i) + delta);
+            s.setSample(i, s.getSample(i) + delta);
         }
         else
         {
@@ -195,7 +195,7 @@ public class Channel
         if( curIndex <= stop )
         {
           if(curIndex >= start)
-            s.setSampleNoUpdate(i, Math.round(s.getSample(i) * alpha ));
+            s.setSample(i, Math.round(s.getSample(i) * alpha ));
         }
         else
         {
@@ -364,8 +364,8 @@ public class Channel
     samplesList.set( startPoint.x, newSamples );
 
     // Copy from first
-    retSamples = new Samples( samples.getSize() - startPoint.x );
-    for( int i = startPoint.x, j = 0; i < samples.getSize(); i++, j++ )
+    retSamples = new Samples( samples.getSize() - startPoint.y );
+    for( int i = startPoint.y, j = 0; i < samples.getSize(); i++, j++ )
     {
       retSamples.setSample( j, samples.getSample(i) );
     }
@@ -381,8 +381,8 @@ public class Channel
 
     // Fix last
     samples = samplesList.get( midIndex );
-    newSamples = new Samples( samples.getSize() - stopPoint.y );
-    for( int i = stopPoint.y, j = 0; i < samples.getSize(); i++, j++ )
+    newSamples = new Samples( stopPoint.y + 1 );
+    for( int i = 0, j = 0; i <= stopPoint.y; i++, j++ )
       newSamples.setSample(j, samples.getSample( i ) );
     samplesList.set( midIndex, newSamples );
 
@@ -503,7 +503,7 @@ public class Channel
       Samples sampObj = new Samples( SAMPLES_SIZE );
       for( int j = 0; j < SAMPLES_SIZE; j++ )
       {
-        sampObj.setSampleNoUpdate( j, samples.getSample( i * SAMPLES_SIZE + j ) );
+        sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
       }
       sampObj.updateMinAndMaxAmplitude();
       split.add( sampObj );

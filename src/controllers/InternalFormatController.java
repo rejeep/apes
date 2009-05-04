@@ -86,9 +86,9 @@ public class InternalFormatController extends ApplicationController
       return;
 
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
-
     undoManager.addEdit( edit );
-
+    
+    firstSelection.unmark();
     clipboard = edit.getCutout();
 
     ifView.updateView();
@@ -115,8 +115,9 @@ public class InternalFormatController extends ApplicationController
       return;
 
     UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
-
     undoManager.addEdit( edit );
+    
+    firstSelection.unmark();
 
     ifView.updateView();
   }
@@ -139,8 +140,9 @@ public class InternalFormatController extends ApplicationController
       return;
 
     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
-
     undoManager.addEdit( edit );
+    
+    firstSelection.unmark();
 
     ifView.updateView();
   }

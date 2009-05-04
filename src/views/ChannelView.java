@@ -276,6 +276,15 @@ public class ChannelView extends JPanel
     }
     return null;
   }
+  
+  /**
+   * Removes marking.
+   */
+  public void unmark()
+  {
+    markBeginning = markEnd = -1;
+    repaint();
+  }
 
   //@Override
   public void mouseClicked(MouseEvent e) {
