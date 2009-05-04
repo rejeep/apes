@@ -172,43 +172,9 @@ public class Samples
    * @param index The index of the sample to affect.
    * @param value The desired amplitude.
    */
-  public void setSampleNoUpdate( int index, int value )
-  {
-    sampleData[index] = Math.max(Short.MIN_VALUE, Math.min(value, Short.MAX_VALUE));
-  }
-
-  /**
-   * Sets amplitude of selected sample and update minimum and maximum
-   * amplitude.
-   *
-   * @param index The index of the sample to affect.
-   * @param value The desired amplitude.
-   */
   public void setSample( int index, int value )
   {
-    setSampleNoUpdate(index,value);
-    value = getSample(index);
-
-    int oldMaxIndex = maxAmplitudeIndex;
-    int oldMinIndex = minAmplitudeIndex;
-    // If smaller, we have a new min.
-    if( value < minAmplitude )
-    {
-      minAmplitude = value;
-      minAmplitudeIndex = index;
-    }
-    // If higher, we have a new max.
-    else if( value > maxAmplitude )
-    {
-      maxAmplitude = value;
-      maxAmplitudeIndex = index;
-    }
-
-    // If same index, we may need to update. If not, we don't.
-    if( index == oldMinIndex || index == oldMaxIndex )
-    {
-      updateMinAndMaxAmplitude();
-    }
+    sampleData[index] = Math.max(Short.MIN_VALUE, Math.min(value, Short.MAX_VALUE));
   }
 
   /**
