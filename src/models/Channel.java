@@ -133,11 +133,9 @@ public class Channel
         }
         else
         {
-          s.updateMinAndMaxAmplitude();
           return;
         }
       }
-      s.updateMinAndMaxAmplitude();
     }
   }
 
@@ -166,11 +164,9 @@ public class Channel
         }
         else
         {
-          s.updateMinAndMaxAmplitude();
           return;
         }
       }
-      s.updateMinAndMaxAmplitude();
     }
   }
 
@@ -199,11 +195,9 @@ public class Channel
         }
         else
         {
-          s.updateMinAndMaxAmplitude();
           return;
         }
       }
-      s.updateMinAndMaxAmplitude();
     }
   }
 
@@ -505,7 +499,6 @@ public class Channel
       {
         sampObj.setSample( j, samples.getSample( i * SAMPLES_SIZE + j ) );
       }
-      sampObj.updateMinAndMaxAmplitude();
       split.add( sampObj );
     }
 
@@ -548,45 +541,5 @@ public class Channel
   public int getSamplesSize()
   {
     return samplesList.size();
-  }
-
-  /**
-   * Returns that smallest amplitude for this channel.
-   *
-   * @return The smallest amplitude.
-   */
-  public int getMinAmplitude()
-  {
-    int min = Integer.MAX_VALUE;
-    int value;
-    for( Samples s : samplesList )
-      if( (value = s.getMinAmplitude()) < min )
-        min = value;
-    return min;
-  }
-
-  /**
-   * Returns that largest amplitude for this channel.
-   *
-   * @return The largest amplitude.
-   */
-  public int getMaxAmplitude()
-  {
-    int max = Integer.MAX_VALUE;
-    int value;
-    for( Samples s : samplesList )
-      if( (value = s.getMaxAmplitude()) > max )
-        max = value;
-    return max;
-  }
-
-  /**
-   * Returns the diff between the largest and smallest amplitude.
-   *
-   * @return Diff between amplitues.
-   */
-  public long getDiffAmplitude()
-  {
-    return (long)getMaxAmplitude() - getMinAmplitude();
   }
 }
