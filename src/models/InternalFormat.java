@@ -144,13 +144,15 @@ public class InternalFormat
 
   /**
    * Returns a chunk of data in PCM format. The chunk contains <code>amount</code> samples from each channel starting from absolute index <code>index</code>. 
-   * @param index 
-   * @param amount
+   * @param index The first sample to include in the chunk, as an absolute index.
+   * @param amount Amount of samples in the chunk. If there are fewer than <code>amount</code> samples after <code>index</code>, all remaining samples are included.
    * @return A byte array containing the requested data.
    */
   public byte[] getChunk( int index, int amount )
   {
     // Get memory.
+    if( index + amount > getSampleAmount() )
+      amount = getSampleAmount() - index;
     byte[] retChunk = new byte[ channels.size() * amount * Samples.BYTES_PER_SAMPLE ];
     
     for( int i = 0; i < channels.size(); i++ )
