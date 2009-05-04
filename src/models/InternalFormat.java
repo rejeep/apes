@@ -155,15 +155,19 @@ public class InternalFormat
       amount = getSampleAmount() - index;
     byte[] retChunk = new byte[ channels.size() * amount * Samples.BYTES_PER_SAMPLE ];
     
+    SampleIterator[] sampIts = new SampleIterator[channels.size()];
     for( int i = 0; i < channels.size(); i++ )
     {
       Channel c = channels.get(i);
       Point point = c.findAbsoluteIndex( index );
-      SampleIterator sampIt = c.getIteratorFromIndex( point.x, point.y );
+      sampIts[i] = c.getIteratorFromIndex( point.x, point.y );
+    }
       
-      for( int j = 0; j < amount; j++ )
+    for( int j = 0; j < amount; j++ )
+    {
+      for( int i = 0; i < channels.size(); i++ )
       {
-        int value = sampIt.next();
+        int value = sampIts[i].next();
         for( int k = 0; k < Samples.BYTES_PER_SAMPLE; k++ )
         {
           retChunk[i * amount * Samples.BYTES_PER_SAMPLE + j * Samples.BYTES_PER_SAMPLE + k] = (byte)((value >> (k * 8)) & 0xff);
