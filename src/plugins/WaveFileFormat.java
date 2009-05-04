@@ -189,10 +189,10 @@ public class WaveFileFormat implements AudioFormatPlugin
     int channel = 0;
     int bytesPerSample = bitsPerSample/8;
 
-    for( int i = 0; i < subChunk2Size/bytesPerSample; ++i )
+    for( int i = 0; i < subChunk2Size/(numChannels*bytesPerSample); ++i )
     {
-      buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
-      channel = (channel+1) % numChannels;
+      for( channel = 0; channel < numChannels; channel++ )
+        buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
     }
 
     for ( int i = 0; i < numChannels; ++i )
