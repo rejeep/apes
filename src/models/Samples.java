@@ -31,26 +31,6 @@ public class Samples
   private int size;
 
   /**
-   * Maximum amplitude of all samples in the Samples object.
-   */
-  private int maxAmplitude;
-
-  /**
-   * The index of the sample due to which the maxAmplitude was last updated.
-   */
-  private int maxAmplitudeIndex;
-
-  /**
-   * Minimum amplitude of all samples in the Samples object.
-   */
-  private int minAmplitude;
-
-  /**
-   * The index of the sample due to which the minAmplitude was last updated.
-   */
-  private int minAmplitudeIndex;
-
-  /**
    * Contains all the raw data of the samples.
    */
   private int[] sampleData;
@@ -65,9 +45,6 @@ public class Samples
   {
     size = amount;
     sampleData = new int[amount];
-
-    minAmplitude = maxAmplitude = 0;
-    minAmplitudeIndex = maxAmplitudeIndex = 0;
   }
 
   /**
@@ -82,8 +59,6 @@ public class Samples
     {
       throw new Exception("Invalid amount of bits per sample");
     }
-
-    setMinAndMaxDefaultValues();
 
     // Count bytes instead of bits
     int Bps = bps / 8;
@@ -103,7 +78,6 @@ public class Samples
 
       sampleData[i] = amplitude;
     }
-    updateMinAndMaxAmplitude();
   }
 
   /**
@@ -134,28 +108,6 @@ public class Samples
   }
 
   /**
-   * Returns the maximum amplitude among all samples in this object.
-   *
-   * @return The value of the highest amplitude of all samples in this
-   * object.
-   */
-  public int getMaxAmplitude()
-  {
-    return maxAmplitude;
-  }
-
-  /**
-   * Returns the minimum amplitude among all samples in this object.
-   *
-   * @return The value of the highest amplitude of all samples in this
-   * object.
-   */
-  public int getMinAmplitude()
-  {
-    return minAmplitude;
-  }
-
-  /**
    * Returns the sample at given index.
    *
    * @param index The index of the desired sample.
@@ -178,47 +130,6 @@ public class Samples
   }
 
   /**
-   * Calculates the minimum and maximum amplitude, stores it in
-   * <code>minAmplitude</code> and <code>maxAmplitude</code> and
-   * updates <code>minAmplitudeIndex</code> and
-   * <code>maxAmplitudeIndex</code>.
-   */
-  public void updateMinAndMaxAmplitude()
-  {
-    int min = Short.MAX_VALUE;
-    int minI = -1;
-
-    int max = Short.MIN_VALUE;
-    int maxI = -1;
-
-    // Go through all samples
-    for( int i = 0; i < size; i++ )
-    {
-      int amp = getSample( i );
-
-      // Update min as needed.
-      if( amp < min )
-      {
-        min = amp;
-        minI = i;
-      }
-
-      // Update max as needed.
-      if( amp > max )
-      {
-        max = amp;
-        maxI = i;
-      }
-    }
-
-    minAmplitude = min;
-    minAmplitudeIndex = minI;
-
-    maxAmplitude = max;
-    maxAmplitudeIndex = maxI;
-  }
-
-  /**
    * Returns all data.
    *
    * @return a <code>byte</code> array containing all data.
@@ -234,17 +145,5 @@ public class Samples
       }
     }
     return retArray;
-  }
-
-  /**
-   * Sets default min and max index and value.
-   */
-  private void setMinAndMaxDefaultValues()
-  {
-    minAmplitude = Short.MAX_VALUE;
-    minAmplitudeIndex = -1;
-
-    maxAmplitude = Short.MIN_VALUE;
-    maxAmplitudeIndex = -1;
   }
 }
