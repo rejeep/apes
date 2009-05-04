@@ -2,6 +2,7 @@ package apes.models;
 
 import java.lang.InterruptedException;
 import javax.sound.sampled.SourceDataLine;
+import java.awt.Point;
 
 /**
  * This class plays an internal format. It implements Runnable rather
@@ -55,6 +56,11 @@ public class Player implements Runnable
   private Channel channel;
 
   /**
+   * This is how far we are allowed to play.
+   */
+  private int stop;
+
+  /**
    * This class must be run as a thread. Otherwise nothing can be done
    * while playing.
    */
@@ -71,6 +77,8 @@ public class Player implements Runnable
 
     channel = internalFormat.getChannel( 0 );
     numSamples = channel.getSamplesSize();
+
+    resetStop();
 
     reset();
     setStatus( Status.WAIT );
@@ -204,13 +212,20 @@ public class Player implements Runnable
           // Do the playing.
           if( currentSamples < channel.getSamplesSize() )
           {
-            Samples samples = channel.getSamples( currentSamples );
-            byte[] data = samples.getData();
+            if( currentSample <= stop )
+            {
+              Samples samples = channel.getSamples( currentSamples );
+              byte[] data = samples.getData();
 
-            line.write( data, 0, data.length );
+              line.write( data, 0, data.length );
 
-            currentSamples++;
-            currentSample += samples.getSize();
+              currentSamples++;
+              currentSample += samples.getSize();
+            }
+            else
+            {
+              pause();
+            }
           }
           else
           {
@@ -278,5 +293,60 @@ public class Player implements Runnable
   {
     currentSamples = 0;
     currentSample = 0;
+  }
+
+  /**
+   * Sets region of playing.
+   *
+   * @param selection The selection.
+   */
+  public void setRegion( Point selection )
+  {
+    if( isPlaying() )
+    {
+      resetStop();
+    }
+    else
+    {
+      int min = selection.x;
+      int max = selection.y;
+
+      if( min == max )
+      {
+        resetStop();
+      }
+      else
+      {
+        stop = max;
+      }
+
+      Point point = channel.findAbsoluteIndex( min );
+
+      currentSample = min - point.y;
+      currentSamples = point.x;
+    }
+  }
+
+  /**
+   * Returns true if the player is playing. False otherwise.
+   *
+   * @return true if playing. False otherwise.
+   */
+  public boolean isPlaying()
+  {
+    if( status == Status.PLAY )
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Sets the stop position to the end position.
+   */
+  private void resetStop()
+  {
+    stop = internalFormat.getSampleAmount() - 1;
   }
 }
