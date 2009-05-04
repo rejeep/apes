@@ -42,6 +42,11 @@ public class Player implements Runnable
    * This is how far we are allowed to play.
    */
   private int stop;
+  
+  /**
+   * The start of the selected region.
+   */
+  private int start;
 
   /**
    * This class must be run as a thread. Otherwise nothing can be done
@@ -170,7 +175,16 @@ public class Player implements Runnable
           }
           else
           {
-            pause();
+            if( stop == getSampleAmount() )
+            {
+              stop();
+            }
+            else
+            {
+              pause();
+              
+              currentSample = start;
+            }
           }
         }
         else
@@ -238,6 +252,7 @@ public class Player implements Runnable
       }
       else
       {
+        start = min;
         stop = max;
       }
 
@@ -265,6 +280,16 @@ public class Player implements Runnable
    */
   private void resetStop()
   {
-    stop = internalFormat.getSampleAmount() - 1;
+    stop = getSampleAmount();
+  }
+  
+  /**
+   * Returns the number of samples.
+   *
+   * @return The number of samples.
+   */
+  public int getSampleAmount()
+  {
+    return internalFormat.getSampleAmount() - 1;
   }
 }

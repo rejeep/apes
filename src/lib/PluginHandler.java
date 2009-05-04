@@ -285,6 +285,9 @@ public class PluginHandler
    */
   private void loadFile( String path, String name, PluginInfo pi )
   {
+    Class cls;
+    try
+    {
       if(!plugins.contains(pi))
       {
         pi.setPath(path);
@@ -292,39 +295,26 @@ public class PluginHandler
       
       if( path.endsWith( ".class" ) )
       {
-        loadClass( path, "apes.plugins." + name, pi );
+        cls = cl.loadClass(path, "apes.plugins." + name);
       }
       else if( path.endsWith( ".jar" ) )
       {
-        //loadJAR( path, "apes.plugins." + name, pi );
+        cls = cl.loadClass(path, "apes.plugins." + name);
       }
       else
       {
         System.out.println("Wrong filename for plugin");
+        return;
       }
-  }
-  
-  /**
-   * Loads a class.
-   * 
-   * @param location The path to the file.
-   * @param name The name.
-   * @param pi The PluginInfo object to assign it to.
-   */
-  private void loadClass( String location, String name, PluginInfo pi)
-  {
-    try
-    {
-      Class cls;
-      cls = cl.loadClass(location, name);
+      
       instancePlugin(cls, pi);
+      
     }
     catch( ClassNotFoundException e )
     {
-      System.out.println("Exception " + e);
     }
   }
-
+  
   /**
    * Creates a new instance of the class and adds it to the list
    * of loaded plugins.
@@ -425,7 +415,6 @@ class PluginLoader extends ClassLoader
       Class<?> cls = defineClass( name, classBytes, 0, classBytes.length );
       resolveClass( cls );
       return cls;
-      //instancePlugin( cls, pi );
     }
     catch ( ClassFormatError e )
     {
@@ -442,8 +431,7 @@ class PluginLoader extends ClassLoader
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
    */
-  /*
-  private void loadJAR( String location, String name, PluginInfo pi ) throws
+  public Class loadJAR( String location, String name) throws
     ClassNotFoundException
   {
     try
@@ -454,14 +442,15 @@ class PluginLoader extends ClassLoader
         new URLClassLoader( locations );
 
       Class<?> cls = classloader.loadClass( name );
-      instancePlugin( cls, pi );
+      return cls;
     }
     catch ( MalformedURLException e )
     {
       // -
     }
+    
+    return null;
   }
-  */
 }
 
 /**
