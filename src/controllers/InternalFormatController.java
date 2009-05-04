@@ -7,6 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import apes.lib.ApesFile;
 import apes.models.InternalFormat;
 import apes.models.Samples;
 import apes.models.undo.ChangeEdit;
@@ -14,7 +15,8 @@ import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
 import apes.views.ChannelView;
 import apes.views.InternalFormatView;
-import apes.lib.ApesFile;
+import apes.views.ApesError;
+import apes.exceptions.UnidentifiedLanguageException;
 
 
 /**
@@ -193,7 +195,7 @@ public class InternalFormatController extends ApplicationController
   {
     System.out.println("out");
   }
-  
+
   /**
    * Reset zoom to normal size.
    */
@@ -218,6 +220,10 @@ public class InternalFormatController extends ApplicationController
 
       ApesFile apesFile = new ApesFile( file );
       tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+    }
+    catch( UnidentifiedLanguageException e )
+    {
+      ApesError.unsupportedFormat();
     }
     catch( Exception e )
     {

@@ -108,6 +108,7 @@ public class Config
     addOption( "color_selection", "#0000FF", Type.STRING );
     addOption( "color_lines", "#FFFF00", Type.STRING );
     addOption( "color_background", "#FF0000", Type.STRING );
+    addOption( "gui_error_messages", "true", Type.BOOLEAN );
   }
 
   /**
