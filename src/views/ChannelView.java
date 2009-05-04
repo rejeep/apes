@@ -345,6 +345,8 @@ public class ChannelView extends JPanel
       this.repaint();
     }
     mousePressed = false;
+    
+    player.setRegion( getMarkedSamples() );
   }
 
   //@Override
