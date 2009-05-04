@@ -1,8 +1,9 @@
 package apes.models;
 
+import java.awt.Point;
 import java.lang.InterruptedException;
 import javax.sound.sampled.SourceDataLine;
-import java.awt.Point;
+import apes.lib.Config;
 
 /**
  * This class plays an internal format. It implements Runnable rather
@@ -42,11 +43,17 @@ public class Player implements Runnable
    * This is how far we are allowed to play.
    */
   private int stop;
-  
+
   /**
    * The start of the selected region.
    */
   private int start;
+
+  /**
+   * Tells how long a wind should be. The larger value, the less wind
+   * amount.
+   */
+  private int wind;
 
   /**
    * This class must be run as a thread. Otherwise nothing can be done
@@ -62,6 +69,7 @@ public class Player implements Runnable
   public Player( InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
+    this.wind = Config.getInstance().getIntOption( "wind" );
 
     resetStop();
     currentSample = 0;
@@ -103,7 +111,10 @@ public class Player implements Runnable
    */
   public void forward()
   {
+    int temp = currentSample + getWindLength();
+    int max = getSampleAmount();
 
+    currentSample = temp >= max ? max : temp;
   }
 
   /**
@@ -111,7 +122,19 @@ public class Player implements Runnable
    */
   public void backward()
   {
+    int temp = currentSample - getWindLength();
 
+    currentSample = temp <= 0 ? 0 : temp;
+  }
+
+  /**
+   * Returns the wind length.
+   *
+   * @return The wins length.
+   */
+  private int getWindLength()
+  {
+    return getSampleAmount() / wind;
   }
 
   /**
@@ -182,7 +205,7 @@ public class Player implements Runnable
             else
             {
               pause();
-              
+
               currentSample = start;
             }
           }
@@ -282,7 +305,7 @@ public class Player implements Runnable
   {
     stop = getSampleAmount();
   }
-  
+
   /**
    * Returns the number of samples.
    *

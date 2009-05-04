@@ -107,6 +107,7 @@ config:
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
   gui_error_messages: Använd GUI för att visa felmeddelanden
+  wind: Spolningskonstant
 plugins:
   header: Plugins
   apply: Verkställ

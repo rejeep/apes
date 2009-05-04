@@ -107,6 +107,7 @@ config:
   color_lines: Line color
   color_background: Background color
   gui_error_messages: Use GUI to show error messages
+  wind: Forward / Backward constand
 plugins:
   header: Plugins
   apply: Apply
