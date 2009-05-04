@@ -1,6 +1,7 @@
 package apes;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.undo.UndoManager;
 
 import apes.controllers.ConfigController;
@@ -20,6 +23,7 @@ import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
 import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
+import apes.controllers.PluginController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.exceptions.UnidentifiedLanguageException;
@@ -48,7 +52,7 @@ import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
-import apes.controllers.PluginController;
+import javax.swing.UIDefaults;
 
 /**
  * This is where it all starts. This creates a basic GUI with a layout
@@ -118,6 +122,18 @@ public class Main extends JFrame
    */
   public Main( String[] args )
   {
+    // Default colors.
+    UIManager.put( "Panel.background", Color.WHITE );
+    UIManager.put( "Label.background", Color.WHITE );
+    UIManager.put( "Slider.background", Color.WHITE );
+    UIManager.put( "Frame.background", Color.WHITE );
+    UIManager.put( "CheckBox.background", Color.WHITE );
+    UIManager.put( "TextField.background", Color.WHITE );
+    UIManager.put( "TextArea.background", Color.WHITE );
+    UIManager.put( "MenuBar.background", Color.WHITE );
+    UIManager.put( "Menu.background", Color.WHITE );
+    UIManager.put( "MenuItem.background", Color.WHITE );
+
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
@@ -186,11 +202,11 @@ public class Main extends JFrame
     // Create and add top panel.
     JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
-
+    
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
-
+    
     // Set window dimensions.
     setWindowDimensions();
 
@@ -421,6 +437,7 @@ public class Main extends JFrame
   private JPanel topPanel()
   {
     JPanel topPanel = new JPanel();
+    topPanel.setBorder( new LineBorder( Color.GRAY, 1, true ) );
 
     ImageButton open = new OpenButton();
     topPanel.add( open );
@@ -485,6 +502,7 @@ public class Main extends JFrame
   private JPanel bottomPanel()
   {
     JPanel bottomPanel = new JPanel();
+    bottomPanel.setBorder( new LineBorder( Color.GRAY, 1, true ) );
 
     ImageButton backward = new BackwardButton();
     backward.addActionListener( playerController );
@@ -513,7 +531,7 @@ public class Main extends JFrame
 
     JPanel volumePanel = new VolumePanel( playerController );
     bottomPanel.add( volumePanel );
-
+    
     return bottomPanel;
   }
 
