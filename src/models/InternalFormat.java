@@ -2,6 +2,7 @@ package apes.models;
 
 import apes.lib.FileHandler;
 import java.util.List;
+import java.awt.Point;
 import java.io.IOException;
 
 /**
@@ -141,6 +142,35 @@ public class InternalFormat
     return sampleRate;
   }
 
+  /**
+   * Returns a chunk of data in PCM format. The chunk contains <code>amount</code> samples from each channel starting from absolute index <code>index</code>. 
+   * @param index 
+   * @param amount
+   * @return A byte array containing the requested data.
+   */
+  public byte[] getChunk( int index, int amount )
+  {
+    // Get memory.
+    byte[] retChunk = new byte[ channels.size() * amount * Samples.BYTES_PER_SAMPLE ];
+    
+    for( int i = 0; i < channels.size(); i++ )
+    {
+      Channel c = channels.get(index);
+      Point point = c.findAbsoluteIndex( index );
+      SampleIterator sampIt = c.getIteratorFromIndex( point.x, point.y );
+      
+      for( int j = 0; j < amount; j++ )
+      {
+        int value = sampIt.next();
+        for( int k = 0; k < Samples.BYTES_PER_SAMPLE; k++ )
+        {
+          retChunk[i * amount * Samples.BYTES_PER_SAMPLE + j * Samples.BYTES_PER_SAMPLE + k] = (byte)((value >> (k * 8)) & 0xff);
+        }
+      }
+    }
+    
+    return retChunk;
+  }
   /**
    * Save file as
    * TODO: add error handling, or some sort of response

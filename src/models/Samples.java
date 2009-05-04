@@ -128,22 +128,4 @@ public class Samples
   {
     sampleData[index] = Math.max(Short.MIN_VALUE, Math.min(value, Short.MAX_VALUE));
   }
-
-  /**
-   * Returns all data.
-   *
-   * @return a <code>byte</code> array containing all data.
-   */
-  public byte[] getData()
-  {
-    byte[] retArray = new byte[ size * BYTES_PER_SAMPLE ];
-    for( int i = 0; i < size; i++ )
-    {
-      for( int j = 0; j < BYTES_PER_SAMPLE; j++ )
-      {
-        retArray[i * BYTES_PER_SAMPLE + j] = (byte)((sampleData[i] >> (j * 8)) & 0xff);
-      }
-    }
-    return retArray;
-  }
 }
