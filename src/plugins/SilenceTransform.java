@@ -11,12 +11,12 @@ public class SilenceTransform implements TransformPlugin
 {
   public String getName()
   {
-    return( "Silence" );
+    return "Silence";
   }
 
   public String getDescription()
   {
-    return( "A silence plugin for testing purposes." );
+    return "A silence plugin for testing purposes.";
   }
 
   public Samples apply( Samples set )
