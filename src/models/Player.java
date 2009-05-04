@@ -34,26 +34,9 @@ public class Player implements Runnable
   private InternalFormat internalFormat;
 
   /**
-   * Keeps state of which samples that is currently playing.
-   */
-  private int currentSamples;
-
-  /**
    * What sample (not samples are we on).
    */
   private int currentSample;
-
-  /**
-   * The number of samples in a channel.
-   */
-  private int numSamples;
-
-  /**
-   * Current channel.
-   *
-   * TODO: Must be able to play from many channels.
-   */
-  private Channel channel;
 
   /**
    * This is how far we are allowed to play.
@@ -75,12 +58,8 @@ public class Player implements Runnable
   {
     this.internalFormat = internalFormat;
 
-    channel = internalFormat.getChannel( 0 );
-    numSamples = channel.getSamplesSize();
-
     resetStop();
-
-    reset();
+    currentSample = 0;
     setStatus( Status.WAIT );
 
     thread = new Thread( this );
@@ -119,21 +98,7 @@ public class Player implements Runnable
    */
   public void forward()
   {
-    int start = currentSamples;
-    int stop = start + ( numSamples / 20 );
 
-    if( stop > numSamples )
-    {
-      stop = numSamples;
-    }
-
-    for( int i = start; i < stop; i++ )
-    {
-      Samples samples = channel.getSamples( currentSamples );
-
-      currentSamples++;
-      currentSample += samples.getSize();
-    }
   }
 
   /**
@@ -141,21 +106,7 @@ public class Player implements Runnable
    */
   public void backward()
   {
-    int start = currentSamples;
-    int stop = start - ( numSamples / 20 );
 
-    if( stop < 0 )
-    {
-      stop = 0;
-    }
-
-    for( int i = start; i > stop; i-- )
-    {
-      Samples samples = channel.getSamples( currentSamples );
-
-      currentSamples--;
-      currentSample -= samples.getSize();
-    }
   }
 
   /**
@@ -209,38 +160,27 @@ public class Player implements Runnable
       {
         if( status == Status.PLAY )
         {
-          // Do the playing.
-          if( currentSamples < channel.getSamplesSize() )
+          if( currentSample <= stop )
           {
-            if( currentSample <= stop )
-            {
-              Samples samples = channel.getSamples( currentSamples );
-              byte[] data = samples.getData();
+            byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
 
-              line.write( data, 0, data.length );
+            line.write( data, 0, data.length );
 
-              currentSamples++;
-              currentSample += samples.getSize();
-            }
-            else
-            {
-              pause();
-            }
+            currentSample += Channel.SAMPLES_SIZE;
           }
           else
           {
-            status = Status.WAIT;
+            pause();
           }
-        }
-        else if( status == Status.STOP )
-        {
-          reset();
-
-          setStatus( Status.WAIT );
         }
         else
         {
-          // Status is PAUSE
+          if( status == Status.STOP )
+          {
+            currentSample = 0;
+          }
+
+          setStatus( Status.WAIT );
         }
 
         // If this is not present there will be no playing.
@@ -254,16 +194,6 @@ public class Player implements Runnable
         }
       }
     }
-  }
-
-  /**
-   * Returns currentSamples.
-   *
-   * @return currentSamples.
-   */
-  public int getCurrentSamples()
-  {
-    return currentSamples;
   }
 
   /**
@@ -287,16 +217,7 @@ public class Player implements Runnable
   }
 
   /**
-   * Resets this player by setting starting points to 0.
-   */
-  private void reset()
-  {
-    currentSamples = 0;
-    currentSample = 0;
-  }
-
-  /**
-   * Sets region of playing.
+   * Sets playing region.
    *
    * @param selection The selection.
    */
@@ -320,10 +241,7 @@ public class Player implements Runnable
         stop = max;
       }
 
-      Point point = channel.findAbsoluteIndex( min );
-
-      currentSample = min - point.y;
-      currentSamples = point.x;
+      currentSample = min;
     }
   }
 
