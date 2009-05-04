@@ -464,7 +464,7 @@ public class Channel
 
       if( absIndex < newIndex )
       {
-        return new Point(sampObj, newIndex - absIndex);
+        return new Point(sampObj, absIndex - curIndex );
       }
 
       curIndex = newIndex;

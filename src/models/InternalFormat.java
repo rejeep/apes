@@ -155,7 +155,7 @@ public class InternalFormat
     
     for( int i = 0; i < channels.size(); i++ )
     {
-      Channel c = channels.get(index);
+      Channel c = channels.get(i);
       Point point = c.findAbsoluteIndex( index );
       SampleIterator sampIt = c.getIteratorFromIndex( point.x, point.y );
       
