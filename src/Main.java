@@ -122,18 +122,13 @@ public class Main extends JFrame
    */
   public Main( String[] args )
   {
-    // Default colors.
-    UIManager.put( "Panel.background", Color.WHITE );
-    UIManager.put( "Label.background", Color.WHITE );
-    UIManager.put( "Slider.background", Color.WHITE );
-    UIManager.put( "Frame.background", Color.WHITE );
-    UIManager.put( "CheckBox.background", Color.WHITE );
-    UIManager.put( "TextField.background", Color.WHITE );
-    UIManager.put( "TextArea.background", Color.WHITE );
-    UIManager.put( "MenuBar.background", Color.WHITE );
-    UIManager.put( "Menu.background", Color.WHITE );
-    UIManager.put( "MenuItem.background", Color.WHITE );
-
+    // These should by default be white.
+    String[] whites = { "Panel", "Label", "Slider", "Frame", "CheckBox", "TextField", "TextArea", "MenuBar", "Menu", "MenuItem" };
+    for( int i = 0; i < whites.length; i++)
+    {
+      UIManager.put( whites[i] + ".background", Color.WHITE );
+    }
+    
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
