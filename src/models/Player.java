@@ -72,6 +72,8 @@ public class Player implements Runnable
     this.wind = Config.getInstance().getIntOption( "wind" );
 
     resetStop();
+    resetStart();
+    
     currentSample = 0;
     setStatus( Status.WAIT );
 
@@ -112,7 +114,7 @@ public class Player implements Runnable
   public void forward()
   {
     int temp = currentSample + getWindLength();
-    int max = getSampleAmount();
+    int max = Math.min( getSampleAmount(), stop );
 
     currentSample = temp >= max ? max : temp;
   }
@@ -123,8 +125,9 @@ public class Player implements Runnable
   public void backward()
   {
     int temp = currentSample - getWindLength();
-
-    currentSample = temp <= 0 ? 0 : temp;
+    int min = Math.max( 0, start );
+    
+    currentSample = temp <= min ? min : temp;
   }
 
   /**
@@ -272,6 +275,7 @@ public class Player implements Runnable
       if( min == max )
       {
         resetStop();
+        resetStart();
       }
       else
       {
@@ -304,6 +308,14 @@ public class Player implements Runnable
   private void resetStop()
   {
     stop = getSampleAmount();
+  }
+  
+  /**
+   * Sets the start position to the beginning of the file.
+   */
+  private void resetStart()
+  {
+    start = 0;
   }
 
   /**
