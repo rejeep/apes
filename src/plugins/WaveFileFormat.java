@@ -22,7 +22,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public String getName()
   {
-    return( "Wave" );
+    return "Wave";
   }
 
   /**
@@ -30,7 +30,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public String getDescription()
   {
-    return( "Support for .wav files." );
+    return "Support for .wav files.";
   }
 
   /**

@@ -108,6 +108,7 @@ config:
   color_background: Background color
   gui_error_messages: Use GUI to show error messages
 plugins:
+  header: Plugins
   apply: Apply
   close: Close
 error:

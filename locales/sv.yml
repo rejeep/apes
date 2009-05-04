@@ -108,6 +108,7 @@ config:
   color_background: Bakgrundsfärg
   gui_error_messages: Använd GUI för att visa felmeddelanden
 plugins:
+  header: Plugins
   apply: Verkställ
   close: Stäng
 error:
