@@ -170,7 +170,14 @@ public class Player implements Runnable
           }
           else
           {
-            pause();
+            if( stop == getSampleAmount() )
+            {
+              stop();
+            }
+            else
+            {
+              pause();
+            }
           }
         }
         else
@@ -265,6 +272,11 @@ public class Player implements Runnable
    */
   private void resetStop()
   {
-    stop = internalFormat.getSampleAmount() - 1;
+    stop = getSampleAmount();
+  }
+  
+  public int getSampleAmount()
+  {
+    return internalFormat.getSampleAmount() - 1;
   }
 }
