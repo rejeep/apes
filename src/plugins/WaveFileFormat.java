@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
@@ -28,9 +30,12 @@ public class WaveFileFormat implements AudioFormatPlugin
   /**
    * TODO: Comment
    */
-  public String getDescription()
+  public Map<String, String> getDescriptions()
   {
-    return "Support for .wav files.";
+    HashMap map = new HashMap<String, String>();
+    map.put("en", "Support for .wav files.");
+    map.put("sv", "Stöd för .wav filer.");
+    return map;
   }
 
   /**

@@ -1,13 +1,20 @@
 package apes.interfaces;
 
+import java.util.Map;
 /**
- * Interface for plugins.
- * TODO: What do to about locale?
- * TODO: Comment
+ * Interface for the plugins.
+ * 
+ * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public interface Plugin
 {
-  // name and other texty things go here
+  /**
+   * Returns the given name of the plugin.
+   */
   public String getName();
-  public String getDescription();
+  
+  /**
+   * Returns the description key of the plugin.
+   */
+  public Map<String, String> getDescriptions();
 }

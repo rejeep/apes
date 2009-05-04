@@ -1,6 +1,8 @@
 package apes.lib;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.ByteArrayOutputStream;
@@ -68,13 +70,13 @@ public class PluginHandler
    * @return The description.
    */
   
-  public String getDescription(String name)
+  public String getDescription(String name, String language)
   {
     for(PluginInfo p : plugins)
     {
       if(p.getName().equals(name))
       {
-        return p.getDescription();
+        return p.getDescription(language);
       }
     }
     
@@ -335,7 +337,7 @@ public class PluginHandler
         if(!plugins.contains(pi))
         {
           pi.setName(tp.getName());
-          pi.setDescription(tp.getDescription());
+          pi.setDescription(tp.getDescriptions());
           pi.setType("transform");
           pi.setTransformObject(tp);
           plugins.add(pi);
@@ -350,7 +352,7 @@ public class PluginHandler
         if(!plugins.contains(pi))
         {
           pi.setName(afp.getName());
-          pi.setDescription(afp.getDescription());
+          pi.setDescription(afp.getDescriptions());
           pi.setType("format");
           pi.setAudioFormatObject(afp);
           plugins.add(pi);
@@ -471,7 +473,8 @@ class PluginInfo
   /**
    * The description of the plugin.
    */
-  private String desc;
+  //private String desc;
+  private Map<String, String> desc;
   
   /**
    * The type of the plugin, "format" or "transform".
@@ -493,6 +496,10 @@ class PluginInfo
    */
   private TransformPlugin tObject;
   
+  public PluginInfo()
+  {
+    desc = new HashMap<String, String>();
+  }
   /**
    * Returns path to plugin.
    * 
@@ -536,21 +543,29 @@ class PluginInfo
   /**
    * Returns the plugin description.
    * 
+   * @param language The chosen language.
    * @return The description.
    */
-  public String getDescription()
+  public String getDescription(String language)
   {
-    return desc;
+    if( desc.containsKey(language) )
+    {
+      return desc.get(language);
+    }
+    else
+    {
+    return desc.get("en");
+    }
   }
   
   /**
    * Sets the plugin description.
    * 
-   * @param str The description.
+   * @param map The description map.
    */
-  public void setDescription(String str)
+  public void setDescription(Map<String, String> map)
   {
-    desc = str;
+    desc = map;
   }
   
   /**
