@@ -216,7 +216,6 @@ public class InternalFormatController extends ApplicationController
       fc.setCurrentDirectory( new File( "." ) );
       fc.showOpenDialog( null );
       File file = fc.getSelectedFile();
-      String name = file.getName();
 
       ApesFile apesFile = new ApesFile( file );
       tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
