@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import apes.controllers.ChannelController;
 import apes.lib.Config;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
@@ -34,6 +35,11 @@ public class InternalFormatView extends JPanel
    */
   private PlayerHandler playerHandler;
 
+  /**
+   * The channel controller.
+   */
+  private ChannelController channelController;
+  
 
   /**
    * Places one ChannelView for each channel on this panel.
@@ -45,6 +51,7 @@ public class InternalFormatView extends JPanel
     this.internalFormat = internalFormat;
     this.playerHandler = playerHandler;
     this.channelViews = new ArrayList<ChannelView>();
+    this.channelController = new ChannelController();
 
     setInternalFormat( internalFormat );
   }
@@ -62,10 +69,19 @@ public class InternalFormatView extends JPanel
 
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
-      channelViews.add( new ChannelView( player, internalFormat.getChannel( i ),
-                                         Config.getInstance().getIntOption( "graph_width" ),
-                                         Config.getInstance().getIntOption( "graph_height" ) ) );
-      add( channelViews.get( i ) );
+      // Create view
+      ChannelView channelView = new ChannelView( player, internalFormat.getChannel( i ),
+                                                 Config.getInstance().getIntOption( "graph_width" ),
+                                                 Config.getInstance().getIntOption( "graph_height" ) );
+      
+      // Set controller
+      channelView.setController( channelController );
+      
+      // Add to list of channel views
+      channelViews.add( channelView );
+      
+      // Add to this panel
+      add( channelView );
     }
 
     updateView();
@@ -113,7 +129,7 @@ public class InternalFormatView extends JPanel
 
     return selected;
   }
-  
+
   /**
    * Returns the list of all ChannelViews.
    * @return The list of all ChannelViews.

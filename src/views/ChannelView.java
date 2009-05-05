@@ -1,67 +1,128 @@
 package apes.views;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import javax.swing.JPanel;
+
+import apes.controllers.ChannelController;
+import apes.lib.Config;
 import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
-import apes.lib.Config;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
 /**
  * Views a single channel.
  *
+ * TODO: width and height are set in this class. But component already
+ * have those. Can we use them?
+ *
+ * TODO: Comment
+ *
+ * TODO: Some bug when changing in the graph with copy/cut/paste and
+ * then drags in it.
+ *
  * @author Simon Holm
  */
-public class ChannelView extends JPanel
-  implements MouseListener,
-  MouseWheelListener,
-  MouseMotionListener,
-  Runnable
+public class ChannelView extends JPanel implements Runnable
 {
+  /**
+   *
+   */
   private Channel channel;
+
+  /**
+   *
+   */
   private int nrSamples;
-  private int width, height;
+
+  /**
+   *
+   */
   private int centerSample;
+
+  /**
+   *
+   */
   private int visibleSamples;
+
+  /**
+   *
+   */
   private int[] samples;
+
+  /**
+   *
+   */
   private Player player;
-  private int markBeginning;
-  private int markEnd;
-  private boolean mousePressed;
-  private boolean movEdgeLeft;
+
+  /**
+   *
+   */
+  private int fixedMark;
+
+  /**
+   *
+   */
+  private int movingMark;
+
+  /**
+   *
+   */
   private float samplesPerPixel;
 
   /**
+   *
+   */
+  private int height;
+
+  /**
+   *
+   */
+  private int width;
+
+  /**
+   * The controller.
+   */
+  private ChannelController channelController;
+
+  /**
    * Constructor to create a view for a channel.
-   * @param player A player to keep track of what is played. 
+   *
+   * @param player A player to keep track of what is played.
    * @param ch A channel contianing the data to be viewed.
    * @param width The width of the view.
    * @param height The height of the view.
    */
   public ChannelView( Player player, Channel ch, int width, int height )
   {
-    super();
-    this.addMouseListener( this );
-    this.addMouseWheelListener( this );
-    this.addMouseMotionListener( this );
+    setPreferredSize( new Dimension( width, height ) );
+
+    this.height = height;
+    this.width = width;
+
+    channelController = new ChannelController();
+
+    this.addMouseListener( channelController );
+    this.addMouseMotionListener( channelController );
+    this.addMouseWheelListener( channelController );
+
     this.player = player;
     this.channel = ch;
-    this.width = width;
-    this.height = height;
-    this.setPreferredSize( new Dimension( width, height ) );
-    markBeginning = -1;
-    markEnd       = -1;
+
+    deSelectRegion();
+
     samples = new int[width];
-    mousePressed = false;
-    movEdgeLeft = true;
 
     if(ch != null)
     {
       for(int i = 0; i < channel.getSamplesSize(); ++i)
         nrSamples += channel.getSamples(i).getSize();
-      
+
       visibleSamples = nrSamples;
       centerSample = nrSamples/2;
       updateView();
@@ -78,7 +139,7 @@ public class ChannelView extends JPanel
     super.paintComponent( g );
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));    
+    g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));
     g2.clearRect(0,0, getWidth()-1, getHeight()-1);
 
     g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
@@ -94,26 +155,23 @@ public class ChannelView extends JPanel
     g2.drawLine(0,height,width,height);
     g2.drawLine(0,0,width,0);
 
-    if(markBeginning > 0)
-      g2.drawLine(markBeginning,0,markBeginning,height);
-    if(markEnd > 0)
-      g2.drawLine(markEnd,0,markEnd,height);
+    if(getMarkBeginning() > 0)
+      g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),height);
+    if(getMarkEnd() > 0)
+      g2.drawLine(getMarkEnd(),0,getMarkEnd(),height);
 
-    if(markBeginning > 0)
+    if(getMarkBeginning() > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
       g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
-      if(markEnd > 0 && markBeginning > 0)
-        g2.fillRect(markBeginning, 0, markEnd-markBeginning, height);
+      if(getMarkEnd() > 0 && getMarkBeginning() > 0)
+        g2.fillRect(getMarkBeginning(), 0, getMarkEnd()-getMarkBeginning(), height);
     }
     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
     if(nrSamples > 0)
       g2.drawLine(( (int) ((long) width*player.getCurrentSample()/nrSamples) ),0,
                   ( (int) ((long) width*player.getCurrentSample()/nrSamples) ),height);
-
-
-
   }
 
   /**
@@ -165,7 +223,7 @@ public class ChannelView extends JPanel
 
     nrSamples = 0;
     for(int i = 0; i < channel.getSamplesSize(); ++i)
-        nrSamples += channel.getSamples(i).getSize();
+      nrSamples += channel.getSamples(i).getSize();
 
     //visibleSamples = nrSamples;
     //centerSample = nrSamples/2;
@@ -202,7 +260,7 @@ public class ChannelView extends JPanel
       for(int i = 0; i < width; ++i)
       {
         index = channel.findAbsoluteIndex(Math.round(i*samplesPerPixel));
-        
+
         for(int j = prevSample; j < index.x; ++j)
         {
           samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
@@ -225,13 +283,13 @@ public class ChannelView extends JPanel
           samples[i] += iterator.next();
 
         samples[i] = Math.round(samples[i]/samplesPerPixel);
-        
+
         if(samples[i]  > maxAmp)
           maxAmp = samples[i];
         if(samples[i] < minAmp)
           minAmp = samples[i];
       }
-      
+
     }
 
     double heightScale = (((float)height/2)/((long)(maxAmp)-(long)(minAmp)));
@@ -261,11 +319,11 @@ public class ChannelView extends JPanel
    */
   public Point getMarkedSamples()
   {
-    if(markBeginning > 0 && markEnd > 0)
+    if(getMarkBeginning() > 0 && getMarkEnd() > 0)
     {
       int samplesPerPixel = visibleSamples/width;
       try {
-        int beginning = (centerSample-visibleSamples/2)+samplesPerPixel*markBeginning, end = (centerSample-visibleSamples/2)+samplesPerPixel*markEnd; 
+        int beginning = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkBeginning(), end = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkEnd();
         if( beginning <= end )
           return new Point( beginning, end );
         else
@@ -275,133 +333,6 @@ public class ChannelView extends JPanel
       }
     }
     return null;
-  }
-  
-  /**
-   * Removes marking.
-   */
-  public void unmark()
-  {
-    markBeginning = markEnd = -1;
-    repaint();
-  }
-
-  //@Override
-  public void mouseClicked(MouseEvent e) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  //@Override
-  public void mousePressed(MouseEvent e) {
-    if(e.getButton() == MouseEvent.BUTTON1)
-    {
-      int x = e.getX();
-      int y = e.getY();
-
-      if(x < width && x > 0 && y < height)
-      {
-        markBeginning = x;
-        markEnd = x;
-        this.repaint();
-      }
-    }
-    mousePressed = true;
-  }
-
-  //@Override
-  public void mouseReleased(MouseEvent e) {
-    if(e.getButton() == MouseEvent.BUTTON1)
-    {
-      int x = e.getX();
-      int y = e.getY();
-
-      if( x < width && x > 0 && y < height)
-      {
-        if( x > markEnd )
-        {
-          markEnd = x;
-          movEdgeLeft = false;
-        }
-        else if( x < markBeginning )
-        {
-          markBeginning = x;
-          movEdgeLeft = true;
-        }
-        else
-        {
-          if(movEdgeLeft)
-            markBeginning = x;
-          else
-            markEnd = x;
-        }
-      }
-
-      this.repaint();
-    }
-    else if( e.getButton() == MouseEvent.BUTTON3)
-    {
-      markBeginning = -1;
-      markEnd = -1;
-      this.repaint();
-    }
-    mousePressed = false;
-    
-    player.setRegion( getMarkedSamples() );
-  }
-
-  //@Override
-  public void mouseEntered(MouseEvent e) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  //@Override
-  public void mouseExited(MouseEvent e) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  //@Override
-  public void mouseWheelMoved(MouseWheelEvent e) {
-    //-1 scroll wheel up
-    //1 scroll wheel down
-    Point marked = getMarkedSamples();
-
-    double time = System.currentTimeMillis();
-    channel.scaleSamples( marked.x, marked.y, 1.0f-e.getWheelRotation()*0.1f );
-    this.updateView();
-  }
-
-  //@Override
-  public void mouseDragged( MouseEvent mouseEvent )
-  {
-    int x = mouseEvent.getX();
-    int y = mouseEvent.getY();
-
-    if(x < width && x > 0 && x > markEnd && y < height)
-    {
-      markEnd = x;
-      movEdgeLeft = false;
-    }
-    else if(x < width && x > 0 && x < markBeginning && y < height)
-    {
-      markBeginning = x;
-      movEdgeLeft = true;
-    }
-    if(x < width && x > 0 && y < height)
-    {
-      //left movement
-      if(movEdgeLeft)
-        markBeginning = x;
-      else
-        markEnd = x;
-    }
-
-    this.repaint();
-  }
-
-  //@Override
-  public void mouseMoved( MouseEvent mouseEvent )
-  {
-
   }
 
   //@Override
@@ -419,5 +350,174 @@ public class ChannelView extends JPanel
         e.printStackTrace();
       }
     }
+  }
+  
+  /**
+   * Sets the player region.
+   *
+   * TODO: Should be in controller...
+   */
+  public void setPlayerRegion()
+  {
+    if( isSelection() )
+    {
+      player.setRegion( getMarkedSamples() );
+    }
+  }
+  
+  /**
+   * Sets the controller for this view.
+   *
+   * @param channelController The controller.
+   */
+  public void setController( ChannelController channelController )
+  {
+    this.channelController = channelController;
+  }
+
+  
+  /**
+   * Selects a region.
+   *
+   * TODO: Check so that x1 and x2 is in graph?
+   *
+   * @param x1 Mark 1.
+   * @param x2 Mark 2.
+   */
+  public void selectRegion( int x1, int x2  )
+  {
+    fixedMark = x1;
+    movingMark = x2;
+  }
+
+  /**
+   * Removes selection.
+   */
+  public void deSelectRegion()
+  {
+    fixedMark = -1;
+    movingMark = -1;
+  }
+  
+  /**
+   * Selects the whole visible graph.
+   */
+  public void selectAll()
+  {
+    fixedMark = 1;
+    movingMark = getWidth() - 1;
+  }
+  
+  /**
+   * Moves mark to <code>x</code>.
+   *
+   * @param x Where to move on the x-axis.
+   */
+  public void moveMark( int x )
+  {
+    if( fixedMark == -1 )
+    {
+      fixedMark = x;
+    }
+
+    movingMark = x;
+  }
+
+  /**
+   * Moves the beginning mark to x.
+   *
+   * @param x The new mark on the x-axis.
+   */
+  public void moveBeginning( int x )
+  {
+    if( fixedMark < movingMark )
+    {
+      int temp = movingMark;
+      movingMark = fixedMark;
+      fixedMark = temp;
+    }
+
+    movingMark = x;
+  }
+
+  /**
+   * Moves the end mark to x.
+   *
+   * @param x The new mark on the x-axis.
+   */
+  public void moveEnd( int x )
+  {
+    if( fixedMark > movingMark )
+    {
+      int temp = movingMark;
+      movingMark = fixedMark;
+      fixedMark = temp;
+    }
+
+    movingMark = x;
+  }
+  
+  /**
+   * Returns true if there's any selection in the graph. False
+   * otherwise.
+   *
+   * @return True if any selection. False otherwise.
+   */
+  public boolean isSelection()
+  {
+    return fixedMark != -1 || movingMark != -1;
+  }
+  
+  /**
+   * Returns true if <code>x</code> and <code>y</code> is in the graph
+   * panel.
+   *
+   * @param x A value on the x-axis.
+   * @param y A value on the y-axis.
+   * @return True if x and y is in the graph area. False otherwise.
+   */
+  public boolean inView( int x, int y )
+  {
+    return x > 0 && y > 0 && x < width - 1 && y < height - 1;
+  }
+
+  /**
+   * Returns the graph width.
+   *
+   * @return The graph width.
+   */
+  public int getWidth()
+  {
+    return width;
+  }
+
+  /**
+   * Returns the graph height.
+   *
+   * @return The graph height.
+   */
+  public int getHeight()
+  {
+    return height;
+  }
+  
+  /**
+   * Returns the mark that is the most to the left.
+   *
+   * @return The position of the mark in pixels.
+   */
+  public int getMarkBeginning()
+  {
+    return Math.min( fixedMark, movingMark );
+  }
+
+  /**
+   * Returns the mark that is the most to the right.
+   *
+   * @return The position of the mark in pixels.
+   */
+  public int getMarkEnd()
+  {
+    return Math.max( fixedMark, movingMark );
   }
 }
