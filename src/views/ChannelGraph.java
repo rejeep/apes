@@ -360,4 +360,14 @@ public class ChannelGraph extends JPanel
     // To be implemented...
     return -1;
   }
+  
+  /**
+   * Sets the player mark.
+   *
+   * @param pixels The player mark in pixels.
+   */
+  public void setMarkPlayer( int pixels )
+  {
+    // To be implemented...
+  }
 }
