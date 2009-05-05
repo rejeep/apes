@@ -291,6 +291,17 @@ public class ChannelGraph extends JPanel
   }
   
   /**
+   * Returns the player mark on the x-axis in pixels.
+   *
+   * @return The player mark.
+   */
+  public int getPlayerMark()
+  {
+    // To be implemented...
+    return -1;
+  }
+  
+  /**
    * Returns the position of the fixed mark.
    *
    * @return The fixed marks position.
