@@ -2,8 +2,8 @@ package apes.views;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +18,6 @@ import javax.swing.JTextField;
 
 import apes.controllers.ConfigController;
 import apes.lib.Config;
-import apes.lib.Language;
-import java.awt.Font;
 
 
 
@@ -47,11 +45,6 @@ public class ConfigView extends JFrame
    */
   private Map<String, Component> newOptions;
 
-  /**
-   * A language object.
-   */
-  private Language language;
-
 
   /**
    * Creates a new <code>ConfigView</code> instance.
@@ -61,7 +54,6 @@ public class ConfigView extends JFrame
    */
   public ConfigView( Config config, ConfigController configController )
   {
-    this.language = Language.getInstance();
     this.config = config;
     this.configController = configController;
     this.newOptions = new HashMap<String, Component>();
@@ -156,12 +148,12 @@ public class ConfigView extends JFrame
   {
     JPanel panel = new JPanel();
 
-    JButton close = new JButton( language.get( "config.properties.close" ) );
+    JButton close = new ApesButton( "config.properties.close" );
     close.addActionListener( configController );
     close.setName( "close" );
     panel.add( close );
 
-    JButton save = new JButton( language.get( "config.properties.save" ) );
+    JButton save = new ApesButton( "config.properties.save" );
     save.addActionListener( configController );
     save.setName( "save" );
     panel.add( save );
