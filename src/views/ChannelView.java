@@ -104,13 +104,7 @@ public class ChannelView extends JPanel implements Runnable
 
     this.height = height;
     this.width = width;
-
-    channelController = new ChannelController();
-
-    this.addMouseListener( channelController );
-    this.addMouseMotionListener( channelController );
-    this.addMouseWheelListener( channelController );
-
+    
     this.player = player;
     this.channel = ch;
 
@@ -373,6 +367,10 @@ public class ChannelView extends JPanel implements Runnable
   public void setController( ChannelController channelController )
   {
     this.channelController = channelController;
+    
+    addMouseListener( channelController );
+    addMouseMotionListener( channelController );
+    addMouseWheelListener( channelController );
   }
 
   
