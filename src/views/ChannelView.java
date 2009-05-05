@@ -84,12 +84,8 @@ public class ChannelView extends JPanel implements Runnable
    * The panel width.
    */
   private int width;
-
-  /**
-   * The controller.
-   */
-  private ChannelController channelController;
-
+  
+  
   /**
    * Constructor to create a view for a channel.
    *
@@ -98,15 +94,20 @@ public class ChannelView extends JPanel implements Runnable
    * @param width The width of the view.
    * @param height The height of the view.
    */
-  public ChannelView( Player player, Channel ch, int width, int height )
+  public ChannelView( ChannelController channelController, Channel ch, int width, int height )
   {
     setPreferredSize( new Dimension( width, height ) );
 
     this.height = height;
     this.width = width;
     
-    this.player = player;
     this.channel = ch;
+    this.player = channelController.getPlayer();
+    
+    // Set events for this panel.
+    addMouseListener( channelController );
+    addMouseMotionListener( channelController );
+    addMouseWheelListener( channelController );    
 
     deSelectRegion();
 
@@ -345,34 +346,6 @@ public class ChannelView extends JPanel implements Runnable
       }
     }
   }
-  
-  /**
-   * Sets the player region.
-   *
-   * TODO: Should be in controller...
-   */
-  public void setPlayerRegion()
-  {
-    if( isSelection() )
-    {
-      player.setRegion( getMarkedSamples() );
-    }
-  }
-  
-  /**
-   * Sets the controller for this view.
-   *
-   * @param channelController The controller.
-   */
-  public void setController( ChannelController channelController )
-  {
-    this.channelController = channelController;
-    
-    addMouseListener( channelController );
-    addMouseMotionListener( channelController );
-    addMouseWheelListener( channelController );
-  }
-
   
   /**
    * Selects a region.

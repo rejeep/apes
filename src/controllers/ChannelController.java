@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import apes.views.ChannelView;
+import apes.models.Player;
 
 /**
  * Channel controller.
@@ -24,6 +25,22 @@ public class ChannelController extends ApplicationController implements MouseLis
    * work well in mouseDragged.
    */
   private boolean mouseDown;
+  
+  /**
+   * The player.
+   */
+  private Player player;
+  
+  
+  /**
+   * Creates a new <code>ChannelController</code> instance.
+   *
+   * @param player The player.
+   */
+  public ChannelController( Player player )
+  {
+    this.player = player;
+  }
 
   public void mousePressed( MouseEvent e )
   {
@@ -59,8 +76,11 @@ public class ChannelController extends ApplicationController implements MouseLis
     ChannelView channelView = (ChannelView)e.getSource();
 
     mouseDown = false;
-
-    channelView.setPlayerRegion();
+   
+    if( channelView.isSelection() )
+    {
+      player.setRegion( channelView.getMarkedSamples() );
+    }
   }
 
   public void mouseExited( MouseEvent e )
@@ -136,7 +156,6 @@ public class ChannelController extends ApplicationController implements MouseLis
     int rotation = e.getWheelRotation();
 
     Point marked = channelView.getMarkedSamples();
-    double time = System.currentTimeMillis();
 
     channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
     channelView.updateView();
@@ -145,4 +164,15 @@ public class ChannelController extends ApplicationController implements MouseLis
   public void mouseMoved( MouseEvent e ) {}
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
+  
+  
+  /**
+   * Returns this player.
+   *
+   * @return The player;
+   */
+  public Player getPlayer()
+  {
+    return player;
+  }
 }

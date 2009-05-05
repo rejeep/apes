@@ -31,11 +31,6 @@ public class InternalFormatView extends JPanel
   private List<ChannelView> channelViews;
 
   /**
-   * The player handler.
-   */
-  private PlayerHandler playerHandler;
-
-  /**
    * The channel controller.
    */
   private ChannelController channelController;
@@ -48,10 +43,11 @@ public class InternalFormatView extends JPanel
    */
   public InternalFormatView( PlayerHandler playerHandler, InternalFormat internalFormat )
   {
+    Player player = playerHandler.getPlayer( internalFormat );
+    
     this.internalFormat = internalFormat;
-    this.playerHandler = playerHandler;
     this.channelViews = new ArrayList<ChannelView>();
-    this.channelController = new ChannelController();
+    this.channelController = new ChannelController( player );
 
     setInternalFormat( internalFormat );
   }
@@ -64,18 +60,13 @@ public class InternalFormatView extends JPanel
   private void setInternalFormat( InternalFormat internalFormat )
   {
     channelViews.clear();
-
-    Player player = playerHandler.getPlayer( internalFormat );
-
+    
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
       // Create view
-      ChannelView channelView = new ChannelView( player, internalFormat.getChannel( i ),
+      ChannelView channelView = new ChannelView( channelController, internalFormat.getChannel( i ),
                                                  Config.getInstance().getIntOption( "graph_width" ),
                                                  Config.getInstance().getIntOption( "graph_height" ) );
-      
-      // Set controller
-      channelView.setController( channelController );
       
       // Add to list of channel views
       channelViews.add( channelView );
