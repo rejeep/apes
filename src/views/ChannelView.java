@@ -31,7 +31,7 @@ import apes.models.SampleIterator;
 public class ChannelView extends JPanel implements Runnable
 {
   /**
-   *
+   * The channel.
    */
   private Channel channel;
 
@@ -56,7 +56,7 @@ public class ChannelView extends JPanel implements Runnable
   private int[] samples;
 
   /**
-   *
+   * The player for this channel.
    */
   private Player player;
 
@@ -76,12 +76,12 @@ public class ChannelView extends JPanel implements Runnable
   private float samplesPerPixel;
 
   /**
-   *
+   * The panel height.
    */
   private int height;
 
   /**
-   *
+   * The panel width.
    */
   private int width;
 
