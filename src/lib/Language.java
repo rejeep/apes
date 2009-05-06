@@ -2,13 +2,10 @@ package apes.lib;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import apes.interfaces.LanguageObserver;
-import java.util.Arrays;
+import java.util.Observable;
 
 /**
  * Singleton class for setting the language of the application also
@@ -16,7 +13,7 @@ import java.util.Arrays;
  *
  * @author Simon Holm
  */
-public class Language
+public class Language extends Observable
 {
   /**
    * The default language to be loaded.
@@ -43,22 +40,15 @@ public class Language
    */
   private String language;
 
-  /**
-   * The observers looking at the Language module.
-   */
-  private List<LanguageObserver> observers;
-
 
   /**
    * Creates a new <code>Language</code> instance. Private so that you
    * cant create an object of this class without using {@link
-   * Language#getInstance getInstance}
+   * Language#getInstance getInstance}.
    */
   private Language()
   {
     language = DEFAULT_LANGUAGE;
-
-    observers = new ArrayList<LanguageObserver>();
   }
 
   /**
@@ -83,6 +73,8 @@ public class Language
 
       System.err.println( "Cannot set language " + language + ". Locale does not exist." );
     }
+    
+    setChanged();
   }
 
   /**
@@ -114,40 +106,8 @@ public class Language
   public void load() throws Exception
   {
     dictionary = new ApeLang( path, language + ".yml" );
-
-    notifyAllObservers();
-  }
-
-  /**
-   * Adds an observer to the Language.
-   *
-   * @param observer The observable item that should be added to watch
-   * the language.
-   */
-  public void addObserver( LanguageObserver observer )
-  {
-    observers.add( observer );
-  }
-
-  /**
-   * Removes the specified observer form the language.
-   *
-   * @param observer The observer to be removed.
-   */
-  public void removeObserver( LanguageObserver observer )
-  {
-    observers.remove( observer );
-  }
-
-  /**
-   * Notifies all observers.
-   */
-  private void notifyAllObservers()
-  {
-    for( LanguageObserver o : observers)
-    {
-      o.update();
-    }
+    
+    notifyObservers();
   }
 
   /**

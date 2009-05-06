@@ -4,6 +4,7 @@ import javax.swing.JMenu;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
+import java.util.Observable;
 
 /**
  * This extends {@link javax.swing.JMenuItem JMenu} with locale
@@ -37,11 +38,8 @@ public class ApesMenu extends JMenu implements LanguageObserver
     setText( language.get( tag ) );
     language.addObserver(this);
   }
-
-  /**
-   * Update method used to update the text on the item.
-   */
-  public void update()
+  
+  public void update( Observable o, Object arg )
   {
     setText( language.get( tag ) );
     this.updateUI();

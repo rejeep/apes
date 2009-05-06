@@ -3,6 +3,7 @@ package apes.views;
 import javax.swing.JLabel;
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
+import java.util.Observable;
 
 /**
  * Like JLabel except that it takes locale tag as argument instead of
@@ -35,11 +36,8 @@ public class ApesLabel extends JLabel implements LanguageObserver
     setText( language.get( tag ) );
     language.addObserver( this );
   }
-
-  /**
-   * Update method used to update the text on the item.
-   */
-  public void update()
+  
+  public void update( Observable o, Object arg )
   {
     setText( language.get( tag ) );
 

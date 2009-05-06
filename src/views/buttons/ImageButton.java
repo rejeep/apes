@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import apes.lib.Language;
+
 import apes.interfaces.LanguageObserver;
+import apes.lib.Language;
+import java.util.Observable;
 
 /**
  * <p>Creates a button with an icon on it. The button is stripped down
@@ -172,11 +174,8 @@ public abstract class ImageButton extends JButton implements LanguageObserver
   {
     this.buttonPath = buttonPath;
   }
-
-  /**
-   * Updates the button tooltip.
-   */
-  public void update()
+  
+  public void update( Observable o, Object arg )
   {
     setToolTipText( language.get( getDescription() ) );
 

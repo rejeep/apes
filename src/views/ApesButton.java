@@ -1,8 +1,10 @@
 package apes.views;
 
+import javax.swing.JButton;
+
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import javax.swing.JButton;
+import java.util.Observable;
 
 /**
  * Like JButton except that it takes locale tag as argument instead of
@@ -35,11 +37,8 @@ public class ApesButton extends JButton implements LanguageObserver
     setText( language.get( tag ) );
     language.addObserver( this );
   }
-
-  /**
-   * Update method used to update the text on the item.
-   */
-  public void update()
+  
+  public void update( Observable o, Object arg )
   {
     setText( language.get( tag ) );
 

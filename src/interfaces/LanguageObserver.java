@@ -1,14 +1,13 @@
 package apes.interfaces;
 
+import java.util.Observer;
+
 /**
  * Observer used for observing Language
  *
  * @author Simon Holm
  */
-public interface LanguageObserver
+public interface LanguageObserver extends Observer
 {
-  /**
-   * Called when the Language changes language.
-   */
-  public void update();
+
 }
