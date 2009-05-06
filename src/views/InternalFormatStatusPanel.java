@@ -207,17 +207,17 @@ public class InternalFormatStatusPanel extends JPanel
     // Milliseconds
     if( unit == 0 )
     {
-      pixels = 6000;
+      pixels = value;
     }
     // Seconds
     else if( unit == 1 )
     {
-      pixels = 6;
+      pixels = value;
     }
     // Samples
     else if( unit == 2 )
     {
-      pixels = 400;
+      pixels = value;
     }
 
     return pixels;
@@ -234,17 +234,17 @@ public class InternalFormatStatusPanel extends JPanel
     // Milliseconds
     if( unit == 0 )
     {
-      result = 6000;
+      result = pixels;
     }
     // Seconds
     else if( unit == 1 )
     {
-      result = 6;
+      result = pixels;
     }
     // Samples
     else if( unit == 2 )
     {
-      result = 400;
+      result = pixels;
     }
     
     textField.setText( "" + result );
