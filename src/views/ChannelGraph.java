@@ -106,27 +106,30 @@ public class ChannelGraph extends JPanel
     super.paintComponent( g );
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));
-    g2.clearRect(0,0, getWidth()-1, getHeight()-1);
+    setBackground(g2);
+    drawGraph(g2);
+    drawLines(g2);
+    drawMarkers(g2);
+    drawSelection(g2);
+    drawPlayMarker(g2);
+    drawRuler(g2);
+  }
 
-    g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
-    if(samplesPerPixel < 1)
-      for(int i = 0; i < samples.length-1; ++i)
-        g2.drawLine(i, samples[i]+(getHeight()/2), i+1,  samples[i+1]+(getHeight()/2));
-    else
-      for(int i = 0; i < samples.length; ++i)
-        g2.drawLine(i, -samples[i]+(getHeight()/2), i,  samples[i]+(getHeight()/2));
+  private void drawRuler(Graphics2D g2)
+  {
 
-    g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
-    g2.drawLine(0,getHeight()/2,getWidth(),getHeight()/2);
-    g2.drawLine(0,getHeight(),getWidth(),getHeight());
-    g2.drawLine(0,0,getWidth(),0);
+  }
 
-    if(getMarkBeginning() > 0)
-      g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),getHeight());
-    if(getMarkEnd() > 0)
-      g2.drawLine(getMarkEnd(),0,getMarkEnd(),getHeight());
+  private void drawPlayMarker(Graphics2D g2)
+  {
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
+    if(nrSamples > 0)
+      g2.drawLine(( (int) ((long) getWidth()*player.getCurrentSample()/nrSamples) ),0,
+                  ( (int) ((long) getWidth()*player.getCurrentSample()/nrSamples) ),getHeight());
+  }
 
+  private void drawSelection(Graphics2D g2)
+  {
     if(getMarkBeginning() > 0)
     {
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
@@ -135,11 +138,42 @@ public class ChannelGraph extends JPanel
         g2.fillRect(getMarkBeginning(), 0, getMarkEnd()-getMarkBeginning(), getHeight());
     }
     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-    g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
-    if(nrSamples > 0)
-      g2.drawLine(( (int) ((long) getWidth()*player.getCurrentSample()/nrSamples) ),0,
-                  ( (int) ((long) getWidth()*player.getCurrentSample()/nrSamples) ),getHeight());
   }
+
+  private void drawMarkers(Graphics2D g2)
+  {
+    if(getMarkBeginning() > 0)
+      g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),getHeight());
+    if(getMarkEnd() > 0)
+      g2.drawLine(getMarkEnd(),0,getMarkEnd(),getHeight());
+  }
+
+  private void drawLines(Graphics2D g2)
+  {
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
+    g2.drawLine(0,getHeight()/2,getWidth(),getHeight()/2);
+    g2.drawLine(0,getHeight(),getWidth(),getHeight());
+    g2.drawLine(0,0,getWidth(),0);
+  }
+
+  private void drawGraph(Graphics2D g2)
+  {
+    g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
+    if(samplesPerPixel < 1)
+      for(int i = 0; i < samples.length-1; ++i)
+        g2.drawLine(i, samples[i]+(getHeight()/2), i+1,  samples[i+1]+(getHeight()/2));
+    else
+      for(int i = 0; i < samples.length; ++i)
+        g2.drawLine(i, -samples[i]+(getHeight()/2), i,  samples[i]+(getHeight()/2));
+  }
+
+  private void setBackground(Graphics2D g2)
+  {
+    g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));
+    g2.clearRect(0,0, getWidth()-1, getHeight()-1);
+  }
+
+  
 
   /**
    * Sets the level of zoom.

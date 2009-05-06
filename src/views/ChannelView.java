@@ -180,16 +180,16 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   // DELEGATORS:
-  public int getGraphWidth() { return channelGraph.getWidth(); }
-  public int getGraphHeight() { return channelGraph.getHeight(); }
-  public int getMarkBeginning() { return channelGraph.getMarkBeginning(); }
-  public int getMarkEnd() { return channelGraph.getMarkEnd(); }
-  private int getFixedMark() { return channelGraph.getFixedMark(); }
-  private int getMovingMark() { return channelGraph.getMovingMark(); }
-  public Point getMarkedSamples() { return channelGraph.getMarkedSamples(); }
-  public Channel getChannel() { return channelGraph.getChannel(); }
-  public void updateView() { channelGraph.updateView(); }
-  private void setFixedMark( int x ) { channelGraph.setFixedMark( x ); }
+  public int getGraphWidth()          { return channelGraph.getWidth(); }
+  public int getGraphHeight()         { return channelGraph.getHeight(); }
+  public int getMarkBeginning()       { return channelGraph.getMarkBeginning(); }
+  public int getMarkEnd()             { return channelGraph.getMarkEnd(); }
+  private int getFixedMark()          { return channelGraph.getFixedMark(); }
+  private int getMovingMark()         { return channelGraph.getMovingMark(); }
+  public Point getMarkedSamples()     { return channelGraph.getMarkedSamples(); }
+  public Channel getChannel()         { return channelGraph.getChannel(); }
+  public void updateView()            { channelGraph.updateView(); }
+  private void setFixedMark( int x )  { channelGraph.setFixedMark( x ); }
   private void setMovingMark( int x ) { channelGraph.setMovingMark( x ); }
-  public void setZoom( int samples ) { channelGraph.setZoom( samples ); }
+  public void setZoom( int samples )  { channelGraph.setZoom( samples ); }
 }
