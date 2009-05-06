@@ -5,6 +5,7 @@ menu:
     view: View
     player: Player
     zoom: Zoom
+    effects: Effects
     tools: Tools
     help: Help
   file:

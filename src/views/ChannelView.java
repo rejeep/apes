@@ -144,7 +144,7 @@ public class ChannelView extends JPanel implements Runnable
     {
       x1 = graphWidth - 1;
     }
-    
+
     if( x2 < 0 )
     {
       x2 = 0;
@@ -426,27 +426,30 @@ public class ChannelView extends JPanel implements Runnable
       super.paintComponent( g );
       Graphics2D g2 = (Graphics2D) g;
 
-      g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));
-      g2.clearRect(0,0, graphWidth-1, graphHeight-1);
+      setBackground(g2);
+      drawGraph(g2);
+      drawLines(g2);
+      drawMarkers(g2);
+      drawSelection(g2);
+      drawPlayMarker(g2);
+      drawRuler(g2);
+    }
 
-      g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
-      if(samplesPerPixel < 1)
-        for(int i = 0; i < samples.length-1; ++i)
-          g2.drawLine(i, samples[i]+(graphHeight/2), i+1,  samples[i+1]+(graphHeight/2));
-      else
-        for(int i = 0; i < samples.length; ++i)
-          g2.drawLine(i, -samples[i]+(graphHeight/2), i,  samples[i]+(graphHeight/2));
+    private void drawRuler(Graphics2D g2)
+    {
 
-      g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
-      g2.drawLine(0,graphHeight/2,graphWidth,graphHeight/2);
-      g2.drawLine(0,graphHeight,graphWidth,graphHeight);
-      g2.drawLine(0,0,graphWidth,0);
+    }
 
-      if(getMarkBeginning() > 0)
-        g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),graphHeight);
-      if(getMarkEnd() > 0)
-        g2.drawLine(getMarkEnd(),0,getMarkEnd(),graphHeight);
+    private void drawPlayMarker(Graphics2D g2)
+    {
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
+      if(nrSamples > 0)
+        g2.drawLine(( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),0,
+                    ( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),graphHeight);
+    }
 
+    private void drawSelection(Graphics2D g2)
+    {
       if(getMarkBeginning() > 0)
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
@@ -455,10 +458,39 @@ public class ChannelView extends JPanel implements Runnable
           g2.fillRect(getMarkBeginning(), 0, getMarkEnd()-getMarkBeginning(), graphHeight);
       }
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-      g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
-      if(nrSamples > 0)
-        g2.drawLine(( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),0,
-                    ( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),graphHeight);
+    }
+
+    private void drawMarkers(Graphics2D g2)
+    {
+      if(getMarkBeginning() > 0)
+        g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),graphHeight);
+      if(getMarkEnd() > 0)
+        g2.drawLine(getMarkEnd(),0,getMarkEnd(),graphHeight);
+    }
+
+    private void drawLines(Graphics2D g2)
+    {
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_lines")));
+      g2.drawLine(0,graphHeight/2,graphWidth,graphHeight/2);
+      g2.drawLine(0,graphHeight,graphWidth,graphHeight);
+      g2.drawLine(0,0,graphWidth,0);
+    }
+
+    private void drawGraph(Graphics2D g2)
+    {
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_graph")));
+      if(samplesPerPixel < 1)
+        for(int i = 0; i < samples.length-1; ++i)
+          g2.drawLine(i, samples[i]+(graphHeight/2), i+1,  samples[i+1]+(graphHeight/2));
+      else
+        for(int i = 0; i < samples.length; ++i)
+          g2.drawLine(i, -samples[i]+(graphHeight/2), i,  samples[i]+(graphHeight/2));
+    }
+
+    private void setBackground(Graphics2D g2)
+    {
+      g2.setBackground(Color.decode(Config.getInstance().getOption("color_background")));
+      g2.clearRect(0,0, graphWidth-1, graphHeight-1);
     }
 
     /**
@@ -478,16 +510,6 @@ public class ChannelView extends JPanel implements Runnable
     {
       centerSample = sample;
     }
-
-    // TODO: Don't need this?
-    //     /**
-    //      * Returns the channel of the view.
-    //      * @return Returns <code>channel</code>.
-    //      */
-    //     public Channel getChannel()
-    //     {
-    //       return channel;
-    //     }
 
     /**
      * Updates the view form the channel and repaints it.
