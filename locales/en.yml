@@ -117,3 +117,13 @@ error:
     unsupported:
       title: Format error
       message: The format you are trying to use is not supported.
+channel:
+  header: Channel
+  beginning: First
+  end: Second
+  player: Player
+  refresh: Refresh
+  unit:
+    milliseconds: Milliseconds
+    samples: Samples
+    seconds: Seconds

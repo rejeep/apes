@@ -34,7 +34,6 @@ public class InternalFormatController extends ApplicationController
    */
   private TabsController tabsController;
 
-
   /**
    * Values copied or cut.
    */
@@ -57,17 +56,17 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    ChannelView firstSelection = getFirstSelectedChannelView();
+//     ChannelView firstSelection = getFirstSelectedChannelView();
 
-    // No selection?
-    if( firstSelection == null )
-      return;
+//     // No selection?
+//     if( firstSelection == null )
+//       return;
 
-    Point marked = firstSelection.getMarkedSamples();
-    if( marked == null || marked.x == marked.y )
-      return;
+//     Point marked = firstSelection.getMarkedSamples();
+//     if( marked == null || marked.x == marked.y )
+//       return;
 
-    clipboard = firstSelection.getChannel().copySamples( marked.x, marked.y );
+//     clipboard = firstSelection.getChannel().copySamples( marked.x, marked.y );
   }
 
   /**
@@ -75,25 +74,25 @@ public class InternalFormatController extends ApplicationController
    */
   public void cut()
   {
-    InternalFormatView ifView = getCurrentInternalFormatView();
-    InternalFormat intForm = ifView.getInternalFormat();
-    ChannelView firstSelection = getFirstSelectedChannelView();
+//     InternalFormatView ifView = getCurrentInternalFormatView();
+//     InternalFormat intForm = ifView.getInternalFormat();
+//     ChannelView firstSelection = getFirstSelectedChannelView();
 
-    // No selection?
-    if( firstSelection == null )
-      return;
+//     // No selection?
+//     if( firstSelection == null )
+//       return;
 
-    Point marked = firstSelection.getMarkedSamples();
-    if( marked == null || marked.x == marked.y )
-      return;
+//     Point marked = firstSelection.getMarkedSamples();
+//     if( marked == null || marked.x == marked.y )
+//       return;
 
-    CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
-    undoManager.addEdit( edit );
+//     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
+//     undoManager.addEdit( edit );
     
-    firstSelection.deSelectRegion();
-    clipboard = edit.getCutout();
+//     firstSelection.deSelectRegion();
+//     clipboard = edit.getCutout();
 
-    ifView.updateView();
+//     ifView.updateView();
   }
 
   /**
@@ -101,27 +100,27 @@ public class InternalFormatController extends ApplicationController
    */
   public void paste()
   {
-    if( clipboard == null )
-      return;
+//     if( clipboard == null )
+//       return;
 
-    InternalFormatView ifView = getCurrentInternalFormatView();
-    InternalFormat intForm = ifView.getInternalFormat();
-    ChannelView firstSelection = getFirstSelectedChannelView();
+//     InternalFormatView ifView = getCurrentInternalFormatView();
+//     InternalFormat intForm = ifView.getInternalFormat();
+//     ChannelView firstSelection = getFirstSelectedChannelView();
 
-    // No selection?
-    if( firstSelection == null )
-      return;
+//     // No selection?
+//     if( firstSelection == null )
+//       return;
 
-    Point marked = firstSelection.getMarkedSamples();
-    if( marked == null )
-      return;
+//     Point marked = firstSelection.getMarkedSamples();
+//     if( marked == null )
+//       return;
 
-    UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
-    undoManager.addEdit( edit );
+//     UndoableEdit edit = new PasteEdit( intForm, firstSelection.getChannel(), marked, clipboard );
+//     undoManager.addEdit( edit );
     
-    firstSelection.deSelectRegion();
+//     firstSelection.deSelectRegion();
 
-    ifView.updateView();
+//     ifView.updateView();
   }
 
   /**
@@ -129,24 +128,24 @@ public class InternalFormatController extends ApplicationController
    */
   public void delete()
   {
-    InternalFormatView ifView = getCurrentInternalFormatView();
-    InternalFormat intForm = ifView.getInternalFormat();
-    ChannelView firstSelection = getFirstSelectedChannelView();
+//     InternalFormatView ifView = getCurrentInternalFormatView();
+//     InternalFormat intForm = ifView.getInternalFormat();
+//     ChannelView firstSelection = getFirstSelectedChannelView();
 
-    // No selection?
-    if( firstSelection == null )
-      return;
+//     // No selection?
+//     if( firstSelection == null )
+//       return;
 
-    Point marked = firstSelection.getMarkedSamples();
-    if( marked == null || marked.x == marked.y )
-      return;
+//     Point marked = firstSelection.getMarkedSamples();
+//     if( marked == null || marked.x == marked.y )
+//       return;
 
-    CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
-    undoManager.addEdit( edit );
+//     CutEdit edit = new CutEdit( intForm, firstSelection.getChannel(), marked );
+//     undoManager.addEdit( edit );
     
-    firstSelection.deSelectRegion();
+//     firstSelection.deSelectRegion();
 
-    ifView.updateView();
+//     ifView.updateView();
   }
 
   /**
@@ -154,9 +153,9 @@ public class InternalFormatController extends ApplicationController
    */
   public void change()
   {
-    UndoableEdit edit = new ChangeEdit();
+//     UndoableEdit edit = new ChangeEdit();
 
-    undoManager.addEdit( edit );
+//     undoManager.addEdit( edit );
   }
 
   /**
@@ -164,8 +163,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void undo()
   {
-    undoManager.undo();
-    getCurrentInternalFormatView().updateView();
+//     undoManager.undo();
+//     getCurrentInternalFormatView().updateView();
   }
 
   /**
@@ -173,8 +172,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void redo()
   {
-    undoManager.redo();
-    getCurrentInternalFormatView().updateView();
+//     undoManager.redo();
+//     getCurrentInternalFormatView().updateView();
   }
 
   /**
@@ -182,10 +181,10 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomIn()
   {
-    System.out.println( "in" );
-    for(int i = 0; i < getCurrentInternalFormatView().getChannelViews().size(); ++i)
-      getCurrentInternalFormatView().getChannelViews().get(i).setZoom(100);
-    getCurrentInternalFormatView().updateView();
+//     System.out.println( "in" );
+//     for(int i = 0; i < getCurrentInternalFormatView().getChannelViews().size(); ++i)
+//       getCurrentInternalFormatView().getChannelViews().get(i).setZoom(100);
+//     getCurrentInternalFormatView().updateView();
   }
 
   /**
@@ -248,16 +247,18 @@ public class InternalFormatController extends ApplicationController
   public ChannelView getFirstSelectedChannelView()
   {
     // Get all Channels
-    List<ChannelView> channelViews = getCurrentInternalFormatView().getChannelViews();
+//     List<ChannelView> channelViews = getCurrentInternalFormatView().getChannelViews();
 
-    // Fins first selection.
-    ChannelView firstSelection = null;
-    for( ChannelView c : channelViews )
-      if( c.getMarkedSamples() != null )
-      {
-        firstSelection = c;
-        break;
-      }
-    return firstSelection;
+//     // Fins first selection.
+//     ChannelView firstSelection = null;
+//     for( ChannelView c : channelViews )
+//       if( c.getMarkedSamples() != null )
+//       {
+//         firstSelection = c;
+//         break;
+//       }
+//     return firstSelection;
+
+    return null;
   }
 }

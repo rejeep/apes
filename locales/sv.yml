@@ -117,3 +117,13 @@ error:
     unsupported:
       title: Format fel
       message: Programmet har inte stöd för filformatet.
+channel:
+  header: Kanal
+  beginning: Start
+  end: Slut
+  player: Spelare
+  refresh: Uppdatera
+  unit:
+    milliseconds: Millisekunder
+    samples: Samplar
+    seconds: Sekunder
