@@ -28,6 +28,11 @@ public class InternalFormatView extends JPanel
    * The channel view.
    */
   private ChannelView channelView;
+  
+  /**
+   * The status panel.
+   */
+  private InternalFormatStatusPanel statusPanel;
 
   /**
    * Places one ChannelView for each channel on this panel.
@@ -41,7 +46,7 @@ public class InternalFormatView extends JPanel
     Player player = playerHandler.getPlayer( internalFormat );
     ChannelController channelController = new ChannelController( player );
 
-    InternalFormatStatusPanel statusPanel = new InternalFormatStatusPanel( channelController );
+    statusPanel = new InternalFormatStatusPanel( channelController );
     add( statusPanel );
 
     channelView = new ChannelView( channelController, player );
@@ -75,13 +80,31 @@ public class InternalFormatView extends JPanel
     return internalFormat;
   }
 
+  /**
+   * Updates the view.
+   */
   public void updateView()
   {
     channelView.updateView();
   }
 
+  /**
+   * Returns this internal format views channel view.
+   *
+   * @return The channel view.
+   */
   public ChannelView getChannelView()
   {
     return channelView;
+  }
+  
+  /**
+   * Returns this internal format views status panel.
+   *
+   * @return The status panel.
+   */
+  public InternalFormatStatusPanel getStatusPanel()
+  {
+    return statusPanel;
   }
 }

@@ -15,7 +15,6 @@ import apes.views.ChannelView.Graph;
 import apes.views.InternalFormatStatusPanel;
 import apes.views.InternalFormatView;
 
-import apes.views.InternalFormatView;
 
 /**
  * Channel controller.
@@ -87,7 +86,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     }
 
     mouseDown = true;
-    
+
     channelView.repaint();
   }
 
@@ -101,12 +100,14 @@ public class ChannelController extends ApplicationController implements MouseLis
     {
       player.setRegion( channelView.getMarkedSamples() );
     }
+    
+    updateStatusPanel( channelView );
   }
 
   public void mouseExited( MouseEvent e )
   {
     setup( e );
-    
+
     // If the mouse don't exist at the top or bottom.
     if( y > 0 && y < channelView.getGraphHeight() )
     {
@@ -159,7 +160,9 @@ public class ChannelController extends ApplicationController implements MouseLis
         }
       }
 
-      channelView.repaint();
+      updateStatusPanel( channelView );
+
+      channelView.updateView();
     }
   }
 
@@ -206,7 +209,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     x = e.getX();
     y = e.getY();
   }
-  
+
   /**
    * Is called when the refresh button in the panel is pressed.
    *
@@ -219,14 +222,34 @@ public class ChannelController extends ApplicationController implements MouseLis
     InternalFormatStatusPanel statusPanel = (InternalFormatStatusPanel)panel.getParent();
     InternalFormatView internalFormatView = (InternalFormatView)statusPanel.getParent();
     ChannelView channelView = (ChannelView)internalFormatView.getChannelView();
-     
+
     int beginning = statusPanel.getBeginningTextFieldValue();
     int end = statusPanel.getEndTextFieldValue();
     int player = statusPanel.getPlayerTextFieldValue();
-    
+
     channelView.selectRegion( beginning, end );
     channelView.setMarkPlayer( player );
-    
+
     channelView.updateView();
+  }
+
+  /**
+   * Updates the status panel with the values from the graph
+   * selection.
+   *
+   * @param channelView The channel view.
+   */
+  private void updateStatusPanel( ChannelView channelView )
+  {
+    InternalFormatView internalFormatView = (InternalFormatView)channelView.getParent();
+    InternalFormatStatusPanel statusPanel = internalFormatView.getStatusPanel();
+
+    int beginning = channelView.getMarkBeginning();
+    int end = channelView.getMarkEnd();
+
+    statusPanel.setBeginningTextFieldValue( beginning );
+    statusPanel.setEndTextFieldValue( end );
+    // TODO: 100 is temp
+    statusPanel.setPlayerTextFieldValue( 100 );
   }
 }
