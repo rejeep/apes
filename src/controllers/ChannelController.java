@@ -6,14 +6,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import javax.swing.JPanel;
 
 import apes.models.Player;
-import apes.views.ApesButton;
 import apes.views.ChannelView;
-import apes.views.ChannelView.Graph;
 import apes.views.InternalFormatStatusPanel;
-import apes.views.InternalFormatView;
 
 
 /**
@@ -37,21 +33,16 @@ public class ChannelController extends ApplicationController implements MouseLis
    * The player.
    */
   private Player player;
-
-  /**
-   * The x-axis position on the graph.
-   */
-  private int x;
-
-  /**
-   * The y-axis position on the graph.
-   */
-  private int y;
-
+  
   /**
    * The channel view.
    */
   private ChannelView channelView;
+
+  /**
+   * The status panel.
+   */
+  private InternalFormatStatusPanel statusPanel;
 
   /**
    * Creates a new <code>ChannelController</code> instance.
@@ -65,7 +56,7 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mousePressed( MouseEvent e )
   {
-    setup( e );
+    int x = e.getX();
 
     // Left mouse button.
     if( e.getButton() == MouseEvent.BUTTON1 )
@@ -92,21 +83,20 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseReleased( MouseEvent e )
   {
-    setup( e );
-
     mouseDown = false;
 
     if( channelView.isSelection() )
     {
       player.setRegion( channelView.getMarkedSamples() );
     }
-    
-    updateStatusPanel( channelView );
+
+    updateStatusPanel();
   }
 
   public void mouseExited( MouseEvent e )
   {
-    setup( e );
+    int y = e.getY();
+    int x = e.getX();
 
     // If the mouse don't exist at the top or bottom.
     if( y > 0 && y < channelView.getGraphHeight() )
@@ -128,7 +118,8 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseDragged( MouseEvent e )
   {
-    setup( e );
+    int y = e.getY();
+    int x = e.getX();
 
     // Is the mouse inside the panel.
     if( channelView.inView( x, y ) )
@@ -160,7 +151,7 @@ public class ChannelController extends ApplicationController implements MouseLis
         }
       }
 
-      updateStatusPanel( channelView );
+      updateStatusPanel();
 
       channelView.updateView();
     }
@@ -168,8 +159,6 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseWheelMoved( MouseWheelEvent e )
   {
-    setup( e );
-
     // -1 scroll wheel up.
     // 1 scroll wheel down.
     int rotation = e.getWheelRotation();
@@ -195,34 +184,12 @@ public class ChannelController extends ApplicationController implements MouseLis
   {
     return player;
   }
-
-  /**
-   * Does some basic setup for an event. Like set up variables etc...
-   *
-   * @param e The <code>MouseEvent</code>.
-   */
-  private void setup( MouseEvent e )
-  {
-    ChannelView.Graph graph = (ChannelView.Graph)e.getSource();
-    channelView = graph.getChannelView();
-
-    x = e.getX();
-    y = e.getY();
-  }
-
+  
   /**
    * Is called when the refresh button in the panel is pressed.
-   *
-   * TODO: In InternalFormatController? But how...?
    */
   public void refresh()
   {
-    ApesButton button = (ApesButton)event.getSource();
-    JPanel panel = (JPanel)button.getParent();
-    InternalFormatStatusPanel statusPanel = (InternalFormatStatusPanel)panel.getParent();
-    InternalFormatView internalFormatView = (InternalFormatView)statusPanel.getParent();
-    ChannelView channelView = (ChannelView)internalFormatView.getChannelView();
-
     int beginning = statusPanel.getBeginningTextFieldValue();
     int end = statusPanel.getEndTextFieldValue();
     int player = statusPanel.getPlayerTextFieldValue();
@@ -239,11 +206,8 @@ public class ChannelController extends ApplicationController implements MouseLis
    *
    * @param channelView The channel view.
    */
-  private void updateStatusPanel( ChannelView channelView )
+  private void updateStatusPanel()
   {
-    InternalFormatView internalFormatView = (InternalFormatView)channelView.getParent();
-    InternalFormatStatusPanel statusPanel = internalFormatView.getStatusPanel();
-
     int beginning = channelView.getMarkBeginning();
     int end = channelView.getMarkEnd();
 
@@ -251,5 +215,25 @@ public class ChannelController extends ApplicationController implements MouseLis
     statusPanel.setEndTextFieldValue( end );
     // TODO: 100 is temp
     statusPanel.setPlayerTextFieldValue( 100 );
+  }
+  
+  /**
+   * Set the status panel.
+   *
+   * @param statusPanel The status panel.
+   */
+  public void setStatusPanel( InternalFormatStatusPanel statusPanel )
+  {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Sets the channel view.
+   *
+   * @param channelView The channel view.
+   */
+  public void setChannelView( ChannelView channelView )
+  {
+    this.channelView = channelView;
   }
 }

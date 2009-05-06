@@ -1,16 +1,11 @@
 package apes.views;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JPanel;
 
 import apes.controllers.ChannelController;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.views.InternalFormatStatusPanel;
-import apes.views.ChannelView;
 
 /**
  * Contains one ChannelView per channel in the internal format.
@@ -51,6 +46,10 @@ public class InternalFormatView extends JPanel
 
     channelView = new ChannelView( channelController, player );
     add( channelView );
+    
+    // The controller must know some views.
+    channelController.setStatusPanel( statusPanel );
+    channelController.setChannelView( channelView ); 
 
     setInternalFormat( internalFormat );
   }
@@ -86,25 +85,5 @@ public class InternalFormatView extends JPanel
   public void updateView()
   {
     channelView.updateView();
-  }
-
-  /**
-   * Returns this internal format views channel view.
-   *
-   * @return The channel view.
-   */
-  public ChannelView getChannelView()
-  {
-    return channelView;
-  }
-  
-  /**
-   * Returns this internal format views status panel.
-   *
-   * @return The status panel.
-   */
-  public InternalFormatStatusPanel getStatusPanel()
-  {
-    return statusPanel;
   }
 }
