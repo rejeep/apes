@@ -450,7 +450,7 @@ public class ChannelView extends JPanel implements Runnable
           g2.drawLine(start+1,0,start+1,graphHeight);
         }
 
-        if(getMarkStop() > 0)
+        if(stop > 0)
         {
           g2.drawLine(stop-1,0,stop-1,graphHeight);
         }
