@@ -79,11 +79,4 @@ public class InternalFormatView extends JPanel
     return internalFormat;
   }
 
-  /**
-   * Updates the view.
-   */
-  public void updateView()
-  {
-    channelView.updateView();
-  }
 }
