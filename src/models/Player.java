@@ -202,7 +202,7 @@ public class Player extends Observable implements Runnable
       {
         if( status == Status.PLAY )
         {
-          if( currentSample <= stop )
+          if( stop == 0 || currentSample <= stop )
           {
             byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
 
