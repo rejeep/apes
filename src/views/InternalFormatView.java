@@ -40,12 +40,12 @@ public class InternalFormatView extends JPanel implements Observer
     this.internalFormat = internalFormat;
 
     ChannelController channelController = new ChannelController( player );
-
-    statusPanel = new InternalFormatStatusPanel( channelController );
-    add( statusPanel );
-
+    
     channelView = new ChannelView( channelController, player );
     add( channelView );
+    
+    statusPanel = new InternalFormatStatusPanel( getSampleRate(), channelController, player );
+    add( statusPanel );
 
     // The controller must know some views.
     channelController.setStatusPanel( statusPanel );
