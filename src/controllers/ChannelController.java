@@ -129,32 +129,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     // Is the mouse inside the panel.
     if( inView( x, y ) )
     {
-      if( e.getModifiers() == MouseEvent.BUTTON1_MASK )
-      {
-        player.setMark( samples );
-      }
-      else if( e.getModifiers() == MouseEvent.BUTTON3_MASK )
-      {
-        // Is there a selection.
-        if( isSelection() )
-        {
-          int start = player.getStart();
-          int stop = player.getStop();
-
-          int fromStart = Math.abs( samples - start );
-          int fromStop = Math.abs( samples - stop );
-
-          // Are we closer to the beginning mark.
-          if( fromStart <= fromStop )
-          {
-            player.setStart( samples );
-          }
-          else
-          {
-            player.setStop( samples );
-          }
-        }
-      }
+      player.setMark( samples );
     }
   }
 
@@ -185,7 +160,6 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
-
 
   /**
    * Returns this player.

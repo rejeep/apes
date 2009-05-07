@@ -413,7 +413,11 @@ public class Player extends Observable implements Runnable
    */
   public void setMark( int mark )
   {
-    if( mark < start )
+    int fromStart = Math.abs( mark - start );
+    int fromStop = Math.abs( mark - stop );
+
+    // Are we closer to the start mark, than to the stop mark.
+    if( fromStart < fromStop )
     {
       setStart( mark );
     }
