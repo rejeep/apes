@@ -1,39 +1,42 @@
 package apes.plugins;
 
+import java.awt.Point;
 import java.util.Map;
 import java.util.HashMap;
-import java.awt.Point;
 
 import apes.interfaces.TransformPlugin;
 import apes.models.Samples;
 import apes.models.InternalFormat;
-import apes.models.Channel;
 
 /**
  * TODO: Comment
  */
-public class SilenceTransform implements TransformPlugin
+public class FadeTransform implements TransformPlugin
 {
   public String getName()
   {
-    return "Silence";
+    return "Fade";
   }
 
   public Map<String, String> getDescriptions()
   {
     HashMap map = new HashMap<String, String>();
-    map.put("en", "A silence effect for testing purposes.");
-    map.put("sv", "En tystnads effekt för testing.");
+    map.put("en", "Fadefade");
+    map.put("sv", "Fjupp");
     return map;
   }
 
   public void apply( InternalFormat internalFormat, Point selection )
   {
-    System.out.println("Silence: x: " + selection.x + " y: " + selection.y);
+    int interval = 100;
+    int diff = selection.y - selection.x;
+    float scale;
+    
     for(int i=0; i<internalFormat.getNumChannels(); i++)
     {
+      scale = 0.05f;
       System.out.println("Setting for channel " + i+1);
-      internalFormat.getChannel(i).setSamples(selection.x, selection.y, 0);
+      internalFormat.getChannel(i).scaleSamples(selection.x, selection.y, scale);
     }
   }
 }

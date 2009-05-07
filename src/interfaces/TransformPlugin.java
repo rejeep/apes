@@ -1,6 +1,7 @@
 package apes.interfaces;
+import java.awt.Point;
 
-import apes.models.Samples;
+import apes.models.InternalFormat;
 
 /**
  * Interface for transform plugins.
@@ -9,11 +10,5 @@ import apes.models.Samples;
  */
 public interface TransformPlugin extends Plugin
 {
-  /**
-   * Applies transformation to a Samples object.
-   *
-   * @param set Samples object containing samples to be altered.
-   * @return Samples object containing the changes.
-   */
-  Samples apply ( Samples set );
+  void apply ( InternalFormat internalFormat, Point selection );
 }

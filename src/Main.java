@@ -24,6 +24,7 @@ import apes.controllers.InternalFormatController;
 import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.PluginController;
+import apes.controllers.EffectController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.exceptions.UnidentifiedLanguageException;
@@ -31,6 +32,7 @@ import apes.lib.ApesFile;
 import apes.lib.Config;
 import apes.lib.Language;
 import apes.lib.PlayerHandler;
+import apes.lib.PluginHandler;
 import apes.views.ApesError;
 import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
@@ -103,6 +105,11 @@ public class Main extends JFrame
   private PluginController pluginController;
 
   /**
+   * Effect controller.
+   */
+  private EffectController effectController;
+  
+  /**
    * Undo manager (keeps history list).
    */
   private UndoManager undoManager;
@@ -117,6 +124,11 @@ public class Main extends JFrame
    */
   private Language language;
 
+  /**
+   * Plugin handler, takes care of the plugin business.
+   */
+  private PluginHandler pluginHandler;
+  
   /**
    * Starts the program.
    */
@@ -135,6 +147,9 @@ public class Main extends JFrame
 
     // Initialize a player handler.
     PlayerHandler playerHandler = new PlayerHandler();
+    
+    // Create the plugin handler
+    pluginHandler = new PluginHandler("build/apes/plugins");
 
     // Set some controllers.
     configController = new ConfigController();
@@ -143,7 +158,8 @@ public class Main extends JFrame
     tagsController = new TagsController( playerHandler );
     tabsController = new TabsController( playerHandler );
     languageController = new LanguageController();
-    pluginController = new PluginController();
+    pluginController = new PluginController(pluginHandler, playerHandler);
+    effectController = new EffectController(pluginHandler);
     
     // Fix language
     language = Language.getInstance();
@@ -391,6 +407,11 @@ public class Main extends JFrame
     JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
     player.add( backward );
     // Player END
+    
+    // Effects START
+    JMenu effects = pluginController.getEffectMenu();
+    menuBar.add( effects );
+    // Effects END
 
     // Tools START
     JMenu tools = new ApesMenu( "menu.head.tools" );

@@ -13,9 +13,13 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 import java.lang.ClassLoader;
 import java.lang.InstantiationException;
+import javax.swing.*;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.interfaces.TransformPlugin;
+import apes.controllers.PluginController;
+import apes.views.ApesMenu;
+import apes.views.ApesMenuItem;
 
 /**
  * Class for loading/unloading plugins.
@@ -44,6 +48,7 @@ public class PluginHandler
     plugins = new ArrayList<PluginInfo>();
     cl = new PluginLoader();
     addPluginsInPath(path);
+    
   }
   
   /**
@@ -112,7 +117,7 @@ public class PluginHandler
     
     for(PluginInfo p : plugins)
     {
-      if(p.getType().equals("transform"))
+      if(p.getType().equals("transform") && p.isLoaded())
       {
         list.add(p.getTransformObject());
       }
@@ -132,7 +137,7 @@ public class PluginHandler
     
     for(PluginInfo p : plugins)
     {
-      if(p.getType().equals("format"))
+      if(p.getType().equals("format") && p.isLoaded())
       {
         list.add(p.getAudioFormatObject());
       }
@@ -200,6 +205,14 @@ public class PluginHandler
         }
     }
     return null;
+  }
+  
+  /**
+   * TODO
+   */
+  public ArrayList<PluginInfo> getPluginInfo()
+  {
+    return plugins;
   }
 
   /**
@@ -357,6 +370,10 @@ public class PluginHandler
           pi.setAudioFormatObject(afp);
           plugins.add(pi);
         }
+      }
+      else
+      {
+        System.out.println("instancePlugin: Not a valid class?");
       }
     }
     catch( InstantiationException e )
