@@ -17,6 +17,8 @@ import apes.lib.SampleHelper;
 
 
 /**
+ * TODO: Comment
+ *
  * Panel with information about the internal format and some controls
  * for it.
  *
@@ -65,12 +67,14 @@ public class InternalFormatStatusPanel extends JPanel
   private Player player;
 
   /**
-   * 
+   * Contains a mark as key and a combo box as value. Used to be able
+   * to write more dynamic code.
    */
   private Map<Mark, JComboBox> unitMap;
   
   /**
-   * 
+   * Contains a mark as key and a text field as value. Used to be able
+   * to write more dynamic code.
    */
   private Map<Mark, JTextField> valueMap;
   
@@ -83,14 +87,14 @@ public class InternalFormatStatusPanel extends JPanel
                              "channel.unit.minutes"};
 
   /**
-   *
+   * The different marks.
    */
   private enum Mark { START, STOP, PLAYER };
 
   /**
-   * 
+   * The sample rate.
    */
-  private SampleHelper sampleHelper;
+  private int sampleRate;
 
   /**
    * Creates a new <code>InternalFormatStatusPanel</code> instance.
@@ -103,7 +107,7 @@ public class InternalFormatStatusPanel extends JPanel
 
     this.channelController = channelController;
     this.player = player;
-    this.sampleHelper = new SampleHelper( sampleRate );
+    this.sampleRate = sampleRate;
     
     unitMap = new HashMap<Mark, JComboBox>();
     valueMap = new HashMap<Mark, JTextField>();
@@ -249,17 +253,17 @@ public class InternalFormatStatusPanel extends JPanel
     // Milliseconds
     else if( comboBox.getSelectedIndex() == 1 )
     {
-      return sampleHelper.millisecondsToSamples( value );
+      return SampleHelper.millisecondsToSamples( sampleRate, value );
     }
     // Seconds
     else if( comboBox.getSelectedIndex() == 2 )
     {
-      return sampleHelper.secondsToSamples( value );
+      return SampleHelper.secondsToSamples( sampleRate, value );
     }
     // Minutes
     else if( comboBox.getSelectedIndex() == 3 )
     {
-      return sampleHelper.minutesToSamples( value );
+      return SampleHelper.minutesToSamples( sampleRate, value );
     }
     
     return value;
@@ -280,17 +284,17 @@ public class InternalFormatStatusPanel extends JPanel
     // Milliseconds
     else if( comboBox.getSelectedIndex() == 1 )
     {
-      value = sampleHelper.samplesToMilliseconds( samples );
+      value = SampleHelper.samplesToMilliseconds( sampleRate, samples );
     }
     // Seconds
     else if( comboBox.getSelectedIndex() == 2 )
     {
-      value = sampleHelper.samplesToseconds( samples );
+      value = SampleHelper.samplesToseconds( sampleRate, samples );
     }
     // Minutes
     else if( comboBox.getSelectedIndex() == 3 )
     {
-      value = sampleHelper.samplesToMinutes( samples );
+      value = SampleHelper.samplesToMinutes( sampleRate, samples );
     }
   }
 }
