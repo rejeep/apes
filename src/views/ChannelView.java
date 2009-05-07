@@ -132,7 +132,7 @@ public class ChannelView extends JPanel implements Runnable
       graph.updateGraph();
     }
   }
-  
+
   /**
    * Returns the graph width.
    *
@@ -179,9 +179,9 @@ public class ChannelView extends JPanel implements Runnable
   {
     int firstVisibleSample = centerSample - visibleSamples/2;
     int lastVisibelSample  = centerSample + visibleSamples/2;
-    
+
     if(samples < firstVisibleSample || samples > lastVisibelSample)
-       return -1;
+      return -1;
 
     int properSamples = samples - firstVisibleSample;
 
@@ -228,7 +228,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Transform a number of pixels to samples in the channel.
-   * @param pixels How many pixels in the graph in the x-axis 
+   * @param pixels How many pixels in the graph in the x-axis
    * @return The absolute samples in the channel, -1 if outside the graph.
    */
   public int pixelsToSamples(int pixels)
@@ -288,6 +288,14 @@ public class ChannelView extends JPanel implements Runnable
     this.mousePosX = mousePosX;
   }
 
+  /**
+   * Is called when the player is updated. Then the each graph should
+   * be updated.
+   */
+  public void updatePlayer()
+  {
+
+  }
 
   /**
    * TODO: Comment
@@ -576,7 +584,7 @@ public class ChannelView extends JPanel implements Runnable
     {
       return samplesToPixels( player.getStart() );
     }
-    
+
     /**
      * Returns the stop mark position in pixels.
      *
@@ -586,11 +594,5 @@ public class ChannelView extends JPanel implements Runnable
     {
       return samplesToPixels( player.getStop() );
     }
-  }
-  
-  // TODO:
-  public void updatePlayer()
-  {
-    
   }
 }
