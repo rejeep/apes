@@ -67,6 +67,7 @@ public class ChannelController extends ApplicationController implements MouseLis
         int samples = channelView.pixelsToSamples( x );
 
         player.setStart( samples );
+        player.setStop( samples );
         player.setCurrentSample( samples );
       }
       // Select all if more than one click.
@@ -88,14 +89,7 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseReleased( MouseEvent e )
   {
-    int x = e.getX();
-
     mouseDown = false;
-
-    if( isSelection() )
-    {
-      player.setStop( channelView.pixelsToSamples( x ) );
-    }
   }
 
   public void mouseExited( MouseEvent e )
@@ -132,7 +126,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     {
       if( e.getModifiers() == MouseEvent.BUTTON1_MASK )
       {
-        player.setStop( samples );
+        player.setMark( samples );
       }
       else if( e.getModifiers() == MouseEvent.BUTTON3_MASK )
       {
@@ -146,7 +140,7 @@ public class ChannelController extends ApplicationController implements MouseLis
           int fromStop = Math.abs( samples - stop );
 
           // Are we closer to the beginning mark.
-          if( fromStart <= fromStart )
+          if( fromStart <= fromStop )
           {
             player.setStart( samples );
           }

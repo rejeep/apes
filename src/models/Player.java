@@ -378,7 +378,7 @@ public class Player extends Observable implements Runnable
   public void setStart( int start )
   {
     this.start = start;
-
+    
     setChangedAndNotifyAll();
   }
 
@@ -402,6 +402,25 @@ public class Player extends Observable implements Runnable
     this.stop = stop;
 
     setChangedAndNotifyAll();
+  }
+  
+  /**
+   * Set <code>mark</code> "at the right place". This means that if
+   * mark is before start. Then start should be set to mark. Otherwise
+   * stop should be set to mark.
+   *
+   * @param mark an <code>int</code> value
+   */
+  public void setMark( int mark )
+  {
+    if( mark < start )
+    {
+      start = mark;
+    }
+    else
+    {
+      stop = mark;
+    }
   }
   
   /**
