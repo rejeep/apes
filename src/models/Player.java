@@ -120,13 +120,13 @@ public class Player extends Observable implements Runnable
   {
     int temp = currentSample + getWindLength();
     int max = getSampleAmount();
-      
+
     if( stop != 0 )
     {
       max = Math.min( max, stop );
     }
 
-    currentSample = temp >= max ? max : temp;
+    setCurrentSample( temp >= max ? max : temp );
   }
 
   /**
@@ -137,7 +137,7 @@ public class Player extends Observable implements Runnable
     int temp = currentSample - getWindLength();
     int min = Math.max( 0, start );
 
-    currentSample = temp <= min ? min : temp;
+    setCurrentSample( temp < min ? min : temp );
   }
 
   /**
