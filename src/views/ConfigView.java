@@ -75,7 +75,7 @@ public class ConfigView extends JFrame
 
     pack();
 
-    setDefaultCloseOperation( EXIT_ON_CLOSE );
+    setDefaultCloseOperation( DISPOSE_ON_CLOSE );
 
     // Start in center on screen.
     setLocationRelativeTo( null );

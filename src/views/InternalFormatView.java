@@ -1,29 +1,30 @@
 package apes.views;
 
+import java.util.Observable;
 import javax.swing.JPanel;
 
 import apes.controllers.ChannelController;
-import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
+import java.util.Observer;
 
 /**
  * Contains one ChannelView per channel in the internal format.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class InternalFormatView extends JPanel
+public class InternalFormatView extends JPanel implements Observer
 {
   /**
    * Internal format.
    */
   private InternalFormat internalFormat;
-  
+
   /**
    * The channel view.
    */
   private ChannelView channelView;
-  
+
   /**
    * The status panel.
    */
@@ -34,11 +35,10 @@ public class InternalFormatView extends JPanel
    *
    * @param internalFormat an <code>InternalFormat</code> value.
    */
-  public InternalFormatView( PlayerHandler playerHandler, InternalFormat internalFormat )
+  public InternalFormatView( Player player, InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
 
-    Player player = playerHandler.getPlayer( internalFormat );
     ChannelController channelController = new ChannelController( player );
 
     statusPanel = new InternalFormatStatusPanel( channelController );
@@ -46,10 +46,10 @@ public class InternalFormatView extends JPanel
 
     channelView = new ChannelView( channelController, player );
     add( channelView );
-    
+
     // The controller must know some views.
     channelController.setStatusPanel( statusPanel );
-    channelController.setChannelView( channelView ); 
+    channelController.setChannelView( channelView );
 
     setInternalFormat( internalFormat );
   }
@@ -79,4 +79,17 @@ public class InternalFormatView extends JPanel
     return internalFormat;
   }
 
+  public void update( Observable o, Object arg )
+  {
+    if( o instanceof InternalFormat )
+    {
+      channelView.updateInternalFormat();
+    }
+
+    if( o instanceof Player )
+    {
+      channelView.updatePlayer();
+      statusPanel.updatePlayer();
+    }
+  }
 }

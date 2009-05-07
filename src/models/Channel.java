@@ -17,11 +17,6 @@ public class Channel
   public static final int SAMPLES_SIZE = 1000;
 
   /**
-   * Padding element at the end of Channel. If null, there is no padding.
-   */
-  private Samples padding;
-
-  /**
    * A list containing all Samples structure, and thus all audio data
    * of the channel.
    */
@@ -58,57 +53,6 @@ public class Channel
     return new SampleIterator( this, obj, i );
   }
   
-  /**
-   * Returns the amount of silent padding at the end of the Channel.
-   *
-   * @return Returns <code>padLength</code>.
-   */
-  public int getPadLength()
-  {
-    return padding.getSize();
-  }
-
-  /**
-   * Adjust the amount of silent padding at end of file by adding an additional <code>length</code> samples.
-   *
-   * @param length The wanted amount of additional padding. May be negative for shortening padding.
-   * @return The amount of padding, in samples, after the call. If current padding length - <code>length</code> is negative, that number is returned and all padding is removed.
-   */
-  public int adjustPadding( int length )
-  {
-    // Do nothing
-    if( length == 0 )
-      return padding.getSize();
-    
-    // Remove old.
-    if( padding != null )
-    {
-      length += padding.getSize();
-      samplesList.remove( samplesList.size() - 1 );
-    }
-    
-    // Remove padding
-    if( length < 0 )
-    {
-      removePadding();
-      return length;
-    }
-    
-    // Add padding.
-    padding = new Samples(length);
-    samplesList.add( padding );
-    return length;
-  }
-  
-  /**
-   * Removes all padding from the Channel.
-   */
-  public void removePadding()
-  {
-    samplesList.remove(samplesList.size()-1);
-    padding = null;
-  }
-
   /**
    * Sets all samples within the specified range to
    * <code>value</code>.
