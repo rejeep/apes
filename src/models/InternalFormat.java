@@ -1,9 +1,11 @@
 package apes.models;
 
-import apes.lib.FileHandler;
-import java.util.List;
 import java.awt.Point;
 import java.io.IOException;
+import java.util.List;
+
+import apes.lib.FileHandler;
+import java.util.Observable;
 
 /**
  * Describes the audio in a format suitable for internal
@@ -11,7 +13,7 @@ import java.io.IOException;
  *
  * @author Daniel Kvick (kvick@student.chalmers.se)
  */
-public class InternalFormat
+public class InternalFormat extends Observable
 {
   /**
    * Information about where the file were saved to or loaded from.

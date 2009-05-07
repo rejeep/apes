@@ -5,6 +5,7 @@ import java.util.Map;
 
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
+import apes.models.Player;
 import apes.views.ButtonTabPanel;
 import apes.views.CloseButton;
 import apes.views.InternalFormatView;
@@ -82,9 +83,12 @@ public class TabsController extends ApplicationController
     // Set the new internal format.
     playerHandler.setInternalFormat( internalFormat );
 
-    // Create a view over the new internal format.
-    InternalFormatView internalFormatView = new InternalFormatView( playerHandler, internalFormat );
-
+    // Create a view over the new internal format and fix observers.
+    Player player = playerHandler.getCurrentPlayer();
+    InternalFormatView internalFormatView = new InternalFormatView( player, internalFormat );
+    internalFormat.addObserver( internalFormatView );
+    player.addObserver( internalFormatView );
+    
     // Add the tab to the pane.
     tabsView.addTab( title, internalFormatView );
 
