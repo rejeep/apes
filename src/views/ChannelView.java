@@ -130,13 +130,13 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Updates the view and all graphs in it.
+   * Updates the view.
    */
-  public void updateView()
+  public void updateInternalFormat()
   {
     for( ChannelView.Graph graph : graphs )
     {
-      graph.updateView();
+      graph.updateGraph();
     }
   }
 
@@ -548,7 +548,7 @@ public class ChannelView extends JPanel implements Runnable
     /**
      * Updates the view form the channel and repaints it.
      */
-    public void updateInternalFormat()
+    public void updateGraph()
     {
       if(channel == null)
         return;
