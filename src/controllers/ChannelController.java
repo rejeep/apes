@@ -153,7 +153,7 @@ public class ChannelController extends ApplicationController implements MouseLis
 
       updateStatusPanel();
 
-      channelView.updateView();
+      channelView.updatePlayer();
     }
   }
 
@@ -167,7 +167,7 @@ public class ChannelController extends ApplicationController implements MouseLis
 
     // TODO: We should scale all channels.
     // channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
-    channelView.updateView();
+    channelView.updatePlayer();
   }
 
   public void mouseMoved( MouseEvent e ) {}
@@ -197,7 +197,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     channelView.selectRegion( beginning, end );
     channelView.setMarkPlayer( player );
 
-    channelView.updateView();
+    channelView.updatePlayer();
   }
 
   /**
