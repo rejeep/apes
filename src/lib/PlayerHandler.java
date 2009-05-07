@@ -272,4 +272,14 @@ public class PlayerHandler
 
     players.remove( player );
   }
+  
+  /**
+   * Returns the current player.
+   *
+   * @return The current player.
+   */
+  public Player getCurrentPlayer()
+  {
+    return currentPlayer;
+  }
 }
