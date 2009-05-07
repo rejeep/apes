@@ -403,7 +403,7 @@ public class ChannelView extends JPanel implements Runnable
 
         visibleSamples = nrSamples;
         centerSample = nrSamples/2;
-        updateView();
+        updateGraph();
       }
     }
 
