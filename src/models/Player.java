@@ -203,7 +203,7 @@ public class Player extends Observable implements Runnable
 
             line.write( data, 0, data.length );
 
-            currentSample += Channel.SAMPLES_SIZE;
+            increaseCurrentSample();
           }
           else
           {
@@ -342,6 +342,8 @@ public class Player extends Observable implements Runnable
   public void setCurrentSample( int currentSample )
   {
     this.currentSample = currentSample;
+    
+    setChangedAndNotifyAll();
   }
 
   /**
@@ -362,6 +364,8 @@ public class Player extends Observable implements Runnable
   public void setStart( int start )
   {
     this.start = start;
+
+    setChangedAndNotifyAll();
   }
 
   /**
@@ -382,5 +386,25 @@ public class Player extends Observable implements Runnable
   public void setStop( int stop )
   {
     this.stop = stop;
+
+    setChangedAndNotifyAll();
+  }
+  
+  /**
+   * Increases <code>currentSample</code> by one step.
+   */
+  private void increaseCurrentSample()
+  {
+    setCurrentSample( currentSample + Channel.SAMPLES_SIZE );
+  }
+ 
+  /**
+   * Set changed and notify all observers.
+   */
+  private void setChangedAndNotifyAll()
+  {
+    setChanged();
+    
+    notifyObservers();
   }
 }
