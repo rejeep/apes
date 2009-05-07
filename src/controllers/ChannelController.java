@@ -64,7 +64,7 @@ public class ChannelController extends ApplicationController implements MouseLis
       // Single click.
       if( e.getClickCount() == 1 )
       {
-        int samples = channelView.pixelsToSeconds( x );
+        int samples = channelView.pixelsToSamples( x );
 
         player.setStart( samples );
         player.setCurrentSample( samples );
