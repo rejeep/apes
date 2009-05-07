@@ -40,6 +40,8 @@ public class ChannelView extends JPanel implements Runnable
    */
   private Player player;
 
+
+
   /**
    * The fixed mark in the graph.
    */
@@ -115,13 +117,13 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Updates the view and all graphs in it.
+   * Updates the view.
    */
-  public void updateView()
+  public void updateInternalFormat()
   {
     for( ChannelView.Graph graph : graphs )
     {
-      graph.updateView();
+      graph.updateGraph();
     }
   }
 
@@ -329,6 +331,38 @@ public class ChannelView extends JPanel implements Runnable
     return null;
   }
 
+  public int samplesToPixels(long samples)
+  {
+    return 0;//graphWidth*samples/nrSamples;
+  }
+
+  public int millisecondsToPixels(long milliseconds)
+  {
+    return 0;
+  }
+
+  public int secondsToPixels(long seconds)
+  {
+    return 0;
+  }
+
+  public long pixelsToSamples(int pixels)
+  {
+    return 0;
+  }
+
+  public long pixelsToMilliseconds(int pixels)
+  {
+    return 0;
+  }
+
+  public long pixelsToSecnods(int pixels)
+  {
+    return 0;
+  }
+
+
+
   /**
    * TODO: Comment
    *
@@ -342,17 +376,17 @@ public class ChannelView extends JPanel implements Runnable
     private Channel channel;
 
     /**
-     *
+     * The number of samples for each of the channels.
      */
     private int nrSamples;
 
     /**
-     *
+     * The center sample of the channels
      */
     private int centerSample;
 
     /**
-     *
+     * The number of visible samples in each channel
      */
     private int visibleSamples;
 
@@ -403,7 +437,7 @@ public class ChannelView extends JPanel implements Runnable
 
         visibleSamples = nrSamples;
         centerSample = nrSamples/2;
-        updateView();
+        updateGraph();
       }
     }
 
@@ -514,7 +548,7 @@ public class ChannelView extends JPanel implements Runnable
     /**
      * Updates the view form the channel and repaints it.
      */
-    public void updateView()
+    public void updateGraph()
     {
       if(channel == null)
         return;
@@ -632,5 +666,11 @@ public class ChannelView extends JPanel implements Runnable
       }
       return null;
     }
+  }
+  
+  // TODO:
+  public void updatePlayer()
+  {
+    
   }
 }

@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.lang.InterruptedException;
 import javax.sound.sampled.SourceDataLine;
 import apes.lib.Config;
+import java.util.Observable;
 
 /**
  * This class plays an internal format. It implements Runnable rather
@@ -12,7 +13,7 @@ import apes.lib.Config;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class Player implements Runnable
+public class Player extends Observable implements Runnable
 {
   /**
    * The data line.
@@ -40,14 +41,14 @@ public class Player implements Runnable
   private int currentSample;
 
   /**
-   * This is how far we are allowed to play.
-   */
-  private int stop;
-
-  /**
-   * The start of the selected region.
+   * Where to start playing, in samples.
    */
   private int start;
+
+  /**
+   * This is how far we are allowed to play, in samples.
+   */
+  private int stop;
 
   /**
    * Tells how long a wind should be. The larger value, the less wind
@@ -73,7 +74,7 @@ public class Player implements Runnable
 
     resetStop();
     resetStart();
-    
+
     currentSample = 0;
     setStatus( Status.WAIT );
 
@@ -126,7 +127,7 @@ public class Player implements Runnable
   {
     int temp = currentSample - getWindLength();
     int min = Math.max( 0, start );
-    
+
     currentSample = temp <= min ? min : temp;
   }
 
@@ -242,16 +243,6 @@ public class Player implements Runnable
   }
 
   /**
-   * Returns currentSample.
-   *
-   * @return currentSample.
-   */
-  public int getCurrentSample()
-  {
-    return currentSample;
-  }
-
-  /**
    * Sets the line for this player.
    *
    * @param line The line.
@@ -314,7 +305,7 @@ public class Player implements Runnable
   {
     stop = getSampleAmount();
   }
-  
+
   /**
    * Sets the start position to the beginning of the file.
    */
@@ -331,5 +322,65 @@ public class Player implements Runnable
   public int getSampleAmount()
   {
     return internalFormat.getSampleAmount() - 1;
+  }
+
+  /**
+   * Returns currentSample.
+   *
+   * @return currentSample.
+   */
+  public int getCurrentSample()
+  {
+    return currentSample;
+  }
+
+  /**
+   * Sets the current sample position.
+   *
+   * @param currentSample The position.
+   */
+  public void getCurrentSample( int currentSample )
+  {
+    this.currentSample = currentSample;
+  }
+
+  /**
+   * Returns start position.
+   *
+   * @return The start position.
+   */
+  public int getStart()
+  {
+    return start;
+  }
+
+  /**
+   * Sets the start position.
+   *
+   * @param start the start position.
+   */
+  public void setStart( int start )
+  {
+    this.start = start;
+  }
+
+  /**
+   * Returns stop position.
+   *
+   * @return The stop position.
+   */
+  public int getStop()
+  {
+    return stop;
+  }
+
+  /**
+   * Sets the stop position.
+   *
+   * @param stop the stop position.
+   */
+  public void setStop( int stop )
+  {
+    this.stop = stop;
   }
 }
