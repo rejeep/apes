@@ -1,47 +1,37 @@
 /**
- *
+ * TODO: Comment
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class SampleHelper
 {
-  /**
-   *
-   */
-  private int sampleRate;
-
-  public SampleHelper( int sampleRate )
+  public static int millisecondsToSamples( int sampleRate, int milliseconds )
   {
-    this.sampleRate = sampleRate;
+    return ( milliseconds / 1000 ) * sampleRate;
   }
 
-  public int millisecondsToSamples( int milliseconds )
+  public static int secondsToSamples( int sampleRate, int seconds )
   {
-
+    return seconds * sampleRate;
   }
 
-  public int secondsToSamples( int seconds )
+  public static int minutesToSamples( int sampleRate, int minutes )
   {
-
+    return ( minutes * 60 ) * sampleRate;
   }
 
-  public int minutesToSamples( int minutes )
+  public static int samplesToMilliseconds( int sampleRate, int samples )
   {
-
+    return ( samples / sampleRate ) * 1000;
   }
 
-  public int samplesToMilliseconds( samples )
+  public static int samplesToseconds( int sampleRate, int samples )
   {
-
+    return samples / sampleRate;
   }
 
-  public int samplesToseconds( samples )
+  public static int samplesToMinutes( int sampleRate, int samples )
   {
-
-  }
-
-  public int samplesToMinutes( samples )
-  {
-
+    return ( samples / sampleRate ) / 60;
   }
 }
