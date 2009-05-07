@@ -141,6 +141,11 @@ public class Player extends Observable implements Runnable
     return getSampleAmount() / wind;
   }
 
+  public Point getSelection()
+  {
+    return new Point( start, stop );
+  }
+  
   /**
    * Returns the <code>InternalFormat</code> connected to this player.
    *

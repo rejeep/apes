@@ -189,7 +189,7 @@ public class Main extends JFrame
     add( tabsController.getTabsView(), BorderLayout.CENTER );
 
     // Controller for the internal format.
-    internalFormatController = new InternalFormatController( undoManager, tabsController );
+    internalFormatController = new InternalFormatController( undoManager, tabsController, playerHandler );
 
     // Create and add menu.
     createMenu();

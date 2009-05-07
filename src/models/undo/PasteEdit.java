@@ -18,14 +18,12 @@ import javax.swing.undo.AbstractUndoableEdit;
 public class PasteEdit extends AbstractUndoableEdit
 { 
   private InternalFormat internalFormat;
-  private Channel channel;
-  private Samples[] paste;
+  private Samples[][] paste;
   private int start, stop;
   
-  public PasteEdit( InternalFormat intForm, Channel c, Point marked, Samples[] p )
+  public PasteEdit( InternalFormat intForm, Point marked, Samples[][] p )
   {
     internalFormat = intForm;
-    channel = c;
     start = marked.x;
     stop = marked.y;
     paste = p;
@@ -34,11 +32,11 @@ public class PasteEdit extends AbstractUndoableEdit
   
   public void redo()
   {
-    stop = internalFormat.pasteSamples( channel, start, paste );
+    stop = internalFormat.pasteSamples( start, paste );
   }
   
   public void undo()
   {
-    paste = internalFormat.cutSamples( channel, start, stop );
+    paste = internalFormat.cutSamples( start, stop );
   }
 }
