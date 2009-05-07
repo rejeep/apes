@@ -141,6 +141,11 @@ public class Player extends Observable implements Runnable
     return getSampleAmount() / wind;
   }
 
+  /**
+   * Returns the selection as a point. x is start and y i stop.
+   *
+   * @return The selection.
+   */
   public Point getSelection()
   {
     return new Point( start, stop );
