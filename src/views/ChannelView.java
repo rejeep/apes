@@ -546,7 +546,7 @@ public class ChannelView extends JPanel implements Runnable
     /**
      * Updates the view form the channel and repaints it.
      */
-    public void updateView()
+    public void updateInternalFormat()
     {
       if(channel == null)
         return;
@@ -664,5 +664,11 @@ public class ChannelView extends JPanel implements Runnable
       }
       return null;
     }
+  }
+  
+  // TODO:
+  public void updatePlayer()
+  {
+    
   }
 }
