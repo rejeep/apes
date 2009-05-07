@@ -17,8 +17,6 @@ import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
 
-// TODO: Maybe pass some arguments to updateView.
-
 
 /**
  * View for all channel graphs.
