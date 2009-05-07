@@ -339,7 +339,7 @@ public class Player extends Observable implements Runnable
    *
    * @param currentSample The position.
    */
-  public void getCurrentSample( int currentSample )
+  public void setCurrentSample( int currentSample )
   {
     this.currentSample = currentSample;
   }
