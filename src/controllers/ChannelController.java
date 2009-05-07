@@ -177,7 +177,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     int x = e.getX();
 
     // Is the mouse inside the panel.
-    if( channelView.inView( x, y ) )
+    if( inView( x, y ) )
     {
       channelView.setMousePosX( x );
       channelView.repaint();
