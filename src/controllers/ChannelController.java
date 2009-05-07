@@ -165,7 +165,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     // 1 scroll wheel down.
     int rotation = e.getWheelRotation();
 
-    Point marked = channelView.getMarkedSamples();
+    // Point marked = channelView.getMarkedSamples();
 
     // TODO: We should scale all channels.
     // channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
