@@ -317,7 +317,7 @@ public class Player extends Observable implements Runnable
    */
   private void resetStop()
   {
-    stop = getSampleAmount();
+    stop = 0;
   }
 
   /**
