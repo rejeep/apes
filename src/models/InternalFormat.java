@@ -308,7 +308,7 @@ public class InternalFormat
     for( int i = 0; i < channels.size(); i++ )
       retVal = channels.get(i).pasteSamples( start, samples[i] );
     
-    sampleAmount += samples[0].length;
+    sampleAmount += retVal - start;
     
     return retVal;
   }
