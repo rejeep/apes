@@ -17,9 +17,8 @@ import javax.swing.undo.AbstractUndoableEdit;
  */
 public class CutEdit extends AbstractUndoableEdit
 {
-  private Samples[] cutout;
+  private Samples[][] cutout;
   private InternalFormat internalFormat;
-  private Channel channel;
   private int start, stop;
   
   /**
@@ -27,10 +26,9 @@ public class CutEdit extends AbstractUndoableEdit
    * @param c Channel to be affected.
    * @param marked A point where [x,y] describes the interval to cut as absolute indexes.
    */
-  public CutEdit( InternalFormat intForm, Channel c, Point marked )
+  public CutEdit( InternalFormat intForm, Point marked )
   {
     internalFormat = intForm;
-    channel = c;
     start = marked.x;
     stop = marked.y;
     
@@ -42,7 +40,7 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void redo()
   {
-    cutout = internalFormat.cutSamples( channel, start, stop );
+    cutout = internalFormat.cutSamples( start, stop );
   }
   
   /**
@@ -50,7 +48,7 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void undo()
   {
-    internalFormat.pasteSamples( channel, start, cutout );
+    internalFormat.pasteSamples( start, cutout );
     cutout = null;
   }
   
@@ -58,7 +56,7 @@ public class CutEdit extends AbstractUndoableEdit
    * Returns an array of Samples containing all samples cut from the Channel.
    * @return Returns cutout.
    */
-  public Samples[] getCutout()
+  public Samples[][] getCutout()
   {
     return cutout;
   }

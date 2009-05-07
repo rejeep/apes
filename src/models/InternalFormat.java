@@ -257,51 +257,50 @@ public class InternalFormat
   }
   
   /**
-   * Removes the samples in the specified interval from the selected channel and returns a Samples[] containing Samples containing these samples. Ensures that all Channels retain equal length.
-   * @param c The Channel to cut from.
-   * @param start First sample to cut away.
-   * @param stop Last sample to cut away.
-   * @return An array containing Samples objects of the data removed from the selected channel.
+   * Returns an array of Samples[] containing the data copied from each channel.
+   * @param start The first index to copy.
+   * @param stop The last index to copy.
+   * @return All data copied.
    */
-  public Samples[] cutSamples( Channel c, int start, int stop )
+  public Samples[][] copySamples( int start, int stop )
   {
-    if( !channels.contains( c ) )
-      return null;
+    Samples[][] samples = new Samples[channels.size()][];
     
-    Samples[] samples = c.cutSamples( start, stop );
-    
-    // Fix length.
-    c.adjustPadding( stop - start + 1 );
+    for( int i = 0; i < channels.size(); i++ )
+      samples[i] = channels.get(i).copySamples(start, stop);
     
     return samples;
   }
   
   /**
+   * Removes the samples in the specified interval from all channel and returns them in a Samples[][] containing a Samples[] for each channel.
+   * @param start First sample to cut away.
+   * @param stop Last sample to cut away.
+   * @return An array containing arrays of Samples objects of the data removed from the channels.
+   */
+  public Samples[][] cutSamples( int start, int stop )
+  {
+    Samples[][] samples = new Samples[channels.size()][];
+    
+    for( int i = 0; i < channels.size(); i++ )
+      samples[i] = channels.get(i).cutSamples( start, stop );
+        
+    return samples;
+  }
+  
+  /**
    * Inserts the provided samples at the specified index. Ensures that all Channels retain equal length.
-   * @param c Channel to insert into.
    * @param start Index to insert at.
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
-  public int pasteSamples( Channel c, int start, Samples[] samples )
+  public int pasteSamples( int start, Samples[][] samples )
   {
-    if( !channels.contains( c ) )
-      return -1;
+    int retVal = 0;
     
-    int retVal = c.pasteSamples( start, samples );
+    for( int i = 0; i < channels.size(); i++ )
+      retVal = channels.get(i).pasteSamples( start, samples[i] );
     
-    // fix length.
-    int addedLength = retVal - start;
-    int newPadding = c.adjustPadding( -addedLength );
-   
-    // This channel too long, pad all others.
-    if( newPadding < 0 )
-    {
-      newPadding *= -1;
-      for( Channel channel : channels )
-        if( channel != c )
-          channel.adjustPadding( newPadding );
-    }
     
     return retVal;
   }
