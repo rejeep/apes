@@ -150,6 +150,8 @@ public class InternalFormat
    */
   public byte[] getChunk( int index, int amount )
   {
+    if( index > getSampleAmount() || index < 0 || amount < 0 )
+      return new byte[0];
     // Get memory.
     if( index + amount > getSampleAmount() )
       amount = getSampleAmount() - index;
@@ -284,23 +286,29 @@ public class InternalFormat
     
     for( int i = 0; i < channels.size(); i++ )
       samples[i] = channels.get(i).cutSamples( start, stop );
+    
+    sampleAmount -= stop - start + 1;
         
     return samples;
   }
   
   /**
-   * Inserts the provided samples at the specified index. Ensures that all Channels retain equal length.
+   * Inserts the provided samples at the specified index.
    * @param start Index to insert at.
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
   public int pasteSamples( int start, Samples[][] samples )
   {
+    if( samples == null || samples.length < channels.size() )
+      return -1;
+    
     int retVal = 0;
     
     for( int i = 0; i < channels.size(); i++ )
       retVal = channels.get(i).pasteSamples( start, samples[i] );
     
+    sampleAmount += samples[0].length;
     
     return retVal;
   }
