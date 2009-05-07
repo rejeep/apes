@@ -69,6 +69,11 @@ public class ChannelView extends JPanel implements Runnable
   private int movingMark;
 
   /**
+   * The position of the mouse in the x-axis
+   */
+  private int mousePosX;
+
+  /**
    * The channel controller.
    */
   private ChannelController channelController;
@@ -460,6 +465,11 @@ public class ChannelView extends JPanel implements Runnable
     return minutes;
   }
 
+  public void setMousePosX( int mousePosX )
+  {
+    this.mousePosX = mousePosX;
+  }
+
 
   /**
    * TODO: Comment
@@ -550,10 +560,23 @@ public class ChannelView extends JPanel implements Runnable
       drawSelection(g2);
       drawPlayMarker(g2);
       drawRuler(g2);
+      drawStatus(g2);
+    }
+
+    private void drawStatus(Graphics2D g2)
+    {
+      //inchannelController;
+      int seconds = pixelsToSeconds( mousePosX );
+      g2.drawString( "( " + seconds + " s)", 0, graphHeight );
     }
 
     private void drawRuler(Graphics2D g2)
     {
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_ruler")));
+      int rulerWidth = Config.getInstance().getIntOption("ruler_width");
+      g2.fillRect(0,0, graphWidth-1, rulerWidth );
+      for(int i = 0; i < graphWidth; i += graphWidth/10)
+        g2.drawLine( i, 0, i, rulerWidth+5);
 
     }
 
