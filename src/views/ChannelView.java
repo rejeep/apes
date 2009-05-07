@@ -431,10 +431,10 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawMarkers(Graphics2D g2)
     {
-      if(getMarkStart() > 0)
-        g2.drawLine(getMarkStart(),0,getMarkStart(),graphHeight);
+      if(getMarkStart() >= 0)
+        g2.drawLine(getMarkStart()+1,0,getMarkStart()+1,graphHeight);
       if(getMarkStop() > 0)
-        g2.drawLine(getMarkStop(),0,getMarkStop(),graphHeight);
+        g2.drawLine(getMarkStop()-1,0,getMarkStop()-1,graphHeight);
     }
 
     private void drawLines(Graphics2D g2)
