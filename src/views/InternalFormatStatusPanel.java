@@ -17,8 +17,6 @@ import apes.lib.SampleHelper;
 
 
 /**
- * TODO: Comment
- *
  * Panel with information about the internal format and some controls
  * for it.
  *
@@ -201,6 +199,10 @@ public class InternalFormatStatusPanel extends JPanel
     return panel;
   }
 
+  /**
+   * I called when something has been changed in the player. This then
+   * updates the fields.
+   */
   public void updatePlayer()
   {
     setStartValue( player.getStart() );
@@ -208,60 +210,90 @@ public class InternalFormatStatusPanel extends JPanel
     setPlayerValue( player.getCurrentSample() );
   }
 
+  /**
+   * Returns the start value in samples.
+   *
+   * @return The start value.
+   */
   public int getStartValue()
   {
     return getValue( Mark.START );
   }
-
-  public int getStopValue()
-  {
-    return getValue( Mark.STOP );
-  }
-
-  public int getPlayerValue()
-  {
-    return getValue( Mark.PLAYER );
-  }
-
+  
+  /**
+   * Sets the start value.
+   *
+   * @param samples The start value.
+   */
   public void setStartValue( int samples )
   {
     setValue( Mark.START, samples );
   }
-
+  
+  /**
+   * Returns the stop value in samples.
+   *
+   * @return The stop value.
+   */
+  public int getStopValue()
+  {
+    return getValue( Mark.STOP );
+  }
+  
+  /**
+   * Sets the stop value.
+   *
+   * @param samples The stop value.
+   */
   public void setStopValue( int samples )
   {
     setValue( Mark.STOP, samples );
   }
-
+  
+  /**
+   * Returns the player value in samples.
+   *
+   * @return The player value.
+   */
+  public int getPlayerValue()
+  {
+    return getValue( Mark.PLAYER );
+  }
+  
+  /**
+   * Sets the player value.
+   *
+   * @param samples The player value.
+   */
   public void setPlayerValue( int samples )
   {
     setValue( Mark.PLAYER, samples );
   }
   
+  /**
+   * Generic helper for getting a value.
+   *
+   * @param mark The mark.
+   * @return The value for mark in samples.
+   */
   private int getValue( Mark mark )
   {
-    JComboBox comboBox = unitMap.get( mark );
     JTextField textField = valueMap.get( mark );
-
-    int value = Integer.parseInt( textField.getText() );
+    int value = getTextFieldValue( textField );
     
-    // Samples
-    if( comboBox.getSelectedIndex() == 0 )
+    if( isSamples( mark ) )
     {
       return value;
     }
-    // Milliseconds
-    else if( comboBox.getSelectedIndex() == 1 )
+    else if( isMilliseconds( mark ) )
     {
       return SampleHelper.millisecondsToSamples( sampleRate, value );
     }
-    // Seconds
-    else if( comboBox.getSelectedIndex() == 2 )
+    else if( isSeconds( mark ) )
     {
       return SampleHelper.secondsToSamples( sampleRate, value );
     }
-    // Minutes
-    else if( comboBox.getSelectedIndex() == 3 )
+    else if( isMinutes( mark ) )
     {
       return SampleHelper.minutesToSamples( sampleRate, value );
     }
@@ -269,32 +301,112 @@ public class InternalFormatStatusPanel extends JPanel
     return value;
   }
 
+  /**
+   * Generic helper for setting a value.
+   *
+   * @param mark The mark.
+   * @param samples The new value for mark.
+   */
   private void setValue( Mark mark, int samples )
   {
-    JComboBox comboBox = unitMap.get( mark );
     JTextField textField = valueMap.get( mark );
+    int value = getTextFieldValue( textField );
     
-    int value = Integer.parseInt( textField.getText() );
-    
-    // Samples
-    if( comboBox.getSelectedIndex() == 0 )
+    if( isSamples( mark ) )
     {
       value = samples;
     }
-    // Milliseconds
-    else if( comboBox.getSelectedIndex() == 1 )
+    else if( isMilliseconds( mark ) )
     {
       value = SampleHelper.samplesToMilliseconds( sampleRate, samples );
     }
-    // Seconds
-    else if( comboBox.getSelectedIndex() == 2 )
+    else if( isSeconds( mark ) )
     {
       value = SampleHelper.samplesToseconds( sampleRate, samples );
     }
-    // Minutes
-    else if( comboBox.getSelectedIndex() == 3 )
+    else if( isMinutes( mark ) )
     {
       value = SampleHelper.samplesToMinutes( sampleRate, samples );
     }
+
+    textField.setText( "" + value );
+  }
+
+  /**
+   * Returns true if <code>mark</code> is in samples. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in samples. False otherwise.
+   */
+  private boolean isSamples( Mark mark )
+  {
+    return isUnit( mark, 0 );
+  }
+
+  /**
+   * Returns true if <code>mark</code> is in milliseconds. False
+   * otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in milliseconds. False otherwise.
+   */  
+  private boolean isMilliseconds( Mark mark )
+  {
+    return isUnit( mark, 1 );
+  }
+  
+  /**
+   * Returns true if <code>mark</code> is in seconds. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in seconds. False otherwise.
+   */
+  private boolean isSeconds( Mark mark )
+  {
+    return isUnit( mark, 2 );
+  }
+  
+  /**
+   * Returns true if <code>mark</code> is in minutes. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in minutes. False otherwise.
+   */
+  private boolean isMinutes( Mark mark )
+  {
+    return isUnit( mark, 3 );
+  }
+  
+  /**
+   * Generic helper for checking what unit is selected for a mark.
+   *
+   * @param mark The mark.
+   * @param index The combo box index.
+   * @return True if the combo box index is the same as
+   * <code>index</code>. False otherwise.
+   */
+  private boolean isUnit( Mark mark, int index )
+  {
+    return unitMap.get( mark ).getSelectedIndex() == index;
+  }
+  
+  /**
+   * Fetches the value from <code>textField</code>. If a valid number,
+   * that is returned. Otherwise zero is returned.
+   *
+   * @param textField The text field.
+   * @return The text field value, or zero if not valid.
+   */
+  private int getTextFieldValue( JTextField textField )
+  {
+    int value = 0;
+    
+    try
+    {
+      value = Integer.parseInt( textField.getText() );
+    }
+    catch( NumberFormatException e ) {}
+    
+    return value;
   }
 }
