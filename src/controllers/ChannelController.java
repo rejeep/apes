@@ -191,13 +191,13 @@ public class ChannelController extends ApplicationController implements MouseLis
    */
   public void refresh()
   {
-    int start = statusPanel.getStartValue();
-    int stop = statusPanel.getStopValue();
-    int player = statusPanel.getPlayerValue();
+    int startValue = statusPanel.getStartValue();
+    int stopValue = statusPanel.getStopValue();
+    int playerValue = statusPanel.getPlayerValue();
 
-    player.setStart( start );
-    player.setStop( stop );
-    player.setCurrentSample( player );
+    player.setStart( startValue );
+    player.setStop( stopValue );
+    player.setCurrentSample( playerValue );
   }
 
   /**
