@@ -96,7 +96,7 @@ public class Main extends JFrame
    * Change controller.
    */
   private InternalFormatController internalFormatController;
-  
+
   /**
    * Plugin controller.
    */
@@ -128,7 +128,7 @@ public class Main extends JFrame
     {
       UIManager.put( whites[i] + ".background", Color.WHITE );
     }
-    
+
     // Parse the configuration file and set default values.
     config = Config.getInstance();
     config.parse();
@@ -144,7 +144,7 @@ public class Main extends JFrame
     tabsController = new TabsController( playerHandler );
     languageController = new LanguageController();
     pluginController = new PluginController();
-    
+
     // Fix language
     language = Language.getInstance();
 
@@ -175,7 +175,7 @@ public class Main extends JFrame
         e.printStackTrace();
       }
     }
-    
+
     // Undomanager
     undoManager = new UndoManager();
     undoManager.setLimit( Config.getInstance().getIntOption( "undo" ) );
@@ -197,11 +197,11 @@ public class Main extends JFrame
     // Create and add top panel.
     JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
-    
+
     // Create and bottom top panel.
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
-    
+
     // Set window dimensions.
     setWindowDimensions();
 
@@ -400,7 +400,7 @@ public class Main extends JFrame
     properties.addActionListener( configController );
     properties.setName( "show" );
     tools.add( properties );
-    
+
     JMenuItem plugins = new ApesMenuItem( "menu.tools.plugins" );
     plugins.addActionListener( pluginController );
     plugins.setName( "plugin" );
@@ -435,6 +435,16 @@ public class Main extends JFrame
     topPanel.setBorder( new LineBorder( Color.GRAY, 1, true ) );
 
     ImageButton open = new OpenButton();
+    // TODO: Maybe this is too much of a hack...
+    open.addActionListener(
+      new ActionListener()
+      {
+        public void actionPerformed( ActionEvent e )
+        {
+          internalFormatController.open();
+        }
+      }
+      );
     topPanel.add( open );
 
     ImageButton save = new SaveButton();
@@ -526,7 +536,7 @@ public class Main extends JFrame
 
     JPanel volumePanel = new VolumePanel( playerController );
     bottomPanel.add( volumePanel );
-    
+
     return bottomPanel;
   }
 
