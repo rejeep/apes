@@ -93,7 +93,7 @@ public class ChannelController extends ApplicationController implements MouseLis
 
     if( isSelection() )
     {
-      player.setCurrentSample( player.getStart() );  
+      player.setCurrentSample( player.getStart() );
     }
   }
 
@@ -182,7 +182,7 @@ public class ChannelController extends ApplicationController implements MouseLis
       channelView.repaint();
     }
   }
-  
+
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
 
@@ -206,9 +206,12 @@ public class ChannelController extends ApplicationController implements MouseLis
     int stopValue = statusPanel.getStopValue();
     int playerValue = statusPanel.getPlayerValue();
 
-    player.setStart( startValue );
-    player.setStop( stopValue );
-    player.setCurrentSample( playerValue );
+    if( startValue < stopValue && stopValue < playerValue )
+    {
+      player.setStart( startValue );
+      player.setStop( stopValue );
+      player.setCurrentSample( playerValue );
+    }
   }
 
   /**
