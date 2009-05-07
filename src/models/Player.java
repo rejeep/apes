@@ -159,7 +159,7 @@ public class Player extends Observable implements Runnable
   {
     return new Point( start, stop );
   }
-  
+
   /**
    * Returns the <code>InternalFormat</code> connected to this player.
    *
@@ -211,7 +211,7 @@ public class Player extends Observable implements Runnable
       {
         if( status == Status.PLAY )
         {
-          if( stop == 0 || currentSample <= stop )
+          if( playingAllowed() )
           {
             byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
 
@@ -221,7 +221,7 @@ public class Player extends Observable implements Runnable
           }
           else
           {
-            if( stop == getSampleAmount() )
+            if( currentSample >= getSampleAmount() )
             {
               stop();
             }
@@ -229,7 +229,7 @@ public class Player extends Observable implements Runnable
             {
               pause();
 
-              currentSample = start;
+              setCurrentSample( start );
             }
           }
         }
@@ -356,7 +356,7 @@ public class Player extends Observable implements Runnable
   public void setCurrentSample( int currentSample )
   {
     this.currentSample = currentSample;
-    
+
     setChangedAndNotifyAll();
   }
 
@@ -378,7 +378,7 @@ public class Player extends Observable implements Runnable
   public void setStart( int start )
   {
     this.start = start;
-    
+
     setChangedAndNotifyAll();
   }
 
@@ -403,7 +403,7 @@ public class Player extends Observable implements Runnable
 
     setChangedAndNotifyAll();
   }
-  
+
   /**
    * Set <code>mark</code> "at the right place". This means that if
    * mark is before start. Then start should be set to mark. Otherwise
@@ -415,14 +415,14 @@ public class Player extends Observable implements Runnable
   {
     if( mark < start )
     {
-      start = mark;
+      setStart( mark );
     }
     else
     {
-      stop = mark;
+      setStop( mark );
     }
   }
-  
+
   /**
    * Increases <code>currentSample</code> by one step.
    */
@@ -430,14 +430,42 @@ public class Player extends Observable implements Runnable
   {
     setCurrentSample( currentSample + Channel.SAMPLES_SIZE );
   }
- 
+
   /**
    * Set changed and notify all observers.
    */
   private void setChangedAndNotifyAll()
   {
     setChanged();
-    
+
     notifyObservers();
+  }
+
+  /**
+   * Returns true if playing is allowed. False otherwise.
+   *
+   * @return True if playing is allowed. False otherwise.
+   */
+  private boolean playingAllowed()
+  {
+    boolean allowed = true;
+
+    if( stop != 0 )
+    {
+      if( start != stop )
+      {
+        if( currentSample > stop )
+        {
+          allowed = false;
+        }
+      }
+
+      if( currentSample >= getSampleAmount() )
+      {
+        allowed = false;
+      }
+    }
+
+    return allowed;
   }
 }
