@@ -324,4 +324,9 @@ public class InternalFormatStatusPanel extends JPanel
     
     textField.setText( "" + result );
   }
+
+  public void updatePlayer()
+  {
+    
+  }
 }
