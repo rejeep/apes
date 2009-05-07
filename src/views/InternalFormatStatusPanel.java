@@ -6,10 +6,14 @@ import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import apes.controllers.ChannelController;
+import apes.models.Player;
+import apes.lib.SampleHelper;
 
 
 /**
@@ -21,14 +25,14 @@ import apes.controllers.ChannelController;
 public class InternalFormatStatusPanel extends JPanel
 {
   /**
-   * Text field for the beginning mark.
+   * Text field for the start mark.
    */
-  private JTextField beginningTextField;
+  private JTextField startTextField;
 
   /**
-   * Text field for the end mark.
+   * Text field for the stop mark.
    */
-  private JTextField endTextField;
+  private JTextField stopTextField;
 
   /**
    * Text field for the player mark.
@@ -36,14 +40,14 @@ public class InternalFormatStatusPanel extends JPanel
   private JTextField playerTextField;
 
   /**
-   * Combo box for the beginning mark.
+   * Combo box for the start mark.
    */
-  private ApesComboBox beginningUnitList;
+  private ApesComboBox startUnitList;
 
   /**
-   * Combo box for the end mark.
+   * Combo box for the stop mark.
    */
-  private ApesComboBox endUnitList;
+  private ApesComboBox stopUnitList;
 
   /**
    * Combo box for the player mark.
@@ -51,62 +55,67 @@ public class InternalFormatStatusPanel extends JPanel
   private ApesComboBox playerUnitList;
 
   /**
-   * Contains as key a {@link InternalFormatStatusPanel#Mark
-   * Mark}. And as value a text field.
-   *
-   * Example: { Mark.END => JTextField }
-   *
-   * Used to make code more dynamic.
-   */
-  private Map<Mark, JTextField> textFields;
-
-  /**
-   * Contains as key a {@link InternalFormatStatusPanel#Mark
-   * Mark}. And as value a combo box.
-   *
-   * Example: { Mark.END => ApesComboBox }
-   *
-   * Used to make code more dynamic.
-   */
-  private Map<Mark, ApesComboBox> unitLists;
-
-  /**
    * The channel controller.
    */
   private ChannelController channelController;
+
+  /**
+   * The player.
+   */
+  private Player player;
+
+  /**
+   * Contains a mark as key and a combo box as value. Used to be able
+   * to write more dynamic code.
+   */
+  private Map<Mark, JComboBox> unitMap;
   
   /**
-   * Enum with the different marks.
+   * Contains a mark as key and a text field as value. Used to be able
+   * to write more dynamic code.
    */
-  private enum Mark { BEGINNING, END, PLAYER };
+  private Map<Mark, JTextField> valueMap;
   
   /**
    * Locale tags to all different units.
    */
-  private String[] units = { "channel.unit.milliseconds",
+  private String[] units = { "channel.unit.samples",
+                             "channel.unit.milliseconds",
                              "channel.unit.seconds",
-                             "channel.unit.samples" };
+                             "channel.unit.minutes"};
+
+  /**
+   * The different marks.
+   */
+  private enum Mark { START, STOP, PLAYER };
+
+  /**
+   * The sample rate.
+   */
+  private int sampleRate;
 
   /**
    * Creates a new <code>InternalFormatStatusPanel</code> instance.
    *
    * @param channelController The channel controller.
    */
-  public InternalFormatStatusPanel( ChannelController channelController )
+  public InternalFormatStatusPanel( int sampleRate, ChannelController channelController, Player player )
   {
     setLayout( new BorderLayout() );
 
-    textFields = new HashMap<Mark, JTextField>();
-    unitLists = new HashMap<Mark, ApesComboBox>();
-    
     this.channelController = channelController;
+    this.player = player;
+    this.sampleRate = sampleRate;
+    
+    unitMap = new HashMap<Mark, JComboBox>();
+    valueMap = new HashMap<Mark, JTextField>();
 
     JPanel topPanel = topPanel();
     add( topPanel, BorderLayout.NORTH );
 
     JPanel centerPanel = centerPanel();
     add( centerPanel, BorderLayout.CENTER );
-    
+
     JPanel bottomPanel = bottomPanel();
     add( bottomPanel, BorderLayout.SOUTH );
   }
@@ -126,7 +135,7 @@ public class InternalFormatStatusPanel extends JPanel
 
     return panel;
   }
-  
+
   /**
    * Returns a panel with fields and boxes.
    *
@@ -137,38 +146,38 @@ public class InternalFormatStatusPanel extends JPanel
     JPanel panel = new JPanel();
     panel.setLayout( new GridLayout( 3, 3 ) );
 
-    // Beginning
-    JLabel beginningLabel = new ApesLabel( "channel.beginning" );
-    beginningTextField = new JTextField();
-    beginningUnitList = new ApesComboBox( units );
+    // Start
+    JLabel startLabel = new ApesLabel( "channel.start" );
+    startTextField = new JTextField();
+    startUnitList = new ApesComboBox( units );
+    unitMap.put( Mark.START, startUnitList );
+    valueMap.put( Mark.START, startTextField );
 
-    panel.add( beginningLabel );
-    panel.add( beginningTextField );
-    panel.add( beginningUnitList );
-    textFields.put( Mark.BEGINNING, beginningTextField );
-    unitLists.put( Mark.BEGINNING, beginningUnitList );
+    panel.add( startLabel );
+    panel.add( startTextField );
+    panel.add( startUnitList );
 
-    // End
-    JLabel endLabel = new ApesLabel( "channel.end" );
-    endTextField = new JTextField();
-    endUnitList = new ApesComboBox( units );
+    // Stop
+    JLabel stopLabel = new ApesLabel( "channel.stop" );
+    stopTextField = new JTextField();
+    stopUnitList = new ApesComboBox( units );
+    unitMap.put( Mark.STOP, stopUnitList );
+    valueMap.put( Mark.STOP, stopTextField );
 
-    panel.add( endLabel );
-    panel.add( endTextField );
-    panel.add( endUnitList );
-    textFields.put( Mark.END, endTextField );
-    unitLists.put( Mark.END, endUnitList );
+    panel.add( stopLabel );
+    panel.add( stopTextField );
+    panel.add( stopUnitList );
 
     // Player
     JLabel playerLabel = new ApesLabel( "channel.player" );
     playerTextField = new JTextField();
     playerUnitList = new ApesComboBox( units );
+    unitMap.put( Mark.PLAYER, playerUnitList );
+    valueMap.put( Mark.PLAYER, playerTextField );
 
     panel.add( playerLabel );
     panel.add( playerTextField );
     panel.add( playerUnitList );
-    textFields.put( Mark.PLAYER, playerTextField );
-    unitLists.put( Mark.PLAYER, playerUnitList );
 
     return panel;
   }
@@ -181,7 +190,7 @@ public class InternalFormatStatusPanel extends JPanel
   public JPanel bottomPanel()
   {
     JPanel panel = new JPanel();
-    
+
     JButton refresh = new ApesButton( "channel.refresh" );
     refresh.addActionListener( channelController );
     refresh.setName( "refresh" );
@@ -191,142 +200,213 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns the value of the beginning mark in pixels.
-   *
-   * @return The beginning mark in pixels.
+   * I called when something has been changed in the player. This then
+   * updates the fields.
    */
-  public int getBeginningTextFieldValue()
+  public void updatePlayer()
   {
-    return getTextFieldValue( Mark.BEGINNING );
+    setStartValue( player.getStart() );
+    setStopValue( player.getStop() );
+    setPlayerValue( player.getCurrentSample() );
   }
 
   /**
-   * Set the value of the beginning mark.
+   * Returns the start value in samples.
    *
-   * @param pixels The number of pixels on the x-axis.
+   * @return The start value.
    */
-  public void setBeginningTextFieldValue( int pixels )
+  public int getStartValue()
   {
-    setTextFieldValue( Mark.BEGINNING, pixels );
-  }
-
-  /**
-   * Returns the value of the end mark in pixels.
-   *
-   * @return The end mark in pixels.
-   */
-  public int getEndTextFieldValue()
-  {
-    return getTextFieldValue( Mark.END );
-  }
-
-  /**
-   * Set the value of the end mark.
-   *
-   * @param pixels The number of pixels on the x-axis.
-   */
-  public void setEndTextFieldValue( int pixels )
-  {
-    setTextFieldValue( Mark.END, pixels );
-  }
-
-  /**
-   * Returns the value of the player mark in pixels.
-   *
-   * @return The player mark in pixels.
-   */
-  public int getPlayerTextFieldValue()
-  {
-    return getTextFieldValue( Mark.PLAYER );
-  }
-
-  /**
-   * Set the value of the player mark.
-   *
-   * @param pixels The number of pixels on the x-axis.
-   */
-  public void setPlayerTextFieldValue( int pixels )
-  {
-    setTextFieldValue( Mark.PLAYER, pixels );
+    return getValue( Mark.START );
   }
   
   /**
-   * Returns the value of <code>mark</code> mark in pixels.
+   * Sets the start value.
    *
-   * TODO: Set pixels to a correct value.
-   *
-   * @param mark The mark type.
-   * @return The <code>mark</code> in pixels.
+   * @param samples The start value.
    */
-  private int getTextFieldValue( Mark mark )
+  public void setStartValue( int samples )
   {
-    JTextField textField = textFields.get( mark );
-    ApesComboBox comboBox = unitLists.get( mark );
+    setValue( Mark.START, samples );
+  }
+  
+  /**
+   * Returns the stop value in samples.
+   *
+   * @return The stop value.
+   */
+  public int getStopValue()
+  {
+    return getValue( Mark.STOP );
+  }
+  
+  /**
+   * Sets the stop value.
+   *
+   * @param samples The stop value.
+   */
+  public void setStopValue( int samples )
+  {
+    setValue( Mark.STOP, samples );
+  }
+  
+  /**
+   * Returns the player value in samples.
+   *
+   * @return The player value.
+   */
+  public int getPlayerValue()
+  {
+    return getValue( Mark.PLAYER );
+  }
+  
+  /**
+   * Sets the player value.
+   *
+   * @param samples The player value.
+   */
+  public void setPlayerValue( int samples )
+  {
+    setValue( Mark.PLAYER, samples );
+  }
+  
+  /**
+   * Generic helper for getting a value.
+   *
+   * @param mark The mark.
+   * @return The value for mark in samples.
+   */
+  private int getValue( Mark mark )
+  {
+    JTextField textField = valueMap.get( mark );
+    int value = getTextFieldValue( textField );
+    
+    if( isSamples( mark ) )
+    {
+      return value;
+    }
+    else if( isMilliseconds( mark ) )
+    {
+      return SampleHelper.millisecondsToSamples( sampleRate, value );
+    }
+    else if( isSeconds( mark ) )
+    {
+      return SampleHelper.secondsToSamples( sampleRate, value );
+    }
+    else if( isMinutes( mark ) )
+    {
+      return SampleHelper.minutesToSamples( sampleRate, value );
+    }
+    
+    return value;
+  }
 
-    int unit = comboBox.getSelectedIndex();
-    int value = -1;
+  /**
+   * Generic helper for setting a value.
+   *
+   * @param mark The mark.
+   * @param samples The new value for mark.
+   */
+  private void setValue( Mark mark, int samples )
+  {
+    JTextField textField = valueMap.get( mark );
+    int value = getTextFieldValue( textField );
+    
+    if( isSamples( mark ) )
+    {
+      value = samples;
+    }
+    else if( isMilliseconds( mark ) )
+    {
+      value = SampleHelper.samplesToMilliseconds( sampleRate, samples );
+    }
+    else if( isSeconds( mark ) )
+    {
+      value = SampleHelper.samplesToseconds( sampleRate, samples );
+    }
+    else if( isMinutes( mark ) )
+    {
+      value = SampleHelper.samplesToMinutes( sampleRate, samples );
+    }
+
+    textField.setText( "" + value );
+  }
+
+  /**
+   * Returns true if <code>mark</code> is in samples. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in samples. False otherwise.
+   */
+  private boolean isSamples( Mark mark )
+  {
+    return isUnit( mark, 0 );
+  }
+
+  /**
+   * Returns true if <code>mark</code> is in milliseconds. False
+   * otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in milliseconds. False otherwise.
+   */  
+  private boolean isMilliseconds( Mark mark )
+  {
+    return isUnit( mark, 1 );
+  }
+  
+  /**
+   * Returns true if <code>mark</code> is in seconds. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in seconds. False otherwise.
+   */
+  private boolean isSeconds( Mark mark )
+  {
+    return isUnit( mark, 2 );
+  }
+  
+  /**
+   * Returns true if <code>mark</code> is in minutes. False otherwise.
+   *
+   * @param mark The mark.
+   * @return True if in minutes. False otherwise.
+   */
+  private boolean isMinutes( Mark mark )
+  {
+    return isUnit( mark, 3 );
+  }
+  
+  /**
+   * Generic helper for checking what unit is selected for a mark.
+   *
+   * @param mark The mark.
+   * @param index The combo box index.
+   * @return True if the combo box index is the same as
+   * <code>index</code>. False otherwise.
+   */
+  private boolean isUnit( Mark mark, int index )
+  {
+    return unitMap.get( mark ).getSelectedIndex() == index;
+  }
+  
+  /**
+   * Fetches the value from <code>textField</code>. If a valid number,
+   * that is returned. Otherwise zero is returned.
+   *
+   * @param textField The text field.
+   * @return The text field value, or zero if not valid.
+   */
+  private int getTextFieldValue( JTextField textField )
+  {
+    int value = 0;
+    
     try
     {
       value = Integer.parseInt( textField.getText() );
     }
     catch( NumberFormatException e ) {}
     
-    int pixels = -1;
-    
-    // Milliseconds
-    if( unit == 0 )
-    {
-      pixels = value;
-    }
-    // Seconds
-    else if( unit == 1 )
-    {
-      pixels = value;
-    }
-    // Samples
-    else if( unit == 2 )
-    {
-      pixels = value;
-    }
-
-    return pixels;
-  }
-  
-  /**
-   * Set the mark for the type <code>mark</code>.
-   *
-   * @param mark The mark type.
-   * @param pixels The number of pixels on the x-axis.
-   */
-  private void setTextFieldValue( Mark mark, int pixels )
-  {
-    JTextField textField = textFields.get( mark );
-    ApesComboBox comboBox = unitLists.get( mark );
-
-    int unit = comboBox.getSelectedIndex();
-    int result = -1;
-    
-    // Milliseconds
-    if( unit == 0 )
-    {
-      result = pixels;
-    }
-    // Seconds
-    else if( unit == 1 )
-    {
-      result = pixels;
-    }
-    // Samples
-    else if( unit == 2 )
-    {
-      result = pixels;
-    }
-    
-    textField.setText( "" + result );
-  }
-
-  public void updatePlayer()
-  {
-    
+    return value;
   }
 }

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +16,6 @@ import apes.lib.Config;
 import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
-import java.awt.GridLayout;
-
-// TODO: Maybe pass some arguments to updateView.
 
 
 /**
@@ -40,17 +38,25 @@ public class ChannelView extends JPanel implements Runnable
    */
   private Player player;
 
-
+  /**
+   * The number of samples for each of the channels.
+   */
+  private int nrSamples;
 
   /**
-   * The fixed mark in the graph.
+   * The center sample of the channels
    */
-  private int fixedMark;
+  private int centerSample;
 
   /**
-   * The moving mark in the graph.
+   * The number of visible samples in each channel
    */
-  private int movingMark;
+  private int visibleSamples;
+
+  /**
+   * The position of the mouse in the x-axis
+   */
+  private int mousePosX;
 
   /**
    * The channel controller.
@@ -128,126 +134,6 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Selects a region.
-   *
-   * TODO: Check so that x1 and x2 is in graph?
-   *
-   * @param x1 Mark 1.
-   * @param x2 Mark 2.
-   */
-  public void selectRegion( int x1, int x2  )
-  {
-    // Check so that x1 and x2 is in the graph.
-    if( x1 < 0 )
-    {
-      x1 = 0;
-    }
-    if( x1 > graphWidth )
-    {
-      x1 = graphWidth - 1;
-    }
-
-    if( x2 < 0 )
-    {
-      x2 = 0;
-    }
-    if( x2 > graphWidth )
-    {
-      x2 = graphWidth - 1;
-    }
-
-    fixedMark = x1;
-    movingMark = x2;
-  }
-
-  /**
-   * Removes selection.
-   */
-  public void deSelectRegion()
-  {
-    fixedMark = -1;
-    movingMark = -1;
-  }
-
-  /**
-   * Selects the whole visible graph.
-   */
-  public void selectAll()
-  {
-    fixedMark = 1;
-    movingMark = graphWidth - 1;
-  }
-
-  /**
-   * Moves mark to <code>x</code>.
-   *
-   * @param x Where to move on the x-axis.
-   */
-  public void moveMark( int x )
-  {
-    if( fixedMark == -1 )
-    {
-      fixedMark = x;
-    }
-
-    movingMark = x;
-  }
-
-  /**
-   * Moves the beginning mark to x.
-   *
-   * @param x The new mark on the x-axis.
-   */
-  public void moveBeginning( int x )
-  {
-    if( fixedMark < movingMark )
-    {
-      fixedMark = movingMark;
-    }
-
-    movingMark = x;
-  }
-
-  /**
-   * Moves the end mark to x.
-   *
-   * @param x The new mark on the x-axis.
-   */
-  public void moveEnd( int x )
-  {
-    if( fixedMark > movingMark )
-    {
-      fixedMark = movingMark;
-    }
-
-    movingMark = x;
-  }
-
-  /**
-   * Returns true if there's any selection in the graph. False
-   * otherwise.
-   *
-   * @return True if any selection. False otherwise.
-   */
-  public boolean isSelection()
-  {
-    return fixedMark != -1 || movingMark != -1;
-  }
-
-  /**
-   * Returns true if <code>x</code> and <code>y</code> is in the graph
-   * panel.
-   *
-   * @param x A value on the x-axis.
-   * @param y A value on the y-axis.
-   * @return True if x and y is in the graph area. False otherwise.
-   */
-  public boolean inView( int x, int y )
-  {
-    return x > 0 && y > 0 && x < graphWidth - 1 && y < graphHeight - 1;
-  }
-
-  /**
    * Returns the graph width.
    *
    * @return The graph width.
@@ -267,38 +153,6 @@ public class ChannelView extends JPanel implements Runnable
     return graphHeight;
   }
 
-  /**
-   * Returns the mark that is the most to the left.
-   *
-   * @return The position of the mark in pixels.
-   */
-  public int getMarkBeginning()
-  {
-    return Math.min( fixedMark, movingMark );
-  }
-
-  /**
-   * Returns the mark that is the most to the right.
-   *
-   * @return The position of the mark in pixels.
-   */
-  public int getMarkEnd()
-  {
-    return Math.max( fixedMark, movingMark );
-  }
-
-  // TODO:
-  public int getMarkPlayer()
-  {
-    return 1;
-  }
-
-  // TODO:
-  public void setMarkPlayer( int pixels )
-  {
-
-  }
-
   public void run()
   {
     while( true )
@@ -316,52 +170,135 @@ public class ChannelView extends JPanel implements Runnable
     }
   }
 
-  // TODO: Ohh, dear lord... Temp!
-  // This method should be in here and not in the graph.
-  public Point getMarkedSamples()
+  /**
+   * Transform a position in a channel to pixels in the graph based on samples.
+   * @param samples The position in the channel in samples.
+   * @return -1 if the sample is outside the graph otherwise where in the graph.
+   */
+  public int samplesToPixels(int samples)
+  {
+    int firstVisibleSample = centerSample - visibleSamples/2;
+    int lastVisibelSample  = centerSample + visibleSamples/2;
+
+    if(samples < firstVisibleSample || samples > lastVisibelSample)
+      return -1;
+
+    int properSamples = samples - firstVisibleSample;
+
+    float ratio = (float)properSamples / visibleSamples;
+
+    return Math.round(ratio * graphWidth);
+  }
+
+  /**
+   * Transform a position in a channel to pixels in the graph based on milliseconds.
+   * @param milliseconds The position in the channel in milliseconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int millisecondsToPixels(int milliseconds)
+  {
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = Math.round((milliseconds / 1000.0f) * sampleRate);
+    return samplesToPixels(samples);
+  }
+
+  /**
+   * Transform a position in a channel to pixels in the graph based on seconds.
+   * @param seconds The position in the channel in seconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int secondsToPixels(int seconds)
+  {
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = seconds * sampleRate;
+    return samplesToPixels(samples);
+  }
+
+  /**
+   * Transform a position in a channel to pixels in the graph based on minutes.
+   * @param minutes The position in the channel in seconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int minutesToPixels(int minutes)
+  {
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = (minutes*60) * sampleRate;
+    return samplesToPixels(samples);
+  }
+
+  /**
+   * Transform a number of pixels to samples in the channel.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The absolute samples in the channel, -1 if outside the graph.
+   */
+  public int pixelsToSamples(int pixels)
+  {
+    if(pixels < 0 || pixels > graphWidth)
+      return -1;
+    int firstVisibleSample = centerSample - visibleSamples/2;
+    int samplesPerPixel = visibleSamples / graphWidth;
+    int samples = pixels*samplesPerPixel + firstVisibleSample;
+    return samples;
+  }
+
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The millisecnods in the channel, -1 if outside the graph.
+   */
+  public int pixelsToMilliseconds(int pixels)
+  {
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int milliseconds = (samples / sampleRate) * 1000;
+    return milliseconds;
+  }
+
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The seconds in the channel, -1 if outside the graph.
+   */
+  public int pixelsToSeconds(int pixels)
+  {
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int seconds = (samples / sampleRate);
+    return seconds;
+  }
+
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The minutes in the channel, -1 if outside the graph.
+   */
+  public int pixelsToMinutes(int pixels)
+  {
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int minutes = (samples / sampleRate) / 60;
+    return minutes;
+  }
+
+  public void setMousePosX( int mousePosX )
+  {
+    this.mousePosX = mousePosX;
+  }
+
+  /**
+   * Is called when the player is updated. Then each graph should
+   * be updated.
+   */
+  public void updatePlayer()
   {
     for( ChannelView.Graph graph : graphs )
     {
-      if( graph != null )
-      {
-        return graph.getMarkedSamples();
-      }
+      graph.repaint();
     }
-
-    return null;
   }
-
-  public int samplesToPixels(long samples)
-  {
-    return 0;//graphWidth*samples/nrSamples;
-  }
-
-  public int millisecondsToPixels(long milliseconds)
-  {
-    return 0;
-  }
-
-  public int secondsToPixels(long seconds)
-  {
-    return 0;
-  }
-
-  public long pixelsToSamples(int pixels)
-  {
-    return 0;
-  }
-
-  public long pixelsToMilliseconds(int pixels)
-  {
-    return 0;
-  }
-
-  public long pixelsToSecnods(int pixels)
-  {
-    return 0;
-  }
-
-
 
   /**
    * TODO: Comment
@@ -374,21 +311,6 @@ public class ChannelView extends JPanel implements Runnable
      * The channel.
      */
     private Channel channel;
-
-    /**
-     * The number of samples for each of the channels.
-     */
-    private int nrSamples;
-
-    /**
-     * The center sample of the channels
-     */
-    private int centerSample;
-
-    /**
-     * The number of visible samples in each channel
-     */
-    private int visibleSamples;
 
     /**
      *
@@ -463,43 +385,72 @@ public class ChannelView extends JPanel implements Runnable
       setBackground(g2);
       drawGraph(g2);
       drawLines(g2);
-      drawMarkers(g2);
+      // Do before markers.
       drawSelection(g2);
+      drawMarkers(g2);
       drawPlayMarker(g2);
       drawRuler(g2);
+      drawStatus(g2);
+    }
+
+    private void drawStatus(Graphics2D g2)
+    {
+      //inchannelController;
+      int seconds = pixelsToSeconds( mousePosX );
+      g2.drawString( "( " + seconds + " s)", 0, graphHeight );
     }
 
     private void drawRuler(Graphics2D g2)
     {
+      g2.setColor(Color.decode(Config.getInstance().getOption("color_ruler")));
+      int rulerWidth = Config.getInstance().getIntOption("ruler_width");
+      g2.fillRect(0,0, graphWidth-1, rulerWidth );
+      for(int i = 0; i < graphWidth; i += graphWidth/10)
+        g2.drawLine( i, 0, i, rulerWidth+5);
 
     }
 
     private void drawPlayMarker(Graphics2D g2)
     {
+      int player = getMarkPlayer();
+
+      if( player == 0 )
+      {
+        player++;
+      }
+
       g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
-      if(nrSamples > 0)
-        g2.drawLine(( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),0,
-                    ( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),graphHeight);
+      g2.drawLine(player,0,player,graphHeight);
     }
 
     private void drawSelection(Graphics2D g2)
     {
-      if(getMarkBeginning() > 0)
+      if( getMarkStart() >= 0 && getMarkStop() > 0)
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
-        if(getMarkEnd() > 0 && getMarkBeginning() > 0)
-          g2.fillRect(getMarkBeginning(), 0, getMarkEnd()-getMarkBeginning(), graphHeight);
+        g2.fillRect(getMarkStart(), 0, getMarkStop()-getMarkStart(), graphHeight);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
       }
-      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
     private void drawMarkers(Graphics2D g2)
     {
-      if(getMarkBeginning() > 0)
-        g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),graphHeight);
-      if(getMarkEnd() > 0)
-        g2.drawLine(getMarkEnd(),0,getMarkEnd(),graphHeight);
+      int start = getMarkStart();
+      int stop = getMarkStop();
+
+      if( start != stop )
+      {
+        if(start >= 0)
+        {
+          g2.drawLine(start+1,0,start+1,graphHeight);
+        }
+
+        if(stop > 0)
+        {
+          g2.drawLine(stop-1,0,stop-1,graphHeight);
+        }
+      }
     }
 
     private void drawLines(Graphics2D g2)
@@ -644,33 +595,33 @@ public class ChannelView extends JPanel implements Runnable
     }
 
     /**
-     * Returns the interval of marked samples.
-     * point.x = the start of the marked area
-     * point.y = the end of the marked area
-     * @return The intervall.
+     * Returns the start mark position in pixels.
+     *
+     * @return The start mark position.
      */
-    public Point getMarkedSamples()
+    private int getMarkStart()
     {
-      if(getMarkBeginning() > 0 && getMarkEnd() > 0)
-      {
-        int samplesPerPixel = visibleSamples/graphWidth;
-        try {
-          int beginning = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkBeginning(), end = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkEnd();
-          if( beginning <= end )
-            return new Point( beginning, end );
-          else
-            return new Point( end, beginning );
-        } catch (Exception e) {
-          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-      }
-      return null;
+      return samplesToPixels( player.getStart() );
     }
-  }
-  
-  // TODO:
-  public void updatePlayer()
-  {
-    
+
+    /**
+     * Returns the stop mark position in pixels.
+     *
+     * @return The stop mark position.
+     */
+    private int getMarkStop()
+    {
+      return samplesToPixels( player.getStop() );
+    }
+
+    /**
+     * Returns the player mark position in pixels.
+     *
+     * @return The player mark position.
+     */
+    private int getMarkPlayer()
+    {
+      return samplesToPixels( player.getCurrentSample() );
+    }
   }
 }

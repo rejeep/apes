@@ -120,11 +120,12 @@ error:
       message: Programmet har inte stöd för filformatet.
 channel:
   header: Kanal
-  beginning: Start
-  end: Slut
+  start: Start
+  stop: Stop
   player: Spelare
   refresh: Uppdatera
   unit:
     milliseconds: Millisekunder
     samples: Samplar
     seconds: Sekunder
+    minutes: Minuter

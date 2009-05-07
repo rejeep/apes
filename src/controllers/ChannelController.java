@@ -33,7 +33,7 @@ public class ChannelController extends ApplicationController implements MouseLis
    * The player.
    */
   private Player player;
-  
+
   /**
    * The channel view.
    */
@@ -61,36 +61,40 @@ public class ChannelController extends ApplicationController implements MouseLis
     // Left mouse button.
     if( e.getButton() == MouseEvent.BUTTON1 )
     {
+      // Single click.
       if( e.getClickCount() == 1 )
       {
-        channelView.selectRegion( x, x );
+        int samples = channelView.pixelsToSamples( x );
+
+        player.setStart( samples );
+        player.setStop( samples );
+        player.setCurrentSample( samples );
       }
+      // Select all if more than one click.
       else
       {
-        channelView.selectAll();
+        player.setStart( 0 );
+        player.setStop( player.getSampleAmount() );
       }
     }
     // Middle mouse button (often wheel).
     else if( e.getButton() == MouseEvent.BUTTON2 )
     {
-      channelView.deSelectRegion();
+      player.setStart( 0 );
+      player.setStop( 0 );
     }
 
     mouseDown = true;
-
-    channelView.repaint();
   }
 
   public void mouseReleased( MouseEvent e )
   {
     mouseDown = false;
 
-    if( channelView.isSelection() )
+    if( isSelection() )
     {
-      player.setRegion( channelView.getMarkedSamples() );
+      player.setCurrentSample( player.getStart() );
     }
-
-    updateStatusPanel();
   }
 
   public void mouseExited( MouseEvent e )
@@ -106,11 +110,11 @@ public class ChannelController extends ApplicationController implements MouseLis
         // If the mouse existed to the left.
         if( x <= 0 )
         {
-          channelView.moveMark( 1 );
+          player.setStart( 0 );
         }
         else
         {
-          channelView.moveMark( channelView.getGraphWidth() - 1 );
+          player.setStop( player.getSampleAmount() );
         }
       }
     }
@@ -120,40 +124,12 @@ public class ChannelController extends ApplicationController implements MouseLis
   {
     int y = e.getY();
     int x = e.getX();
+    int samples = channelView.pixelsToSamples( x );
 
     // Is the mouse inside the panel.
-    if( channelView.inView( x, y ) )
+    if( inView( x, y ) )
     {
-      if( e.getModifiers() == MouseEvent.BUTTON1_MASK )
-      {
-        channelView.moveMark( x );
-      }
-      else if( e.getModifiers() == MouseEvent.BUTTON3_MASK )
-      {
-        // Is there a selection.
-        if( channelView.isSelection() )
-        {
-          int beginning = channelView.getMarkBeginning();
-          int end = channelView.getMarkEnd();
-
-          int fromBeginning = Math.abs( x - beginning );
-          int fromEnd = Math.abs( x - end );
-
-          // Are we closer to the beginning mark.
-          if( fromBeginning <= fromEnd )
-          {
-            channelView.moveBeginning( x );
-          }
-          else
-          {
-            channelView.moveEnd( x );
-          }
-        }
-      }
-
-      updateStatusPanel();
-
-      channelView.updatePlayer();
+      player.setMark( samples );
     }
   }
 
@@ -163,17 +139,27 @@ public class ChannelController extends ApplicationController implements MouseLis
     // 1 scroll wheel down.
     int rotation = e.getWheelRotation();
 
-    Point marked = channelView.getMarkedSamples();
+    // Point marked = channelView.getMarkedSamples();
 
     // TODO: We should scale all channels.
     // channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
-    channelView.updatePlayer();
   }
 
-  public void mouseMoved( MouseEvent e ) {}
+  public void mouseMoved( MouseEvent e )
+  {
+    int y = e.getY();
+    int x = e.getX();
+
+    // Is the mouse inside the panel.
+    if( inView( x, y ) )
+    {
+      channelView.setMousePosX( x );
+      channelView.repaint();
+    }
+  }
+
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
-
 
   /**
    * Returns this player.
@@ -184,39 +170,24 @@ public class ChannelController extends ApplicationController implements MouseLis
   {
     return player;
   }
-  
+
   /**
    * Is called when the refresh button in the panel is pressed.
    */
   public void refresh()
   {
-    int beginning = statusPanel.getBeginningTextFieldValue();
-    int end = statusPanel.getEndTextFieldValue();
-    int player = statusPanel.getPlayerTextFieldValue();
+    int startValue = statusPanel.getStartValue();
+    int stopValue = statusPanel.getStopValue();
+    int playerValue = statusPanel.getPlayerValue();
 
-    channelView.selectRegion( beginning, end );
-    channelView.setMarkPlayer( player );
-
-    channelView.updatePlayer();
+    if( startValue <= stopValue && stopValue <= playerValue )
+    {
+      player.setStart( startValue );
+      player.setStop( stopValue );
+      player.setCurrentSample( playerValue );
+    }
   }
 
-  /**
-   * Updates the status panel with the values from the graph
-   * selection.
-   *
-   * @param channelView The channel view.
-   */
-  private void updateStatusPanel()
-  {
-    int beginning = channelView.getMarkBeginning();
-    int end = channelView.getMarkEnd();
-
-    statusPanel.setBeginningTextFieldValue( beginning );
-    statusPanel.setEndTextFieldValue( end );
-    // TODO: 100 is temp
-    statusPanel.setPlayerTextFieldValue( 100 );
-  }
-  
   /**
    * Set the status panel.
    *
@@ -235,5 +206,32 @@ public class ChannelController extends ApplicationController implements MouseLis
   public void setChannelView( ChannelView channelView )
   {
     this.channelView = channelView;
+  }
+
+  /**
+   * Returns true if there's any selection in the graph. False
+   * otherwise.
+   *
+   * @return True if selection. False otherwise.
+   */
+  private boolean isSelection()
+  {
+    int start = player.getStart();
+    int stop  = player.getStop();
+
+    return start + stop > 0;
+  }
+
+  /**
+   * Returns true if <code>x</code> and <code>y</code> is in the graph
+   * panel.
+   *
+   * @param x A value on the x-axis.
+   * @param y A value on the y-axis.
+   * @return True if x and y is in the graph area. False otherwise.
+   */
+  public boolean inView( int x, int y )
+  {
+    return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView.getGraphHeight() - 1;
   }
 }

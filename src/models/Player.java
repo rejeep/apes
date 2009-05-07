@@ -47,6 +47,10 @@ public class Player extends Observable implements Runnable
 
   /**
    * This is how far we are allowed to play, in samples.
+   *
+   * NOTE: If stop is zero, the player will continue to the end. So if
+   * stop is zero, it basically means that there's no restriction in
+   * what area is allowed to be played.
    */
   private int stop;
 
@@ -115,9 +119,14 @@ public class Player extends Observable implements Runnable
   public void forward()
   {
     int temp = currentSample + getWindLength();
-    int max = Math.min( getSampleAmount(), stop );
+    int max = getSampleAmount();
 
-    currentSample = temp >= max ? max : temp;
+    if( stop != 0 )
+    {
+      max = Math.min( max, stop );
+    }
+
+    setCurrentSample( temp >= max ? max : temp );
   }
 
   /**
@@ -128,7 +137,7 @@ public class Player extends Observable implements Runnable
     int temp = currentSample - getWindLength();
     int min = Math.max( 0, start );
 
-    currentSample = temp <= min ? min : temp;
+    setCurrentSample( temp < min ? min : temp );
   }
 
   /**
@@ -141,11 +150,16 @@ public class Player extends Observable implements Runnable
     return getSampleAmount() / wind;
   }
 
+  /**
+   * Returns the selection as a point. x is start and y i stop.
+   *
+   * @return The selection.
+   */
   public Point getSelection()
   {
     return new Point( start, stop );
   }
-  
+
   /**
    * Returns the <code>InternalFormat</code> connected to this player.
    *
@@ -197,17 +211,17 @@ public class Player extends Observable implements Runnable
       {
         if( status == Status.PLAY )
         {
-          if( currentSample <= stop )
+          if( playingAllowed() )
           {
             byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
 
             line.write( data, 0, data.length );
 
-            currentSample += Channel.SAMPLES_SIZE;
+            increaseCurrentSample();
           }
           else
           {
-            if( stop == getSampleAmount() )
+            if( currentSample >= getSampleAmount() )
             {
               stop();
             }
@@ -215,7 +229,7 @@ public class Player extends Observable implements Runnable
             {
               pause();
 
-              currentSample = start;
+              setCurrentSample( start );
             }
           }
         }
@@ -303,7 +317,7 @@ public class Player extends Observable implements Runnable
    */
   private void resetStop()
   {
-    stop = getSampleAmount();
+    stop = 0;
   }
 
   /**
@@ -339,9 +353,11 @@ public class Player extends Observable implements Runnable
    *
    * @param currentSample The position.
    */
-  public void getCurrentSample( int currentSample )
+  public void setCurrentSample( int currentSample )
   {
     this.currentSample = currentSample;
+
+    setChangedAndNotifyAll();
   }
 
   /**
@@ -362,6 +378,8 @@ public class Player extends Observable implements Runnable
   public void setStart( int start )
   {
     this.start = start;
+
+    setChangedAndNotifyAll();
   }
 
   /**
@@ -382,5 +400,76 @@ public class Player extends Observable implements Runnable
   public void setStop( int stop )
   {
     this.stop = stop;
+
+    setChangedAndNotifyAll();
+  }
+
+  /**
+   * Set <code>mark</code> "at the right place". This means that if
+   * mark is before start. Then start should be set to mark. Otherwise
+   * stop should be set to mark.
+   *
+   * @param mark an <code>int</code> value
+   */
+  public void setMark( int mark )
+  {
+    int fromStart = Math.abs( mark - start );
+    int fromStop = Math.abs( mark - stop );
+
+    // Are we closer to the start mark, than to the stop mark.
+    if( fromStart < fromStop )
+    {
+      setStart( mark );
+    }
+    else
+    {
+      setStop( mark );
+    }
+  }
+
+  /**
+   * Increases <code>currentSample</code> by one step.
+   */
+  private void increaseCurrentSample()
+  {
+    setCurrentSample( currentSample + Channel.SAMPLES_SIZE );
+  }
+
+  /**
+   * Set changed and notify all observers.
+   */
+  private void setChangedAndNotifyAll()
+  {
+    setChanged();
+
+    notifyObservers();
+  }
+
+  /**
+   * Returns true if playing is allowed. False otherwise.
+   *
+   * @return True if playing is allowed. False otherwise.
+   */
+  private boolean playingAllowed()
+  {
+    boolean allowed = true;
+
+    if( stop != 0 )
+    {
+      if( start != stop )
+      {
+        if( currentSample > stop )
+        {
+          allowed = false;
+        }
+      }
+
+      if( currentSample >= getSampleAmount() )
+      {
+        allowed = false;
+      }
+    }
+
+    return allowed;
   }
 }
