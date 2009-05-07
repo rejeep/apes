@@ -15,6 +15,8 @@ import apes.lib.Config;
 import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
+import apes.models.InternalFormat;
+
 import java.awt.GridLayout;
 
 // TODO: Maybe pass some arguments to updateView.
@@ -40,6 +42,20 @@ public class ChannelView extends JPanel implements Runnable
    */
   private Player player;
 
+  /**
+   * The number of samples for each of the channels.
+   */
+  private int nrSamples;
+
+  /**
+   * The center sample of the channels
+   */
+  private int centerSample;
+
+  /**
+   * The number of visible samples in each channel
+   */
+  private int visibleSamples;
 
 
   /**
@@ -307,36 +323,118 @@ public class ChannelView extends JPanel implements Runnable
     return null;
   }
 
-  public int samplesToPixels(long samples)
+  /**
+   * Transform a position in a channel to pixels in the graph based on samples.
+   * @param samples The position in the channel in samples.
+   * @return -1 if the sample is outside the graph otherwise where in the graph.
+   */
+  public int samplesToPixels(int samples)
   {
-    return 0;//graphWidth*samples/nrSamples;
+    int firstVisibleSample = centerSample - visibleSamples/2;
+    int lastVisibelSample  = centerSample + visibleSamples/2;
+    
+    if(samples < firstVisibleSample || samples > lastVisibelSample)
+       return -1;
+
+    int properSamples = samples - firstVisibleSample;
+
+    float ratio = properSamples / visibleSamples;
+
+    return Math.round(ratio * graphWidth);
   }
 
-  public int millisecondsToPixels(long milliseconds)
+  /**
+   * Transform a position in a channel to pixels in the graph based on milliseconds.
+   * @param milliseconds The position in the channel in milliseconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int millisecondsToPixels(int milliseconds)
   {
-    return 0;
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = Math.round((milliseconds / 1000.0f) * sampleRate);
+    return samplesToPixels(samples);
   }
 
-  public int secondsToPixels(long seconds)
+  /**
+   * Transform a position in a channel to pixels in the graph based on seconds.
+   * @param seconds The position in the channel in seconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int secondsToPixels(int seconds)
   {
-    return 0;
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = seconds * sampleRate;
+    return samplesToPixels(samples);
   }
 
-  public long pixelsToSamples(int pixels)
+  /**
+   * Transform a position in a channel to pixels in the graph based on minutes.
+   * @param minutes The position in the channel in seconds.
+   * @return -1 if the time is outside the graph otherwise where in the graph.
+   */
+  public int minutesToPixels(int minutes)
   {
-    return 0;
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int samples = (minutes*60) * sampleRate;
+    return samplesToPixels(samples);
   }
 
-  public long pixelsToMilliseconds(int pixels)
+  /**
+   * Transform a number of pixels to samples in the channel.
+   * @param pixels How many pixels in the graph in the x-axis 
+   * @return The absolute samples in the channel, -1 if outside the graph.
+   */
+  public int pixelsToSamples(int pixels)
   {
-    return 0;
+    if(pixels < 0 || pixels > graphWidth)
+      return -1;
+    int firstVisibleSample = centerSample - visibleSamples/2;
+    int samplesPerPixel = visibleSamples / graphWidth;
+    int samples = pixels*samplesPerPixel + firstVisibleSample;
+    return samples;
   }
 
-  public long pixelsToSecnods(int pixels)
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The millisecnods in the channel, -1 if outside the graph.
+   */
+  public int pixelsToMilliseconds(int pixels)
   {
-    return 0;
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int milliseconds = (samples / sampleRate) * 1000;
+    return milliseconds;
   }
 
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The seconds in the channel, -1 if outside the graph.
+   */
+  public int pixelsToSeconds(int pixels)
+  {
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int seconds = (samples / sampleRate);
+    return seconds;
+  }
+
+  /**
+   * Transform a number of pixels to milliseconds in the channel.
+   * Observ that the numbers are rounded down.
+   * @param pixels How many pixels in the graph in the x-axis
+   * @return The minutes in the channel, -1 if outside the graph.
+   */
+  public int pixelsToMinutes(int pixels)
+  {
+    int samples = pixelsToSamples(pixels);
+    int sampleRate = player.getInternalFormat().getSampleRate();
+    int minutes = (samples / sampleRate) / 60;
+    return minutes;
+  }
 
 
   /**
@@ -350,21 +448,6 @@ public class ChannelView extends JPanel implements Runnable
      * The channel.
      */
     private Channel channel;
-
-    /**
-     * The number of samples for each of the channels.
-     */
-    private int nrSamples;
-
-    /**
-     * The center sample of the channels
-     */
-    private int centerSample;
-
-    /**
-     * The number of visible samples in each channel
-     */
-    private int visibleSamples;
 
     /**
      *

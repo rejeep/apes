@@ -83,9 +83,9 @@ public class InternalFormatView extends JPanel implements Observer
   {
     if( o instanceof InternalFormat )
     {
-      channelView.updateInternalFormat(); 
+      channelView.updateInternalFormat();
     }
-    
+
     if( o instanceof Player )
     {
       channelView.updatePlayer();
