@@ -40,20 +40,7 @@ public class ChannelView extends JPanel implements Runnable
    */
   private Player player;
 
-  /**
-   * The number of samples for each of the channels.
-   */
-  private int nrSamples;
 
-  /**
-   *
-   */
-  private int centerSample;
-
-  /**
-   *
-   */
-  private int visibleSamples;
 
   /**
    * The fixed mark in the graph.
@@ -388,7 +375,20 @@ public class ChannelView extends JPanel implements Runnable
      */
     private Channel channel;
 
+    /**
+     * The number of samples for each of the channels.
+     */
+    private int nrSamples;
 
+    /**
+     * The center sample of the channels
+     */
+    private int centerSample;
+
+    /**
+     * The number of visible samples in each channel
+     */
+    private int visibleSamples;
 
     /**
      *
@@ -437,7 +437,7 @@ public class ChannelView extends JPanel implements Runnable
 
         visibleSamples = nrSamples;
         centerSample = nrSamples/2;
-        updateView();
+        updateGraph();
       }
     }
 
