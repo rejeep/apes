@@ -385,8 +385,9 @@ public class ChannelView extends JPanel implements Runnable
       setBackground(g2);
       drawGraph(g2);
       drawLines(g2);
-      drawMarkers(g2);
+      // Do before markers.
       drawSelection(g2);
+      drawMarkers(g2);
       drawPlayMarker(g2);
       drawRuler(g2);
       drawStatus(g2);
@@ -411,30 +412,49 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawPlayMarker(Graphics2D g2)
     {
+      int player = getMarkPlayer();
+
+      if( player == 0 )
+      {
+        player++;
+      }
+
       g2.setColor(Color.decode(Config.getInstance().getOption("color_play")));
-      if(nrSamples > 0)
-        g2.drawLine(( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),0,
-                    ( (int) ((long) graphWidth*player.getCurrentSample()/nrSamples) ),graphHeight);
+      g2.drawLine(player,0,player,graphHeight);
     }
 
     private void drawSelection(Graphics2D g2)
     {
-      if(getMarkStart() >= 0)
+      if( getMarkStart() >= 0 && getMarkStop() > 0)
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
-        if(getMarkStop() > 0 && getMarkStart() >= 0)
-          g2.fillRect(getMarkStart(), 0, getMarkStop()-getMarkStart(), graphHeight);
+        g2.fillRect(getMarkStart(), 0, getMarkStop()-getMarkStart(), graphHeight);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
       }
-      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
     private void drawMarkers(Graphics2D g2)
     {
-      if(getMarkStart() >= 0)
-        g2.drawLine(getMarkStart()+1,0,getMarkStart()+1,graphHeight);
-      if(getMarkStop() > 0)
-        g2.drawLine(getMarkStop()-1,0,getMarkStop()-1,graphHeight);
+      int start = getMarkStart();
+      int stop = getMarkStop();
+
+      if( start == stop )
+      {
+        g2.drawLine(start,0,start,graphHeight);
+      }
+      else
+      {
+        if(start >= 0)
+        {
+          g2.drawLine(start+1,0,start+1,graphHeight);
+        }
+
+        if(getMarkStop() > 0)
+        {
+          g2.drawLine(stop-1,0,stop-1,graphHeight);
+        }
+      }
     }
 
     private void drawLines(Graphics2D g2)
@@ -596,6 +616,16 @@ public class ChannelView extends JPanel implements Runnable
     private int getMarkStop()
     {
       return samplesToPixels( player.getStop() );
+    }
+
+    /**
+     * Returns the player mark position in pixels.
+     *
+     * @return The player mark position.
+     */
+    private int getMarkPlayer()
+    {
+      return samplesToPixels( player.getCurrentSample() );
     }
   }
 }
