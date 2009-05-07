@@ -185,7 +185,7 @@ public class ChannelView extends JPanel implements Runnable
 
     int properSamples = samples - firstVisibleSample;
 
-    float ratio = properSamples / visibleSamples;
+    float ratio = (float)properSamples / visibleSamples;
 
     return Math.round(ratio * graphWidth);
   }
@@ -294,7 +294,10 @@ public class ChannelView extends JPanel implements Runnable
    */
   public void updatePlayer()
   {
-    
+    for( ChannelView.Graph graph : graphs )
+    {
+      graph.repaint();
+    }
   }
 
   /**
