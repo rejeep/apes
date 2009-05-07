@@ -419,11 +419,11 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawSelection(Graphics2D g2)
     {
-      if(getMarkStart() > 0)
+      if(getMarkStart() >= 0)
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
-        if(getMarkStop() > 0 && getMarkStart() > 0)
+        if(getMarkStop() > 0 && getMarkStart() >= 0)
           g2.fillRect(getMarkStart(), 0, getMarkStop()-getMarkStart(), graphHeight);
       }
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
