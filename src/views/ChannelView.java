@@ -222,31 +222,7 @@ public class ChannelView extends JPanel implements Runnable
 
     movingMark = x;
   }
-
-  /**
-   * Returns true if there's any selection in the graph. False
-   * otherwise.
-   *
-   * @return True if any selection. False otherwise.
-   */
-  public boolean isSelection()
-  {
-    return fixedMark != -1 || movingMark != -1;
-  }
-
-  /**
-   * Returns true if <code>x</code> and <code>y</code> is in the graph
-   * panel.
-   *
-   * @param x A value on the x-axis.
-   * @param y A value on the y-axis.
-   * @return True if x and y is in the graph area. False otherwise.
-   */
-  public boolean inView( int x, int y )
-  {
-    return x > 0 && y > 0 && x < graphWidth - 1 && y < graphHeight - 1;
-  }
-
+  
   /**
    * Returns the graph width.
    *
