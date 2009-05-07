@@ -47,6 +47,10 @@ public class Player extends Observable implements Runnable
 
   /**
    * This is how far we are allowed to play, in samples.
+   *
+   * NOTE: If stop is zero, the player will continue to the end. So if
+   * stop is zero, it basically means that there's no restriction in
+   * what area is allowed to be played.
    */
   private int stop;
 
@@ -115,7 +119,12 @@ public class Player extends Observable implements Runnable
   public void forward()
   {
     int temp = currentSample + getWindLength();
-    int max = Math.min( getSampleAmount(), stop );
+    int max = getSampleAmount();
+      
+    if( stop != 0 )
+    {
+      max = Math.min( max, stop );
+    }
 
     currentSample = temp >= max ? max : temp;
   }
