@@ -289,12 +289,12 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Is called when the player is updated. Then the each graph should
+   * Is called when the player is updated. Then each graph should
    * be updated.
    */
   public void updatePlayer()
   {
-
+    
   }
 
   /**
