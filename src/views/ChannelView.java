@@ -142,102 +142,6 @@ public class ChannelView extends JPanel implements Runnable
       graph.updateGraph();
     }
   }
-
-  /**
-   * Selects a region.
-   *
-   * TODO: Check so that x1 and x2 is in graph?
-   *
-   * @param x1 Mark 1.
-   * @param x2 Mark 2.
-   */
-  public void selectRegion( int x1, int x2  )
-  {
-    // Check so that x1 and x2 is in the graph.
-    if( x1 < 0 )
-    {
-      x1 = 0;
-    }
-    if( x1 > graphWidth )
-    {
-      x1 = graphWidth - 1;
-    }
-
-    if( x2 < 0 )
-    {
-      x2 = 0;
-    }
-    if( x2 > graphWidth )
-    {
-      x2 = graphWidth - 1;
-    }
-
-    fixedMark = x1;
-    movingMark = x2;
-  }
-
-  /**
-   * Removes selection.
-   */
-  public void deSelectRegion()
-  {
-    fixedMark = -1;
-    movingMark = -1;
-  }
-
-  /**
-   * Selects the whole visible graph.
-   */
-  public void selectAll()
-  {
-    fixedMark = 1;
-    movingMark = graphWidth - 1;
-  }
-
-  /**
-   * Moves mark to <code>x</code>.
-   *
-   * @param x Where to move on the x-axis.
-   */
-  public void moveMark( int x )
-  {
-    if( fixedMark == -1 )
-    {
-      fixedMark = x;
-    }
-
-    movingMark = x;
-  }
-
-  /**
-   * Moves the beginning mark to x.
-   *
-   * @param x The new mark on the x-axis.
-   */
-  public void moveBeginning( int x )
-  {
-    if( fixedMark < movingMark )
-    {
-      fixedMark = movingMark;
-    }
-
-    movingMark = x;
-  }
-
-  /**
-   * Moves the end mark to x.
-   *
-   * @param x The new mark on the x-axis.
-   */
-  public void moveEnd( int x )
-  {
-    if( fixedMark > movingMark )
-    {
-      fixedMark = movingMark;
-    }
-
-    movingMark = x;
-  }
   
   /**
    * Returns the graph width.
@@ -259,38 +163,6 @@ public class ChannelView extends JPanel implements Runnable
     return graphHeight;
   }
 
-  /**
-   * Returns the mark that is the most to the left.
-   *
-   * @return The position of the mark in pixels.
-   */
-  public int getMarkBeginning()
-  {
-    return Math.min( fixedMark, movingMark );
-  }
-
-  /**
-   * Returns the mark that is the most to the right.
-   *
-   * @return The position of the mark in pixels.
-   */
-  public int getMarkEnd()
-  {
-    return Math.max( fixedMark, movingMark );
-  }
-
-  // TODO:
-  public int getMarkPlayer()
-  {
-    return 1;
-  }
-
-  // TODO:
-  public void setMarkPlayer( int pixels )
-  {
-
-  }
-
   public void run()
   {
     while( true )
@@ -306,21 +178,6 @@ public class ChannelView extends JPanel implements Runnable
         e.printStackTrace();
       }
     }
-  }
-
-  // TODO: Ohh, dear lord... Temp!
-  // This method should be in here and not in the graph.
-  public Point getMarkedSamples()
-  {
-    for( ChannelView.Graph graph : graphs )
-    {
-      if( graph != null )
-      {
-        return graph.getMarkedSamples();
-      }
-    }
-
-    return null;
   }
 
   /**
