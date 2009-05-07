@@ -91,7 +91,10 @@ public class ChannelController extends ApplicationController implements MouseLis
   {
     mouseDown = false;
 
-    player.setCurrentSample( player.getStart() );
+    if( isSelection() )
+    {
+      player.setCurrentSample( player.getStart() );  
+    }
   }
 
   public void mouseExited( MouseEvent e )
