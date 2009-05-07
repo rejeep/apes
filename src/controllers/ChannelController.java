@@ -171,7 +171,18 @@ public class ChannelController extends ApplicationController implements MouseLis
     // channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
   }
 
-  public void mouseMoved( MouseEvent e ) {}
+  public void mouseMoved( MouseEvent e )
+  {
+    int y = e.getY();
+    int x = e.getX();
+
+    // Is the mouse inside the panel.
+    if( channelView.inView( x, y ) )
+    {
+      channelView.setMousePosX( x );
+      channelView.repaint();
+    }
+  }
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
 
@@ -199,7 +210,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     player.setStop( stopValue );
     player.setCurrentSample( playerValue );
   }
-
+  
   /**
    * Set the status panel.
    *
