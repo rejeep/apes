@@ -439,11 +439,7 @@ public class ChannelView extends JPanel implements Runnable
       int start = getMarkStart();
       int stop = getMarkStop();
 
-      if( start == stop )
-      {
-        g2.drawLine(start,0,start,graphHeight);
-      }
-      else
+      if( start != stop )
       {
         if(start >= 0)
         {
