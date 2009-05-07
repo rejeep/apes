@@ -11,17 +11,17 @@ import apes.models.InternalFormat;
 /**
  * TODO: Comment
  */
-public class FadeInTransform implements TransformPlugin
+public class FadeOutTransform implements TransformPlugin
 {
   public String getName()
   {
-    return "Fade in";
+    return "Fade out";
   }
 
   public Map<String, String> getDescriptions()
   {
     HashMap map = new HashMap<String, String>();
-    map.put("en", "Fade in");
+    map.put("en", "Fade out");
     map.put("sv", "-");
     return map;
   }
