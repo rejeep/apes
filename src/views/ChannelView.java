@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +16,6 @@ import apes.lib.Config;
 import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
-import apes.models.InternalFormat;
-
-import java.awt.GridLayout;
 
 // TODO: Maybe pass some arguments to updateView.
 
@@ -56,17 +54,6 @@ public class ChannelView extends JPanel implements Runnable
    * The number of visible samples in each channel
    */
   private int visibleSamples;
-
-
-  /**
-   * The fixed mark in the graph.
-   */
-  private int fixedMark;
-
-  /**
-   * The moving mark in the graph.
-   */
-  private int movingMark;
 
   /**
    * The position of the mouse in the x-axis
@@ -423,22 +410,22 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawSelection(Graphics2D g2)
     {
-      if(getMarkBeginning() > 0)
+      if(getMarkStart() > 0)
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
-        if(getMarkEnd() > 0 && getMarkBeginning() > 0)
-          g2.fillRect(getMarkBeginning(), 0, getMarkEnd()-getMarkBeginning(), graphHeight);
+        if(getMarkStop() > 0 && getMarkStart() > 0)
+          g2.fillRect(getMarkStart(), 0, getMarkStop()-getMarkStart(), graphHeight);
       }
       g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
     private void drawMarkers(Graphics2D g2)
     {
-      if(getMarkBeginning() > 0)
-        g2.drawLine(getMarkBeginning(),0,getMarkBeginning(),graphHeight);
-      if(getMarkEnd() > 0)
-        g2.drawLine(getMarkEnd(),0,getMarkEnd(),graphHeight);
+      if(getMarkStart() > 0)
+        g2.drawLine(getMarkStart(),0,getMarkStart(),graphHeight);
+      if(getMarkStop() > 0)
+        g2.drawLine(getMarkStop(),0,getMarkStop(),graphHeight);
     }
 
     private void drawLines(Graphics2D g2)
@@ -583,27 +570,23 @@ public class ChannelView extends JPanel implements Runnable
     }
 
     /**
-     * Returns the interval of marked samples.
-     * point.x = the start of the marked area
-     * point.y = the end of the marked area
-     * @return The intervall.
+     * Returns the start mark position in pixels.
+     *
+     * @return The start mark position.
      */
-    public Point getMarkedSamples()
+    private int getMarkStart()
     {
-      if(getMarkBeginning() > 0 && getMarkEnd() > 0)
-      {
-        int samplesPerPixel = visibleSamples/graphWidth;
-        try {
-          int beginning = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkBeginning(), end = (centerSample-visibleSamples/2)+samplesPerPixel*getMarkEnd();
-          if( beginning <= end )
-            return new Point( beginning, end );
-          else
-            return new Point( end, beginning );
-        } catch (Exception e) {
-          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-      }
-      return null;
+      return samplesToPixels( player.getStart() );
+    }
+    
+    /**
+     * Returns the stop mark position in pixels.
+     *
+     * @return The stop mark position.
+     */
+    private int getMarkStop()
+    {
+      return samplesToPixels( player.getStop() );
     }
   }
   
