@@ -90,6 +90,8 @@ public class ChannelController extends ApplicationController implements MouseLis
   public void mouseReleased( MouseEvent e )
   {
     mouseDown = false;
+
+    player.setCurrentSample( player.getStart() );
   }
 
   public void mouseExited( MouseEvent e )
@@ -177,6 +179,7 @@ public class ChannelController extends ApplicationController implements MouseLis
       channelView.repaint();
     }
   }
+  
   public void mouseEntered( MouseEvent e ) {}
   public void mouseClicked( MouseEvent e ) {}
 
@@ -204,7 +207,7 @@ public class ChannelController extends ApplicationController implements MouseLis
     player.setStop( stopValue );
     player.setCurrentSample( playerValue );
   }
-  
+
   /**
    * Set the status panel.
    *
