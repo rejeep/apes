@@ -20,6 +20,7 @@ public class CutEdit extends AbstractUndoableEdit
   private Samples[][] cutout;
   private InternalFormat internalFormat;
   private int start, stop;
+  private boolean undoable;
   
   /**
    * Constructs the CutEdit and performs the cut.
@@ -40,7 +41,9 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void redo()
   {
+    System.out.println("Redoing cut");
     cutout = internalFormat.cutSamples( start, stop );
+    undoable = true;
   }
   
   /**
@@ -50,6 +53,18 @@ public class CutEdit extends AbstractUndoableEdit
   {
     internalFormat.pasteSamples( start, cutout );
     cutout = null;
+    undoable = false;
+    System.out.println("Undoing cut");
+  }
+  
+  public boolean canRedo()
+  {
+    return !undoable;
+  }
+  
+  public boolean canUndo()
+  {
+    return undoable; 
   }
   
   /**

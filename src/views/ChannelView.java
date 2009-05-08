@@ -546,6 +546,7 @@ public class ChannelView extends JPanel implements Runnable
 
           for(int j = prevSample; j < index.x; ++j)
           {
+            if(channel.getSamples( j ).getSize() > 0)
             samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
           }
 
