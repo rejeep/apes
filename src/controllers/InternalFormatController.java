@@ -188,11 +188,15 @@ public class InternalFormatController extends ApplicationController
       // Chose file.
       final JFileChooser fc = new JFileChooser();
       fc.setCurrentDirectory( new File( "." ) );
-      fc.showOpenDialog( null );
-      File file = fc.getSelectedFile();
-
-      ApesFile apesFile = new ApesFile( file );
-      tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+      int returnVal = fc.showOpenDialog( null );
+      
+      if( returnVal == JFileChooser.APPROVE_OPTION )
+      {
+        File file = fc.getSelectedFile();
+        
+        ApesFile apesFile = new ApesFile( file );
+        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+      }
     }
     catch( UnidentifiedLanguageException e )
     {
