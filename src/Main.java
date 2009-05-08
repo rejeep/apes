@@ -24,7 +24,6 @@ import apes.controllers.InternalFormatController;
 import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.PluginController;
-import apes.controllers.EffectController;
 import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.exceptions.UnidentifiedLanguageException;
@@ -103,11 +102,6 @@ public class Main extends JFrame
    * Plugin controller.
    */
   private PluginController pluginController;
-
-  /**
-   * Effect controller.
-   */
-  private EffectController effectController;
   
   /**
    * Undo manager (keeps history list).
