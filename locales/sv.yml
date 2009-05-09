@@ -107,8 +107,10 @@ config:
   color_selection: Färg Valt område
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
+  color_ruler: Färg linjal
   gui_error_messages: Använd GUI för att visa felmeddelanden
   wind: Spolningskonstant
+  ruler_width: Linjallängd
 plugins:
   header: Plugins
   apply: Verkställ
