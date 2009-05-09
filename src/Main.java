@@ -32,7 +32,7 @@ public class Main extends JFrame
    *
    * @param args Files to loaded at startup.
    */
-  public Main( String[] args )
+  public Main( String[] args ) throws Exception
   {
     // Parse the configuration file and set default values.
     Config config = Config.getInstance();
@@ -79,11 +79,11 @@ public class Main extends JFrame
         e.printStackTrace();
       }
     }
-
+    
     // Create the undo manager.
     UndoManager undoManager = new UndoManager();
     undoManager.setLimit( config.getIntOption( "undo" ) );
-    
+
     // Controller for the internal format.
     InternalFormatController internalFormatController = new InternalFormatController( undoManager, tabsController, playerHandler );
 
@@ -100,6 +100,15 @@ public class Main extends JFrame
 
   public static void main( String[] args )
   {
-    new Main( args );
+    try
+    {
+      new Main( args );
+    }
+    catch( Exception e )
+    {
+      ApesError.unknownErrorOccurred();
+      System.out.println();
+      e.printStackTrace();
+    }
   }
 }

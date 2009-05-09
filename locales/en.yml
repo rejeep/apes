@@ -120,6 +120,9 @@ error:
     unsupported:
       title: Format error
       message: The format you are trying to use is not supported.
+  unknown:
+    title: Unknown error
+    message: An unknown error occurred. Se backtrace for more information.
 channel:
   header: Channel
   start: Start

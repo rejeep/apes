@@ -120,6 +120,9 @@ error:
     unsupported:
       title: Format fel
       message: Programmet har inte stöd för filformatet.
+  unknown:
+    title: Okänt fel
+    message: Ett okänt fel uppstod. Se \"backtrace\" för mer information.
 channel:
   header: Kanal
   start: Start

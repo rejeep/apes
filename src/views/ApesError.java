@@ -12,6 +12,16 @@ import apes.lib.Config;
 public class ApesError
 {
   /**
+   * 
+   */
+  public static void unknownErrorOccurred()
+  {
+    ApesError.showError( "unknown.title",
+                         "unknown.message" );
+  }
+
+  
+  /**
    * Shows an error message saying that the format is not supported.
    */
   public static void unsupportedFormat()
