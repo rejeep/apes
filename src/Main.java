@@ -43,7 +43,7 @@ public class Main extends JFrame
     PlayerHandler playerHandler = new PlayerHandler();
     
     // Create the plugin handler
-    pluginHandler = new PluginHandler("build/apes/plugins");
+    PluginHandler pluginHandler = new PluginHandler("build/apes/plugins");
 
     // Set up controllers.
     ConfigController configController = new ConfigController();
