@@ -26,12 +26,12 @@ public class PluginController extends ApplicationController
   /**
    * The plugin view.
    */
-  PluginView pluginView;
+  private PluginView pluginView;
   
   /**
    * The plugin handler.
    */
-  PluginHandler pluginHandler;
+  private PluginHandler pluginHandler;
   
   /**
    * Menu for effects
@@ -62,6 +62,7 @@ public class PluginController extends ApplicationController
   {
     pluginView.create();
   }
+  
   /**
    * TODO
    */
@@ -75,7 +76,6 @@ public class PluginController extends ApplicationController
         effect.setName( "doEffect" );
         effect.addActionListener( this );
         effectMenu.add(effect);
-        System.out.println("menu: " + p.getName());
     }
   }
   
@@ -89,17 +89,12 @@ public class PluginController extends ApplicationController
   
   public void doEffect(String name)
   {
-    System.out.println("doEffect(): " + name);
     if(playerHandler != null)
     {
-    InternalFormat internalFormat = playerHandler.getInternalFormat();
-    Player player = playerHandler.getPlayer(internalFormat);
-    Point selection = player.getSelection();
-    pluginHandler.getTransform(name).apply(internalFormat, selection);
-    }
-    else
-    {
-      System.out.println("is null!");
+      InternalFormat internalFormat = playerHandler.getInternalFormat();
+      Player player = playerHandler.getPlayer(internalFormat);
+      Point selection = player.getSelection();
+      pluginHandler.getTransform(name).apply(internalFormat, selection);
     }
   }
   
@@ -113,18 +108,14 @@ public class PluginController extends ApplicationController
     
     for(String name : names)
     {
-      System.out.println("apply() name: " + pluginHandler.isLoaded(name) + "-" + choices.get(name).isSelected());
-      
       if( !(pluginHandler.isLoaded(name) == choices.get(name).isSelected()) )
       {
         if(pluginHandler.isLoaded(name))
         {
-          System.out.println("unloading " + name);
           pluginHandler.unloadPlugin(name);
         }
         else
         {
-          System.out.println("loading " + name);
           pluginHandler.loadPlugin(name);
         }
       }

@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Font;
+import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JFrame;
@@ -66,11 +67,11 @@ public class PluginView extends JFrame
    * Creates the frame.
    */
   public void create()
-  {      
+  {     
     setLayout(new BorderLayout());
     add(createPluginPanel(), BorderLayout.NORTH);
     add(createButtonPanel(), BorderLayout.SOUTH);
-    setDefaultCloseOperation( EXIT_ON_CLOSE );
+    setDefaultCloseOperation( DISPOSE_ON_CLOSE );
     pack();
     setLocationRelativeTo( null );
     setVisible(true);
@@ -154,6 +155,7 @@ public class PluginView extends JFrame
    */
   public Map<String, JCheckBox> getChoices()
   {
+    //debug
     return choices;
   }
 }

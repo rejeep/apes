@@ -8,9 +8,6 @@ import apes.interfaces.TransformPlugin;
 import apes.models.Samples;
 import apes.models.InternalFormat;
 
-/**
- * TODO: Comment
- */
 public class FadeTransform implements TransformPlugin
 {
   public String getName()
@@ -32,6 +29,7 @@ public class FadeTransform implements TransformPlugin
     int diff = selection.y - selection.x;
     float scale;
     
+    // just scale it for testing
     for(int i=0; i<internalFormat.getNumChannels(); i++)
     {
       scale = 0.05f;
