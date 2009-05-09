@@ -189,7 +189,8 @@ public class ChannelController extends ApplicationController implements MouseLis
     int stopValue = statusPanel.getStopValue();
     int playerValue = statusPanel.getPlayerValue();
 
-    if( startValue <= stopValue && stopValue <= playerValue )
+    // Make sure values are ok.
+    if( startValue <= stopValue && playerValue <= stopValue )
     {
       player.setStart( startValue );
       player.setStop( stopValue );
