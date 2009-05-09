@@ -1,10 +1,15 @@
 package apes.views;
 
+import java.util.Observable;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.util.Observable;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+import java.io.File;
 
 /**
  * This extends {@link javax.swing.JMenuItem JMenuItem} with locale
@@ -36,6 +41,16 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
 
     setText( language.get( tag ) );
     language.addObserver( this );
+
+    // Set icon.
+    String[] split = tag.split( "\\." );
+    String button = split[split.length - 1];
+    File file = new File( "images/menu/" + button + ".png" );
+    if( file.exists() )
+    {
+      ImageIcon icon = new ImageIcon( file.getAbsolutePath() );
+      setIcon( icon );
+    }
   }
 
   public void update( Observable o, Object arg )
