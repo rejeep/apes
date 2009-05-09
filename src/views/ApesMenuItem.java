@@ -1,15 +1,12 @@
 package apes.views;
 
+import java.io.File;
 import java.util.Observable;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
-import java.io.File;
 
 /**
  * This extends {@link javax.swing.JMenuItem JMenuItem} with locale
