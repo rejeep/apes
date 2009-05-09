@@ -335,6 +335,11 @@ public class ApplicationView extends JFrame
       JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
       player.add( backward );
       // Player END
+      
+      // Effects START
+      JMenuItem effects = pluginController.getEffectMenu();
+      add(effects);
+      // Effects END
 
       // Tools START
       JMenu tools = new ApesMenu( "menu.head.tools" );
