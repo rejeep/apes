@@ -7,9 +7,7 @@ import apes.lib.Config;
 import java.util.Observable;
 
 /**
- * This class plays an internal format. It implements Runnable rather
- * than extending Thread because methods such as stop and pause is in
- * the Thread class aswell as in this (with a different meaning).
+ * This class plays an internal format.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -41,18 +39,14 @@ public class Player extends Observable implements Runnable
   private int currentSample;
 
   /**
-   * Where to start playing, in samples.
+   * The fixed position.
    */
-  private int start;
+  private int fixed;
 
   /**
-   * This is how far we are allowed to play, in samples.
-   *
-   * NOTE: If stop is zero, the player will continue to the end. So if
-   * stop is zero, it basically means that there's no restriction in
-   * what area is allowed to be played.
+   * The moving position.
    */
-  private int stop;
+  private int moving;
 
   /**
    * Tells how long a wind should be. The larger value, the less wind
@@ -76,10 +70,6 @@ public class Player extends Observable implements Runnable
     this.internalFormat = internalFormat;
     this.wind = Config.getInstance().getIntOption( "wind" );
 
-    resetStop();
-    resetStart();
-
-    currentSample = 0;
     setStatus( Status.WAIT );
 
     thread = new Thread( this );
@@ -119,13 +109,15 @@ public class Player extends Observable implements Runnable
   public void forward()
   {
     int temp = currentSample + getWindLength();
-    int max = getSampleAmount();
-
-    if( stop != 0 )
+    int start = getStart();
+    int stop = getStop();
+    int max = stop;
+      
+    if( stop == 0 || start == stop )
     {
-      max = Math.min( max, stop );
+      max = getSampleAmount();
     }
-
+    
     setCurrentSample( temp >= max ? max : temp );
   }
 
@@ -135,8 +127,15 @@ public class Player extends Observable implements Runnable
   public void backward()
   {
     int temp = currentSample - getWindLength();
-    int min = Math.max( 0, start );
+    int start = getStart();
+    int stop = getStop();
+    int min = start;
 
+    if( start == stop )
+    {
+      min = 0;
+    }
+    
     setCurrentSample( temp < min ? min : temp );
   }
 
@@ -157,7 +156,7 @@ public class Player extends Observable implements Runnable
    */
   public Point getSelection()
   {
-    return new Point( start, stop );
+    return new Point( getStart(), getStop() );
   }
 
   /**
@@ -199,64 +198,6 @@ public class Player extends Observable implements Runnable
   }
 
   /**
-   * Will run in a thread. And for each time in the loop the current
-   * status is checked. And depending on status, sound will be played,
-   * paused or stopped.
-   */
-  public void run()
-  {
-    while( true )
-    {
-      if( status != Status.WAIT )
-      {
-        if( status == Status.PLAY )
-        {
-          if( playingAllowed() )
-          {
-            byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
-
-            line.write( data, 0, data.length );
-
-            increaseCurrentSample();
-          }
-          else
-          {
-            if( currentSample >= getSampleAmount() )
-            {
-              stop();
-            }
-            else
-            {
-              pause();
-
-              setCurrentSample( start );
-            }
-          }
-        }
-        else
-        {
-          if( status == Status.STOP )
-          {
-            currentSample = 0;
-          }
-
-          setStatus( Status.WAIT );
-        }
-
-        // If this is not present there will be no playing.
-        try
-        {
-          Thread.sleep( 0 );
-        }
-        catch( InterruptedException e )
-        {
-          e.printStackTrace();
-        }
-      }
-    }
-  }
-
-  /**
    * Sets the line for this player.
    *
    * @param line The line.
@@ -267,65 +208,13 @@ public class Player extends Observable implements Runnable
   }
 
   /**
-   * Sets playing region.
-   *
-   * @param selection The selection.
-   */
-  public void setRegion( Point selection )
-  {
-    if( isPlaying() )
-    {
-      resetStop();
-    }
-    else
-    {
-      int min = selection.x;
-      int max = selection.y;
-
-      if( min == max )
-      {
-        resetStop();
-        resetStart();
-      }
-      else
-      {
-        start = min;
-        stop = max;
-      }
-
-      currentSample = min;
-    }
-  }
-
-  /**
    * Returns true if the player is playing. False otherwise.
    *
    * @return true if playing. False otherwise.
    */
   public boolean isPlaying()
   {
-    if( status == Status.PLAY )
-    {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Sets the stop position to the end position.
-   */
-  private void resetStop()
-  {
-    stop = 0;
-  }
-
-  /**
-   * Sets the start position to the beginning of the file.
-   */
-  private void resetStart()
-  {
-    start = 0;
+    return status == Status.PLAY;
   }
 
   /**
@@ -367,7 +256,7 @@ public class Player extends Observable implements Runnable
    */
   public int getStart()
   {
-    return start;
+    return Math.min( fixed, moving );
   }
 
   /**
@@ -377,7 +266,14 @@ public class Player extends Observable implements Runnable
    */
   public void setStart( int start )
   {
-    this.start = start;
+    if( moving < fixed )
+    {
+      moving = start;
+    }
+    else
+    {
+      fixed = start;
+    }
 
     setChangedAndNotifyAll();
   }
@@ -389,7 +285,7 @@ public class Player extends Observable implements Runnable
    */
   public int getStop()
   {
-    return stop;
+    return Math.max( fixed, moving );
   }
 
   /**
@@ -399,32 +295,62 @@ public class Player extends Observable implements Runnable
    */
   public void setStop( int stop )
   {
-    this.stop = stop;
+    if( moving > fixed )
+    {
+      moving = stop;
+    }
+    else
+    {
+      fixed = stop;
+    }
 
     setChangedAndNotifyAll();
   }
 
   /**
-   * Set <code>mark</code> "at the right place". This means that if
-   * mark is before start. Then start should be set to mark. Otherwise
-   * stop should be set to mark.
+   * Sets the moving mark to <code>mark</code>.
    *
-   * @param mark an <code>int</code> value
+   * @param mark The <code>mark</code>.
    */
   public void setMark( int mark )
   {
-    int fromStart = Math.abs( mark - start );
-    int fromStop = Math.abs( mark - stop );
+    moving = mark;
 
-    // Are we closer to the start mark, than to the stop mark.
-    if( fromStart < fromStop )
+    setChangedAndNotifyAll();
+  }
+
+  /**
+   * Change mark closest to <code>mark</code> to <code>mark.</code>.
+   *
+   * @param mark The mark.
+   */
+  public void setClosestMark( int mark )
+  {
+    int fromMoving = Math.abs( mark - moving );
+    int fromFixed = Math.abs( mark - fixed );
+
+    if( fromMoving > fromFixed )
     {
-      setStart( mark );
+      int temp = fixed;
+      fixed = moving;
+      moving = temp;
     }
-    else
-    {
-      setStop( mark );
-    }
+
+    setMark( mark );
+  }
+
+  /**
+   * Set all marks to <code>mark</code>.
+   *
+   * @param mark The mark.
+   */
+  public void setAllMarks( int mark )
+  {
+    moving = mark;
+    fixed = mark;
+    currentSample = mark;
+
+    setChangedAndNotifyAll();
   }
 
   /**
@@ -453,6 +379,8 @@ public class Player extends Observable implements Runnable
   private boolean playingAllowed()
   {
     boolean allowed = true;
+    int start = getStart();
+    int stop = getStop();
 
     if( stop != 0 )
     {
@@ -471,5 +399,63 @@ public class Player extends Observable implements Runnable
     }
 
     return allowed;
+  }
+
+  /**
+   * Will run in a thread. And for each time in the loop the current
+   * status is checked. And depending on status, sound will be played,
+   * paused or stopped.
+   */
+  public void run()
+  {
+    while( true )
+    {
+      if( status != Status.WAIT )
+      {
+        if( status == Status.PLAY )
+        {
+          if( playingAllowed() )
+          {
+            byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
+
+            line.write( data, 0, data.length );
+
+            increaseCurrentSample();
+          }
+          else
+          {
+            if( currentSample >= getSampleAmount() )
+            {
+              stop();
+            }
+            else
+            {
+              pause();
+
+              setCurrentSample( getStart() );
+            }
+          }
+        }
+        else
+        {
+          if( status == Status.STOP )
+          {
+            currentSample = 0;
+          }
+
+          setStatus( Status.WAIT );
+        }
+
+        // If this is not present there will be no playing.
+        try
+        {
+          Thread.sleep( 0 );
+        }
+        catch( InterruptedException e )
+        {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 }

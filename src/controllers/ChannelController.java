@@ -64,11 +64,9 @@ public class ChannelController extends ApplicationController implements MouseLis
       // Single click.
       if( e.getClickCount() == 1 )
       {
-        int samples = channelView.pixelsToSamples( x );
+        int mark = channelView.pixelsToSamples( x );
 
-        player.setStart( samples );
-        player.setStop( samples );
-        player.setCurrentSample( samples );
+        player.setAllMarks( mark );
       }
       // Select all if more than one click.
       else
@@ -124,12 +122,23 @@ public class ChannelController extends ApplicationController implements MouseLis
   {
     int y = e.getY();
     int x = e.getX();
-    int samples = channelView.pixelsToSamples( x );
+    int mark = channelView.pixelsToSamples( x );
 
     // Is the mouse inside the panel.
     if( inView( x, y ) )
     {
-      player.setMark( samples );
+      if( e.getModifiers() == MouseEvent.BUTTON1_MASK )
+      {
+        player.setMark( mark );
+      }
+      else if( e.getModifiers() == MouseEvent.BUTTON3_MASK )
+      {
+        // Is there a selection.
+        if( isSelection() )
+        {
+          player.setClosestMark( mark );
+        }
+      }
     }
   }
 
