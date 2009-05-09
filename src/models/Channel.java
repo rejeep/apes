@@ -255,12 +255,12 @@ public class Channel
       samples = samplesList.get(startPoint.x);
 
       // Extrmely unlikely
-      /*if(startPoint.y == 0 && stopPoint.y == samples.getSize()-1)
-        {
+      if(startPoint.y == 0 && stopPoint.y == samples.getSize()-1)
+      {
         retArray[0] = samples;
         samplesList.remove(samples);
         return retArray;
-        }*/
+      }
 
       // Create Samples to return.
       retSamples = new Samples( stopPoint.y - startPoint.y + 1 );
@@ -296,10 +296,18 @@ public class Channel
 
     // Fix first
     samples = samplesList.get( startPoint.x );
-    newSamples = new Samples( startPoint.y );
-    for(int i = 0; i < startPoint.y; i++)
-      newSamples.setSample( i, samples.getSample(i) );
-    samplesList.set( startPoint.x, newSamples );
+    // Remove entire
+    if( startPoint.y <= 0 )
+    {
+     samplesList.remove( startPoint.x ); 
+    }
+    else
+    {
+      newSamples = new Samples( startPoint.y );
+      for(int i = 0; i < startPoint.y; i++)
+        newSamples.setSample( i, samples.getSample(i) );
+      samplesList.set( startPoint.x, newSamples );
+    }
 
     // Copy from first
     retSamples = new Samples( samples.getSize() - startPoint.y );

@@ -20,6 +20,7 @@ public class PasteEdit extends AbstractUndoableEdit
   private InternalFormat internalFormat;
   private Samples[][] paste;
   private int start, stop;
+  private boolean undoable;
   
   public PasteEdit( InternalFormat intForm, Point marked, Samples[][] p )
   {
@@ -32,11 +33,26 @@ public class PasteEdit extends AbstractUndoableEdit
   
   public void redo()
   {
+    System.out.println("Redoing paste");
     stop = internalFormat.pasteSamples( start, paste );
+    undoable = true;
+    System.out.println("Redoing paste");
   }
   
   public void undo()
   {
     paste = internalFormat.cutSamples( start, stop );
+    undoable = false;
+    System.out.println("Undoing cut");
+  }
+  
+  public boolean canRedo()
+  {
+    return !undoable;
+  }
+  
+  public boolean canUndo()
+  {
+    return undoable; 
   }
 }
