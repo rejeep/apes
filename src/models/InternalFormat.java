@@ -290,7 +290,9 @@ public class InternalFormat extends Observable
       samples[i] = channels.get(i).cutSamples( start, stop );
     
     sampleAmount -= stop - start + 1;
-        
+    
+    setChanged();
+    notifyObservers();
     return samples;
   }
   
@@ -311,6 +313,9 @@ public class InternalFormat extends Observable
       retVal = channels.get(i).pasteSamples( start, samples[i] );
     
     sampleAmount += retVal - start;
+    
+    setChanged();
+    notifyObservers();
     
     return retVal;
   }

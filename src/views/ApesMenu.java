@@ -36,7 +36,7 @@ public class ApesMenu extends JMenu implements LanguageObserver
     this.language = Language.getInstance();
 
     setText( language.get( tag ) );
-    language.addObserver(this);
+    language.addObserver( this );
   }
   
   public void update( Observable o, Object arg )
