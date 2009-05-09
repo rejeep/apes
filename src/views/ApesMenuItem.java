@@ -39,9 +39,21 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
     setText( language.get( tag ) );
     language.addObserver( this );
 
-    // Set icon.
+    // What should have been Arrays#join
     String[] split = tag.split( "\\." );
-    String button = split[split.length - 1];
+    StringBuffer button = new StringBuffer();
+    int start = 2;
+    for( int i = start; i < split.length; i++ )
+    {
+      if( i != start )
+      {
+        button.append( "_" );
+      }
+      
+      button.append( split[i] );
+    }
+    
+    // Set icon
     File file = new File( "images/menu/" + button + ".png" );
     if( file.exists() )
     {
