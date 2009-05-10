@@ -165,6 +165,13 @@ public class PluginController extends ApplicationController
    */
   public void close()
   {
+    Map<String, JCheckBox> choices = pluginView.getChoices();
+    ArrayList<String> names = pluginHandler.getPluginNames();
+    
+    for(String name : names)
+    {
+      choices.get(name).setSelected(pluginHandler.isLoaded(name));
+    }
     pluginView.setVisible(false);
     pluginView.dispose();
   }
