@@ -33,22 +33,27 @@ public class PluginView extends JFrame
    *  The plugin controller
    */
   private PluginController pluginController;
-  
+
   /**
    * The plugin handler
    */
   private PluginHandler pluginHandler;
-  
+
   /**
    * Mapping to fetch selected values from checkboxes.
    */
   private Map<String, JCheckBox> choices;
-  
+
   /**
    * The language object.
    */
   private Language language;
-  
+
+  /**
+   *
+   */
+  private boolean viewCreated = false;
+
   /**
    * Creates a new <code>PluginView/code> instance.
    *
@@ -62,24 +67,29 @@ public class PluginView extends JFrame
     choices = new HashMap<String, JCheckBox>();
     language = Language.getInstance();
   }
-  
+
   /**
    * Creates the frame.
    */
   public void create()
-  {     
-    setLayout(new BorderLayout());
-    add(createPluginPanel(), BorderLayout.NORTH);
-    add(createButtonPanel(), BorderLayout.SOUTH);
-    setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-    pack();
-    setLocationRelativeTo( null );
+  {
+    if( !viewCreated )
+    {
+      setLayout(new BorderLayout());
+      add(createPluginPanel(), BorderLayout.NORTH);
+      add(createButtonPanel(), BorderLayout.SOUTH);
+      setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+      pack();
+      setLocationRelativeTo( null );
+      viewCreated = true;
+    }
+
     setVisible(true);
   }
-  
+
   /**
    * Returns the top panel with selectable plugins.
-   * 
+   *
    * @return The top panel.
    */
   public JPanel createPluginPanel()
