@@ -39,12 +39,15 @@ public class PluginController extends ApplicationController
   private JMenu effectMenu;
   
   /**
-   * 
+   * The player handler.
    */
   private PlayerHandler playerHandler;
 
   /**
    * Creates a new plugin controller.
+   * 
+   * @param pH Plugin handler.
+   * @param playerHandler Player handler.
    */
   public PluginController(PluginHandler pH, PlayerHandler playerHandler)
   {
@@ -64,7 +67,7 @@ public class PluginController extends ApplicationController
   }
   
   /**
-   * TODO
+   * Updates the effects menu.
    */
   public void updateEffectMenu()
   {
@@ -80,13 +83,20 @@ public class PluginController extends ApplicationController
   }
   
   /**
-   * TODO
+   * Returns the effects menu.
+   * 
+   * @return Effects menu.
    */
   public JMenu getEffectMenu()
   {
     return effectMenu;
   }
   
+  /**
+   * Given a plugin name, runs the effect.
+   * 
+   * @param name The name of the plugin.
+   */
   public void doEffect(String name)
   {
     if(playerHandler != null)
@@ -132,6 +142,11 @@ public class PluginController extends ApplicationController
     updateEffectMenu();
   }
   
+  /**
+   * Override actionPerformed in ActionController for effect events.
+   * 
+   * @param ae ActionEvent.
+   */
   public void actionPerformed(ActionEvent ae)
   {
     String action = ae.getActionCommand();

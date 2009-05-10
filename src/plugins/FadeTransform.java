@@ -13,17 +13,46 @@ import apes.interfaces.TransformPlugin;
 import apes.models.Samples;
 import apes.models.InternalFormat;
 
+/**
+ * Effect plugin that fades in or out.
+ */
 public class FadeTransform implements TransformPlugin, ActionListener
 {
+  /**
+   * Window frame.
+   */
   JFrame frame;
+  
+  /**
+   * The internal format.
+   */
   InternalFormat internalFormat;
+  
+  /**
+   * Selected region.
+   */
   Point selection;
   
+  /**
+   * The interval, how many samples per fade step.
+   */
+  int interval;
+  
+  /**
+   * Return the name of the plugin.
+   * 
+   * @return The name
+   */
   public String getName()
   {
     return "Fade";
   }
 
+  /**
+   * Returns the description map.
+   * 
+   * @return Description map.
+   */
   public Map<String, String> getDescriptions()
   {
     HashMap map = new HashMap<String, String>();
@@ -32,10 +61,14 @@ public class FadeTransform implements TransformPlugin, ActionListener
     return map;
   }
   
+  /**
+   * Creates and shows the frame.
+   */
   public void showFrame()
   {
     frame = new JFrame();
     frame.setLayout( new BorderLayout() );
+    
     JButton inButton = new JButton("Fade in");
     inButton.addActionListener(this);
     frame.add(inButton, BorderLayout.NORTH);
@@ -48,31 +81,82 @@ public class FadeTransform implements TransformPlugin, ActionListener
     frame.setVisible(true);
   }
 
+  /**
+   * Runs the effect on selected region.
+   *
+   * @param internalFormat The internal format.
+   * @param selection The selected region.
+   */
   public void apply( InternalFormat internalFormat, Point selection )
   {
+    this.internalFormat = internalFormat;
+    this.selection = selection;
+    interval = 100;
     showFrame();
-    int interval = 100;
-    int diff = selection.y - selection.x;
-    float scale;
+  }
+  
+  /**
+   * Performs the fade on the internal format.
+   * 
+   * @param flag Fade in if true.
+   */
+  public void doFade(Boolean flag)
+  {
+    int curr = 0;
+    float scale = 1.0f;
     
-    // just scale it for testing
+    int diff = selection.y - selection.x;
+    int steps = diff / interval;
+    int spill = diff % interval;
+  
     for(int i=0; i<internalFormat.getNumChannels(); i++)
     {
-      scale = 0.05f;
-      System.out.println("Setting for channel " + i+1);
-      internalFormat.getChannel(i).scaleSamples(selection.x, selection.y, scale);
+      for(int j=0; j<steps; j++)
+      {
+        if(flag)
+        {
+          scale = (float) j / steps;
+        }
+        else
+        {
+          scale = (float) j / steps;
+          scale = (float) (1.0f - scale);
+        }
+        curr = selection.x + (j*interval);
+        internalFormat.getChannel(i).scaleSamples(curr, curr+interval-1, scale);
+      }
+      curr = selection.x + steps*interval;
+      internalFormat.getChannel(i).scaleSamples(curr, curr+spill, scale);
     }
   }
   
+  /**
+   * Removes the frame.
+   */
+  public void closeFrame()
+  {
+    frame.setVisible(false);
+    frame.dispose();
+  }
+  
+  /**
+   * Listen for events from the buttons.
+   * 
+   * @param ae ActionEvent.
+   */
   public void actionPerformed(ActionEvent ae)
   {
     String action = ae.getActionCommand();
-    System.out.println(action);
+    
     if(action.equals("Fade in"))
     {
+      doFade(true);
+      closeFrame();
     }
     else if(action.equals("Fade out"))
     {
+      doFade(false);
+      closeFrame();
     }
   }
 }
