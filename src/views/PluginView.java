@@ -156,6 +156,10 @@ public class PluginView extends JFrame
   public Map<String, JCheckBox> getChoices()
   {
     //debug
+    for (String name : choices.keySet())
+    {
+      System.out.println(name + " " + choices.get(name).isSelected());
+    }
     return choices;
   }
 }
