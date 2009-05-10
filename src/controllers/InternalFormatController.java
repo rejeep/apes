@@ -12,7 +12,6 @@ import apes.lib.PlayerHandler;
 import apes.models.Player;
 import apes.models.InternalFormat;
 import apes.models.Samples;
-import apes.models.undo.ChangeEdit;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
 import apes.views.InternalFormatView;
