@@ -51,7 +51,7 @@ public class PluginController extends ApplicationController
     pluginHandler = pH;;
     this.playerHandler = playerHandler;
     pluginView = new PluginView(pluginHandler, this);
-    effectMenu = new JMenu("Effects");
+    effectMenu = new JMenu( "Effects" );
     updateEffectMenu();
   }
   
@@ -92,9 +92,16 @@ public class PluginController extends ApplicationController
     if(playerHandler != null)
     {
       InternalFormat internalFormat = playerHandler.getInternalFormat();
+      if(internalFormat == null)
+      {
+        return;
+      }
+      else
+      {
       Player player = playerHandler.getPlayer(internalFormat);
       Point selection = player.getSelection();
       pluginHandler.getTransform(name).apply(internalFormat, selection);
+      }
     }
   }
   
