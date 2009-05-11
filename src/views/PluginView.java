@@ -14,12 +14,15 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.BorderFactory;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import apes.lib.Language;
 import apes.lib.PluginHandler;
+import apes.interfaces.TransformPlugin;
 import apes.controllers.PluginController;
 
 /**
@@ -55,7 +58,7 @@ public class PluginView extends JFrame
   private boolean viewCreated = false;
   
   /**
-   * 
+   * The effect menu.
    */
   private JMenu effectMenu;
 
@@ -71,6 +74,8 @@ public class PluginView extends JFrame
     pluginHandler = pH;
     choices = new HashMap<String, JCheckBox>();
     language = Language.getInstance();
+    //effectMenu = new ApesMenu( "menu.head.effects" );
+    effectMenu = new JMenu( "Effects" );
   }
 
   /**
@@ -174,7 +179,7 @@ public class PluginView extends JFrame
     {
         JMenuItem effect = new JMenuItem( p.getName() );
         effect.setName( "doEffect" );
-        effect.addActionListener( pluginHandler );
+        effect.addActionListener( pluginController );
         effectMenu.add(effect);
     }
   }

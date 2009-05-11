@@ -35,7 +35,7 @@ public class PluginController extends ApplicationController
   /**
    * Menu for effects
    */
-  private JMenu effectMenu;
+  //private JMenu effectMenu;
   
   /**
    * The player handler.
@@ -53,9 +53,8 @@ public class PluginController extends ApplicationController
     pluginHandler = pH;;
     this.playerHandler = playerHandler;
     pluginView = new PluginView(pluginHandler, this);
-    ApesMenu test = new ApesMenu( "menu.head.file" );
-    effectMenu = new JMenu( "menu.head.effects" );
-    updateEffectMenu();
+    //effectMenu = new JMenu( "menu.head.effects" );
+    pluginView.updateEffectMenu();
   }
   
   /**
@@ -118,7 +117,7 @@ public class PluginController extends ApplicationController
     }
     
     // update effects menu
-    updateEffectMenu();
+    pluginView.updateEffectMenu();
   }
   
   /**
