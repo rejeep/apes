@@ -33,7 +33,7 @@ public class InternalFormatController extends ApplicationController
    * The main panel tabs.
    */
   private TabsController tabsController;
-  
+
   /**
    * The player handler.
    */
@@ -62,14 +62,14 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-     InternalFormat iF = playerHandler.getInternalFormat();
-     Player player = playerHandler.getPlayer(iF);
-     Point selection = player.getSelection();
+    InternalFormat iF = playerHandler.getInternalFormat();
+    Player player = playerHandler.getPlayer(iF);
+    Point selection = player.getSelection();
 
-     if( selection.x == selection.y )
-       return;
+    if( selection.x == selection.y )
+      return;
 
-     clipboard = iF.copySamples( selection.x, selection.y );
+    clipboard = iF.copySamples( selection.x, selection.y );
   }
 
   /**
@@ -84,10 +84,10 @@ public class InternalFormatController extends ApplicationController
     if( selection.x == selection.y )
       return;
 
-     CutEdit edit = new CutEdit( iF, selection );
-     undoManager.addEdit( edit );
-    
-     clipboard = edit.getCutout();
+    CutEdit edit = new CutEdit( iF, selection );
+    undoManager.addEdit( edit );
+
+    clipboard = edit.getCutout();
   }
 
   /**
@@ -102,8 +102,8 @@ public class InternalFormatController extends ApplicationController
     if( selection.x == selection.y )
       return;
 
-     UndoableEdit edit = new PasteEdit( iF, selection, clipboard );
-     undoManager.addEdit( edit );
+    UndoableEdit edit = new PasteEdit( iF, selection, clipboard );
+    undoManager.addEdit( edit );
   }
 
   /**
@@ -118,8 +118,8 @@ public class InternalFormatController extends ApplicationController
     if( selection.x == selection.y )
       return;
 
-     CutEdit edit = new CutEdit( iF, selection );
-     undoManager.addEdit( edit );
+    CutEdit edit = new CutEdit( iF, selection );
+    undoManager.addEdit( edit );
   }
 
   /**
@@ -127,7 +127,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void undo()
   {
-     undoManager.undo();
+    undoManager.undo();
   }
 
   /**
@@ -135,7 +135,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void redo()
   {
-     undoManager.redo();
+    undoManager.redo();
   }
 
   /**
@@ -143,10 +143,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomIn()
   {
-//     System.out.println( "in" );
-//     for(int i = 0; i < getCurrentInternalFormatView().getChannelViews().size(); ++i)
-//       getCurrentInternalFormatView().getChannelViews().get(i).setZoom(100);
-//     getCurrentInternalFormatView().updateView();
+    System.out.println( "in" );
   }
 
   /**
@@ -158,7 +155,15 @@ public class InternalFormatController extends ApplicationController
   }
 
   /**
-   * Reset zoom to normal size.
+   * Zoom to mark.
+   */
+  public void zoomSelection()
+  {
+    System.out.println( "selection" );
+  }
+
+  /**
+   * Reset zoom.
    */
   public void zoomReset()
   {
@@ -176,11 +181,11 @@ public class InternalFormatController extends ApplicationController
       final JFileChooser fc = new JFileChooser();
       fc.setCurrentDirectory( new File( "." ) );
       int returnVal = fc.showOpenDialog( null );
-      
+
       if( returnVal == JFileChooser.APPROVE_OPTION )
       {
         File file = fc.getSelectedFile();
-        
+
         ApesFile apesFile = new ApesFile( file );
         tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
       }

@@ -43,6 +43,7 @@ import apes.views.buttons.StopButton;
 import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
+import apes.views.buttons.ZoomSelectionButton;
 import apes.views.buttons.ZoomResetButton;
 
 /**
@@ -297,6 +298,11 @@ public class ApplicationView extends JFrame
       zoomOut.setName( "zoomOut" );
       zoom.add( zoomOut );
 
+      JMenuItem zoomSelection = new ApesMenuItem( "menu.view.zoom.selection" );
+      zoomSelection.addActionListener( internalFormatController );
+      zoomSelection.setName( "zoomSelection" );
+      zoom.add( zoomSelection );
+      
       JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
       zoomReset.addActionListener( internalFormatController );
       zoomReset.setName( "zoomReset" );
@@ -439,6 +445,11 @@ public class ApplicationView extends JFrame
       zoomOut.setName( "zoomOut" );
       add( zoomOut );
 
+      ImageButton zoomSelection = new ZoomSelectionButton();
+      zoomSelection.addActionListener( internalFormatController );
+      zoomSelection.setName( "zoomSelection" );
+      add( zoomSelection );
+      
       ImageButton zoomReset = new ZoomResetButton();
       zoomReset.addActionListener( internalFormatController );
       zoomReset.setName( "zoomReset" );

@@ -26,6 +26,7 @@ menu:
     zoom:
       in: In
       out: Ut
+      selection: Markering
       reset: Återställ
     languages: Språk
   player:
@@ -61,6 +62,8 @@ button:
     description: Zoomar in
   zoom_out:
     description: Zoomar ut
+  zoom_selection:
+    description: Zoomar in markering
   zoom_reset:
     description: Återställer zoom
   play:

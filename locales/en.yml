@@ -26,6 +26,7 @@ menu:
     zoom:
       in: In
       out: Out
+      selection: Selection
       reset: Reset
     languages: Languages
   player:
@@ -61,6 +62,8 @@ button:
     description: Zooms in
   zoom_out:
     description: Zooms out
+  zoom_selection:
+    description: Zooms to the selected region
   zoom_reset:
     description: Resets the zoom to default size
   play:
