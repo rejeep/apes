@@ -25,7 +25,7 @@ public class ApesFile
    */
   public ApesFile( String fileName )
   {
-    this( new File( "./" + fileName ) );
+    this( new File( System.getProperty( "user.dir" ) + File.separator + fileName ) );
   }
   
   /**
