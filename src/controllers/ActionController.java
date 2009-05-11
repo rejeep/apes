@@ -46,6 +46,11 @@ import javax.swing.event.ChangeListener;
  * controller, you can override this method to get some other
  * behavior.</p>
  *
+ * <p>Before a method is called, {@link
+ * ApplicationController#beforeFilter beforeFilter} is called. And
+ * after the method is called, {@link
+ * ApplicationController#afterFilter afterFilter} is called.</p>
+ *
  * <p>Two variables are by default available in the controllers.
  * <ul>
  *   <li>event - Is the event that was fired.</li>
@@ -120,7 +125,9 @@ public abstract class ActionController implements ActionListener, ChangeListener
 
     try
     {
+      callAction( "beforeFilter" );
       callAction( name );
+      callAction( "afterFilter" );
     }
     catch( NoSuchMethodException e )
     {

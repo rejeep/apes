@@ -16,4 +16,14 @@ public abstract class ApplicationController extends ActionController
    * special behavior in these cases.
    */
   public void methodMissing() {}
+  
+  /**
+   * Is called before an action is called.
+   */
+  public void beforeFilter() {}
+  
+  /**
+   * Is called after an action is called.
+   */
+  public void afterFilter() {}
 }
