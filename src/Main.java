@@ -45,15 +45,6 @@ public class Main extends JFrame
     // Create the plugin handler
     PluginHandler pluginHandler = new PluginHandler("build/apes/plugins");
 
-    // Set up controllers.
-    ConfigController configController = new ConfigController();
-    HelpController helpController = new HelpController();
-    PlayerController playerController = new PlayerController( playerHandler );
-    TagsController tagsController = new TagsController( playerHandler );
-    TabsController tabsController = new TabsController( playerHandler );
-    LanguageController languageController = new LanguageController();
-    PluginController pluginController = new PluginController(pluginHandler, playerHandler);
-
     // Fix language.
     Language language = Language.getInstance();
 
@@ -66,7 +57,16 @@ public class Main extends JFrame
     {
       e.printStackTrace();
     }
-
+    
+    // Set up controllers.
+    ConfigController configController = new ConfigController();
+    HelpController helpController = new HelpController();
+    PlayerController playerController = new PlayerController( playerHandler );
+    TagsController tagsController = new TagsController( playerHandler );
+    TabsController tabsController = new TabsController( playerHandler );
+    LanguageController languageController = new LanguageController();
+    PluginController pluginController = new PluginController(pluginHandler, playerHandler);
+    
     // Open all files passed in as arguments.
     for( int i = 0; i < args.length; i++)
     {
