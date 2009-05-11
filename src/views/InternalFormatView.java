@@ -34,6 +34,11 @@ public class InternalFormatView extends JPanel implements Observer
    * Zoom in and out by this much.
    */
   public final static int ZOOM = 2;
+  
+  /**
+   * Max possible zoom.
+   */
+  public final static int MAX_ZOOM = 10;
 
   /**
    * Places one ChannelView for each channel on this panel.
