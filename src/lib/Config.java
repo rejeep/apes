@@ -103,13 +103,14 @@ public class Config
     addOption( "maximized",           "true",    Type.BOOLEAN );
     addOption( "undo",                "10",      Type.INTEGER );
     addOption( "language",            "en",      Type.STRING  );
-    addOption( "color_play",          "#FF00FF", Type.STRING  );
-    addOption( "color_graph",         "#00FF00", Type.STRING  );
+    addOption( "color_play",          "#FFFFFF", Type.STRING  );
+    addOption( "color_graph",         "#000000", Type.STRING  );
     addOption( "color_selection",     "#0000FF", Type.STRING  );
     addOption( "color_lines",         "#FFFF00", Type.STRING  );
-    addOption( "color_background",    "#FF0000", Type.STRING  );
+    addOption( "color_background",    "#939391", Type.STRING  );
+    //addOption( "color_background",    "#ac71ac", Type.STRING  );
     addOption( "color_ruler",         "#000000", Type.STRING  );
-    addOption( "ruler_width",         "4",       Type.INTEGER );
+    addOption( "ruler_width",         "6",       Type.INTEGER );
     addOption( "gui_error_messages",  "true",    Type.BOOLEAN );
     addOption( "wind",                "20",      Type.INTEGER );
   }
