@@ -16,4 +16,16 @@ public abstract class ApplicationController extends ActionController
    * special behavior in these cases.
    */
   public void methodMissing() {}
+  
+  /**
+   * Is called before an action is called.
+   * @exception Exception If an exception is thrown. If an exception
+   * is thrown. The action method will never be called.
+   */
+  public void beforeFilter() throws Exception {}
+  
+  /**
+   * Is called after an action is called.
+   */
+  public void afterFilter() {}
 }

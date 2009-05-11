@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.EventObject;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>This class handles all controller actions. All controllers
@@ -45,6 +46,14 @@ import javax.swing.event.ChangeListener;
  * called. This is handy for dynamic action calling. So in your
  * controller, you can override this method to get some other
  * behavior.</p>
+ *
+ * <p>Before a method is called, {@link
+ * ApplicationController#beforeFilter beforeFilter} is called. And
+ * after the method is called, {@link
+ * ApplicationController#afterFilter afterFilter} is
+ * called. However. The action is only called if there's no exception
+ * thrown in the before filter. This can be used to not call an action
+ * on some condition in the before filter.</p>
  *
  * <p>Two variables are by default available in the controllers.
  * <ul>
@@ -120,7 +129,14 @@ public abstract class ActionController implements ActionListener, ChangeListener
 
     try
     {
-      callAction( name );
+      try
+      {
+        callAction( "beforeFilter" );
+        callAction( name );
+      }
+      catch( InvocationTargetException e ) {}
+      
+      callAction( "afterFilter" );
     }
     catch( NoSuchMethodException e )
     {
@@ -148,7 +164,7 @@ public abstract class ActionController implements ActionListener, ChangeListener
    * @exception NoSuchMethodException If method does not exits.
    * @exception Exception If any other error occurs.
    */
-  private void callAction( String name ) throws NoSuchMethodException, Exception
+  private void callAction( String name ) throws NoSuchMethodException, InvocationTargetException, Exception
   {
     Method method = this.getClass().getMethod( name );
 

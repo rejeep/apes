@@ -2,21 +2,20 @@ package apes.controllers;
 
 import java.awt.Point;
 import java.io.File;
-import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 
+import apes.exceptions.UnidentifiedLanguageException;
 import apes.lib.ApesFile;
 import apes.lib.PlayerHandler;
-import apes.models.Player;
 import apes.models.InternalFormat;
+import apes.models.Player;
 import apes.models.Samples;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
-import apes.views.InternalFormatView;
 import apes.views.ApesError;
-import apes.exceptions.UnidentifiedLanguageException;
+import apes.views.InternalFormatView;
 
 
 /**
@@ -45,6 +44,41 @@ public class InternalFormatController extends ApplicationController
   private Samples[][] clipboard;
 
   /**
+   * An internal format view object used by the zoom methods.
+   */
+  private InternalFormatView internalFormatView;
+
+  /**
+   * New zoom.
+   */
+  private int zoom;
+
+  /**
+   * New center position in zoom.
+   */
+  private int center;
+
+  /**
+   * Holds an undoable edit.
+   */
+  private AbstractUndoableEdit edit;
+
+  /**
+   * An internal format.
+   */
+  private InternalFormat internalFormat;
+
+  /**
+   * A player.
+   */
+  private Player player;
+
+  /**
+   * The marked selection.
+   */
+  private Point selection;
+
+  /**
    * Creates a new <code>InternalFormatController</code>.
    *
    * @param undoManager The undo manager.
@@ -57,69 +91,51 @@ public class InternalFormatController extends ApplicationController
     this.playerHandler = playerHandler;
   }
 
-  /**
-   * A piece was copied from the graph.
-   */
-  public void copy()
+  public void beforeFilter() throws Exception
   {
-    InternalFormat iF = playerHandler.getInternalFormat();
-    Player player = playerHandler.getPlayer(iF);
-    Point selection = player.getSelection();
+    if( name.matches( "^zoom.*" ) )
+    {
+      internalFormatView = tabsController.getCurrentInternalFormatView();
 
-    if( selection.x == selection.y )
-      return;
+      if( internalFormatView == null )
+      {
+        throw new Exception();
+      }
+    }
+    else
+    {
+      internalFormat = playerHandler.getInternalFormat();
 
-    clipboard = iF.copySamples( selection.x, selection.y );
+      if( internalFormat == null )
+      {
+        throw new Exception();
+      }
+
+      player = playerHandler.getCurrentPlayer();
+      selection = player.getSelection();
+
+      if( selection.x == selection.y )
+      {
+        throw new Exception();
+      }
+    }
   }
 
-  /**
-   * A piece was cut from the graph.
-   */
-  public void cut()
+  public void afterFilter()
   {
-    InternalFormat iF = playerHandler.getInternalFormat();
-    Player player = playerHandler.getPlayer(iF);
-    Point selection = player.getSelection();
-
-    if( selection.x == selection.y )
-      return;
-
-    CutEdit edit = new CutEdit( iF, selection );
-    undoManager.addEdit( edit );
-
-    clipboard = edit.getCutout();
-  }
-
-  /**
-   * A piece was pasted to the graph.
-   */
-  public void paste()
-  {
-    InternalFormat iF = playerHandler.getInternalFormat();
-    Player player = playerHandler.getPlayer(iF);
-    Point selection = player.getSelection();
-
-    if( selection.x == selection.y )
-      return;
-
-    UndoableEdit edit = new PasteEdit( iF, selection, clipboard );
-    undoManager.addEdit( edit );
-  }
-
-  /**
-   * Performs a delete.
-   */
-  public void delete()
-  {
-    InternalFormat iF = playerHandler.getInternalFormat();
-    Player player = playerHandler.getPlayer(iF);
-    Point selection = player.getSelection();
-
-    if( selection.x == selection.y )
-      return;
-
-    CutEdit edit = new CutEdit( iF, selection );
-    undoManager.addEdit( edit );
+    if( name.matches( "^zoom.*" ) )
+    {
+      if( internalFormatView != null )
+      {
+        internalFormatView.setCenter( center );
+        internalFormatView.setZoom( zoom );
+        internalFormatView.updateAll();
+      }
+    }
+    else
+    {
+      undoManager.addEdit( edit );
+    }
   }
 
   /**
@@ -139,17 +155,47 @@ public class InternalFormatController extends ApplicationController
   }
 
   /**
+   * Copies the selected region.
+   */
+  public void copy()
+  {
+    clipboard = internalFormat.copySamples( selection.x, selection.y );
+  }
+
+  /**
+   * Cuts the selected region.
+   */
+  public void cut()
+  {
+    edit = new CutEdit( internalFormat, selection );
+    clipboard = ((CutEdit)edit).getCutout();
+  }
+
+  /**
+   * Pastes the top of the stack at mark.
+   */
+  public void paste()
+  {
+    edit = new PasteEdit( internalFormat, selection, clipboard );
+  }
+
+  /**
+   * Deletes the selected region.
+   */
+  public void delete()
+  {
+    edit = new CutEdit( internalFormat, selection );
+  }
+
+  /**
    * Zoom in.
    */
   public void zoomIn()
   {
-    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
+    int currentZoom = internalFormatView.getZoom();
+    int newZoom = currentZoom / InternalFormatView.ZOOM;
 
-    int zoom = internalFormatView.getZoom();
-    int newZoom = zoom / InternalFormatView.ZOOM;
-
-    internalFormatView.setZoom( newZoom < 10 ? 10 : newZoom );
-    internalFormatView.updateAll();
+    zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
   }
 
   /**
@@ -157,15 +203,13 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomOut()
   {
-    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
     Player player = playerHandler.getCurrentPlayer();
 
-    int zoom = internalFormatView.getZoom();
-    int newZoom = zoom * InternalFormatView.ZOOM;
+    int currentZoom = internalFormatView.getZoom();
+    int newZoom = currentZoom * InternalFormatView.ZOOM;
     int stop = player.getSampleAmount();
 
-    internalFormatView.setZoom( newZoom > stop ? stop : newZoom );
-    internalFormatView.updateAll();
+    zoom = newZoom > stop ? stop : newZoom;
   }
 
   /**
@@ -173,16 +217,10 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomSelection()
   {
-    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
     Player player = playerHandler.getCurrentPlayer();
 
-    int start = player.getStart();
-    int stop = player.getStop();
-    int diff = stop - start;
-
-    internalFormatView.setZoom( diff );
-    internalFormatView.setCenter( diff / 2 );
-    internalFormatView.updateAll();
+    zoom = player.getStop() - player.getStart();
+    center = zoom / 2;
   }
 
   /**
@@ -190,16 +228,10 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomReset()
   {
-    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
     Player player = playerHandler.getCurrentPlayer();
 
-    int start = 0;
-    int stop = player.getSampleAmount();
-    int diff = stop - start;
-
-    internalFormatView.setZoom( diff );
-    internalFormatView.setCenter( diff / 2 );
-    internalFormatView.updateAll();
+    zoom = player.getSampleAmount();
+    center = zoom / 2;
   }
 
   /**
