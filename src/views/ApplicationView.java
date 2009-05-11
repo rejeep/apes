@@ -315,7 +315,11 @@ public class ApplicationView extends JFrame
       {
         Locale locale = new Locale( lang );
 
-        JMenuItem menuItem = new JMenuItem( locale.getDisplayName() );
+        String tempName = locale.getDisplayName().replaceFirst( "reg", "" );
+        char[] chars = tempName.toCharArray();
+        chars[0] = Character.toUpperCase( chars[0] );
+        String name = new String( chars );
+        JMenuItem menuItem = new JMenuItem( name );
         menuItem.addActionListener( languageController );
         menuItem.setName( lang );
         languages.add( menuItem );
