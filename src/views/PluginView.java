@@ -22,6 +22,7 @@ import java.util.Map;
 
 import apes.lib.Language;
 import apes.lib.PluginHandler;
+import apes.views.ApesMenu;
 import apes.interfaces.TransformPlugin;
 import apes.controllers.PluginController;
 
@@ -74,8 +75,7 @@ public class PluginView extends JFrame
     pluginHandler = pH;
     choices = new HashMap<String, JCheckBox>();
     language = Language.getInstance();
-    //effectMenu = new ApesMenu( "menu.head.effects" );
-    effectMenu = new JMenu( "Effects" );
+    effectMenu = new ApesMenu( "menu.head.effects" );
   }
 
   /**
