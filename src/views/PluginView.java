@@ -53,6 +53,11 @@ public class PluginView extends JFrame
    *
    */
   private boolean viewCreated = false;
+  
+  /**
+   * 
+   */
+  private JMenu effectMenu;
 
   /**
    * Creates a new <code>PluginView/code> instance.
@@ -158,6 +163,32 @@ public class PluginView extends JFrame
     return panel;
   }
   
+  /**
+   * Updates the effects menu.
+   */
+  public void updateEffectMenu()
+  {
+    effectMenu.removeAll();
+    
+    for (TransformPlugin p : pluginHandler.getTransforms())
+    {
+        JMenuItem effect = new JMenuItem( p.getName() );
+        effect.setName( "doEffect" );
+        effect.addActionListener( pluginHandler );
+        effectMenu.add(effect);
+    }
+  }
+  
+  /**
+   * Returns the effects menu.
+   * 
+   * @return Effects menu.
+   */
+  public JMenu getEffectMenu()
+  {
+    return effectMenu;
+  }
+    
   /**
    * Returns mapping with plugin names and checkboxes.
    * 
