@@ -33,11 +33,6 @@ public class PluginController extends ApplicationController
   private PluginHandler pluginHandler;
   
   /**
-   * Menu for effects
-   */
-  //private JMenu effectMenu;
-  
-  /**
    * The player handler.
    */
   private PlayerHandler playerHandler;
