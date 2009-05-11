@@ -19,8 +19,10 @@ public abstract class ApplicationController extends ActionController
   
   /**
    * Is called before an action is called.
+   * @exception Exception If an exception is thrown. If an exception
+   * is thrown. The action method will never be called.
    */
-  public void beforeFilter() {}
+  public void beforeFilter() throws Exception {}
   
   /**
    * Is called after an action is called.
