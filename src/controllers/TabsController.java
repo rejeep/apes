@@ -34,6 +34,10 @@ public class TabsController extends ApplicationController
    */
   private Map<CloseButton, InternalFormat> buttons;
 
+  /**
+   * Keeps track of which view an internal format is connected to.
+   */
+  private Map<InternalFormat, InternalFormatView> internalFormats;
 
   /**
    * Creates a new <code>TabsController</code>.
@@ -41,12 +45,13 @@ public class TabsController extends ApplicationController
   public TabsController( PlayerHandler playerHandler )
   {
     this.playerHandler = playerHandler;
-
+    
     this.tabsView = new TabsView();
     this.tabsView.addChangeListener( this );
     this.tabsView.setName( "change" );
 
     buttons = new HashMap<CloseButton, InternalFormat>();
+    internalFormats = new HashMap<InternalFormat, InternalFormatView>();
   }
 
   /**
@@ -68,8 +73,17 @@ public class TabsController extends ApplicationController
       tabsView.remove( index );
     }
 
+    // The internal format.
+    InternalFormat internalFormat = buttons.get( closeButton );
+      
     // Remove player from player handler.
-    playerHandler.remove( buttons.get( closeButton ) );
+    playerHandler.remove( internalFormat );
+    
+    // Remove from map that keeps track of buttons and internalformats.
+    buttons.remove( closeButton );
+    
+    // Remove connection between internal format and it's view.
+    internalFormats.remove( internalFormat );
   }
 
   /**
@@ -88,7 +102,7 @@ public class TabsController extends ApplicationController
     InternalFormatView internalFormatView = new InternalFormatView( player, internalFormat );
     internalFormat.addObserver( internalFormatView );
     player.addObserver( internalFormatView );
-    
+
     // Add the tab to the pane.
     tabsView.addTab( title, internalFormatView );
 
@@ -105,6 +119,9 @@ public class TabsController extends ApplicationController
 
     // Select the added tab.
     tabsView.setSelectedIndex( index );
+    
+    // Adds internal format and view connection.
+    internalFormats.put( internalFormat, internalFormatView );
   }
 
   /**
@@ -132,5 +149,15 @@ public class TabsController extends ApplicationController
       playerHandler.setInternalFormat( internalFormat );
     }
     catch( NullPointerException e ) {}
+  }
+  
+  /**
+   * TODO: Comment
+   *
+   * @return an <code>InternalFormatView</code> value
+   */
+  public InternalFormatView getCurrentInternalFormatView()
+  {
+    return internalFormats.get( playerHandler.getInternalFormat() );
   }
 }

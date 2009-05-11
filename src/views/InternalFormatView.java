@@ -31,6 +31,11 @@ public class InternalFormatView extends JPanel implements Observer
   private InternalFormatStatusPanel statusPanel;
 
   /**
+   * Zoom in and out by this much.
+   */
+  public final static int ZOOM = 2;
+
+  /**
    * Places one ChannelView for each channel on this panel.
    *
    * @param internalFormat an <code>InternalFormat</code> value.
@@ -40,10 +45,10 @@ public class InternalFormatView extends JPanel implements Observer
     this.internalFormat = internalFormat;
 
     ChannelController channelController = new ChannelController( player );
-    
+
     channelView = new ChannelView( channelController, player );
     statusPanel = new InternalFormatStatusPanel( internalFormat.getSampleRate(), channelController, player );
-    
+
     add( statusPanel );
     add( channelView );
 
@@ -93,4 +98,19 @@ public class InternalFormatView extends JPanel implements Observer
       statusPanel.updatePlayer();
     }
   }
+
+  /**
+   * Updates all.
+   */
+  public void updateAll()
+  {
+    channelView.updateInternalFormat();
+    channelView.updatePlayer();
+    statusPanel.updatePlayer();
+  }
+
+  // DELEGATORS
+  public int getZoom() { return channelView.getZoom(); }
+  public void setZoom( int samples ) { channelView.setZoom( samples ); }
+  public void setCenter( int sample ) { channelView.setCenter( sample ); }
 }

@@ -143,7 +143,13 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomIn()
   {
-    System.out.println( "in" );
+    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
+
+    int zoom = internalFormatView.getZoom();
+    int newZoom = zoom / InternalFormatView.ZOOM;
+
+    internalFormatView.setZoom( newZoom < 10 ? 10 : newZoom );
+    internalFormatView.updateAll();
   }
 
   /**
@@ -151,7 +157,15 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomOut()
   {
-    System.out.println("out");
+    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
+    Player player = playerHandler.getCurrentPlayer();
+
+    int zoom = internalFormatView.getZoom();
+    int newZoom = zoom * InternalFormatView.ZOOM;
+    int stop = player.getSampleAmount();
+
+    internalFormatView.setZoom( newZoom > stop ? stop : newZoom );
+    internalFormatView.updateAll();
   }
 
   /**
@@ -159,7 +173,16 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomSelection()
   {
-    System.out.println( "selection" );
+    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
+    Player player = playerHandler.getCurrentPlayer();
+
+    int start = player.getStart();
+    int stop = player.getStop();
+    int diff = stop - start;
+
+    internalFormatView.setZoom( diff );
+    internalFormatView.setCenter( diff / 2 );
+    internalFormatView.updateAll();
   }
 
   /**
@@ -167,7 +190,16 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomReset()
   {
-    System.out.println( "reset" );
+    InternalFormatView internalFormatView = tabsController.getCurrentInternalFormatView();
+    Player player = playerHandler.getCurrentPlayer();
+
+    int start = 0;
+    int stop = player.getSampleAmount();
+    int diff = stop - start;
+
+    internalFormatView.setZoom( diff );
+    internalFormatView.setCenter( diff / 2 );
+    internalFormatView.updateAll();
   }
 
   /**

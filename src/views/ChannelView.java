@@ -301,6 +301,33 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
+   * Returns the level of zoom.
+   * @return Number of samples visible.
+   */
+  public int getZoom()
+  {
+    return visibleSamples;
+  }
+
+  /**
+   * Sets the level of zoom.
+   * @param samples The number of samples to be viewed in the view.
+   */
+  public void setZoom(int samples)
+  {
+    visibleSamples = samples;
+  }
+
+  /**
+   * Sets the center of the view.
+   * @param sample The sample that should be in the center of the view.
+   */
+  public void setCenter(int sample)
+  {
+    centerSample = sample;
+  }
+
+  /**
    * TODO: Comment
    *
    * @author Simon Holm
@@ -479,24 +506,6 @@ public class ChannelView extends JPanel implements Runnable
     }
 
     /**
-     * Sets the level of zoom.
-     * @param samples The number of samples to be viewed in the view.
-     */
-    public void setZoom(int samples)
-    {
-      visibleSamples = samples;
-    }
-
-    /**
-     * Sets the center of the view.
-     * @param sample The sample that should be in the center of the view.
-     */
-    public void setCenter(int sample)
-    {
-      centerSample = sample;
-    }
-
-    /**
      * Updates the view form the channel and repaints it.
      */
     public void updateGraph()
@@ -547,7 +556,7 @@ public class ChannelView extends JPanel implements Runnable
           for(int j = prevSample; j < index.x; ++j)
           {
             if(channel.getSamples( j ).getSize() > 0)
-            samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
+              samples[i] += channel.getSamples( j ).getAverageAmplitude( channel.getSamples( j ).getSize() );
           }
 
           if(samples[i]  > maxAmp)
@@ -584,15 +593,6 @@ public class ChannelView extends JPanel implements Runnable
         samples[i] = Math.round((float)(samples[i]*heightScale));
 
       this.repaint();
-    }
-
-    /**
-     * Returns the level of zoom.
-     * @return Number of samples visible.
-     */
-    public int getZoom()
-    {
-      return visibleSamples;
     }
 
     /**
