@@ -10,7 +10,6 @@ import java.awt.Point;
 import apes.views.PluginView;
 import apes.lib.PluginHandler;
 import apes.interfaces.TransformPlugin;
-import apes.views.ApesMenu;
 import apes.views.ApesMenuItem;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
@@ -54,7 +53,8 @@ public class PluginController extends ApplicationController
     pluginHandler = pH;;
     this.playerHandler = playerHandler;
     pluginView = new PluginView(pluginHandler, this);
-    effectMenu = new JMenu( "Effects" );
+    ApesMenu test = new ApesMenu( "menu.head.file" );
+    effectMenu = new JMenu( "menu.head.effects" );
     updateEffectMenu();
   }
   
@@ -66,30 +66,9 @@ public class PluginController extends ApplicationController
     pluginView.create();
   }
   
-  /**
-   * Updates the effects menu.
-   */
-  public void updateEffectMenu()
-  {
-    effectMenu.removeAll();
-    
-    for (TransformPlugin p : pluginHandler.getTransforms())
-    {
-        JMenuItem effect = new JMenuItem( p.getName() );
-        effect.setName( "doEffect" );
-        effect.addActionListener( this );
-        effectMenu.add(effect);
-    }
-  }
-  
-  /**
-   * Returns the effects menu.
-   * 
-   * @return Effects menu.
-   */
   public JMenu getEffectMenu()
   {
-    return effectMenu;
+    return pluginView.getEffectMenu();
   }
   
   /**
