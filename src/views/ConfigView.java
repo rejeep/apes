@@ -18,8 +18,7 @@ import javax.swing.JTextField;
 
 import apes.controllers.ConfigController;
 import apes.lib.Config;
-
-
+import apes.lib.Language;
 
 /**
  * A graphical view for the configuration file.
@@ -37,6 +36,11 @@ public class ConfigView extends JFrame
    * The controller.
    */
   private ConfigController configController;
+  
+  /**
+   * A language object.
+   */
+  private Language language;
 
   /**
    * Contains all new option names as key. And the component as
@@ -57,6 +61,7 @@ public class ConfigView extends JFrame
     this.config = config;
     this.configController = configController;
     this.newOptions = new HashMap<String, Component>();
+    this.language = Language.getInstance();
   }
 
   /**
@@ -65,6 +70,8 @@ public class ConfigView extends JFrame
   public void create()
   {
     setLayout( new BorderLayout() );
+    
+    setTitle( language.get( "config.header" ) );
 
     // Create top and bottom panel.
     JPanel topPanel = topPanel();
@@ -92,29 +99,29 @@ public class ConfigView extends JFrame
   {
     Map<String, String> options = config.getOptions();
     Set<String> keys = options.keySet();
-    
+
     JPanel panel = new JPanel();
     panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
     panel.setLayout( new BorderLayout() );
-    
+
     JPanel top = new JPanel( new FlowLayout() );
     panel.add( top, BorderLayout.NORTH );
-    
+
     JLabel header = new ApesLabel( "config.header" );
     header.setFont( new Font( "verdana", 1, 20 ) );
     top.add( header );
-    
+
     JPanel bottom = new JPanel( new GridLayout( options.size(), 2 ) );
     panel.add( bottom, BorderLayout.SOUTH );
-    
+
     for( String key : keys )
     {
       JLabel label = new ApesLabel( "config." + key );
       label.setBorder( BorderFactory.createEmptyBorder( 0, 0, 0, 10 ) );
       bottom.add( label );
-      
+
       String value = options.get( key );
-      
+
       Config.Type type = config.getType( key );
 
       if( type == Config.Type.INTEGER || type == Config.Type.STRING )
