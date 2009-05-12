@@ -129,7 +129,7 @@ public class ApplicationView extends JFrame
     // Set layout.
     setLayout( new BorderLayout() );
 
-    // Add tab.
+    // Add tab stuff.
     TabsView tabsView = new TabsView( tabsController );
     Tabs tabs = tabsController.getTabs();
     tabs.addObserver( tabsView );
