@@ -133,6 +133,7 @@ public class ApplicationView extends JFrame
     TabsView tabsView = new TabsView( tabsController );
     Tabs tabs = tabsController.getTabs();
     tabs.addObserver( tabsView );
+    tabs.setModel( tabsView.getModel() );
     add( tabsView, BorderLayout.CENTER );
 
     // Set the menu.

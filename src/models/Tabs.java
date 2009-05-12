@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 import apes.views.InternalFormatView;
-import apes.models.InternalFormat;
+import javax.swing.SingleSelectionModel;
 
 /**
  * Keeps track of tabs. All adding and removing of tabs should be done
@@ -19,6 +19,11 @@ public class Tabs extends Observable
    * A set with all tabs.
    */
   private Set<Tab> tabs;
+  
+  /**
+   * The default model.
+   */
+  private SingleSelectionModel model;
   
   /**
    * Creates a new <code>Tabs</code> instance.
@@ -54,6 +59,26 @@ public class Tabs extends Observable
     add( new InternalFormatView( internalFormat ) );
   }
 
+  /**
+   * Sets the default model.
+   *
+   * @param model The default model.
+   */
+  public void setModel( SingleSelectionModel model )
+  {
+    this.model = model;
+  }
+
+  /**
+   * Returns the <code>Tab</code> that is selected.
+   *
+   * @return The selected tab.
+   */
+  public Tab getSelectedTab()
+  {
+    return findTabByIndex( model.getSelectedIndex() );
+  }
+  
   /**
    * Removes <code>tab</code> with index <code>index</code>.
    *
