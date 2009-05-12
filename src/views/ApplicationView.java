@@ -164,8 +164,10 @@ public class ApplicationView extends JFrame
     setVisible( true );
 
     // Do something before close
-    addWindowListener( new WindowAdapter() {
-      public void windowClosing( WindowEvent e ) {
+    addWindowListener( new WindowAdapter()
+    {
+      public void windowClosing( WindowEvent e )
+      {
         // Do before exit
       }
     } );
