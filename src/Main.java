@@ -54,15 +54,15 @@ public class Main extends JFrame
     {
       e.printStackTrace();
     }
-    
+
     // Create the undo manager.
     UndoManager undoManager = new UndoManager();
     undoManager.setLimit( config.getIntOption( "undo" ) );
-    
+
     // Init tabs.
     Tabs tabs = new Tabs();
     TabsController tabsController = new TabsController( tabs );
-    
+
     // Set up some controllers.
     ConfigController configController = new ConfigController();
     HelpController helpController = new HelpController();
@@ -71,7 +71,17 @@ public class Main extends JFrame
     LanguageController languageController = new LanguageController();
     PluginController pluginController = new PluginController( pluginHandler );
     InternalFormatController internalFormatController = new InternalFormatController( tabs, undoManager );
-    
+
+    // Create the application view.
+    new ApplicationView( internalFormatController,
+                         tagsController,
+                         languageController,
+                         configController,
+                         pluginController,
+                         helpController,
+                         playerController,
+                         tabsController );
+
     // Open all files passed in as arguments.
     for( int i = 0; i < args.length; i++)
     {
@@ -89,16 +99,6 @@ public class Main extends JFrame
         e.printStackTrace();
       }
     }
-    
-    // Create the application view.
-    new ApplicationView( internalFormatController,
-                         tagsController,
-                         languageController,
-                         configController,
-                         pluginController,
-                         helpController,
-                         playerController,
-                         tabsController );
   }
 
   public static void main( String[] args )
