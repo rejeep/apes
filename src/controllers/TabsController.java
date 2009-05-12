@@ -70,6 +70,8 @@ public class TabsController extends ApplicationController
     int index = tabsView.getSelectedIndex();
     Tabs.Tab tab = tabs.get( index );
 
+    // An exception may occur here. But thats what we want. Because
+    // this happens when there's no tab.
     playerHandler.setInternalFormat( tab.getInternalFormat() );
   }
 }
