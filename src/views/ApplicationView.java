@@ -27,6 +27,7 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
+import apes.models.Tabs;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
 import apes.views.buttons.CutButton;
@@ -43,8 +44,9 @@ import apes.views.buttons.StopButton;
 import apes.views.buttons.UndoButton;
 import apes.views.buttons.ZoomInButton;
 import apes.views.buttons.ZoomOutButton;
-import apes.views.buttons.ZoomSelectionButton;
 import apes.views.buttons.ZoomResetButton;
+import apes.views.buttons.ZoomSelectionButton;
+import apes.views.tabs.TabsView;
 
 /**
  *
@@ -106,7 +108,7 @@ public class ApplicationView extends JFrame
     this.helpController = helpController;
     this.playerController = playerController;
     this.tabsController = tabsController;
-
+    
     // These should by default be white.
     String[] whites = { "Panel",
                         "Label",
@@ -127,8 +129,11 @@ public class ApplicationView extends JFrame
     // Set layout.
     setLayout( new BorderLayout() );
 
-    // Add tab panel.
-    add( tabsController.getTabsView(), BorderLayout.CENTER );
+    // Add tab.
+    TabsView tabsView = new TabsView( tabsController );
+    Tabs tabs = tabsController.getTabs();
+    tabs.addObserver( tabsView );
+    add( tabsView, BorderLayout.CENTER );
 
     // Set the menu.
     setJMenuBar( this.new Menu() );
@@ -394,7 +399,6 @@ public class ApplicationView extends JFrame
       setBorder( new LineBorder( Color.GRAY, 1, true ) );
 
       ImageButton open = new OpenButton();
-      // TODO: Maybe this is too much of a hack...
       open.addActionListener(
         new ActionListener()
         {

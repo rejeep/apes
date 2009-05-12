@@ -1,4 +1,4 @@
-package apes.views;
+package apes.views.tabs;
 
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
@@ -9,7 +9,7 @@ import javax.swing.JButton;
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class CloseButton extends JButton
+public class TabCloseButton extends JButton
 {
   /**
    * The panel the button is placed on.
@@ -22,7 +22,7 @@ public class CloseButton extends JButton
    *
    * @param buttonTabPanel The panel the button is placed on.
    */
-  public CloseButton( ButtonTabPanel buttonTabPanel )
+  public TabCloseButton( ButtonTabPanel buttonTabPanel )
   {
     this.buttonTabPanel = buttonTabPanel;
 
@@ -35,6 +35,7 @@ public class CloseButton extends JButton
 
     setPreferredSize( new Dimension( width, height ) );
 
+    // TODO: should be in locale.
     setToolTipText( "Close this tab" );
     setContentAreaFilled( false );
     setFocusable( false );

@@ -1,7 +1,6 @@
-package apes.views;
+package apes.views.tabs;
 
 import java.awt.FlowLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import apes.controllers.TabsController;
@@ -14,20 +13,17 @@ import apes.controllers.TabsController;
  */
 public class ButtonTabPanel extends JPanel
 {
-  /**
-   * The close button.
-   */
-  private JButton close;
-
+  private TabsView tabsView;
 
   /**
-   * Creates a new <code>ButtonTabPanel</code>.
+   * Creates a new <code>ButtonTabPanel</code> instance.
    *
-   * @param tabsController The tabs controller.
    * @param tabsView The tabs view.
    */
-  public ButtonTabPanel( TabsController tabsController, final TabsView tabsView )
+  public ButtonTabPanel( final TabsView tabsView, TabsController tabsController )
   {
+    this.tabsView = tabsView;
+
     // Use flowlayout.
     setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
 
@@ -56,19 +52,19 @@ public class ButtonTabPanel extends JPanel
     add( label );
 
     // Close button.
-    close = new CloseButton( this );
+    TabCloseButton close = new TabCloseButton( this );
     close.addActionListener( tabsController );
     close.setName( "close" );
     add( close );
   }
 
   /**
-   * Return the close button.
+   * Return the tabs view that this panel is added on.
    *
-   * @return The close button.
+   * @return The tabs view.
    */
-  public CloseButton getCloseButton()
+  public TabsView getTabsView()
   {
-    return (CloseButton)this.close;
+    return tabsView;
   }
 }
