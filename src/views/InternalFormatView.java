@@ -3,6 +3,7 @@ package apes.views;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JPanel;
+import java.awt.*;
 
 import apes.controllers.ChannelController;
 import apes.lib.PlayerHandler;
@@ -63,9 +64,9 @@ public class InternalFormatView extends JPanel implements Observer
 
     channelController = new ChannelController( player );
 
+
     channelView = new ChannelView( channelController, player );
     statusPanel = new InternalFormatStatusPanel( internalFormat.getSampleRate(), channelController, player );
-
     add( statusPanel );
     add( channelView );
 
