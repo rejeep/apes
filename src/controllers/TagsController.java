@@ -23,12 +23,10 @@ public class TagsController extends ApplicationController
 
   /**
    * Creates a new <code>TagsController</code> instance.
-   *
-   * @param playerHandler The playser handler.
    */
-  public TagsController( PlayerHandler playerHandler )
+  public TagsController()
   {
-    internalFormat = playerHandler.getInternalFormat();
+    internalFormat = PlayerHandler.getInstance().getInternalFormat();
   }
 
   /**

@@ -15,13 +15,13 @@ import apes.exceptions.UnidentifiedLanguageException;
 import apes.lib.ApesFile;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.lib.PlayerHandler;
 import apes.lib.PluginHandler;
+import apes.models.Tabs;
 import apes.views.ApesError;
 import apes.views.ApplicationView;
 
 /**
- * This is where it all starts. This creates a basic GUI with a layout
+ * This is where it all nnstarts. This creates a basic GUI with a layout
  * and on it a few components are placed.
  *
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -39,9 +39,6 @@ public class Main extends JFrame
     Config config = Config.getInstance();
     config.parse();
 
-    // Initialize a player handler.
-    PlayerHandler playerHandler = new PlayerHandler();
-    
     // Create the plugin handler
     PluginHandler pluginHandler = new PluginHandler("build/apes/plugins");
 
@@ -57,40 +54,23 @@ public class Main extends JFrame
     {
       e.printStackTrace();
     }
-    
-    // Set up controllers.
-    ConfigController configController = new ConfigController();
-    HelpController helpController = new HelpController();
-    PlayerController playerController = new PlayerController( playerHandler );
-    TagsController tagsController = new TagsController( playerHandler );
-    TabsController tabsController = new TabsController( playerHandler );
-    LanguageController languageController = new LanguageController();
-    PluginController pluginController = new PluginController(pluginHandler, playerHandler);
-    
-    // Open all files passed in as arguments.
-    for( int i = 0; i < args.length; i++)
-    {
-      try
-      {
-        ApesFile apesFile = new ApesFile( args[i] );
-        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
-      }
-      catch( UnidentifiedLanguageException e )
-      {
-        ApesError.unsupportedFormat();
-      }
-      catch( Exception e )
-      {
-        e.printStackTrace();
-      }
-    }
-    
+
     // Create the undo manager.
     UndoManager undoManager = new UndoManager();
     undoManager.setLimit( config.getIntOption( "undo" ) );
 
-    // Controller for the internal format.
-    InternalFormatController internalFormatController = new InternalFormatController( undoManager, tabsController, playerHandler );
+    // Init tabs.
+    Tabs tabs = new Tabs();
+    TabsController tabsController = new TabsController( tabs );
+
+    // Set up some controllers.
+    ConfigController configController = new ConfigController();
+    HelpController helpController = new HelpController();
+    PlayerController playerController = new PlayerController();
+    TagsController tagsController = new TagsController();
+    LanguageController languageController = new LanguageController();
+    PluginController pluginController = new PluginController( pluginHandler );
+    InternalFormatController internalFormatController = new InternalFormatController( tabs, undoManager );
 
     // Create the application view.
     new ApplicationView( internalFormatController,
@@ -101,6 +81,24 @@ public class Main extends JFrame
                          helpController,
                          playerController,
                          tabsController );
+
+    // Open all files passed in as arguments.
+    for( int i = 0; i < args.length; i++)
+    {
+      try
+      {
+        ApesFile apesFile = new ApesFile( args[i] );
+        tabs.add( apesFile.getInternalFormat() );
+      }
+      catch( UnidentifiedLanguageException e )
+      {
+        ApesError.unsupportedFormat();
+      }
+      catch( Exception e )
+      {
+        e.printStackTrace();
+      }
+    }
   }
 
   public static void main( String[] args )

@@ -1,43 +1,27 @@
 package apes.controllers;
 
 import java.awt.Point;
-import java.io.File;
-import javax.swing.JFileChooser;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 
-import apes.exceptions.UnidentifiedLanguageException;
 import apes.lib.ApesFile;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
 import apes.models.Samples;
+import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
-import apes.views.ApesError;
 import apes.views.InternalFormatView;
 
 
 /**
  * Controller for the internal format.
+ *
+ * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatController extends ApplicationController
 {
-  /**
-   * The undo manager that keeps track of all changes.
-   */
-  private UndoManager undoManager;
-
-  /**
-   * The main panel tabs.
-   */
-  private TabsController tabsController;
-
-  /**
-   * The player handler.
-   */
-  private PlayerHandler playerHandler;
-
   /**
    * Values copied or cut.
    */
@@ -74,35 +58,53 @@ public class InternalFormatController extends ApplicationController
   private Player player;
 
   /**
+   * A player handler.
+   */
+  private PlayerHandler playerHandler;
+  
+  /**
    * The marked selection.
    */
   private Point selection;
 
   /**
+   * The tabs model.
+   */
+  private Tabs tabs;
+
+  /**
+   * The undo manager that keeps track of all changes.
+   */
+  private UndoManager undoManager;
+
+  /**
    * Creates a new <code>InternalFormatController</code>.
    *
+   * @param tabs The tabs model.
    * @param undoManager The undo manager.
-   * @param tabsController The tabs controller.
    */
-  public InternalFormatController( UndoManager undoManager, TabsController tabsController, PlayerHandler playerHandler )
+  public InternalFormatController( Tabs tabs, UndoManager undoManager )
   {
-    this.tabsController = tabsController;
+    this.tabs = tabs;
     this.undoManager = undoManager;
-    this.playerHandler = playerHandler;
+    this.playerHandler = PlayerHandler.getInstance();
   }
 
   public void beforeFilter() throws Exception
   {
     if( name.matches( "^zoom.*" ) )
     {
-      internalFormatView = tabsController.getCurrentInternalFormatView();
-
+      // This may throw an exception if there's no tab. But thats what
+      // we want.
+      Tabs.Tab tab = tabs.getSelectedTab();
+      internalFormatView = tab.getInternalFormatView();
+      
       if( internalFormatView == null )
       {
         throw new Exception();
       }
     }
-    else
+    else if( name.matches( "copy|cut|paste|delete" ) )
     {
       internalFormat = playerHandler.getInternalFormat();
 
@@ -194,7 +196,7 @@ public class InternalFormatController extends ApplicationController
   {
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom / InternalFormatView.ZOOM;
-
+    
     zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
   }
 
@@ -203,7 +205,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomOut()
   {
-    Player player = playerHandler.getCurrentPlayer();
+    player = playerHandler.getCurrentPlayer();
 
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom * InternalFormatView.ZOOM;
@@ -217,7 +219,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomSelection()
   {
-    Player player = playerHandler.getCurrentPlayer();
+    player = playerHandler.getCurrentPlayer();
 
     zoom = player.getStop() - player.getStart();
     center = zoom / 2;
@@ -239,28 +241,21 @@ public class InternalFormatController extends ApplicationController
    */
   public void open()
   {
-    try
-    {
-      // Chose file.
-      final JFileChooser fc = new JFileChooser();
-      fc.setCurrentDirectory( new File( "." ) );
-      int returnVal = fc.showOpenDialog( null );
+    ApesFile apesFile = ApesFile.open();
 
-      if( returnVal == JFileChooser.APPROVE_OPTION )
+    if( apesFile != null )
+    {
+      try
       {
-        File file = fc.getSelectedFile();
+        InternalFormatView internalFormatView = new InternalFormatView( apesFile.getInternalFormat() );
 
-        ApesFile apesFile = new ApesFile( file );
-        tabsController.add( apesFile.getInternalFormat(), apesFile.getName() );
+        tabs.add( internalFormatView );
       }
-    }
-    catch( UnidentifiedLanguageException e )
-    {
-      ApesError.unsupportedFormat();
-    }
-    catch( Exception e )
-    {
-      e.printStackTrace();
+      catch( Exception e )
+      {
+        // TODO: Show some error...
+        e.printStackTrace();
+      }
     }
   }
 }
