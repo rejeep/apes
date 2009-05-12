@@ -20,9 +20,9 @@ public class PlayerController extends ApplicationController
   /**
    * Creates a new Player controller.
    */
-  public PlayerController( PlayerHandler playerHandler )
+  public PlayerController()
   {
-    this.playerHandler = playerHandler;
+    this.playerHandler = PlayerHandler.getInstance();
   }
 
   /**

@@ -41,12 +41,11 @@ public class PluginController extends ApplicationController
    * Creates a new plugin controller.
    * 
    * @param pH Plugin handler.
-   * @param playerHandler Player handler.
    */
-  public PluginController(PluginHandler pH, PlayerHandler playerHandler)
+  public PluginController(PluginHandler pH)
   {
     pluginHandler = pH;;
-    this.playerHandler = playerHandler;
+    this.playerHandler = PlayerHandler.getInstance();
     pluginView = new PluginView(pluginHandler, this);
     //effectMenu = new JMenu( "menu.head.effects" );
     pluginView.updateEffectMenu();

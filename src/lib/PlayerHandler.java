@@ -63,11 +63,16 @@ public class PlayerHandler
    */
   private InternalFormat internalFormat;
 
+  /**
+   * An instance of this class.
+   */
+  private static PlayerHandler instance = null;
+
 
   /**
    * Creates a new <code>PlayerHandler</code>.
    */
-  public PlayerHandler()
+  private PlayerHandler()
   {
     players = new HashSet<Player>();
   }
@@ -267,7 +272,7 @@ public class PlayerHandler
   {
     Player player = getPlayer( internalFormat );
     player.stop();
-    
+
     if( player.equals( currentPlayer ) )
     {
       currentPlayer = null;
@@ -275,7 +280,7 @@ public class PlayerHandler
 
     players.remove( player );
   }
-  
+
   /**
    * Returns the current player.
    *
@@ -284,5 +289,15 @@ public class PlayerHandler
   public Player getCurrentPlayer()
   {
     return currentPlayer;
+  }
+
+  public static PlayerHandler getInstance()
+  {
+    if( instance == null )
+    {
+      instance = new PlayerHandler();
+    }
+
+    return instance;
   }
 }
