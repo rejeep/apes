@@ -209,8 +209,9 @@ public class PlayerHandler
    * internalFormat, it is used. Otherwise a new Player is created.
    *
    * @param internalFormat an <code>InternalFormat</code> value
+   * @return The player that is associated with <code>internalFormat</code>.
    */
-  public void setInternalFormat( InternalFormat internalFormat )
+  public Player setInternalFormat( InternalFormat internalFormat )
   {
     this.internalFormat = internalFormat;
 
@@ -233,6 +234,8 @@ public class PlayerHandler
     players.add( player );
     currentPlayer = player;
     currentPlayer.setLine( line );
+    
+    return player;
   }
 
   /**
