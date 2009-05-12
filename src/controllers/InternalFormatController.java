@@ -97,7 +97,7 @@ public class InternalFormatController extends ApplicationController
       // This may throw an exception if there's no tab. But thats what
       // we want.
       Tabs.Tab tab = tabs.getSelectedTab();
-      InternalFormatView internalFormatView = tab.getInternalFormatView();
+      internalFormatView = tab.getInternalFormatView();
       
       if( internalFormatView == null )
       {
@@ -196,7 +196,7 @@ public class InternalFormatController extends ApplicationController
   {
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom / InternalFormatView.ZOOM;
-
+    
     zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
   }
 
