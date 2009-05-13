@@ -22,7 +22,7 @@ public class FileHandler
    */
   public static ByteBuffer loadFile( String path, String fileName ) throws IOException
   {
-    File file = new File( path + "/" + fileName );
+    File file = new File( path, fileName );
     FileInputStream iStream = new FileInputStream( file );
     byte[] buffer = new byte[(int) file.length()];
     iStream.read( buffer );
