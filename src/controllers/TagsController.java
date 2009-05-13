@@ -19,14 +19,18 @@ public class TagsController extends ApplicationController
    * The internal format that the tags should be edited on.
    */
   private InternalFormat internalFormat;
-
+  
+  /**
+   * 
+   */
+  private PlayerHandler playerHandler;
 
   /**
    * Creates a new <code>TagsController</code> instance.
    */
   public TagsController()
   {
-    internalFormat = PlayerHandler.getInstance().getInternalFormat();
+    playerHandler = PlayerHandler.getInstance();
   }
 
   /**
@@ -34,6 +38,7 @@ public class TagsController extends ApplicationController
    */
   public void edit()
   {
+    internalFormat = playerHandler.getInternalFormat();
     this.tagsView = new TagsView( this, internalFormat.getTags() );
   }
 

@@ -71,7 +71,11 @@ public class TagsView extends JFrame
   private JTextField copy;
 
   /**
+   * TODO: Comment
+   * Creates a new <code>TagsView</code> instance.
    *
+   * @param tagsController a <code>TagsController</code> value
+   * @param tags a <code>Tags</code> value
    */
   public TagsView( TagsController tagsController, Tags tags )
   {
@@ -147,9 +151,9 @@ public class TagsView extends JFrame
     add( new JPanel(), BorderLayout.EAST );
     add( north, BorderLayout.NORTH );
 
+    pack();
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setVisible( true );
-    pack();
   }
 
   /**
