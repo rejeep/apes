@@ -72,8 +72,11 @@ public class ChannelController extends ApplicationController implements MouseLis
       // Select all if more than one click.
       else
       {
-        player.setStart( 0 );
-        player.setStop( player.getSampleAmount() );
+        int firstVisibleSample = channelView.getCenter() - channelView.getZoom() / 2;
+        int lastVisibelSample  = channelView.getCenter() + channelView.getZoom() / 2;
+
+        player.setStart( firstVisibleSample );
+        player.setStop( lastVisibelSample );
       }
     }
     // Middle mouse button (often wheel).
