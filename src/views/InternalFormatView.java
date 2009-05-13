@@ -128,4 +128,5 @@ public class InternalFormatView extends JPanel implements Observer
   public int getZoom() { return channelView.getZoom(); }
   public void setZoom( int samples ) { channelView.setZoom( samples ); }
   public void setCenter( int sample ) { channelView.setCenter( sample ); }
+  public int getCenter() { return channelView.getCenter(); }
 }

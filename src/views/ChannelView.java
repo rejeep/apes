@@ -326,6 +326,16 @@ public class ChannelView extends JPanel implements Runnable
   {
     centerSample = sample;
   }
+  
+  /**
+   * Returns the center position.
+   *
+   * @return The center position.
+   */
+  public int getCenter()
+  {
+    return centerSample;
+  }
 
   /**
    * TODO: Comment

@@ -224,7 +224,7 @@ public class InternalFormatController extends ApplicationController
     player = playerHandler.getCurrentPlayer();
 
     zoom = player.getStop() - player.getStart();
-    center = zoom / 2;
+    center = internalFormatView.getCenter() / 2;
   }
 
   /**
@@ -235,7 +235,7 @@ public class InternalFormatController extends ApplicationController
     Player player = playerHandler.getCurrentPlayer();
 
     zoom = player.getSampleAmount();
-    center = zoom / 2;
+    center = internalFormatView.getCenter() / 2;
   }
 
   /**
