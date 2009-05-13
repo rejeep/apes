@@ -12,7 +12,7 @@ import apes.lib.Config;
 public class ApesError
 {
   /**
-   * 
+   * Unknown error.
    */
   public static void unknownErrorOccurred()
   {
@@ -20,7 +20,6 @@ public class ApesError
                          "unknown.message" );
   }
 
-  
   /**
    * Shows an error message saying that the format is not supported.
    */
@@ -28,6 +27,15 @@ public class ApesError
   {
     ApesError.showError( "format.unsupported.title",
                          "format.unsupported.message" );
+  }
+
+  /**
+   * Saving the internal format failed.
+   */
+  public static void saveFailure()
+  {
+    ApesError.showError( "if.save.title",
+                         "if.save.message" );
   }
 
 
@@ -41,10 +49,10 @@ public class ApesError
   {
     Language language = Language.getInstance();
     Config config = Config.getInstance();
-    
+
     String title = language.get( "error." + titleTag );
     String message = language.get( "error." + messageTag );
-  
+
     if( config.getBooleanOption( "gui_error_messages" ) )
     {
       JOptionPane.showMessageDialog( null,

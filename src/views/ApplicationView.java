@@ -228,9 +228,13 @@ public class ApplicationView extends JFrame
       file.add( open );
 
       JMenuItem save = new ApesMenuItem( "menu.file.save" );
+      save.addActionListener( internalFormatController );
+      save.setName( "save" );
       file.add( save );
 
       JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as" );
+      saveAs.addActionListener( internalFormatController );
+      saveAs.setName( "saveAs" );
       file.add( saveAs );
 
       JMenuItem export = new ApesMenuItem( "menu.file.export" );
@@ -414,6 +418,8 @@ public class ApplicationView extends JFrame
       add( open );
 
       ImageButton save = new SaveButton();
+      save.addActionListener( internalFormatController );
+      save.setName( "save" );
       add( save );
 
       ImageButton undo = new UndoButton();

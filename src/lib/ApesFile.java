@@ -50,6 +50,16 @@ public class ApesFile
   {
     return file.getName();
   }
+  
+  /**
+   * Returns the name of the parent directory.
+   *
+   * @return The name of the parent directory.
+   */
+  public String getParent()
+  {
+    return file.getParent();
+  }
 
   /**
    * Creates new internal format from the file.
@@ -62,7 +72,7 @@ public class ApesFile
   {
     AudioFormatPlugin audioFile = new ApesFormat( file ).getAudioFile();
 
-    return audioFile.importFile( file.getParent(), getName() );
+    return audioFile.importFile( getParent(), getName() );
   }
   
   /**

@@ -126,6 +126,10 @@ error:
   unknown:
     title: Unknown error
     message: An unknown error occurred. Se backtrace for more information.
+  if:
+    save:
+      title: Save failure
+      message: An error occurred when trying to save
 channel:
   header: Channel
   start: Start

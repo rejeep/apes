@@ -1,6 +1,7 @@
 package apes.controllers;
 
 import java.awt.Point;
+import java.io.IOException;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 
@@ -13,6 +14,7 @@ import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
 import apes.views.InternalFormatView;
+import apes.views.ApesError;
 
 
 /**
@@ -256,6 +258,45 @@ public class InternalFormatController extends ApplicationController
         // TODO: Show some error...
         e.printStackTrace();
       }
+    }
+  }
+  
+  /**
+   * Save the current internal format.
+   */
+  public void save()
+  {
+    internalFormat = playerHandler.getInternalFormat();
+    
+    try
+    {
+      internalFormat.save();
+    }
+    catch( IOException e )
+    {
+      ApesError.saveFailure();
+      
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Save the current internal format as.
+   */
+  public void saveAs()
+  {
+    internalFormat = playerHandler.getInternalFormat();
+    ApesFile apesFile = ApesFile.open();
+    
+    try
+    {
+      internalFormat.saveAs( apesFile.getParent(), apesFile.getName() );
+    }
+    catch( IOException e )
+    {
+      ApesError.saveFailure();
+      
+      e.printStackTrace();
     }
   }
 }

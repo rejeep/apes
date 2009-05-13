@@ -126,6 +126,10 @@ error:
   unknown:
     title: Okänt fel
     message: Ett okänt fel uppstod. Se \"backtrace\" för mer information.
+  if:
+    save:
+      title: Sparning misslyckades
+      message: Ett fel uppstod vid sparning
 channel:
   header: Kanal
   start: Start
