@@ -319,4 +319,22 @@ public class InternalFormat extends Observable
     
     return retVal;
   }
+  
+  /**
+   * Scales all samples in the internal format.
+   *
+   * @param start The start sample.
+   * @param stop The end sample.
+   * @param alpha The alpha value.
+   */
+  public void scaleSamples( int start, int stop, float alpha )
+  {
+    for( Channel channel : channels )
+    {
+      channel.scaleSamples( start, stop, alpha );
+    }
+
+    setChanged();
+    notifyObservers();
+  }
 }

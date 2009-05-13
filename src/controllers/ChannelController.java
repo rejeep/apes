@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelListener;
 import apes.models.Player;
 import apes.views.ChannelView;
 import apes.views.InternalFormatStatusPanel;
+import apes.models.InternalFormat;
 
 
 /**
@@ -144,14 +145,20 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   public void mouseWheelMoved( MouseWheelEvent e )
   {
-    // -1 scroll wheel up.
-    // 1 scroll wheel down.
-    int rotation = e.getWheelRotation();
+    if( isSelection() )
+    {
+      // -1 scroll wheel up.
+      // 1 scroll wheel down.
+      int rotation = e.getWheelRotation();
 
-    // Point marked = channelView.getMarkedSamples();
+      int start = player.getStart();
+      int stop  = player.getStop();
 
-    // TODO: We should scale all channels.
-    // channelView.getChannel().scaleSamples( marked.x, marked.y, 1.0f - rotation * 0.1f );
+      InternalFormat internalFormat = player.getInternalFormat();
+      int numChannels = internalFormat.getNumChannels();
+
+      internalFormat.scaleSamples( start, stop, 1.0f - rotation * 0.1f );
+    }
   }
 
   public void mouseMoved( MouseEvent e )
