@@ -214,7 +214,7 @@ public class ChannelView extends JPanel implements Runnable
   public int samplesToPixels( int samples )
   {
     int firstVisibleSample = getFirstVisibleSample();
-    int lastVisibelSample  = getLasrVisibleSample();
+    int lastVisibelSample  = getLastVisibleSample();
 
     if(samples < firstVisibleSample || samples > lastVisibelSample)
       return -1;
@@ -412,7 +412,7 @@ public class ChannelView extends JPanel implements Runnable
    * 
    * @return The last visible sample.
    */
-  public int getLasrVisibleSample()
+  public int getLastVisibleSample()
   {
     return centerSample + ( visibleSamples / 2 );
   }
@@ -664,7 +664,7 @@ public class ChannelView extends JPanel implements Runnable
     private int getTime( int pixels )
     {
       int firstVisibleSample = getFirstVisibleSample();
-      int lastVisibelSample  = getLasrVisibleSample();
+      int lastVisibelSample  = getLastVisibleSample();
 
       int start = SampleHelper.samplesToMilliseconds( sampleRate, firstVisibleSample );
       int stop = SampleHelper.samplesToMilliseconds( sampleRate, lastVisibelSample );
