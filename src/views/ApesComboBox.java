@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * Like JComboBox except that it takes an array of locale tags as
  * argument instead of the text.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApesComboBox extends JComboBox implements LanguageObserver
@@ -25,20 +25,20 @@ public class ApesComboBox extends JComboBox implements LanguageObserver
 
   /**
    * Creates a new <code>ApesPanel</code> instance.
-   *
+   * 
    * @param items The list of locale tags.
    */
-  public ApesComboBox( Object[] items )
+  public ApesComboBox(Object[] items)
   {
     this.language = Language.getInstance();
     this.items = items;
 
     addLanguageItems();
 
-    language.addObserver( this );
+    language.addObserver(this);
   }
-  
-  public void update( Observable o, Object arg )
+
+  public void update(Observable o, Object arg)
   {
     removeAllItems();
     addLanguageItems();
@@ -51,9 +51,9 @@ public class ApesComboBox extends JComboBox implements LanguageObserver
    */
   private void addLanguageItems()
   {
-    for( int i = 0; i < items.length; i++ )
+    for(int i = 0; i < items.length; i++)
     {
-      addItem( language.get( (String)items[i] ) );
+      addItem(language.get((String)items[i]));
     }
   }
 }

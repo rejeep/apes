@@ -2,7 +2,7 @@ package apes.views.buttons;
 
 /**
  * This button is for deleting the selected region.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class DeleteButton extends ImageButton

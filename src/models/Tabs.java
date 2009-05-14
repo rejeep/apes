@@ -10,7 +10,7 @@ import javax.swing.SingleSelectionModel;
  * Keeps track of tabs. All adding and removing of tabs should be done
  * through this model. The view should then listen to this and update
  * itself when something happens.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Tabs extends Observable
@@ -35,9 +35,9 @@ public class Tabs extends Observable
   
   /**
    * Adds a new tab.
-   *
+   * 
    * @param internalFormatView The internal format view to add to the
-   * tab panel.
+   *          tab panel.
    */
   public void add( InternalFormatView internalFormatView )
   {
@@ -50,9 +50,9 @@ public class Tabs extends Observable
   
   /**
    * Adds a new tab.
-   *
+   * 
    * @param internalFormat The internal format to add to the tab
-   * panel.
+   *          panel.
    */
   public void add( InternalFormat internalFormat )
   {
@@ -61,7 +61,7 @@ public class Tabs extends Observable
 
   /**
    * Sets the default model.
-   *
+   * 
    * @param model The default model.
    */
   public void setModel( SingleSelectionModel model )
@@ -71,7 +71,7 @@ public class Tabs extends Observable
 
   /**
    * Returns the <code>Tab</code> that is selected.
-   *
+   * 
    * @return The selected tab.
    */
   public Tab getSelectedTab()
@@ -81,7 +81,7 @@ public class Tabs extends Observable
   
   /**
    * Removes <code>tab</code> with index <code>index</code>.
-   *
+   * 
    * @param index The index of the tab that should be removed.
    */
   public void remove( int index )
@@ -105,10 +105,12 @@ public class Tabs extends Observable
   }
   
   /**
-   * Returns true if <code>tab</code> is in the list of tabs. False otherwise.
-   *
+   * Returns true if <code>tab</code> is in the list of tabs. False
+   * otherwise.
+   * 
    * @param tab The tab to look for.
-   * @return True if <code>tab</code> is in the list of tabs. False otherwise. 
+   * @return True if <code>tab</code> is in the list of tabs. False
+   *         otherwise.
    */
   public boolean contains( Tab tab )
   {
@@ -117,7 +119,7 @@ public class Tabs extends Observable
   
   /**
    * Returns the tab with index <code>index</code>.
-   *
+   * 
    * @param index The index.
    * @return The tab with index index, or null if there's no such tab.
    */
@@ -128,7 +130,7 @@ public class Tabs extends Observable
   
   /**
    * See {@link Tabs#get get}
-   *
+   * 
    * @param index -
    * @return -
    */
@@ -163,7 +165,7 @@ public class Tabs extends Observable
 
     /**
      * Creates a new <code>Tab</code> instance.
-     *
+     * 
      * @param index The tab index.
      * @param internalFormatView The view to place on the tab panel.
      */
@@ -175,7 +177,7 @@ public class Tabs extends Observable
     
     /**
      * Return this tab index.
-     *
+     * 
      * @return The index.
      */
     public int getIndex()
@@ -185,7 +187,7 @@ public class Tabs extends Observable
     
     /**
      * Return the tab title, which is the same as the file name.
-     *
+     * 
      * @return The tab title.
      */
     public String getTitle()
@@ -195,7 +197,7 @@ public class Tabs extends Observable
 
     /**
      * Returns the internal format view that is on this panel.
-     *
+     * 
      * @return The internal format view.
      */
     public InternalFormatView getInternalFormatView()
@@ -205,7 +207,7 @@ public class Tabs extends Observable
     
     /**
      * Returns the internal format for this tab.
-     *
+     * 
      * @return The internal format.
      */
     public InternalFormat getInternalFormat()

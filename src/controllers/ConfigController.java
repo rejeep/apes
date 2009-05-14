@@ -8,10 +8,9 @@ import javax.swing.JTextField;
 import apes.lib.Config;
 import apes.views.ConfigView;
 
-
 /**
  * Controller for the configuration file.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ConfigController extends ApplicationController
@@ -32,7 +31,7 @@ public class ConfigController extends ApplicationController
   public ConfigController()
   {
     config = Config.getInstance();
-    configView = new ConfigView( config, this );
+    configView = new ConfigView(config, this);
   }
 
   /**
@@ -77,7 +76,7 @@ public class ConfigController extends ApplicationController
    */
   public void close()
   {
-    configView.setVisible( false );
+    configView.setVisible(false);
     configView.dispose();
   }
 }

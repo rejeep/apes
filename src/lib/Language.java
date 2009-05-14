@@ -10,7 +10,7 @@ import java.util.Observable;
 /**
  * Singleton class for setting the language of the application also
  * works as an observable for ApesObserver.
- *
+ * 
  * @author Simon Holm
  */
 public class Language extends Observable
@@ -40,10 +40,9 @@ public class Language extends Observable
    */
   private String language;
 
-
   /**
-   * Creates a new <code>Language</code> instance. Private so that you
-   * cant create an object of this class without using {@link
+   * Creates a new <code>Language</code> instance. Private so that
+   * you cant create an object of this class without using {@link
    * Language#getInstance getInstance}.
    */
   private Language()
@@ -53,17 +52,17 @@ public class Language extends Observable
 
   /**
    * Sets the language
-   *
+   * 
    * @param language The language to change to.
    */
-  public void setLanguage( String language )
+  public void setLanguage(String language)
   {
     String[] languages = getLanguages();
-    Arrays.sort( languages );
+    Arrays.sort(languages);
 
-    int index = Arrays.binarySearch( languages, language );
+    int index = Arrays.binarySearch(languages, language);
 
-    if( index >= 0 )
+    if(index >= 0)
     {
       this.language = language;
     }
@@ -71,25 +70,25 @@ public class Language extends Observable
     {
       this.language = DEFAULT_LANGUAGE;
 
-      System.err.println( "Cannot set language " + language + ". Locale does not exist." );
+      System.err.println("Cannot set language " + language + ". Locale does not exist.");
     }
-    
+
     setChanged();
   }
 
   /**
    * Gets the text for the key.
-   *
+   * 
    * @param key The key corrsponding to the text.
    * @return Returns the string to the corresponhing key.
    */
-  public String get( String key )
+  public String get(String key)
   {
-    String result = dictionary.get( key );
+    String result = dictionary.get(key);
 
-    if( result == null )
+    if(result == null)
     {
-      System.err.println( "Key " + key + " does not exist in locale " + language );
+      System.err.println("Key " + key + " does not exist in locale " + language);
 
       return key;
     }
@@ -100,37 +99,37 @@ public class Language extends Observable
   /**
    * Loads the dictionary into the memory from the file specified.
    * This will also notify all the observers looking at Language.
-   *
+   * 
    * @throws Exception Throws an exception if the parsing goes wrong.
    */
   public void load() throws Exception
   {
-    dictionary = new ApeLang( path, language + ".yml" );
-    
+    dictionary = new ApeLang(path, language + ".yml");
+
     notifyObservers();
   }
 
   /**
    * Returns an array of all available languages. The array will
    * contain the name of the locale. For example: [ "en", "sv", "dk" ]
-   *
+   * 
    * @return All available languages.
    */
   public String[] getLanguages()
   {
-    String[] files = new File( path ).list( new LanguageFileFilter() );
-    String[] result = new String[ files.length ];
+    String[] files = new File(path).list(new LanguageFileFilter());
+    String[] result = new String[files.length];
 
-    Pattern pattern = Pattern.compile( "(.*)\\.yml$" );
+    Pattern pattern = Pattern.compile("(.*)\\.yml$");
     Matcher matcher;
 
-    for( int i = 0; i < files.length; i++)
+    for(int i = 0; i < files.length; i++)
     {
-      matcher = pattern.matcher( files[i] );
+      matcher = pattern.matcher(files[i]);
 
-      if( matcher.matches() )
+      if(matcher.matches())
       {
-        result[i] = matcher.group( 1 );
+        result[i] = matcher.group(1);
       }
     }
 
@@ -139,12 +138,12 @@ public class Language extends Observable
 
   /**
    * Will return an instance of this class.
-   *
+   * 
    * @return An instance of this class.
    */
   public static Language getInstance()
   {
-    if( instance == null )
+    if(instance == null)
     {
       instance = new Language();
     }
@@ -158,16 +157,16 @@ public class Language extends Observable
   private class LanguageFileFilter implements FilenameFilter
   {
     /**
-     * Returns true if the given file matches a valid language file. False otherwise.
-     *
+     * Returns true if the given file matches a valid language file.
+     * False otherwise.
+     * 
      * @param dir The directory.
      * @param name The file name.
-     *
      * @return True if valid. False otherwise.
      */
-    public boolean accept( File dir, String name )
+    public boolean accept(File dir, String name)
     {
-      return name.endsWith( ".yml" );
+      return name.endsWith(".yml");
     }
   }
 }

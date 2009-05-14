@@ -19,7 +19,7 @@ import apes.lib.SampleHelper;
 /**
  * Panel with information about the internal format and some controls
  * for it.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatStatusPanel extends JPanel
@@ -96,7 +96,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Creates a new <code>InternalFormatStatusPanel</code> instance.
-   *
+   * 
    * @param channelController The channel controller.
    */
   public InternalFormatStatusPanel( int sampleRate, ChannelController channelController, Player player )
@@ -122,7 +122,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Returns a top panel with a header on it.
-   *
+   * 
    * @return The top panel.
    */
   public JPanel topPanel()
@@ -138,7 +138,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Returns a panel with fields and boxes.
-   *
+   * 
    * @return The center panel.
    */
   public JPanel centerPanel()
@@ -184,7 +184,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Returns a panel with a refresh button on it.
-   *
+   * 
    * @return The bottom panel.
    */
   public JPanel bottomPanel()
@@ -212,7 +212,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Returns the start value in samples.
-   *
+   * 
    * @return The start value.
    */
   public int getStartValue()
@@ -222,7 +222,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Sets the start value.
-   *
+   * 
    * @param samples The start value.
    */
   public void setStartValue( int samples )
@@ -232,7 +232,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Returns the stop value in samples.
-   *
+   * 
    * @return The stop value.
    */
   public int getStopValue()
@@ -242,7 +242,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Sets the stop value.
-   *
+   * 
    * @param samples The stop value.
    */
   public void setStopValue( int samples )
@@ -252,7 +252,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Returns the player value in samples.
-   *
+   * 
    * @return The player value.
    */
   public int getPlayerValue()
@@ -262,7 +262,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Sets the player value.
-   *
+   * 
    * @param samples The player value.
    */
   public void setPlayerValue( int samples )
@@ -272,7 +272,7 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Generic helper for getting a value.
-   *
+   * 
    * @param mark The mark.
    * @return The value for mark in samples.
    */
@@ -303,7 +303,7 @@ public class InternalFormatStatusPanel extends JPanel
 
   /**
    * Generic helper for setting a value.
-   *
+   * 
    * @param mark The mark.
    * @param samples The new value for mark.
    */
@@ -333,8 +333,9 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns true if <code>mark</code> is in samples. False otherwise.
-   *
+   * Returns true if <code>mark</code> is in samples. False
+   * otherwise.
+   * 
    * @param mark The mark.
    * @return True if in samples. False otherwise.
    */
@@ -346,7 +347,7 @@ public class InternalFormatStatusPanel extends JPanel
   /**
    * Returns true if <code>mark</code> is in milliseconds. False
    * otherwise.
-   *
+   * 
    * @param mark The mark.
    * @return True if in milliseconds. False otherwise.
    */  
@@ -356,8 +357,9 @@ public class InternalFormatStatusPanel extends JPanel
   }
   
   /**
-   * Returns true if <code>mark</code> is in seconds. False otherwise.
-   *
+   * Returns true if <code>mark</code> is in seconds. False
+   * otherwise.
+   * 
    * @param mark The mark.
    * @return True if in seconds. False otherwise.
    */
@@ -367,8 +369,9 @@ public class InternalFormatStatusPanel extends JPanel
   }
   
   /**
-   * Returns true if <code>mark</code> is in minutes. False otherwise.
-   *
+   * Returns true if <code>mark</code> is in minutes. False
+   * otherwise.
+   * 
    * @param mark The mark.
    * @return True if in minutes. False otherwise.
    */
@@ -379,11 +382,11 @@ public class InternalFormatStatusPanel extends JPanel
   
   /**
    * Generic helper for checking what unit is selected for a mark.
-   *
+   * 
    * @param mark The mark.
    * @param index The combo box index.
    * @return True if the combo box index is the same as
-   * <code>index</code>. False otherwise.
+   *         <code>index</code>. False otherwise.
    */
   private boolean isUnit( Mark mark, int index )
   {
@@ -391,9 +394,9 @@ public class InternalFormatStatusPanel extends JPanel
   }
   
   /**
-   * Fetches the value from <code>textField</code>. If a valid number,
-   * that is returned. Otherwise zero is returned.
-   *
+   * Fetches the value from <code>textField</code>. If a valid
+   * number, that is returned. Otherwise zero is returned.
+   * 
    * @param textField The text field.
    * @return The text field value, or zero if not valid.
    */

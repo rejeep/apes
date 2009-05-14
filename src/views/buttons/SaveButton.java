@@ -2,7 +2,7 @@ package apes.views.buttons;
 
 /**
  * This button is for saving the current file.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class SaveButton extends ImageButton

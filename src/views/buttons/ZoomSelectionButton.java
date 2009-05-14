@@ -2,7 +2,7 @@ package apes.views.buttons;
 
 /**
  * This button is zooming the selection.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ZoomSelectionButton extends ImageButton

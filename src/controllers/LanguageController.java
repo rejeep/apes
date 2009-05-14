@@ -5,7 +5,7 @@ import apes.lib.Language;
 /**
  * This class handles the program languages. For example it switches
  * between them.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class LanguageController extends ApplicationController

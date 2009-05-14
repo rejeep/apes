@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import apes.models.InternalFormat;
 
-
 public class SampleIterator
 {
   /**
@@ -17,44 +16,47 @@ public class SampleIterator
    */
   private long samplesIndex;
 
-
   /**
    * Consts a SampleIterator iterating over all samples in the given
    * <code>Channel</code>.
-   *
+   * 
    * @param c The <code>Channel</code> to iterate over.
    */
-  public SampleIterator( InternalFormat iF, int c )
+  public SampleIterator(InternalFormat iF, int c)
   {
     intForm = iF;
-    
-    if( c < iF.getNumChannels() )
+
+    if(c < iF.getNumChannels())
       samplesIndex = c;
     else
       samplesIndex = 0;
   }
 
   /**
-   * Creates a SampleIterator iterating over all samples in the given channel starting from the given sample if it exists, otherwise from the beginning of the channel.
+   * Creates a SampleIterator iterating over all samples in the given
+   * channel starting from the given sample if it exists, otherwise
+   * from the beginning of the channel.
+   * 
    * @param iF Internal format to iterate over.
    * @param c Channel of iteration.
    * @param i Index to start at.
    */
-  public SampleIterator( InternalFormat iF, int c, int i )
+  public SampleIterator(InternalFormat iF, int c, int i)
   {
     intForm = iF;
-    
-    if( c < iF.getNumChannels() )
+
+    if(c < iF.getNumChannels())
       samplesIndex = c;
     else
       samplesIndex = 0;
-    
-    if( i < iF.getSampleAmount() )
+
+    if(i < iF.getSampleAmount())
       samplesIndex *= i;
   }
-  
+
   /**
-   * Returns false if there are no more samples in the Iterator. Otherwise, returns true.
+   * Returns false if there are no more samples in the Iterator.
+   * Otherwise, returns true.
    */
   public boolean hasNext()
   {
@@ -66,13 +68,13 @@ public class SampleIterator
    */
   public int next()
   {
-    if( hasNext() )
+    if(hasNext())
     {
-      byte[] bytes = intForm.getChunk( (int)samplesIndex, 1 );
+      byte[] bytes = intForm.getChunk((int)samplesIndex, 1);
       samplesIndex += intForm.getNumChannels();
       int amplitude = 0;
-      for( int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++ )
-        amplitude += bytes[i] << (i * 8);
+      for(int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++)
+        amplitude += bytes[i] << ( i * 8 );
       return amplitude;
     }
     throw new NoSuchElementException();

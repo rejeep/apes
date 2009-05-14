@@ -2,7 +2,7 @@ package apes.views.buttons;
 
 /**
  * This button is for stop playing the music file.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class StopButton extends ImageButton

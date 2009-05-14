@@ -21,7 +21,7 @@ import apes.lib.SampleHelper;
 
 /**
  * View for all channel graphs.
- *
+ * 
  * @author Simon Holm
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -41,11 +41,6 @@ public class ChannelView extends JPanel implements Runnable
    * The internal format
    */
   private InternalFormat internalFormat;
-  
-  /**
-   * The number of samples for each of the channels.
-   */
-  private int nrSamples;
 
   /**
    * The center sample of the channels
@@ -99,7 +94,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Creates a new <code>ChannelView</code> instance.
-   *
+   * 
    * @param channelController The channel controller.
    * @param player The player.
    */
@@ -139,7 +134,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Adds a channel graph to this view.
-   *
+   * 
    * @param channel The channel.
    */
   public void addChannel( int channel )
@@ -170,7 +165,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the graph width.
-   *
+   * 
    * @return The graph width.
    */
   public int getGraphWidth()
@@ -180,7 +175,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the graph height.
-   *
+   * 
    * @return The graph height.
    */
   public int getGraphHeight()
@@ -214,12 +209,12 @@ public class ChannelView extends JPanel implements Runnable
    * 
    * @param samples The position in the channel in samples.
    * @return -1 if the sample is outside the graph otherwise where in
-   * the graph.
+   *         the graph.
    */
   public int samplesToPixels( int samples )
   {
     int firstVisibleSample = getFirstVisibleSample();
-    int lastVisibelSample  = getLasrVisibleSample();
+    int lastVisibelSample  = getLastVisibleSample();
 
     if(samples < firstVisibleSample || samples > lastVisibelSample)
       return -1;
@@ -234,10 +229,10 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a position in a channel to pixels in the graph based on
    * milliseconds.
-   *
+   * 
    * @param milliseconds The position in the channel in milliseconds.
    * @return -1 if the time is outside the graph otherwise where in
-   * the graph.
+   *         the graph.
    */
   public int millisecondsToPixels( int milliseconds )
   {
@@ -249,10 +244,10 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a position in a channel to pixels in the graph based on
    * seconds.
-   *
+   * 
    * @param seconds The position in the channel in seconds.
    * @return -1 if the time is outside the graph otherwise where in
-   * the graph.
+   *         the graph.
    */
   public int secondsToPixels( int seconds )
   {
@@ -264,10 +259,10 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a position in a channel to pixels in the graph based on
    * minutes.
-   *
+   * 
    * @param minutes The position in the channel in seconds.
    * @return -1 if the time is outside the graph otherwise where in
-   * the graph.
+   *         the graph.
    */
   public int minutesToPixels( int minutes )
   {
@@ -278,10 +273,10 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Transform a number of pixels to samples in the channel.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The absolute samples in the channel, -1 if outside the
-   * graph.
+   *         graph.
    */
   public int pixelsToSamples( int pixels )
   {
@@ -300,7 +295,7 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The millisecnods in the channel, -1 if outside the graph.
    */
@@ -314,7 +309,7 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The seconds in the channel, -1 if outside the graph.
    */
@@ -328,7 +323,7 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The minutes in the channel, -1 if outside the graph.
    */
@@ -341,7 +336,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Set the x position of the mouse.
-   *
+   * 
    * @param mousePosX The x position.
    */
   public void setMousePosX( int mousePosX )
@@ -350,8 +345,8 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Is called when the player is updated. Then each graph should
-   * be updated.
+   * Is called when the player is updated. Then each graph should be
+   * updated.
    */
   public void updatePlayer()
   {
@@ -363,7 +358,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the level of zoom.
-   *
+   * 
    * @return Number of samples visible.
    */
   public int getZoom()
@@ -373,7 +368,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Sets the level of zoom.
-   *
+   * 
    * @param samples The number of samples to be viewed in the view.
    */
   public void setZoom( int samples )
@@ -383,9 +378,9 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Sets the center of the view.
-   *
+   * 
    * @param sample The sample that should be in the center of the
-   * view.
+   *          view.
    */
   public void setCenter( int sample )
   {
@@ -394,7 +389,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the center position.
-   *
+   * 
    * @return The center position.
    */
   public int getCenter()
@@ -404,7 +399,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the first visible sample.
-   *
+   * 
    * @return The first visible sample.
    */
   public int getFirstVisibleSample()
@@ -414,17 +409,17 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the last visible sample.
-   *
+   * 
    * @return The last visible sample.
    */
-  public int getLasrVisibleSample()
+  public int getLastVisibleSample()
   {
     return centerSample + ( visibleSamples / 2 );
   }
 
   /**
    * This is a graph over a channel.
-   *
+   * 
    * @author Simon Holm
    * @author Johan Andersson (johandy@student.chalmers.se)
    */
@@ -463,7 +458,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Creates a new <code>ChannelGraph</code> instance.
-     *
+     * 
      * @param channelView The view that this graph is placed on.
      * @param channel The channel.
      */
@@ -487,7 +482,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the view that this graph is placed on.
-     *
+     * 
      * @return The view.
      */
     public ChannelView getChannelView()
@@ -497,7 +492,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Draws the view.
-     *
+     * 
      * @param g A graphics object.
      */
     public void paintComponent( Graphics g )
@@ -518,8 +513,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Draws a status indication on the graph telling where the mouse
-     * is placed. The time is in seconds or milliseconds if zoomed
-     * in.
+     * is placed. The time is in seconds or milliseconds if zoomed in.
      */
     private void drawStatus()
     {
@@ -623,10 +617,21 @@ public class ChannelView extends JPanel implements Runnable
     private void drawGraph()
     {
       g2.setColor( colorGraph );
-
-      if( samplesPerPixel <= 1 )
+      
+      if( samplesPerPixel < 1 )
       {
+        float jump = (float)graphWidth / samples.length;
+        int pixel = 0;
+        
+        for(int i = 1; i <= samples.length; i++)
+        {
+          int x1 = samples[i - 1];
+          int x2 = samples[i];
+          
+          g2.drawLine( pixel, x1 , Math.round( pixel + jump ), x2 );
 
+          pixel += Math.round(jump);
+        }
       }
       else
       {
@@ -648,18 +653,18 @@ public class ChannelView extends JPanel implements Runnable
       g2.clearRect( 0, 0, graphWidth - 1, graphHeight - 1 );
     }
 
-    
     /**
      * Returns an appropriate time depending on the zoom. The
-     * <code>timeUnit</code> variable is also set to the correct unit.
-     *
+     * <code>timeUnit</code> variable is also set to the correct
+     * unit.
+     * 
      * @param pixels The pixel position.
      * @return The time.
      */
     private int getTime( int pixels )
     {
       int firstVisibleSample = getFirstVisibleSample();
-      int lastVisibelSample  = getLasrVisibleSample();
+      int lastVisibelSample  = getLastVisibleSample();
 
       int start = SampleHelper.samplesToMilliseconds( sampleRate, firstVisibleSample );
       int stop = SampleHelper.samplesToMilliseconds( sampleRate, lastVisibelSample );
@@ -696,7 +701,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the current unit as a string.
-     *
+     * 
      * @return The unit.
      */
     private String getUnit()
@@ -711,27 +716,19 @@ public class ChannelView extends JPanel implements Runnable
      */
     public void updateGraph()
     {
-      //boolean i = true;
-      if(true)
-        return;
-      // Get number of samples.
-      nrSamples = internalFormat.getSampleAmount();
-
       samplesPerPixel = visibleSamples / graphWidth;
 
       // If there are less samples per pixel than 1. Or if there are
       // equally many samples as there are pixels.
       if( samplesPerPixel <= 1 )
       {
-        samples = new int[nrSamples];
-
-        int i = 0;
-        SampleIterator it = new SampleIterator( internalFormat, channel );
-        while( it.hasNext() )
+        samples = new int[visibleSamples + 1];
+        
+        int firstVisibleSample = getFirstVisibleSample();
+        
+        for(int i = 0; i < samples.length; i++)
         {
-          int sample = it.next();
-
-          samples[i++] = sample;
+          samples[i] = internalFormat.getSample( channel, firstVisibleSample + i );
         }
       }
       // If there are more samples per pixel than 1.
@@ -742,8 +739,8 @@ public class ChannelView extends JPanel implements Runnable
         int jump = visibleSamples / graphWidth;
         int firstVisibleSample = getFirstVisibleSample();
 
-        System.out.println("'bout to average. firstVis: " + firstVisibleSample + " graphW: " + graphWidth + " chann: " + channel + " jmp: " + jump);
-        for( int i = firstVisibleSample; i < graphWidth; i++ )
+
+        for( int i = firstVisibleSample; i < visibleSamples; i += jump )
         {
           int sample = internalFormat.getAverageAmplitude( channel, i*jump , jump );
           
@@ -780,7 +777,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the start mark position in pixels.
-     *
+     * 
      * @return The start mark position.
      */
     private int getMarkStart()
@@ -790,7 +787,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the stop mark position in pixels.
-     *
+     * 
      * @return The stop mark position.
      */
     private int getMarkStop()
@@ -800,7 +797,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the player mark position in pixels.
-     *
+     * 
      * @return The player mark position.
      */
     private int getMarkPlayer()

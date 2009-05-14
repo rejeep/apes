@@ -8,7 +8,7 @@ import apes.views.tabs.TabsView;
 
 /**
  * Handles tab actions such as closing or changing a tab.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class TabsController extends ApplicationController
@@ -17,7 +17,7 @@ public class TabsController extends ApplicationController
    * The tabs model.
    */
   private Tabs tabs;
-  
+
   /**
    * An instance of the player handler.
    */
@@ -25,10 +25,10 @@ public class TabsController extends ApplicationController
 
   /**
    * Creates a new <code>TabsController</code> instance.
-   *
+   * 
    * @param tabs The tabs model.
    */
-  public TabsController( Tabs tabs )
+  public TabsController(Tabs tabs)
   {
     this.tabs = tabs;
     this.playerHandler = PlayerHandler.getInstance();
@@ -36,7 +36,7 @@ public class TabsController extends ApplicationController
 
   /**
    * Returns the tabs model.
-   *
+   * 
    * @return The tabs model.
    */
   public Tabs getTabs()
@@ -53,11 +53,11 @@ public class TabsController extends ApplicationController
     ButtonTabPanel buttonTabPanel = (ButtonTabPanel)tabCloseButton.getButtonTabPanel();
     TabsView tabsView = (TabsView)buttonTabPanel.getTabsView();
 
-    int index = tabsView.indexOfTabComponent( buttonTabPanel );
+    int index = tabsView.indexOfTabComponent(buttonTabPanel);
 
-    if( index != -1 )
+    if(index != -1)
     {
-      tabs.remove( index );
+      tabs.remove(index);
     }
   }
 
@@ -68,10 +68,10 @@ public class TabsController extends ApplicationController
   {
     TabsView tabsView = (TabsView)event.getSource();
     int index = tabsView.getSelectedIndex();
-    Tabs.Tab tab = tabs.get( index );
+    Tabs.Tab tab = tabs.get(index);
 
     // An exception may occur here. But thats what we want. Because
     // this happens when there's no tab.
-    playerHandler.setInternalFormat( tab.getInternalFormat() );
+    playerHandler.setInternalFormat(tab.getInternalFormat());
   }
 }

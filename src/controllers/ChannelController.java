@@ -12,10 +12,9 @@ import apes.views.ChannelView;
 import apes.views.InternalFormatStatusPanel;
 import apes.models.InternalFormat;
 
-
 /**
  * Channel controller.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ChannelController extends ApplicationController implements MouseListener, MouseMotionListener, MouseWheelListener
@@ -42,142 +41,145 @@ public class ChannelController extends ApplicationController implements MouseLis
 
   /**
    * Creates a new <code>ChannelController</code> instance.
-   *
+   * 
    * @param player The player.
    */
-  public ChannelController( Player player )
+  public ChannelController(Player player)
   {
     this.player = player;
   }
 
-  public void mousePressed( MouseEvent e )
+  public void mousePressed(MouseEvent e)
   {
     int x = e.getX();
 
     // Left mouse button.
-    if( e.getButton() == MouseEvent.BUTTON1 )
+    if(e.getButton() == MouseEvent.BUTTON1)
     {
       // Single click.
-      if( e.getClickCount() == 1 )
+      if(e.getClickCount() == 1)
       {
-        int mark = channelView.pixelsToSamples( x );
+        int mark = channelView.pixelsToSamples(x);
 
-        player.setAllMarks( mark );
+        player.setAllMarks(mark);
       }
       // Select all if more than one click.
       else
       {
         int firstVisibleSample = channelView.getCenter() - channelView.getZoom() / 2;
-        int lastVisibelSample  = channelView.getCenter() + channelView.getZoom() / 2;
+        int lastVisibelSample = channelView.getCenter() + channelView.getZoom() / 2;
 
-        player.setStart( firstVisibleSample );
-        player.setStop( lastVisibelSample );
+        player.setStart(firstVisibleSample);
+        player.setStop(lastVisibelSample);
       }
     }
     // Middle mouse button (often wheel).
-    else if( e.getButton() == MouseEvent.BUTTON2 )
+    else if(e.getButton() == MouseEvent.BUTTON2)
     {
-      player.setStart( 0 );
-      player.setStop( 0 );
+      player.setStart(0);
+      player.setStop(0);
     }
 
     mouseDown = true;
   }
 
-  public void mouseReleased( MouseEvent e )
+  public void mouseReleased(MouseEvent e)
   {
     mouseDown = false;
 
-    if( isSelection() )
+    if(isSelection())
     {
-      player.setCurrentSample( player.getStart() );
+      player.setCurrentSample(player.getStart());
     }
   }
 
-  public void mouseExited( MouseEvent e )
+  public void mouseExited(MouseEvent e)
   {
     int y = e.getY();
     int x = e.getX();
 
     // If the mouse don't exist at the top or bottom.
-    if( y > 0 && y < channelView.getGraphHeight() )
+    if(y > 0 && y < channelView.getGraphHeight())
     {
-      if( mouseDown )
+      if(mouseDown)
       {
         // If the mouse existed to the left.
-        if( x <= 0 )
+        if(x <= 0)
         {
-          player.setStart( 0 );
+          player.setStart(0);
         }
         else
         {
-          player.setStop( player.getSampleAmount() );
+          player.setStop(player.getSampleAmount());
         }
       }
     }
   }
 
-  public void mouseDragged( MouseEvent e )
+  public void mouseDragged(MouseEvent e)
   {
     int y = e.getY();
     int x = e.getX();
-    int mark = channelView.pixelsToSamples( x );
+    int mark = channelView.pixelsToSamples(x);
 
     // Is the mouse inside the panel.
-    if( inView( x, y ) )
+    if(inView(x, y))
     {
-      if( e.getModifiers() == MouseEvent.BUTTON1_MASK )
+      if(e.getModifiers() == MouseEvent.BUTTON1_MASK)
       {
-        player.setMark( mark );
+        player.setMark(mark);
       }
-      else if( e.getModifiers() == MouseEvent.BUTTON3_MASK )
+      else if(e.getModifiers() == MouseEvent.BUTTON3_MASK)
       {
         // Is there a selection.
-        if( isSelection() )
+        if(isSelection())
         {
-          player.setClosestMark( mark );
+          player.setClosestMark(mark);
         }
       }
     }
   }
 
-  public void mouseWheelMoved( MouseWheelEvent e )
+  public void mouseWheelMoved(MouseWheelEvent e)
   {
-    if( isSelection() )
+    if(isSelection())
     {
       // -1 scroll wheel up.
       // 1 scroll wheel down.
       int rotation = e.getWheelRotation();
 
       int start = player.getStart();
-      int stop  = player.getStop();
+      int stop = player.getStop();
 
       InternalFormat internalFormat = player.getInternalFormat();
       int numChannels = internalFormat.getNumChannels();
 
-      internalFormat.scaleSamples( start, stop, 1.0f - rotation * 0.1f );
+      internalFormat.scaleSamples(start, stop, 1.0f - rotation * 0.1f);
     }
   }
 
-  public void mouseMoved( MouseEvent e )
+  public void mouseMoved(MouseEvent e)
   {
     int y = e.getY();
     int x = e.getX();
 
     // Is the mouse inside the panel.
-    if( inView( x, y ) )
+    if(inView(x, y))
     {
-      channelView.setMousePosX( x );
+      channelView.setMousePosX(x);
       channelView.repaint();
     }
   }
 
-  public void mouseEntered( MouseEvent e ) {}
-  public void mouseClicked( MouseEvent e ) {}
+  public void mouseEntered(MouseEvent e)
+  {}
+
+  public void mouseClicked(MouseEvent e)
+  {}
 
   /**
    * Returns this player.
-   *
+   * 
    * @return The player;
    */
   public Player getPlayer()
@@ -195,30 +197,30 @@ public class ChannelController extends ApplicationController implements MouseLis
     int playerValue = statusPanel.getPlayerValue();
 
     // Make sure values are ok.
-    if( startValue <= stopValue && playerValue <= stopValue )
+    if(startValue <= stopValue && playerValue <= stopValue)
     {
-      player.setStart( startValue );
-      player.setStop( stopValue );
-      player.setCurrentSample( playerValue );
+      player.setStart(startValue);
+      player.setStop(stopValue);
+      player.setCurrentSample(playerValue);
     }
   }
 
   /**
    * Set the status panel.
-   *
+   * 
    * @param statusPanel The status panel.
    */
-  public void setStatusPanel( InternalFormatStatusPanel statusPanel )
+  public void setStatusPanel(InternalFormatStatusPanel statusPanel)
   {
     this.statusPanel = statusPanel;
   }
 
   /**
    * Sets the channel view.
-   *
+   * 
    * @param channelView The channel view.
    */
-  public void setChannelView( ChannelView channelView )
+  public void setChannelView(ChannelView channelView)
   {
     this.channelView = channelView;
   }
@@ -226,26 +228,26 @@ public class ChannelController extends ApplicationController implements MouseLis
   /**
    * Returns true if there's any selection in the graph. False
    * otherwise.
-   *
+   * 
    * @return True if selection. False otherwise.
    */
   private boolean isSelection()
   {
     int start = player.getStart();
-    int stop  = player.getStop();
+    int stop = player.getStop();
 
     return start + stop > 0;
   }
 
   /**
-   * Returns true if <code>x</code> and <code>y</code> is in the graph
-   * panel.
-   *
+   * Returns true if <code>x</code> and <code>y</code> is in the
+   * graph panel.
+   * 
    * @param x A value on the x-axis.
    * @param y A value on the y-axis.
    * @return True if x and y is in the graph area. False otherwise.
    */
-  public boolean inView( int x, int y )
+  public boolean inView(int x, int y)
   {
     return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView.getGraphHeight() - 1;
   }

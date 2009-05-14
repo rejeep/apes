@@ -13,10 +13,8 @@ import apes.models.Player;
 
 /**
  * Wrapper for all players. So instead of calling play on a Player,
- * play in this class is called.
- *
- * It also handles the volume.
- *
+ * play in this class is called. It also handles the volume.
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class PlayerHandler
@@ -78,10 +76,9 @@ public class PlayerHandler
 
   /**
    * Does some initialization such as fetching the line and getting
-   * volume control.
-   *
-   * NOTE: {@link PlayerHandler#setInternalFormat setInternalFormat} must be called
-   * before this.
+   * volume control. NOTE:
+   * {@link PlayerHandler#setInternalFormat setInternalFormat} must be
+   * called before this.
    */
   private void init()
   {
@@ -165,7 +162,7 @@ public class PlayerHandler
 
   /**
    * Get the current volume.
-   *
+   * 
    * @return the volume.
    */
   public int getVolume()
@@ -175,7 +172,7 @@ public class PlayerHandler
 
   /**
    * Set the volume.
-   *
+   * 
    * @param volume The new volume.
    */
   public void setVolume( int volume )
@@ -195,7 +192,7 @@ public class PlayerHandler
 
   /**
    * Return the internal format connected to the current player.
-   *
+   * 
    * @return The internal format.
    */
   public InternalFormat getInternalFormat()
@@ -211,9 +208,10 @@ public class PlayerHandler
   /**
    * Sets a new internal format. If a player exists with that
    * internalFormat, it is used. Otherwise a new Player is created.
-   *
+   * 
    * @param internalFormat an <code>InternalFormat</code> value
-   * @return The player that is associated with <code>internalFormat</code>.
+   * @return The player that is associated with
+   *         <code>internalFormat</code>.
    */
   public Player setInternalFormat( InternalFormat internalFormat )
   {
@@ -244,7 +242,7 @@ public class PlayerHandler
 
   /**
    * Returns the Player that is connected to an internal format.
-   *
+   * 
    * @param internalFormat The internal format the Player should have.
    * @return The Player.
    */
@@ -264,7 +262,7 @@ public class PlayerHandler
   /**
    * Remove the Player that has <code>internalFormat</code> as
    * internal format.
-   *
+   * 
    * @param internalFormat an <code>InternalFormat</code> value
    */
   public void remove( InternalFormat internalFormat )
@@ -282,7 +280,7 @@ public class PlayerHandler
 
   /**
    * Returns the current player.
-   *
+   * 
    * @return The current player.
    */
   public Player getCurrentPlayer()

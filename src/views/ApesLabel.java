@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * Like JLabel except that it takes locale tag as argument instead of
  * the text.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApesLabel extends JLabel implements LanguageObserver
@@ -25,21 +25,21 @@ public class ApesLabel extends JLabel implements LanguageObserver
 
   /**
    * Creates a new <code>ApesPanel</code> instance.
-   *
+   * 
    * @param tag The Language tag.
    */
-  public ApesLabel( String tag )
+  public ApesLabel(String tag)
   {
     this.language = Language.getInstance();
     this.tag = tag;
 
-    setText( language.get( tag ) );
-    language.addObserver( this );
+    setText(language.get(tag));
+    language.addObserver(this);
   }
-  
-  public void update( Observable o, Object arg )
+
+  public void update(Observable o, Object arg)
   {
-    setText( language.get( tag ) );
+    setText(language.get(tag));
 
     this.updateUI();
   }

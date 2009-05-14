@@ -82,7 +82,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
 
   /**
    * Runs the effect on selected region.
-   *
+   * 
    * @param internalFormat The internal format.
    * @param selection The selected region.
    */

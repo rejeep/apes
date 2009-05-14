@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * Contians information about the file.
- *
+ * 
  * @author Simon Holm
  */
 public class FileStatus
@@ -21,25 +21,25 @@ public class FileStatus
    */
   private String fileName;
 
-
   /**
    * Creates a new <code>FileStatus</code> instance.
    */
-  public FileStatus() {}
+  public FileStatus()
+  {}
 
   /**
    * Creates a new <code>FileStatus</code> instance and sets
    * <code>filePath</code> and <code>fileName</code>.
    */
-  public FileStatus( String filePath, String fileName )
+  public FileStatus(String filePath, String fileName)
   {
-    setFilePath( filePath );
-    setFileName( fileName );
+    setFilePath(filePath);
+    setFileName(fileName);
   }
 
   /**
    * Getter for the file path.
-   *
+   * 
    * @return The file path.
    */
   public String getFilepath()
@@ -49,17 +49,17 @@ public class FileStatus
 
   /**
    * Setter for the file path.
-   *
+   * 
    * @param filePath The new file path.
    */
-  public void setFilePath( String filePath )
+  public void setFilePath(String filePath)
   {
     this.filePath = filePath;
   }
 
   /**
    * Getter for the file name
-   *
+   * 
    * @return The file name.
    */
   public String getFileName()
@@ -69,21 +69,21 @@ public class FileStatus
 
   /**
    * Setter for the file name.
-   *
+   * 
    * @param fileName The file name.
    */
-  public void setFileName( String fileName )
+  public void setFileName(String fileName)
   {
     this.fileName = fileName;
   }
 
   /**
    * Returns the full path.
-   *
+   * 
    * @return The full path.
    */
   public String getFullPath()
   {
-    return new File( this.filePath + File.separator + this.fileName ).getAbsolutePath();
+    return new File(this.filePath + File.separator + this.fileName).getAbsolutePath();
   }
 }
