@@ -65,7 +65,7 @@ public class InternalFormatView extends JPanel implements Observer
     channelController = new ChannelController( player );
 
     int sampleRate = internalFormat.getSampleRate();
-    channelView = new ChannelView( sampleRate, channelController, player );
+    channelView = new ChannelView( internalFormat, channelController, player );
     statusPanel = new InternalFormatStatusPanel( sampleRate, channelController, player );
     add( statusPanel );
     add( channelView );
@@ -96,7 +96,7 @@ public class InternalFormatView extends JPanel implements Observer
   {
     for( int i = 0; i < internalFormat.getNumChannels(); i++ )
     {
-      channelView.addChannel( internalFormat.getChannel( i ) );
+      channelView.addChannel( i );
     }
   }
 

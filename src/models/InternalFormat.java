@@ -138,6 +138,24 @@ public class InternalFormat extends Observable
   }
   
   /**
+   * Returns an approximate average of the specified interval.
+   * @param channel What channel to perform average on.
+   * @param start First sample to consider.
+   * @param length Amount of samples to consider.
+   * @return
+   */
+  public int getAverageAmplitude( int channel, int start, int length )
+  {
+    int step = length <= 1000 ? 1 : length / 1000;
+    int i = 0;
+    int average = 0;
+    for( ; i < length; i += step )
+      average += getSample( channel, start + i );
+    
+    return average / i;
+  }
+  
+  /**
    * Save file as
    * TODO: add error handling, or some sort of response
    */
@@ -201,6 +219,16 @@ public class InternalFormat extends Observable
   {
     // TODO: add error handling or some sort of response
     return (InternalFormat) FileHandler.loadObjectFile( filePath, fileName );
+  }
+  
+  public int getSample( int channel, int index )
+  {
+    int amplitude = 0;
+    index = index * channels + channel;
+    byte[] b = getSamples( index, index );
+    for( int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++ )
+      amplitude += b[i] << (i * 8);
+    return amplitude;
   }
   
   /**

@@ -322,7 +322,7 @@ public class InternalFormatStatusPanel extends JPanel
     }
     else if( isSeconds( mark ) )
     {
-      value = SampleHelper.samplesToseconds( sampleRate, samples );
+      value = SampleHelper.samplesToSeconds( sampleRate, samples );
     }
     else if( isMinutes( mark ) )
     {

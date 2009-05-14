@@ -13,9 +13,9 @@ import javax.swing.JPanel;
 
 import apes.controllers.ChannelController;
 import apes.lib.Config;
-import apes.models.Channel;
 import apes.models.Player;
 import apes.models.SampleIterator;
+import apes.models.InternalFormat;
 import apes.lib.SampleHelper;
 
 
@@ -37,6 +37,11 @@ public class ChannelView extends JPanel implements Runnable
    */
   private Player player;
 
+  /**
+   * The internal format
+   */
+  InternalFormat internalFormat;
+  
   /**
    * The number of samples for each of the channels.
    */
@@ -81,6 +86,11 @@ public class ChannelView extends JPanel implements Runnable
    * The sample rate.
    */
   private int sampleRate;
+  
+  /**
+   * List of possible time units.
+   */
+  private static enum Unit { SAMPLES, MILLISECONDS, SECONDS, MINUTES };
 
   /**
    * Creates a new <code>ChannelView</code> instance.
@@ -88,13 +98,14 @@ public class ChannelView extends JPanel implements Runnable
    * @param channelController The channel controller.
    * @param player The player.
    */
-  public ChannelView( int sampleRate, ChannelController channelController, Player player )
+  public ChannelView( InternalFormat internalFormat, ChannelController channelController, Player player )
   {
     layout = new GridLayout( 0, 1 );
     layout.setVgap( 10 );
     setLayout( layout );
 
-    this.sampleRate = sampleRate;
+    this.internalFormat = internalFormat;
+    this.sampleRate = internalFormat.getSampleRate();
     this.channelController = channelController;
     this.player = player;
 
@@ -112,7 +123,7 @@ public class ChannelView extends JPanel implements Runnable
    *
    * @param channel The channel.
    */
-  public void addChannel( Channel channel )
+  public void addChannel( int channel )
   {
     // Add one more row to the layout.
     layout.setRows( layout.getRows() + 1 );
@@ -396,7 +407,7 @@ public class ChannelView extends JPanel implements Runnable
     /**
      * The channel.
      */
-    private Channel channel;
+    private int channel;
 
     /**
      * Contains all sample amplitudes that should be drawn in the
@@ -420,11 +431,6 @@ public class ChannelView extends JPanel implements Runnable
     private Graphics2D g2;
 
     /**
-     * List of possible time units.
-     */
-    private enum Unit { SAMPLES, MILLISECONDS, SECONDS, MINUTES };
-
-    /**
      * The current time unit.
      */
     private Unit timeUnit;
@@ -435,7 +441,7 @@ public class ChannelView extends JPanel implements Runnable
      * @param channelView The view that this graph is placed on.
      * @param channel The channel.
      */
-    public Graph( ChannelView channelView, Channel channel )
+    public Graph( ChannelView channelView, int channel )
     {
       // Set graph size.
       Dimension size = new Dimension( graphWidth, graphHeight );
@@ -540,23 +546,23 @@ public class ChannelView extends JPanel implements Runnable
 
       if( diff > 5 * 1000 * 60 )
       {
-        time = pixelsToMinutes();
-        timeUnit = MINUTES;
+        time = pixelsToMinutes(pixels);
+        timeUnit = Unit.MINUTES;
       }
       else if( diff > 10 * 1000 )
       {
-        time = pixelsToSeconds();
-        timeUnit = SECONDS;
+        time = pixelsToSeconds(pixels);
+        timeUnit = Unit.SECONDS;
       }
       else if( diff > 1000 )
       {
-        time = pixelsToMilliseconds();
-        timeUnit = MILLISECONDS;
+        time = pixelsToMilliseconds(pixels);
+        timeUnit = Unit.MILLISECONDS;
       }
       else
       {
-        time = pixelsToSamples();
-        timeUnit = SAMPLES;
+        time = pixelsToSamples(pixels);
+        timeUnit = Unit.SAMPLES;
       }
 
       return time;
@@ -677,11 +683,7 @@ public class ChannelView extends JPanel implements Runnable
     public void updateGraph()
     {
       // Get number of samples.
-      nrSamples = 0;
-      for( int i = 0; i < channel.getSamplesSize(); i++ )
-      {
-        nrSamples += channel.getSamples( i ).getSize();
-      }
+      nrSamples = internalFormat.getSampleAmount();
 
       samplesPerPixel = visibleSamples / graphWidth;
 
@@ -692,7 +694,7 @@ public class ChannelView extends JPanel implements Runnable
         samples = new int[nrSamples];
 
         int i = 0;
-        SampleIterator it = channel.getIterator();
+        SampleIterator it = new SampleIterator( internalFormat, channel );
         while( it.hasNext() )
         {
           int sample = it.next();
@@ -710,7 +712,7 @@ public class ChannelView extends JPanel implements Runnable
 
         for( int i = firstVisibleSample; i < nrSamples; i += jump )
         {
-          int sample = internalFormat.getAverageAmplitude( i, jump );
+          int sample = internalFormat.getAverageAmplitude( channel, i, jump );
           
           samples[i] = sample;
         }
