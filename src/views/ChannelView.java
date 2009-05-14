@@ -526,60 +526,6 @@ public class ChannelView extends JPanel implements Runnable
     }
 
     /**
-     * Returns an appropriate time depending on the zoom. The
-     * <code>timeUnit</code> variable is also set to the correct unit.
-     *
-     * @param pixels The pixel position.
-     * @return The time.
-     */
-    private int getTime( int pixels )
-    {
-      int firstVisibleSample = getFirstVisibleSample();
-      int lastVisibelSample  = getLasrVisibleSample();
-
-      int start = SampleHelper.samplesToMilliseconds( sampleRate, firstVisibleSample );
-      int stop = SampleHelper.samplesToMilliseconds( sampleRate, lastVisibelSample );
-      int diff = stop - start;
-
-      int time = -1;
-
-      if( diff > 5 * 1000 * 60 )
-      {
-        time = pixelsToMinutes(pixels);
-        timeUnit = Unit.MINUTES;
-      }
-      else if( diff > 10 * 1000 )
-      {
-        time = pixelsToSeconds(pixels);
-        timeUnit = Unit.SECONDS;
-      }
-      else if( diff > 1000 )
-      {
-        time = pixelsToMilliseconds(pixels);
-        timeUnit = Unit.MILLISECONDS;
-      }
-      else
-      {
-        time = pixelsToSamples(pixels);
-        timeUnit = Unit.SAMPLES;
-      }
-
-      return time;
-    }
-
-    /**
-     * Returns the current unit as a string.
-     *
-     * @return The unit.
-     */
-    private String getUnit()
-    {
-      String[] units = { "smp", "ms", "s", "min" };
-
-      return units[timeUnit.ordinal()];
-    }
-
-    /**
      * Draws the player marker.
      */
     private void drawPlayMarker()
@@ -676,6 +622,64 @@ public class ChannelView extends JPanel implements Runnable
       g2.clearRect( 0, 0, graphWidth - 1, graphHeight - 1 );
     }
 
+    
+    /**
+     * Returns an appropriate time depending on the zoom. The
+     * <code>timeUnit</code> variable is also set to the correct unit.
+     *
+     * @param pixels The pixel position.
+     * @return The time.
+     */
+    private int getTime( int pixels )
+    {
+      int firstVisibleSample = getFirstVisibleSample();
+      int lastVisibelSample  = getLasrVisibleSample();
+
+      int start = SampleHelper.samplesToMilliseconds( sampleRate, firstVisibleSample );
+      int stop = SampleHelper.samplesToMilliseconds( sampleRate, lastVisibelSample );
+      int diff = stop - start;
+
+      int time = -1;
+
+      // If diff is larger than five minutes.
+      if( diff > 5 * 1000 * 60 )
+      {
+        time = pixelsToMinutes(pixels);
+        timeUnit = Unit.MINUTES;
+      }
+      // If diff is larger than one minute.
+      else if( diff > 10 * 1000 )
+      {
+        time = pixelsToSeconds(pixels);
+        timeUnit = Unit.SECONDS;
+      }
+      // If diff is larger than one tenth of a second.
+      else if( diff > 100 )
+      {
+        time = pixelsToMilliseconds(pixels);
+        timeUnit = Unit.MILLISECONDS;
+      }
+      else
+      {
+        time = pixelsToSamples(pixels);
+        timeUnit = Unit.SAMPLES;
+      }
+
+      return time;
+    }
+
+    /**
+     * Returns the current unit as a string.
+     *
+     * @return The unit.
+     */
+    private String getUnit()
+    {
+      String[] units = { "smp", "ms", "s", "min" };
+
+      return units[timeUnit.ordinal()];
+    }
+    
     /**
      * Recalculates the view and repaints it.
      */
