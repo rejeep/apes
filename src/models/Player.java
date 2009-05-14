@@ -13,8 +13,10 @@ import java.util.Observable;
  */
 public class Player extends Observable implements Runnable
 {
-  
-  private final static int CHUNK_SIZE; 
+  /**
+   * How large is a chunk.
+   */
+  private final static int CHUNK_SIZE = 1024; 
   
   /**
    * The data line.
