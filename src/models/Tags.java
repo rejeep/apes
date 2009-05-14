@@ -5,15 +5,14 @@ import java.util.Map;
 
 /**
  * Wrapper class enabling tag usage within the program.
- *
+ * 
  * @author sophie kores
  */
 public class Tags
 {
   /**
-   * Contains all tags. Example:
-   *
-   * { "artist" => "Madonna", "track" => "Tell Me" }
+   * Contains all tags. Example: { "artist" => "Madonna", "track" =>
+   * "Tell Me" }
    */
   Map<String, String> tags;
 
@@ -27,7 +26,7 @@ public class Tags
 
   /**
    * Associates a value to a specific key and puts them in a map.
-   *
+   * 
    * @param key The tag key
    * @param value The tag value
    */
@@ -37,7 +36,7 @@ public class Tags
   }
   /**
    * Gets the value given a specific key.
-   *
+   * 
    * @param key The tag key
    * @return The tag value. Or null if it does not exist.
    */

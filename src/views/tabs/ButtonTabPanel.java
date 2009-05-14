@@ -8,7 +8,7 @@ import apes.controllers.TabsController;
 /**
  * Is a panel that is placed on a tab. A label and a close button is
  * placed on in.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ButtonTabPanel extends JPanel
@@ -17,18 +17,18 @@ public class ButtonTabPanel extends JPanel
 
   /**
    * Creates a new <code>ButtonTabPanel</code> instance.
-   *
+   * 
    * @param tabsView The tabs view.
    */
-  public ButtonTabPanel( final TabsView tabsView, TabsController tabsController )
+  public ButtonTabPanel(final TabsView tabsView, TabsController tabsController)
   {
     this.tabsView = tabsView;
 
     // Use flowlayout.
-    setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
+    setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
     // Not opaque.
-    setOpaque( false );
+    setOpaque(false);
 
     // Make JLabel read titles from TabsView.
     JLabel label = new JLabel()
@@ -38,29 +38,29 @@ public class ButtonTabPanel extends JPanel
        */
       public String getText()
       {
-        int i = tabsView.indexOfTabComponent( ButtonTabPanel.this );
+        int i = tabsView.indexOfTabComponent(ButtonTabPanel.this);
 
-        if( i != -1 )
+        if(i != -1)
         {
-          return tabsView.getTitleAt( i );
+          return tabsView.getTitleAt(i);
         }
 
         return null;
       }
     };
 
-    add( label );
+    add(label);
 
     // Close button.
-    TabCloseButton close = new TabCloseButton( this );
-    close.addActionListener( tabsController );
-    close.setName( "close" );
-    add( close );
+    TabCloseButton close = new TabCloseButton(this);
+    close.addActionListener(tabsController);
+    close.setName("close");
+    add(close);
   }
 
   /**
    * Return the tabs view that this panel is added on.
-   *
+   * 
    * @return The tabs view.
    */
   public TabsView getTabsView()

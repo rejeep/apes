@@ -2,7 +2,7 @@ package apes.views.buttons;
 
 /**
  * This button is for zooming out.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ZoomOutButton extends ImageButton

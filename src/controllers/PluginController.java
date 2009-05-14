@@ -17,7 +17,7 @@ import apes.models.Player;
 
 /**
  * Plugin controller.
- *
+ * 
  * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public class PluginController extends ApplicationController
@@ -26,12 +26,12 @@ public class PluginController extends ApplicationController
    * The plugin view.
    */
   private PluginView pluginView;
-  
+
   /**
    * The plugin handler.
    */
   private PluginHandler pluginHandler;
-  
+
   /**
    * The player handler.
    */
@@ -47,10 +47,10 @@ public class PluginController extends ApplicationController
     pluginHandler = pH;;
     this.playerHandler = PlayerHandler.getInstance();
     pluginView = new PluginView(pluginHandler, this);
-    //effectMenu = new JMenu( "menu.head.effects" );
+    // effectMenu = new JMenu( "menu.head.effects" );
     pluginView.updateEffectMenu();
   }
-  
+
   /**
    * Create and show the frame.
    */
@@ -58,12 +58,12 @@ public class PluginController extends ApplicationController
   {
     pluginView.create();
   }
-  
+
   public JMenu getEffectMenu()
   {
     return pluginView.getEffectMenu();
   }
-  
+
   /**
    * Given a plugin name, runs the effect.
    * 
@@ -80,13 +80,13 @@ public class PluginController extends ApplicationController
       }
       else
       {
-      Player player = playerHandler.getPlayer(internalFormat);
-      Point selection = player.getSelection();
-      pluginHandler.getTransform(name).apply(internalFormat, selection);
+        Player player = playerHandler.getPlayer(internalFormat);
+        Point selection = player.getSelection();
+        pluginHandler.getTransform(name).apply(internalFormat, selection);
       }
     }
   }
-  
+
   /**
    * Apply any changes made to selected plugins.
    */
@@ -113,7 +113,7 @@ public class PluginController extends ApplicationController
     // update effects menu
     pluginView.updateEffectMenu();
   }
-  
+
   /**
    * Override actionPerformed in ActionController for effect events.
    * 
@@ -131,7 +131,7 @@ public class PluginController extends ApplicationController
       doEffect(action);
     }
   }
-  
+
   /**
    * Closes the frame.
    */

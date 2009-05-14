@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 /**
  * This extends {@link javax.swing.JMenuItem JMenu} with locale
  * functionality.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApesMenu extends JMenu implements LanguageObserver
@@ -26,36 +26,35 @@ public class ApesMenu extends JMenu implements LanguageObserver
    */
   private Language language;
 
-
   /**
    * Creates a new <code>ApesMenu</code> instance.
-   *
+   * 
    * @param tag The Language tag.
    */
-  public ApesMenu( String tag )
+  public ApesMenu(String tag)
   {
     this.tag = tag;
     this.language = Language.getInstance();
 
-    setText( language.get( tag ) );
-    language.addObserver( this );
-    
+    setText(language.get(tag));
+    language.addObserver(this);
+
     // What should have been Arrays#join
-    String[] split = tag.split( "\\." );
+    String[] split = tag.split("\\.");
     String button = split[split.length - 1];
-      
+
     // Set icon
-    File file = new File( "images/menu/" + button + ".png" );
-    if( file.exists() )
+    File file = new File("images/menu/" + button + ".png");
+    if(file.exists())
     {
-      ImageIcon icon = new ImageIcon( file.getAbsolutePath() );
-      setIcon( icon );
+      ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+      setIcon(icon);
     }
   }
-  
-  public void update( Observable o, Object arg )
+
+  public void update(Observable o, Object arg)
   {
-    setText( language.get( tag ) );
+    setText(language.get(tag));
     this.updateUI();
   }
 }

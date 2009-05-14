@@ -49,8 +49,6 @@ import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
 
 /**
- *
- *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApplicationView extends JFrame
@@ -67,17 +65,24 @@ public class ApplicationView extends JFrame
 
   // Controllers
   private InternalFormatController internalFormatController;
+
   private TagsController tagsController;
+
   private LanguageController languageController;
+
   private ConfigController configController;
+
   private PluginController pluginController;
+
   private HelpController helpController;
+
   private PlayerController playerController;
+
   private TabsController tabsController;
 
   /**
    * Creates a new <code>ApplicationView</code> instance.
-   *
+   * 
    * @param internalFormatController The internal format controller.
    * @param tagsController The tags controller.
    * @param languageController The language controller.
@@ -87,14 +92,7 @@ public class ApplicationView extends JFrame
    * @param playerController The player controller.
    * @param tabsController The tabs controller.
    */
-  public ApplicationView( InternalFormatController internalFormatController,
-                          TagsController tagsController,
-                          LanguageController languageController,
-                          ConfigController configController,
-                          PluginController pluginController,
-                          HelpController helpController,
-                          PlayerController playerController,
-                          TabsController tabsController )
+  public ApplicationView(InternalFormatController internalFormatController, TagsController tagsController, LanguageController languageController, ConfigController configController, PluginController pluginController, HelpController helpController, PlayerController playerController, TabsController tabsController)
   {
     this.config = Config.getInstance();
     this.language = Language.getInstance();
@@ -108,103 +106,94 @@ public class ApplicationView extends JFrame
     this.helpController = helpController;
     this.playerController = playerController;
     this.tabsController = tabsController;
-    
-    // These should by default be white.
-    String[] whites = { "Panel",
-                        "Label",
-                        "Slider",
-                        "Frame",
-                        "CheckBox",
-                        "TextField",
-                        "TextArea",
-                        "MenuBar",
-                        "Menu",
-                        "MenuItem" };
 
-    for( int i = 0; i < whites.length; i++)
+    // These should by default be white.
+    String[] whites = { "Panel", "Label", "Slider", "Frame", "CheckBox", "TextField", "TextArea", "MenuBar", "Menu", "MenuItem" };
+
+    for(int i = 0; i < whites.length; i++)
     {
-      UIManager.put( whites[i] + ".background", Color.WHITE );
+      UIManager.put(whites[i] + ".background", Color.WHITE);
     }
 
     // Set layout.
-    setLayout( new BorderLayout() );
+    setLayout(new BorderLayout());
 
     // Add tab stuff.
-    TabsView tabsView = new TabsView( tabsController );
+    TabsView tabsView = new TabsView(tabsController);
     Tabs tabs = tabsController.getTabs();
-    tabs.addObserver( tabsView );
-    tabs.setModel( tabsView.getModel() );
-    add( tabsView, BorderLayout.CENTER );
+    tabs.addObserver(tabsView);
+    tabs.setModel(tabsView.getModel());
+    add(tabsView, BorderLayout.CENTER);
 
     // Set the menu.
-    setJMenuBar( this.new Menu() );
+    setJMenuBar(this.new Menu());
 
     // Add top panel.
-    add( this.new TopPanel(), BorderLayout.NORTH );
+    add(this.new TopPanel(), BorderLayout.NORTH);
 
     // Add bottom panel.
-    add( this.new BottomPanel(), BorderLayout.SOUTH );
+    add(this.new BottomPanel(), BorderLayout.SOUTH);
 
     // Set window dimensions.
     setWindowDimensions();
 
     // Set a title.
-    setTitle( language.get( "help.about.name" ) );
+    setTitle(language.get("help.about.name"));
 
     // Exit on close.
-    setDefaultCloseOperation( EXIT_ON_CLOSE );
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     // Set icon.
-    setIconImage( Toolkit.getDefaultToolkit().createImage( "images/apes.png" ) );
+    setIconImage(Toolkit.getDefaultToolkit().createImage("images/apes.png"));
 
     // Start in center on screen.
-    setLocationRelativeTo( null );
+    setLocationRelativeTo(null);
 
     // Make frame visible.
-    setVisible( true );
+    setVisible(true);
 
     // Do something before close
-    addWindowListener( new WindowAdapter()
+    addWindowListener(new WindowAdapter()
     {
-      public void windowClosing( WindowEvent e )
+      public void windowClosing(WindowEvent e)
       {
-        // Do before exit
+      // Do before exit
       }
-    } );
+    });
   }
 
   /**
-   * Sets the dimensions for the window depending on the
-   * configuration file.
+   * Sets the dimensions for the window depending on the configuration
+   * file.
    */
   private void setWindowDimensions()
   {
     pack();
 
-    boolean maximized = config.getBooleanOption( "maximized" );
+    boolean maximized = config.getBooleanOption("maximized");
 
     // Do this even if maximized is set to true. This is because then
     // when the window gets restored, the preferred size is set.
     try
     {
-      int width = config.getIntOption( "frame_width" );
-      int height = config.getIntOption( "frame_height" );
+      int width = config.getIntOption("frame_width");
+      int height = config.getIntOption("frame_height");
 
-      if( width > 0 && height > 0 )
+      if(width > 0 && height > 0)
       {
         // Best do both JIC.
-        setPreferredSize( new Dimension( width, height ) );
-        setSize( width, height );
+        setPreferredSize(new Dimension(width, height));
+        setSize(width, height);
       }
     }
-    catch( NumberFormatException e )
+    catch(NumberFormatException e)
     {
       e.printStackTrace();
     }
 
-    if( maximized )
+    if(maximized)
     {
-      setExtendedState( getExtendedState() | MAXIMIZED_BOTH );
+      setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
     }
   }
 
@@ -403,74 +392,72 @@ public class ApplicationView extends JFrame
      */
     public TopPanel()
     {
-      setBorder( new LineBorder( Color.GRAY, 1, true ) );
+      setBorder(new LineBorder(Color.GRAY, 1, true));
 
       ImageButton open = new OpenButton();
-      open.addActionListener(
-        new ActionListener()
+      open.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
         {
-          public void actionPerformed( ActionEvent e )
-          {
-            internalFormatController.open();
-          }
+          internalFormatController.open();
         }
-        );
-      add( open );
+      });
+      add(open);
 
       ImageButton save = new SaveButton();
-      save.addActionListener( internalFormatController );
-      save.setName( "save" );
-      add( save );
+      save.addActionListener(internalFormatController);
+      save.setName("save");
+      add(save);
 
       ImageButton undo = new UndoButton();
-      undo.addActionListener( internalFormatController );
-      undo.setName( "undo" );
-      add( undo );
+      undo.addActionListener(internalFormatController);
+      undo.setName("undo");
+      add(undo);
 
       ImageButton redo = new RedoButton();
-      redo.addActionListener( internalFormatController );
-      redo.setName( "redo" );
-      add( redo );
+      redo.addActionListener(internalFormatController);
+      redo.setName("redo");
+      add(redo);
 
       ImageButton copy = new CopyButton();
-      copy.addActionListener( internalFormatController );
-      copy.setName( "copy" );
-      add( copy );
+      copy.addActionListener(internalFormatController);
+      copy.setName("copy");
+      add(copy);
 
       ImageButton cut = new CutButton();
-      cut.addActionListener( internalFormatController );
-      cut.setName( "cut" );
-      add( cut );
+      cut.addActionListener(internalFormatController);
+      cut.setName("cut");
+      add(cut);
 
       ImageButton paste = new PasteButton();
-      paste.addActionListener( internalFormatController );
-      paste.setName( "paste" );
-      add( paste );
+      paste.addActionListener(internalFormatController);
+      paste.setName("paste");
+      add(paste);
 
       ImageButton delete = new DeleteButton();
-      delete.addActionListener( internalFormatController );
-      delete.setName( "delete" );
-      add( delete );
+      delete.addActionListener(internalFormatController);
+      delete.setName("delete");
+      add(delete);
 
       ImageButton zoomIn = new ZoomInButton();
-      zoomIn.addActionListener( internalFormatController );
-      zoomIn.setName( "zoomIn" );
-      add( zoomIn );
+      zoomIn.addActionListener(internalFormatController);
+      zoomIn.setName("zoomIn");
+      add(zoomIn);
 
       ImageButton zoomOut = new ZoomOutButton();
-      zoomOut.addActionListener( internalFormatController );
-      zoomOut.setName( "zoomOut" );
-      add( zoomOut );
+      zoomOut.addActionListener(internalFormatController);
+      zoomOut.setName("zoomOut");
+      add(zoomOut);
 
       ImageButton zoomSelection = new ZoomSelectionButton();
-      zoomSelection.addActionListener( internalFormatController );
-      zoomSelection.setName( "zoomSelection" );
-      add( zoomSelection );
-      
+      zoomSelection.addActionListener(internalFormatController);
+      zoomSelection.setName("zoomSelection");
+      add(zoomSelection);
+
       ImageButton zoomReset = new ZoomResetButton();
-      zoomReset.addActionListener( internalFormatController );
-      zoomReset.setName( "zoomReset" );
-      add( zoomReset );
+      zoomReset.addActionListener(internalFormatController);
+      zoomReset.setName("zoomReset");
+      add(zoomReset);
     }
   }
 
@@ -484,35 +471,35 @@ public class ApplicationView extends JFrame
      */
     public BottomPanel()
     {
-      setBorder( new LineBorder( Color.GRAY, 1, true ) );
+      setBorder(new LineBorder(Color.GRAY, 1, true));
 
       ImageButton backward = new BackwardButton();
-      backward.addActionListener( playerController );
-      backward.setName( "backward" );
-      add( backward );
+      backward.addActionListener(playerController);
+      backward.setName("backward");
+      add(backward);
 
       ImageButton pause = new PauseButton();
-      pause.addActionListener( playerController );
-      pause.setName( "pause" );
-      add( pause );
+      pause.addActionListener(playerController);
+      pause.setName("pause");
+      add(pause);
 
       ImageButton play = new PlayButton();
-      play.addActionListener( playerController );
-      play.setName( "play" );
-      add( play );
+      play.addActionListener(playerController);
+      play.setName("play");
+      add(play);
 
       ImageButton stop = new StopButton();
-      stop.addActionListener( playerController );
-      stop.setName( "stop" );
-      add( stop );
+      stop.addActionListener(playerController);
+      stop.setName("stop");
+      add(stop);
 
       ImageButton forward = new ForwardButton();
-      forward.addActionListener( playerController );
-      forward.setName( "forward" );
-      add( forward );
+      forward.addActionListener(playerController);
+      forward.setName("forward");
+      add(forward);
 
-      JPanel volumePanel = new VolumePanel( playerController );
-      add( volumePanel );
+      JPanel volumePanel = new VolumePanel(playerController);
+      add(volumePanel);
     }
   }
 }

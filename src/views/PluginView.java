@@ -28,13 +28,13 @@ import apes.controllers.PluginController;
 
 /**
  * Graphical view for the plugins.
- *
+ * 
  * @author Johan Åhlander (johan.ahlander@gmail.com)
  */
 public class PluginView extends JFrame
 {
   /**
-   *  The plugin controller
+   * The plugin controller
    */
   private PluginController pluginController;
 
@@ -99,7 +99,7 @@ public class PluginView extends JFrame
 
   /**
    * Returns the top panel with selectable plugins.
-   *
+   * 
    * @return The top panel.
    */
   public JPanel createPluginPanel()

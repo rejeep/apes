@@ -7,7 +7,7 @@ import apes.lib.Language;
 
 /**
  * A tab close button.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class TabCloseButton extends JButton
@@ -17,36 +17,35 @@ public class TabCloseButton extends JButton
    */
   private ButtonTabPanel buttonTabPanel;
 
-
   /**
    * Creates a new <code>CloseButton</code> instance.
-   *
+   * 
    * @param buttonTabPanel The panel the button is placed on.
    */
-  public TabCloseButton( ButtonTabPanel buttonTabPanel )
+  public TabCloseButton(ButtonTabPanel buttonTabPanel)
   {
     this.buttonTabPanel = buttonTabPanel;
 
-    ImageIcon icon = new ImageIcon( "images/close_tab.png" );
+    ImageIcon icon = new ImageIcon("images/close_tab.png");
 
     int width = icon.getIconWidth();
     int height = icon.getIconHeight();
 
-    setIcon( icon );
+    setIcon(icon);
 
-    setPreferredSize( new Dimension( width, height ) );
-    
+    setPreferredSize(new Dimension(width, height));
+
     Language language = Language.getInstance();
-    setToolTipText( language.get("tabs.close") );
-    setContentAreaFilled( false );
-    setFocusable( false );
-    setBorderPainted( false );
-    setContentAreaFilled( false );
+    setToolTipText(language.get("tabs.close"));
+    setContentAreaFilled(false);
+    setFocusable(false);
+    setBorderPainted(false);
+    setContentAreaFilled(false);
   }
 
   /**
    * Returns the panel this button is placed on.
-   *
+   * 
    * @return The panel.
    */
   public ButtonTabPanel getButtonTabPanel()

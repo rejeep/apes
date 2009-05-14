@@ -18,28 +18,35 @@ import java.util.regex.Pattern;
 import java.util.TreeMap;
 
 /**
- * <p>This class handles the user specific configuration file. This class
+ * <p>
+ * This class handles the user specific configuration file. This class
  * uses the Singleton pattern. That means that if you want to use this
  * class you should create an object like this:
- * <pre>Config config = Config.getInstance();</pre></p>
- *
- * <p>An option in the configuration file should consist of: At least one
+ * 
+ * <pre>
+ * Config config = Config.getInstance();
+ * </pre>
+ * 
+ * </p>
+ * <p>
+ * An option in the configuration file should consist of: At least one
  * character from a-z, then an arbitrary number of spaces, then an
  * equal sign, then again an arbitrary number of spaces and then the
- * value optionally in quotes.</p>
- *
- * <p>Here are some options that are valid.</p>
+ * value optionally in quotes.
+ * </p>
+ * <p>
+ * Here are some options that are valid.
+ * </p>
  * <ul>
- *   <li>option="value"</li>
- *   <li>option=value</li>
- *   <li>option = "value"</li>
- *   <li>option = value</li>
- *   <li>option_two = "value"</li>
- *   <li>option_two=value</li>
+ * <li>option="value"</li>
+ * <li>option=value</li>
+ * <li>option = "value"</li>
+ * <li>option = value</li>
+ * <li>option_two = "value"</li>
+ * <li>option_two=value</li>
  * </ul>
- *
  * And lines starting with a <code>#</code> is a comment.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Config
@@ -61,9 +68,8 @@ public class Config
   private Map<String, String> options;
 
   /**
-   * Contains all option types. Examples:
-   *
-   * { "size" => Type.INTEGER, "maximized" => Type.BOOLEAN }
+   * Contains all option types. Examples: { "size" => Type.INTEGER,
+   * "maximized" => Type.BOOLEAN }
    */
   private Map<String, Type> types;
 
@@ -108,7 +114,7 @@ public class Config
     addOption( "color_selection",     "#0000FF", Type.STRING  );
     addOption( "color_lines",         "#FFFF00", Type.STRING  );
     addOption( "color_background",    "#939391", Type.STRING  );
-    //addOption( "color_background",    "#ac71ac", Type.STRING  );
+    // addOption( "color_background", "#ac71ac", Type.STRING );
     addOption( "color_ruler",         "#000000", Type.STRING  );
     addOption( "ruler_width",         "6",       Type.INTEGER );
     addOption( "gui_error_messages",  "true",    Type.BOOLEAN );
@@ -155,7 +161,7 @@ public class Config
 
   /**
    * Get the absolute path to the configuration file.
-   *
+   * 
    * @return the absolute path to the configuration file.
    */
   public String getFilePath()
@@ -165,7 +171,7 @@ public class Config
 
   /**
    * Set the configuration file.
-   *
+   * 
    * @param path The absolute path to the file.
    */
   public void setFilePath( String path )
@@ -175,7 +181,7 @@ public class Config
 
   /**
    * Get the value for <code>key</code>.
-   *
+   * 
    * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
@@ -187,11 +193,11 @@ public class Config
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be true or false instead of "true" and "false".
-   *
+   * 
    * @param key The configuration key.
-   * @return the value for <code>key</code> casted to a
-   * boolean. "true" option will return true. Everything else will
-   * return false.
+   * @return the value for <code>key</code> casted to a boolean.
+   *         "true" option will return true. Everything else will
+   *         return false.
    */
   public boolean getBooleanOption( String key )
   {
@@ -201,7 +207,7 @@ public class Config
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be not be a string, but an integer.
-   *
+   * 
    * @param key The configuration key.
    * @return the value for <code>key</code> casted to an integer.
    * @exception NumberFormatException if there was no value to key.
@@ -213,7 +219,7 @@ public class Config
 
   /**
    * Adds an option.
-   *
+   * 
    * @param key The option key.
    * @param default_value The default value.
    * @param type The type (string, integer, boolean).
@@ -227,7 +233,7 @@ public class Config
 
   /**
    * Return the types map.
-   *
+   * 
    * @param key The configuration key.
    * @return The map containing all types.
    */
@@ -238,7 +244,7 @@ public class Config
 
   /**
    * Return the options map.
-   *
+   * 
    * @return The map containing all options.
    */
   public Map<String, String> getOptions()
@@ -315,7 +321,7 @@ public class Config
 
   /**
    * Returns a string of an option.
-   *
+   * 
    * @param key The key option.
    * @return The option as a string (key = value).
    */
@@ -326,7 +332,7 @@ public class Config
 
   /**
    * Will return an instance of this class.
-   *
+   * 
    * @return An instance of this class.
    */
   public static Config getInstance()

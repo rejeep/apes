@@ -4,7 +4,7 @@ import apes.views.HelpView;
 
 /**
  * This controller handles all help related events.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class HelpController extends ApplicationController

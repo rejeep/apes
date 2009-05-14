@@ -108,7 +108,7 @@ public class PluginHandler
 
   /**
    * Returns an ArrayList of all the transform classes.
-   *
+   * 
    * @return ArrayList of TransformPlugins.
    */
   public ArrayList<TransformPlugin> getTransforms()
@@ -128,7 +128,7 @@ public class PluginHandler
 
   /**
    * Returns an ArrayList of all the format classes.
-   *
+   * 
    * @return ArrayList of AudioFormatPlugins.
    */
   public ArrayList<AudioFormatPlugin> getFormats()
@@ -150,7 +150,7 @@ public class PluginHandler
    * Given a path pointing to a directory or a file, will try to add
    * all plugins in the directory or the plugin the path was pointing
    * to.
-   *
+   * 
    * @param str A path pointing to either a file or a directory.
    */
   public void addPlugin( String str )
@@ -229,9 +229,11 @@ public class PluginHandler
         if(plugins.get(i).isLoaded())
         {
           plugins.get(i).unLoad();
-          /* discard the old classloader to remove any references 
-           * to the class. Read somewhere that two gc() should
-           * do the trick :-) */
+          /*
+           * discard the old classloader to remove any references to
+           * the class. Read somewhere that two gc() should do the
+           * trick :-)
+           */
           cl = new PluginLoader();
           System.gc();
           System.gc();
@@ -260,7 +262,7 @@ public class PluginHandler
 
   /**
    * Tries to load all plugins in a directory.
-   *
+   * 
    * @param path Directory.
    */
   private void addPluginsInPath( String path )
@@ -293,7 +295,7 @@ public class PluginHandler
 
   /**
    * Loads a single plugin, given a path and a name.
-   *
+   * 
    * @param path Directory.
    * @param name Name of class to load.
    * @param pi PluginInfo object.
@@ -331,9 +333,9 @@ public class PluginHandler
   }
   
   /**
-   * Creates a new instance of the class and adds it to the list
-   * of loaded plugins.
-   *
+   * Creates a new instance of the class and adds it to the list of
+   * loaded plugins.
+   * 
    * @param cls Class object.
    * @param pi The PluginInfo object to assign it to.
    */
@@ -343,7 +345,7 @@ public class PluginHandler
     {
       if( TransformPlugin.class.isAssignableFrom( cls ) )
       {
-        //transforms.add( (TransformPlugin)cls.newInstance() );
+        // transforms.add( (TransformPlugin)cls.newInstance() );
         TransformPlugin tp = (TransformPlugin)cls.newInstance();
         pi.setTransformObject(tp);
         
@@ -358,7 +360,7 @@ public class PluginHandler
       }
       else if( AudioFormatPlugin.class.isAssignableFrom( cls ) )
       {
-        //formats.add( (AudioFormatPlugin)cls.newInstance() );
+        // formats.add( (AudioFormatPlugin)cls.newInstance() );
         AudioFormatPlugin afp = (AudioFormatPlugin)cls.newInstance();
         pi.setAudioFormatObject(afp);
         
@@ -445,7 +447,7 @@ class PluginLoader extends ClassLoader
   
   /**
    * Loads a JAR file. Untested :-)
-   *
+   * 
    * @param location Directory.
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
@@ -490,7 +492,7 @@ class PluginInfo
   /**
    * The description of the plugin.
    */
-  //private String desc;
+  // private String desc;
   private Map<String, String> desc;
   
   /**
@@ -608,7 +610,7 @@ class PluginInfo
   /**
    * Returns true if the plugin is loaded.
    * 
-   * @return 
+   * @return
    */
   public Boolean isLoaded()
   {

@@ -15,10 +15,9 @@ import apes.models.undo.PasteEdit;
 import apes.views.InternalFormatView;
 import apes.views.ApesError;
 
-
 /**
  * Controller for the internal format.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatController extends ApplicationController
@@ -62,7 +61,7 @@ public class InternalFormatController extends ApplicationController
    * A player handler.
    */
   private PlayerHandler playerHandler;
-  
+
   /**
    * The marked selection.
    */
@@ -80,11 +79,11 @@ public class InternalFormatController extends ApplicationController
 
   /**
    * Creates a new <code>InternalFormatController</code>.
-   *
+   * 
    * @param tabs The tabs model.
    * @param undoManager The undo manager.
    */
-  public InternalFormatController( Tabs tabs, UndoManager undoManager )
+  public InternalFormatController(Tabs tabs, UndoManager undoManager)
   {
     this.tabs = tabs;
     this.undoManager = undoManager;
@@ -93,23 +92,23 @@ public class InternalFormatController extends ApplicationController
 
   public void beforeFilter() throws Exception
   {
-    if( name.matches( "^zoom.*" ) )
+    if(name.matches("^zoom.*"))
     {
       // This may throw an exception if there's no tab. But thats what
       // we want.
       Tabs.Tab tab = tabs.getSelectedTab();
       internalFormatView = tab.getInternalFormatView();
-      
-      if( internalFormatView == null )
+
+      if(internalFormatView == null)
       {
         throw new Exception();
       }
     }
-    else if( name.matches( "copy|cut|paste|delete" ) )
+    else if(name.matches("copy|cut|paste|delete"))
     {
       internalFormat = playerHandler.getInternalFormat();
 
-      if( internalFormat == null )
+      if(internalFormat == null)
       {
         throw new Exception();
       }
@@ -117,7 +116,7 @@ public class InternalFormatController extends ApplicationController
       player = playerHandler.getCurrentPlayer();
       selection = player.getSelection();
 
-      if( selection.x == selection.y )
+      if(selection.x == selection.y)
       {
         throw new Exception();
       }
@@ -126,18 +125,18 @@ public class InternalFormatController extends ApplicationController
 
   public void afterFilter()
   {
-    if( name.matches( "^zoom.*" ) )
+    if(name.matches("^zoom.*"))
     {
-      if( internalFormatView != null )
+      if(internalFormatView != null)
       {
-        internalFormatView.setCenter( center );
-        internalFormatView.setZoom( zoom );
+        internalFormatView.setCenter(center);
+        internalFormatView.setZoom(zoom);
         internalFormatView.updateAll();
       }
     }
     else
     {
-      undoManager.addEdit( edit );
+      undoManager.addEdit(edit);
     }
   }
 
@@ -162,7 +161,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    clipboard = internalFormat.getSamples( selection.x, selection.y );
+    clipboard = internalFormat.getSamples(selection.x, selection.y);
   }
 
   /**
@@ -170,8 +169,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void cut()
   {
-    edit = new CutEdit( internalFormat, selection );
-    clipboard = ((CutEdit)edit).getCutout();
+    edit = new CutEdit(internalFormat, selection);
+    clipboard = ( (CutEdit)edit ).getCutout();
   }
 
   /**
@@ -179,7 +178,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void paste()
   {
-    edit = new PasteEdit( internalFormat, selection, clipboard );
+    edit = new PasteEdit(internalFormat, selection, clipboard);
   }
 
   /**
@@ -187,7 +186,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void delete()
   {
-    edit = new CutEdit( internalFormat, selection );
+    edit = new CutEdit(internalFormat, selection);
   }
 
   /**
@@ -197,7 +196,7 @@ public class InternalFormatController extends ApplicationController
   {
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom / InternalFormatView.ZOOM;
-    
+
     zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
   }
 
@@ -244,38 +243,38 @@ public class InternalFormatController extends ApplicationController
   {
     ApesFile apesFile = ApesFile.open();
 
-    if( apesFile != null )
+    if(apesFile != null)
     {
       try
       {
-        InternalFormatView internalFormatView = new InternalFormatView( apesFile.getInternalFormat() );
+        InternalFormatView internalFormatView = new InternalFormatView(apesFile.getInternalFormat());
 
-        tabs.add( internalFormatView );
+        tabs.add(internalFormatView);
       }
-      catch( Exception e )
+      catch(Exception e)
       {
         ApesError.couldNotOpenFileError();
-        
+
         e.printStackTrace();
       }
     }
   }
-  
+
   /**
    * Save the current internal format.
    */
   public void save()
   {
     internalFormat = playerHandler.getInternalFormat();
-    
+
     try
     {
       internalFormat.save();
     }
-    catch( IOException e )
+    catch(IOException e)
     {
       ApesError.saveFailure();
-      
+
       e.printStackTrace();
     }
   }
@@ -287,15 +286,15 @@ public class InternalFormatController extends ApplicationController
   {
     internalFormat = playerHandler.getInternalFormat();
     ApesFile apesFile = ApesFile.open();
-    
+
     try
     {
-      internalFormat.saveAs( apesFile.getParent(), apesFile.getName() );
+      internalFormat.saveAs(apesFile.getParent(), apesFile.getName());
     }
-    catch( IOException e )
+    catch(IOException e)
     {
       ApesError.saveFailure();
-      
+
       e.printStackTrace();
     }
   }

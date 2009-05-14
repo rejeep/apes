@@ -12,7 +12,7 @@ import apes.models.Player;
 
 /**
  * Contains one ChannelView per channel in the internal format.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatView extends JPanel implements Observer
@@ -31,7 +31,7 @@ public class InternalFormatView extends JPanel implements Observer
    * The status panel.
    */
   private InternalFormatStatusPanel statusPanel;
-  
+
   /**
    * The channel controller.
    */
@@ -46,68 +46,68 @@ public class InternalFormatView extends JPanel implements Observer
    * Max possible zoom.
    */
   public final static int MAX_ZOOM = 10;
-  
+
   /**
    * Places one ChannelView for each channel on this panel.
-   *
+   * 
    * @param internalFormat an <code>InternalFormat</code> value.
    */
-  public InternalFormatView( InternalFormat internalFormat )
+  public InternalFormatView(InternalFormat internalFormat)
   {
     this.internalFormat = internalFormat;
-    
-    Player player = PlayerHandler.getInstance().setInternalFormat( internalFormat );
+
+    Player player = PlayerHandler.getInstance().setInternalFormat(internalFormat);
 
     // Observe these.
-    internalFormat.addObserver( this );
-    player.addObserver( this );
+    internalFormat.addObserver(this);
+    player.addObserver(this);
 
-    channelController = new ChannelController( player );
+    channelController = new ChannelController(player);
 
     int sampleRate = internalFormat.getSampleRate();
-    channelView = new ChannelView( internalFormat, channelController, player );
-    statusPanel = new InternalFormatStatusPanel( sampleRate, channelController, player );
-    add( statusPanel );
-    add( channelView );
+    channelView = new ChannelView(internalFormat, channelController, player);
+    statusPanel = new InternalFormatStatusPanel(sampleRate, channelController, player);
+    add(statusPanel);
+    add(channelView);
 
     // The controller must know some views.
-    channelController.setStatusPanel( statusPanel );
-    channelController.setChannelView( channelView );
+    channelController.setStatusPanel(statusPanel);
+    channelController.setChannelView(channelView);
 
-    setInternalFormat( internalFormat );
+    setInternalFormat(internalFormat);
   }
 
   /**
    * Returns the internal format connected to this view.
-   *
+   * 
    * @return The internal format.
    */
   public InternalFormat getInternalFormat()
   {
     return internalFormat;
   }
-  
+
   /**
    * Adds some channel views to this pannel.
-   *
+   * 
    * @param internalFormat The internal format.
    */
-  private void setInternalFormat( InternalFormat internalFormat )
+  private void setInternalFormat(InternalFormat internalFormat)
   {
-    for( int i = 0; i < internalFormat.getNumChannels(); i++ )
+    for(int i = 0; i < internalFormat.getNumChannels(); i++)
     {
-      channelView.addChannel( i );
+      channelView.addChannel(i);
     }
   }
 
-  public void update( Observable o, Object arg )
+  public void update(Observable o, Object arg)
   {
-    if( o instanceof InternalFormat )
+    if(o instanceof InternalFormat)
     {
       channelView.updateInternalFormat();
     }
 
-    if( o instanceof Player )
+    if(o instanceof Player)
     {
       channelView.updatePlayer();
       statusPanel.updatePlayer();
@@ -125,8 +125,23 @@ public class InternalFormatView extends JPanel implements Observer
   }
 
   // DELEGATORS
-  public int getZoom() { return channelView.getZoom(); }
-  public void setZoom( int samples ) { channelView.setZoom( samples ); }
-  public void setCenter( int sample ) { channelView.setCenter( sample ); }
-  public int getCenter() { return channelView.getCenter(); }
+  public int getZoom()
+  {
+    return channelView.getZoom();
+  }
+
+  public void setZoom(int samples)
+  {
+    channelView.setZoom(samples);
+  }
+
+  public void setCenter(int sample)
+  {
+    channelView.setCenter(sample);
+  }
+
+  public int getCenter()
+  {
+    return channelView.getCenter();
+  }
 }

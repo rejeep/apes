@@ -19,7 +19,7 @@ public class TagsController extends ApplicationController
    * The internal format that the tags should be edited on.
    */
   private InternalFormat internalFormat;
-  
+
   /**
    * 
    */
@@ -39,7 +39,7 @@ public class TagsController extends ApplicationController
   public void edit()
   {
     internalFormat = playerHandler.getInternalFormat();
-    this.tagsView = new TagsView( this, internalFormat.getTags() );
+    this.tagsView = new TagsView(this, internalFormat.getTags());
   }
 
   /**
@@ -47,7 +47,7 @@ public class TagsController extends ApplicationController
    */
   public void close()
   {
-    tagsView.setVisible( false );
+    tagsView.setVisible(false);
     tagsView.dispose();
   }
 
@@ -58,15 +58,15 @@ public class TagsController extends ApplicationController
   {
     // Create new Tags object from view.
     Tags tags = new Tags();
-    tags.put( "name", tagsView.getName() );
-    tags.put( "track", tagsView.getTrack() );
-    tags.put( "artist", tagsView.getArtist() );
-    tags.put( "album", tagsView.getAlbum() );
-    tags.put( "genre", tagsView.getGenre() );
-    tags.put( "composer", tagsView.getComposer() );
-    tags.put( "comments", tagsView.getComments() );
-    tags.put( "copyright", tagsView.getCopyright() );
+    tags.put("name", tagsView.getName());
+    tags.put("track", tagsView.getTrack());
+    tags.put("artist", tagsView.getArtist());
+    tags.put("album", tagsView.getAlbum());
+    tags.put("genre", tagsView.getGenre());
+    tags.put("composer", tagsView.getComposer());
+    tags.put("comments", tagsView.getComments());
+    tags.put("copyright", tagsView.getCopyright());
 
-    internalFormat.setTags( tags );
+    internalFormat.setTags(tags);
   }
 }

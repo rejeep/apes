@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * Intended to parse a ApeLang file and store it for later use.
- *
+ * 
  * @author Simon Holm
  */
 public class ApeLang
@@ -28,7 +28,7 @@ public class ApeLang
 
   /**
    * Constructor, parses an ApeLang file.
-   *
+   * 
    * @param path The path to the location of the file to read from.
    * @param file The name of the file to read.
    * @throws Exception Throws exception when the parsing goes wrong.
@@ -41,7 +41,7 @@ public class ApeLang
 
   /**
    * TODO: Comment
-   *
+   * 
    * @param path a <code>String</code> value
    * @param file a <code>String</code> value
    * @exception Exception if an error occurs
@@ -58,7 +58,7 @@ public class ApeLang
     String group = "";
     String line;
 
-    //TODO: Speed up
+    // TODO: Speed up
     while( (line = bufferedReader.readLine() ) != null )
     {
       depth = 0;
@@ -68,11 +68,13 @@ public class ApeLang
 
       if( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' )
       {
-        // Pattern that matches a tag with following text: "key: Some text"
+        // Pattern that matches a tag with following text: "key: Some
+        // text"
         Pattern withTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s+(.+)$" );
         Matcher withTextMatcher = withTextPattern.matcher( line );
 
-        // Pattern that matches a tag without any following text: "key:"
+        // Pattern that matches a tag without any following text:
+        // "key:"
         Pattern withoutTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s*$" );
         Matcher withoutTextMatcher = withoutTextPattern.matcher( line );
 
@@ -115,10 +117,10 @@ public class ApeLang
 
   /**
    * Looks for the value corresponding to the key.
-   *
+   * 
    * @param key The key for the word.
    * @return Returns the word that corresponds to the key in the
-   * dictionary.
+   *         dictionary.
    */
   public String get( String key )
   {

@@ -22,7 +22,7 @@ import apes.lib.Language;
 
 /**
  * A graphical view for the configuration file.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ConfigView extends JFrame
@@ -43,16 +43,15 @@ public class ConfigView extends JFrame
   private Language language;
 
   /**
-   * Contains all new option names as key. And the component as
-   * value. This is so that the new value can be fetched from the
-   * component.
+   * Contains all new option names as key. And the component as value.
+   * This is so that the new value can be fetched from the component.
    */
   private Map<String, Component> newOptions;
 
 
   /**
    * Creates a new <code>ConfigView</code> instance.
-   *
+   * 
    * @param config The model.
    * @param configController The controller.
    */
@@ -92,7 +91,7 @@ public class ConfigView extends JFrame
 
   /**
    * Returns the top panel with all configuration options.
-   *
+   * 
    * @return The top panel.
    */
   private JPanel topPanel()
@@ -148,7 +147,7 @@ public class ConfigView extends JFrame
 
   /**
    * Returns the bottom panel with a save and a close button.
-   *
+   * 
    * @return The bottom panel.
    */
   private JPanel bottomPanel()
@@ -170,7 +169,7 @@ public class ConfigView extends JFrame
 
   /**
    * Returns the new options map.
-   *
+   * 
    * @return The new options.
    */
   public Map<String, Component> getNewOptions()
