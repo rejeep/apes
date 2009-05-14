@@ -1,8 +1,6 @@
 package apes.models.undo;
 
 import apes.models.InternalFormat;
-import apes.models.Samples;
-import apes.models.Channel;
 
 import java.awt.Point;
 
@@ -17,7 +15,7 @@ import javax.swing.undo.AbstractUndoableEdit;
  */
 public class CutEdit extends AbstractUndoableEdit
 {
-  private Samples[][] cutout;
+  private byte[] cutout;
   private InternalFormat internalFormat;
   private int start, stop;
   private boolean undoable;
@@ -41,7 +39,6 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void redo()
   {
-    System.out.println("Redoing cut");
     cutout = internalFormat.cutSamples( start, stop );
     undoable = true;
   }
@@ -54,7 +51,6 @@ public class CutEdit extends AbstractUndoableEdit
     internalFormat.pasteSamples( start, cutout );
     cutout = null;
     undoable = false;
-    System.out.println("Undoing cut");
   }
   
   public boolean canRedo()
@@ -71,7 +67,7 @@ public class CutEdit extends AbstractUndoableEdit
    * Returns an array of Samples containing all samples cut from the Channel.
    * @return Returns cutout.
    */
-  public Samples[][] getCutout()
+  public byte[] getCutout()
   {
     return cutout;
   }

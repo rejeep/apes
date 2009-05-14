@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.awt.Point;
 
 import apes.interfaces.TransformPlugin;
-import apes.models.Samples;
 import apes.models.InternalFormat;
-import apes.models.Channel;
 
 /**
  * A simple silence effect.
@@ -45,9 +43,6 @@ public class SilenceTransform implements TransformPlugin
    */
   public void apply( InternalFormat internalFormat, Point selection )
   {
-    for(int i=0; i<internalFormat.getNumChannels(); i++)
-    {
-      internalFormat.getChannel(i).setSamples(selection.x, selection.y, 0);
-    }
+    internalFormat.scaleSamples(selection.x, selection.y, 0);
   }
 }

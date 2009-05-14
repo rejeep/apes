@@ -9,7 +9,6 @@ import apes.lib.ApesFile;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.models.Samples;
 import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
@@ -27,7 +26,7 @@ public class InternalFormatController extends ApplicationController
   /**
    * Values copied or cut.
    */
-  private Samples[][] clipboard;
+  private byte[] clipboard;
 
   /**
    * An internal format view object used by the zoom methods.
@@ -163,7 +162,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    clipboard = internalFormat.copySamples( selection.x, selection.y );
+    clipboard = internalFormat.getSamples( selection.x, selection.y );
   }
 
   /**

@@ -13,6 +13,9 @@ import java.util.Observable;
  */
 public class Player extends Observable implements Runnable
 {
+  
+  private final static int CHUNK_SIZE; 
+  
   /**
    * The data line.
    */
@@ -358,7 +361,7 @@ public class Player extends Observable implements Runnable
    */
   private void increaseCurrentSample()
   {
-    setCurrentSample( currentSample + Channel.SAMPLES_SIZE );
+    setCurrentSample( currentSample + CHUNK_SIZE );
   }
 
   /**
@@ -416,7 +419,7 @@ public class Player extends Observable implements Runnable
         {
           if( playingAllowed() )
           {
-            byte[] data = internalFormat.getChunk( currentSample, Channel.SAMPLES_SIZE );
+            byte[] data = internalFormat.getChunk( currentSample, CHUNK_SIZE );
 
             line.write( data, 0, data.length );
 

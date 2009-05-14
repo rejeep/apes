@@ -1,5 +1,6 @@
 package apes.models;
 
+import apes.models.MemoryHandler;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.List;
@@ -31,14 +32,22 @@ public class InternalFormat extends Observable
   private int sampleRate;
 
   /**
-   * List containing all channels of the sound file.
+   * Amount of channels in file
    */
-  private List<Channel> channels;
+  private int channels;
+  
+  /**
+   * Memory handler taking care of swapping
+   */
+  private MemoryHandler memoryHandler;
+
+  public final static int BITS_PER_SAMPLE = 16;
+  public final static int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
 
   /**
    * Length of each channel in samples.
    */
-  int sampleAmount;
+  private int sampleAmount;
 
   /**
    * Constructor setting up the Internal Format according to the
@@ -48,7 +57,7 @@ public class InternalFormat extends Observable
    * @param samplerate  Amount of samples per second.
    * @param channelList Channels containing all audio data.
    */
-  public InternalFormat( Tags tags, int samplerate, List<Channel> channelList )
+  public InternalFormat( Tags tags, int samplerate, int numChannels )
   {
     if(tags == null)
     {
@@ -59,15 +68,9 @@ public class InternalFormat extends Observable
       this.tags = tags;
     }
     sampleRate = samplerate;
-    channels = channelList;
-    
-    // Assume equal length of channels. NullPointerException if incorrect or no channels.
-    Channel c = channels.get(0);
-    
-    int sampleCount = 0;
-    for( int i = 0; i < c.getSamplesSize(); i++ )
-      sampleCount += c.getSamples( i ).getSize();
-    sampleAmount = sampleCount;
+    channels = numChannels;
+    memoryHandler = new MemoryHandler();
+    sampleAmount = 5; // TODO: OBSERVE
   }
 
   /**
@@ -97,7 +100,7 @@ public class InternalFormat extends Observable
    */
   public int getNumChannels()
   {
-    return channels.size();
+    return channels;
   }
   
   /**
@@ -107,30 +110,6 @@ public class InternalFormat extends Observable
   public int getSampleAmount()
   {
     return sampleAmount;
-  }
-
-  /**
-   * Returns the channel with index channel.
-   *
-   * @return The channel of the chosen index.
-   */
-  public Channel getChannel( int channel )
-  {
-    return channels.get( channel );
-  }
-
-  /**
-   * Returns a Samples object containing the specified interval.
-   *
-   * @param channel Index of the channel to fetch data from.
-   * @param start   Start of interval in milliseconds.
-   * @param stop    End of interval in milliseconds.
-   * @return A Samples object containing all samples of the selected
-   * Channel in the specified interval.
-   */
-  Samples getSamples( int channel, int start, int stop )
-  {
-    return null;
   }
 
   /**
@@ -152,34 +131,10 @@ public class InternalFormat extends Observable
    */
   public byte[] getChunk( int index, int amount )
   {
-    if( index > getSampleAmount() || index < 0 || amount < 0 )
-      return new byte[0];
-    // Get memory.
-    if( index + amount > getSampleAmount() )
-      amount = getSampleAmount() - index;
-    byte[] retChunk = new byte[ channels.size() * amount * Samples.BYTES_PER_SAMPLE ];
+    if( index + amount > getSampleAmount() || index < 0 || amount < 0 )
+      return null;
     
-    SampleIterator[] sampIts = new SampleIterator[channels.size()];
-    for( int i = 0; i < channels.size(); i++ )
-    {
-      Channel c = channels.get(i);
-      Point point = c.findAbsoluteIndex( index );
-      sampIts[i] = c.getIteratorFromIndex( point.x, point.y );
-    }
-      
-    for( int j = 0; j < amount; j++ )
-    {
-      for( int i = 0; i < channels.size(); i++ )
-      {
-        int value = sampIts[i].next();
-        for( int k = 0; k < Samples.BYTES_PER_SAMPLE; k++ )
-        {
-          retChunk[i * amount * Samples.BYTES_PER_SAMPLE + j * Samples.BYTES_PER_SAMPLE + k] = (byte)((value >> (k * 8)) & 0xff);
-        }
-      }
-    }
-    
-    return retChunk;
+    return memoryHandler.read( channels * index, amount * index * BYTES_PER_SAMPLE );
   }
   /**
    * Save file as
@@ -246,19 +201,6 @@ public class InternalFormat extends Observable
     // TODO: add error handling or some sort of response
     return (InternalFormat) FileHandler.loadObjectFile( filePath, fileName );
   }
-
-  /**
-   * Returns the amount of time needed to play all samples in the
-   * given object, assuming the samplerate of <code>this</code>.
-   *
-   * @param s The samples to be checked.
-   * @return The time needed to play all samples in <code>s</code>
-   * given the samplerate of <code>this</code>, in milliseconds.
-   */
-  public int getPlayTime( Samples s )
-  {
-    return (Samples.MS_PER_SECOND * s.getSize()) / sampleRate;
-  }
   
   /**
    * Returns an array of Samples[] containing the data copied from each channel.
@@ -266,14 +208,29 @@ public class InternalFormat extends Observable
    * @param stop The last index to copy.
    * @return All data copied.
    */
-  public Samples[][] copySamples( int start, int stop )
+  // FIXME: How large chunks can we get?
+  public byte[] getSamples( int start, int stop )
   {
-    Samples[][] samples = new Samples[channels.size()][];
+    if( start < 0 || start > stop || stop >= sampleAmount )
+      return null;
     
-    for( int i = 0; i < channels.size(); i++ )
-      samples[i] = channels.get(i).copySamples(start, stop);
+    return memoryHandler.read( start * channels, (stop - start) * channels * BYTES_PER_SAMPLE );
+  }
+  
+  /**
+   * Removes all samples 
+   * @param start
+   * @param stop
+   */
+  public void removeSamples( int start, int stop )
+  {
+    if( start < 0 || start > stop || stop >= sampleAmount )
+      return;
     
-    return samples;
+    int length = (stop - start);
+    if(memoryHandler.free( start * channels, length * channels * BYTES_PER_SAMPLE ) )
+      sampleAmount -= length;
+    updated();
   }
   
   /**
@@ -282,18 +239,28 @@ public class InternalFormat extends Observable
    * @param stop Last sample to cut away.
    * @return An array containing arrays of Samples objects of the data removed from the channels.
    */
-  public Samples[][] cutSamples( int start, int stop )
+  public byte[] cutSamples( int start, int stop )
   {
-    Samples[][] samples = new Samples[channels.size()][];
+    if( start < 0 || start > stop || stop >= sampleAmount )
+      return null;
     
-    for( int i = 0; i < channels.size(); i++ )
-      samples[i] = channels.get(i).cutSamples( start, stop );
+    byte[] retVal = getSamples( start, stop );
+    removeSamples( start, stop );
+    return retVal;
+  }
+  
+  /**
+   * Sets all samples in the selected range to data taken from <code>values</code>
+   * @param start First index to set
+   * @param values An array of byte values to use for setting.
+   */
+  public void setSamples( int start, byte[] values )
+  {
+    if( start < 0 || start + values.length >= sampleAmount )
+      return;
     
-    sampleAmount -= stop - start + 1;
-    
-    setChanged();
-    notifyObservers();
-    return samples;
+    memoryHandler.write( start * channels , values );
+    updated();
   }
   
   /**
@@ -302,22 +269,22 @@ public class InternalFormat extends Observable
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
-  public int pasteSamples( int start, Samples[][] samples )
+  public int pasteSamples( int start, byte[] samples )
   {
-    if( samples == null || samples.length < channels.size() )
+    if( samples == null || samples.length < sampleAmount )
       return -1;
     
-    int retVal = 0;
+    boolean alloc = memoryHandler.malloc(start, samples.length);
+    if(!alloc)
+      return -1;
     
-    for( int i = 0; i < channels.size(); i++ )
-      retVal = channels.get(i).pasteSamples( start, samples[i] );
+    setSamples( start, samples );
     
-    sampleAmount += retVal - start;
+    sampleAmount += samples.length;
     
-    setChanged();
-    notifyObservers();
+    updated();
     
-    return retVal;
+    return start + samples.length;
   }
   
   /**
@@ -329,11 +296,14 @@ public class InternalFormat extends Observable
    */
   public void scaleSamples( int start, int stop, float alpha )
   {
-    for( Channel channel : channels )
-    {
-      channel.scaleSamples( start, stop, alpha );
-    }
-
+    byte[] samples = getSamples( start, stop );
+    for( byte b : samples )
+      b *= alpha;
+    setSamples( start, samples );
+  }
+  
+  public void updated()
+  {
     setChanged();
     notifyObservers();
   }

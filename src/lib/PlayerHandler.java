@@ -10,7 +10,6 @@ import javax.sound.sampled.SourceDataLine;
 
 import apes.models.InternalFormat;
 import apes.models.Player;
-import apes.models.Samples;
 
 /**
  * Wrapper for all players. So instead of calling play on a Player,
@@ -88,7 +87,7 @@ public class PlayerHandler
   {
     try
     {
-      AudioFormat format = new AudioFormat( internalFormat.getSampleRate(), Samples.BITS_PER_SAMPLE, internalFormat.getNumChannels(), true, false );
+      AudioFormat format = new AudioFormat( internalFormat.getSampleRate(), InternalFormat.BITS_PER_SAMPLE, internalFormat.getNumChannels(), true, false );
       DataLine.Info info = new DataLine.Info( SourceDataLine.class, format );
 
       if( line != null )

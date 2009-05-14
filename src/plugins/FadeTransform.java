@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 
 import apes.interfaces.TransformPlugin;
-import apes.models.Samples;
 import apes.models.InternalFormat;
 
 /**
@@ -109,25 +108,24 @@ public class FadeTransform implements TransformPlugin, ActionListener
     int steps = diff / interval;
     int spill = diff % interval;
   
-    for(int i=0; i<internalFormat.getNumChannels(); i++)
+ 
+    for(int j=0; j<steps; j++)
     {
-      for(int j=0; j<steps; j++)
+      if(flag)
       {
-        if(flag)
-        {
-          scale = (float) j / steps;
-        }
-        else
-        {
-          scale = (float) j / steps;
-          scale = (float) (1.0f - scale);
-        }
-        curr = selection.x + (j*interval);
-        internalFormat.getChannel(i).scaleSamples(curr, curr+interval-1, scale);
+        scale = (float) j / steps;
       }
-      curr = selection.x + steps*interval;
-      internalFormat.getChannel(i).scaleSamples(curr, curr+spill, scale);
+      else
+      {
+        scale = (float) j / steps;
+        scale = (float) (1.0f - scale);
+      }
+      curr = selection.x + (j*interval);
+      internalFormat.scaleSamples(curr, curr+interval-1, scale);
     }
+    
+    curr = selection.x + steps*interval;
+    internalFormat.scaleSamples(curr, curr+spill, scale);
   }
   
   /**

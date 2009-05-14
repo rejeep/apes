@@ -1,8 +1,6 @@
 package apes.models.undo;
 
 import apes.models.InternalFormat;
-import apes.models.Channel;
-import apes.models.Samples;
 
 import java.awt.Point;
 
@@ -18,11 +16,11 @@ import javax.swing.undo.AbstractUndoableEdit;
 public class PasteEdit extends AbstractUndoableEdit
 { 
   private InternalFormat internalFormat;
-  private Samples[][] paste;
+  private byte[] paste;
   private int start, stop;
   private boolean undoable;
   
-  public PasteEdit( InternalFormat intForm, Point marked, Samples[][] p )
+  public PasteEdit( InternalFormat intForm, Point marked, byte[] p )
   {
     internalFormat = intForm;
     start = marked.x;

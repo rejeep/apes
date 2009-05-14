@@ -2,24 +2,20 @@ package apes.models;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import apes.models.InternalFormat;
 
 
 public class SampleIterator
 {
   /**
-   * The channel to iterate over.
+   * The internal format the iterator is bound to.
    */
-  private Channel channel;
+  InternalFormat intForm;
 
   /**
-   * Which Samples object is currently being iterated over.
+   * Current index.
    */
-  private int samplesObject;
-
-  /**
-   * Current index within the current samples object.
-   */
-  private int samplesIndex;
+  private long samplesIndex;
 
 
   /**
@@ -28,27 +24,33 @@ public class SampleIterator
    *
    * @param c The <code>Channel</code> to iterate over.
    */
-  public SampleIterator( Channel c )
+  public SampleIterator( InternalFormat iF, int c )
   {
-    channel = c;
-    samplesObject = 0;
-    samplesIndex = 0;
+    intForm = iF;
+    
+    if( c < iF.getNumChannels() )
+      samplesIndex = c;
+    else
+      samplesIndex = 0;
   }
 
   /**
-   * Creates a SampleIterator iterating over all samples in the given <code>Channel</code> starting from the given sample if it exists, otherwise from the beginning of the channel.
-   * @param c
-   * @param obj
-   * @param i
+   * Creates a SampleIterator iterating over all samples in the given channel starting from the given sample if it exists, otherwise from the beginning of the channel.
+   * @param iF Internal format to iterate over.
+   * @param c Channel of iteration.
+   * @param i Index to start at.
    */
-  public SampleIterator( Channel c, int obj, int i )
+  public SampleIterator( InternalFormat iF, int c, int i )
   {
-    channel = c;
-    samplesObject = obj;
-    samplesIndex = i;
+    intForm = iF;
     
-    if( c.getSamplesSize() < obj || c.getSamples( obj ).getSize() < i )
-      samplesObject = samplesIndex = 0;
+    if( c < iF.getNumChannels() )
+      samplesIndex = c;
+    else
+      samplesIndex = 0;
+    
+    if( i < iF.getSampleAmount() )
+      samplesIndex *= i;
   }
   
   /**
@@ -56,7 +58,7 @@ public class SampleIterator
    */
   public boolean hasNext()
   {
-    return samplesObject < channel.getSamplesSize();
+    return samplesIndex < intForm.getSampleAmount();
   }
 
   /**
@@ -64,15 +66,13 @@ public class SampleIterator
    */
   public int next()
   {
-    int amplitude;
     if( hasNext() )
     {
-      amplitude = channel.getSamples(samplesObject).getSample(samplesIndex);
-      if(++samplesIndex >= channel.getSamples(samplesObject).getSize())
-      {
-        samplesObject++;
-        samplesIndex = 0;
-      }
+      byte[] bytes = intForm.getChunk( (int)samplesIndex, 1 );
+      samplesIndex += intForm.getNumChannels();
+      int amplitude = 0;
+      for( int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++ )
+        amplitude += bytes[i] << (i * 8);
       return amplitude;
     }
     throw new NoSuchElementException();

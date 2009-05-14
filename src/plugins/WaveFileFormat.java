@@ -1,11 +1,16 @@
 package apes.plugins;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
@@ -19,6 +24,11 @@ import apes.models.*;
  */
 public class WaveFileFormat implements AudioFormatPlugin
 {
+  
+  /**
+   * Magic number of samples to read and write.
+   */
+  private final static int IO_CHUNK_SIZE = 100000; 
   /**
    * TODO: Comment
    */
@@ -71,32 +81,18 @@ public class WaveFileFormat implements AudioFormatPlugin
     short  audioFormat   = 1;
     short  numChannels   = (short)internalFormat.getNumChannels();
     int    sampleRate    = internalFormat.getSampleRate();
-    int    byteRate      = sampleRate * numChannels * (Samples.BITS_PER_SAMPLE/8);
-    short  blockAlign    = (short)(numChannels * (Samples.BITS_PER_SAMPLE/8));
-    short  bitsPerSample = Samples.BITS_PER_SAMPLE;
+    int    byteRate      = sampleRate * numChannels * (InternalFormat.BYTES_PER_SAMPLE);
+    short  blockAlign    = (short)(numChannels * (InternalFormat.BYTES_PER_SAMPLE));
+    short  bitsPerSample = InternalFormat.BITS_PER_SAMPLE;
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
-    int numSamples = 0;
+    int numSamples = internalFormat.getSampleAmount();
 
-    SampleIterator[] iterators = new SampleIterator[numChannels];
-
-    for(int i = 0; i < numChannels; ++i)
-      iterators[i] = internalFormat.getChannel( i ).getIterator();
-
-    for( SampleIterator iterator : iterators)
-    {
-      while(iterator.hasNext())
-      {
-        iterator.next();
-        ++numSamples;
-      }
-    }
-
-    subchunk2Size = numSamples * numChannels * (Samples.BITS_PER_SAMPLE/8);
+    subchunk2Size = numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE;
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
-
-    data = ByteBuffer.wrap( new byte[8 + chunkSize] );
+    
+    data = ByteBuffer.wrap( new byte[chunkSize - subchunk2Size] );
 
     // Start copy data
 
@@ -120,16 +116,22 @@ public class WaveFileFormat implements AudioFormatPlugin
     data.order( ByteOrder.LITTLE_ENDIAN );
     data.putInt( subchunk2Size );
 
-    iterators = new SampleIterator[numChannels];
-
-    for(int i = 0; i < numChannels; ++i)
-      iterators[i] = internalFormat.getChannel( i ).getIterator();
-
-    while(iterators[0].hasNext())
-      for( SampleIterator iterator : iterators)
-        data.putInt( iterator.next() );
-
-    FileHandler.saveToFile( path, fileName, data.array() );
+    File file = new File( path + fileName );
+    FileOutputStream fStream = new FileOutputStream( file );
+    
+    fStream.write( data.array() );
+    int written = 0;
+     
+    while( written < numSamples )
+    {
+      byte[] bytes = internalFormat.getChunk( written, IO_CHUNK_SIZE );
+      if( bytes == null )
+        bytes = internalFormat.getChunk( written, numSamples - written );
+      written += IO_CHUNK_SIZE;
+      fStream.write(bytes);
+    }
+    
+    fStream.close();
   }
 
   //TODO: Create a more detailed description of exception
@@ -143,68 +145,57 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @throws Exception Will throw an exception if something bad
    * happens
    */
+  // TODO: Rewrite
   public InternalFormat importFile( String path, String filename ) throws Exception
   {
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
+    //buffer.order( ByteOrder.LITTLE_ENDIAN );
 
-    ByteBuffer buffer = FileHandler.loadFile( path, filename );
+    File file = new File( path + filename );
+    FileInputStream fStream = new FileInputStream( file );
+    DataInputStream dStream = new DataInputStream( fStream );
+    
 
     // Wave do not contain any tags
     Tags tag = null;
-
-    // 4 big
-    buffer.order( ByteOrder.BIG_ENDIAN );
-    buffer.getInt();
-    // 4 little
-    buffer.order( ByteOrder.LITTLE_ENDIAN );
-    buffer.getInt();
-    // 4 big
-    buffer.order( ByteOrder.BIG_ENDIAN );
-    buffer.getInt();
-    // 4 big
-    buffer.order( ByteOrder.BIG_ENDIAN );
-    buffer.getInt();
-    // 4 little
-    buffer.order( ByteOrder.LITTLE_ENDIAN );
-    buffer.getInt();
+    dStream.skip( 22 );
+    
     // 2 little
-    buffer.getShort();
-    // 2 little
-    int numChannels = buffer.getShort();
+    int numChannels = dStream.readShort();
+    
     // 4 little
-    int sampleRate = buffer.getInt();
-    // 4 little
-    buffer.getInt();
+    int sampleRate = dStream.readInt();
+    
+    dStream.skip(6);
+    
     // 2 little
-    buffer.getShort();
-    // 2 little
-    int bitsPerSample = buffer.getShort();
-    // 4 big
-    buffer.order( ByteOrder.BIG_ENDIAN );
-    buffer.getInt();
+    int bitsPerSample = dStream.readShort();
+    
+    dStream.skip( 4 );
+    
     // 4 little
-    buffer.order( ByteOrder.LITTLE_ENDIAN );
-    int subChunk2Size = buffer.getInt();
-    // little
+    int subChunk2Size = dStream.readInt();
 
-    List<Channel> channels = new ArrayList<Channel>();
-
-    byte[][] samplesPerChannel = new byte[numChannels][subChunk2Size/numChannels];
-
-    int channel = 0;
     int bytesPerSample = bitsPerSample/8;
 
-    for( int i = 0; i < subChunk2Size/(numChannels*bytesPerSample); ++i )
-    {
-      for( channel = 0; channel < numChannels; channel++ )
-        buffer.get( samplesPerChannel[channel], i*bytesPerSample, bytesPerSample );
-    }
-
-    for ( int i = 0; i < numChannels; ++i )
-      channels.add( new Channel( new Samples( bitsPerSample, samplesPerChannel[i] ) ) );
-
-    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, channels );
+    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
+    
+    int written = 0;
+    byte b[] = new byte[IO_CHUNK_SIZE];
+    while( written < subChunk2Size )
+    {
+      int read = dStream.read(b);
+      if( read < IO_CHUNK_SIZE )
+      {
+        byte[] bTemp = new byte[read];
+        System.arraycopy( b, 0, bTemp, 0, read );
+        b = bTemp;
+      }
+        
+      internalFormat.pasteSamples( written, b );
+      written += b.length;
+    }
 
     return internalFormat;
   }
