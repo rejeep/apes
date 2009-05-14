@@ -169,6 +169,9 @@ public class ChannelView extends JPanel implements Runnable
     return graphHeight;
   }
 
+  /**
+   * Run in a thread.
+   */
   public void run()
   {
     while( true )
@@ -187,9 +190,12 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * Transform a position in a channel to pixels in the graph based on samples.
+   * Transform a position in a channel to pixels in the graph based on
+   * samples.
+   * 
    * @param samples The position in the channel in samples.
-   * @return -1 if the sample is outside the graph otherwise where in the graph.
+   * @return -1 if the sample is outside the graph otherwise where in
+   * the graph.
    */
   public int samplesToPixels( int samples )
   {
