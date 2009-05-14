@@ -82,7 +82,9 @@ help:
     name: apes - Audio Program for Editing Sound
     authors: Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm
 tags:
+  title: Edit tags information 
   save: Save tags
+  close: Exit
   name: Name
   track: Track
   artist: Artist

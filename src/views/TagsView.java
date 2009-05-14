@@ -26,7 +26,7 @@ public class TagsView extends JFrame
   private Language language;
 
   /**
-   * TODO: Comment
+   * The head label.
    */
   private JLabel head;
 
@@ -71,11 +71,10 @@ public class TagsView extends JFrame
   private JTextField copy;
 
   /**
-   * TODO: Comment
    * Creates a new <code>TagsView</code> instance.
    *
-   * @param tagsController a <code>TagsController</code> value
-   * @param tags a <code>Tags</code> value
+   * @param tagsController The tags controller.
+   * @param tags The tags model.
    */
   public TagsView( TagsController tagsController, Tags tags )
   {
@@ -86,7 +85,7 @@ public class TagsView extends JFrame
     // North panel
     JPanel north = new JPanel();
     north.setLayout( new FlowLayout() );
-    head = new JLabel( "This is the information" );
+    head = new ApesLabel( "tags.title" );
     north.add( head );
 
     // South panel
@@ -94,13 +93,13 @@ public class TagsView extends JFrame
     south.setLayout( new FlowLayout() );
 
     // Save button
-    JButton save = new JButton( "Save" );
+    JButton save = new ApesButton( "tags.save" );
     save.addActionListener( tagsController );
     save.setName( "save" );
     south.add(save);
 
     // Close button
-    JButton close = new JButton( "Close" );
+    JButton close = new ApesButton( "tags.close" );
     close.addActionListener( tagsController );
     close.setName( "close" );
     south.add( close );
