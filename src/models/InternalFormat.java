@@ -131,11 +131,12 @@ public class InternalFormat extends Observable
    */
   public byte[] getChunk( int index, int amount )
   {
-    if( index + amount > getSampleAmount() || index < 0 || amount < 0 )
+    if( index + amount > getSampleAmount() || index < 0 || amount < 1 )
       return null;
     
-    return memoryHandler.read( channels * index, amount * index * BYTES_PER_SAMPLE );
+    return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * index * BYTES_PER_SAMPLE );
   }
+  
   /**
    * Save file as
    * TODO: add error handling, or some sort of response
@@ -214,7 +215,7 @@ public class InternalFormat extends Observable
     if( start < 0 || start > stop || stop >= sampleAmount )
       return null;
     
-    return memoryHandler.read( start * channels, (stop - start) * channels * BYTES_PER_SAMPLE );
+    return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start) * channels * BYTES_PER_SAMPLE );
   }
   
   /**
@@ -228,7 +229,7 @@ public class InternalFormat extends Observable
       return;
     
     int length = (stop - start);
-    if(memoryHandler.free( start * channels, length * channels * BYTES_PER_SAMPLE ) )
+    if(memoryHandler.free( start * channels * BYTES_PER_SAMPLE, length * channels * BYTES_PER_SAMPLE ) )
       sampleAmount -= length;
     updated();
   }
@@ -259,7 +260,7 @@ public class InternalFormat extends Observable
     if( start < 0 || start + values.length >= sampleAmount )
       return;
     
-    memoryHandler.write( start * channels , values );
+    memoryHandler.write( start * channels * BYTES_PER_SAMPLE , values );
     updated();
   }
   
@@ -274,7 +275,7 @@ public class InternalFormat extends Observable
     if( samples == null || samples.length < sampleAmount )
       return -1;
     
-    boolean alloc = memoryHandler.malloc(start, samples.length);
+    boolean alloc = memoryHandler.malloc(start * BYTES_PER_SAMPLE, samples.length);
     if(!alloc)
       return -1;
     
