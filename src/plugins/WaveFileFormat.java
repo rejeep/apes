@@ -151,7 +151,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
     //buffer.order( ByteOrder.LITTLE_ENDIAN );
 
-    File file = new File( path + filename );
+    File file = new File( path, filename );
     FileInputStream fStream = new FileInputStream( file );
     DataInputStream dStream = new DataInputStream( fStream );
     
