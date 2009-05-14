@@ -711,6 +711,9 @@ public class ChannelView extends JPanel implements Runnable
      */
     public void updateGraph()
     {
+      //boolean i = true;
+      if(true)
+        return;
       // Get number of samples.
       nrSamples = internalFormat.getSampleAmount();
 
@@ -736,12 +739,13 @@ public class ChannelView extends JPanel implements Runnable
       {
         samples = new int[graphWidth];
 
-        int jump = nrSamples / graphWidth;
+        int jump = visibleSamples / graphWidth;
         int firstVisibleSample = getFirstVisibleSample();
 
-        for( int i = firstVisibleSample; i < nrSamples; i += jump )
+        System.out.println("'bout to average. firstVis: " + firstVisibleSample + " graphW: " + graphWidth + " chann: " + channel + " jmp: " + jump);
+        for( int i = firstVisibleSample; i < graphWidth; i++ )
         {
-          int sample = internalFormat.getAverageAmplitude( channel, i, jump );
+          int sample = internalFormat.getAverageAmplitude( channel, i*jump , jump );
           
           samples[i] = sample;
         }

@@ -421,6 +421,7 @@ public class Player extends Observable implements Runnable
         {
           if( playingAllowed() )
           {
+            System.out.println("Current Sample: " + currentSample);
             byte[] data = internalFormat.getChunk( currentSample, CHUNK_SIZE );
 
             line.write( data, 0, data.length );

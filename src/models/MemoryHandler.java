@@ -108,71 +108,59 @@ public class MemoryHandler
       return false;
     
     int frameI = find( index );
+    Frame frame;
     // Not in memory
     if( frameI == -1 )
     {
       // Doesn't exist
-      if( swap(index) == null )
+      if( (frame = swap(index)) == null )
       {
         Page[] pages = createPages(index, bytes);
+        long newIndex = index;
+        for( int i = 0; i < pages.length; ++i )
+        {
+          pages[i].index = newIndex;
+          newIndex += pages[i].file.length();
+        }
         for( Page p : pages )
           pageTable.add( p );
         usedMemory += bytes;
         return true;
       }
     }
-    
-    
-    Frame frame = frameTable[frameI];
-    long firstIndex = index - frame.page.index;
-    long frontSize = index - firstIndex;
-    long backSize = frame.page.file.length() - frontSize;
-    long newSizeB = frame.page.file.length() + bytes;
-    long newSizeI = newSizeB;
+    else
+      frame = frameTable[frameI];
+
+    long firstIndex    = frame.page.index;
+    long index0        = index;
+    long index1        = index + bytes;
     
     // Create pages
-    Page[] pages = createPages( firstIndex, newSizeI );
+    Page[] pages = createPages( firstIndex, bytes + frame.page.file.length() );
     
-    // Copy front data
-    Page front0 = pages[0], front1 = null;
-    long front0CopySize = frontSize > PAGE_SIZE ? PAGE_SIZE : frontSize;
-    if( frontSize > PAGE_SIZE )
-      front1 = pages[1]; 
-    front0.file.write(frame.data, 0, (int)front0CopySize);
-    if( front1 != null )
-    {
-      front1.file.write(frame.data, (int)front0CopySize, (int)(frontSize - PAGE_SIZE));
-    }
-    
-    // Copy back data
-    Page back0 = pages[pages.length-1], back1 = null;
-    long back0CopySize = backSize > PAGE_SIZE ? PAGE_SIZE : backSize;
-    if( backSize > PAGE_SIZE )
-      back1 = pages[pages.length-2]; 
-    back0.file.write(frame.data, (int)(PAGE_SIZE - back0CopySize), (int)back0CopySize);
-    if( back1 != null )
-    {
-      back1.file.write(frame.data, (int)(PAGE_SIZE - (backSize - back0CopySize)), (int)(backSize - back0CopySize));
-    }
-    
-    // Remove old page from disk
+    // Destroy old page
     destroyPage( frame.page );
     
-    // Put front0 in frame
-    frame.load(front0);
-    frame.timeStamp = System.currentTimeMillis();
-    
-    // Update indexes
-    for( Page p : pageTable )
+    long newIndex = firstIndex;
+    for( int i = 0; i < pages.length; ++i )
     {
-      if( p.index > firstIndex )
-        p.index += bytes;
+      pages[i].index = newIndex;
+      newIndex += pages[i].file.length();
     }
     
-    // Add new pages
-    for( Page p : pages )
-      pageTable.add( p );
-        
+    for(Page p : pages)
+      pageTable.add(p);
+    
+    int amountToCopy = frame.data.length;
+    byte[] fst = new byte[amountToCopy/2];
+    byte[] lst = new byte[amountToCopy/2 + amountToCopy&1];
+    
+    System.arraycopy(frame.data, 0         , fst, 0, fst.length);
+    System.arraycopy(frame.data, fst.length, lst, 0, lst.length);
+    
+    write(index0, fst);
+    write(index1, lst);
+    
     usedMemory += bytes;
     
     return true;
@@ -228,29 +216,35 @@ public class MemoryHandler
 
   // TODO: Well.. Yeah, implement
   public byte[] read( long index, int amount ) throws IOException
-  {
-    Frame frame;
+  { 
+    Frame frame = null;
     int frameI;
     byte[] buf = new byte[amount];
     while( amount > 0 )
     {     
       frameI = find(index);
+      
       frame = (frameI  == -1 ? swap(index) : frameTable[frameI]);
       
       int offset = (int)(index - frame.page.index);
       int length = frame.data.length - offset;
+      if( frame.page.index + offset + length > index + amount )
+        length = amount;
       System.arraycopy(frame.data, offset, buf, 0, length);
       
       index  += length;
       amount -= length;
     }
-    
+    frame.timeStamp = System.currentTimeMillis();
     return buf;
   }
   
   public void write( long index, byte[] data ) throws IOException
   { 
-    Frame frame;
+    if( index < 0 || index + data.length >= usedMemory || data.length < 1 )
+      return;
+    
+    Frame frame = null;
     int frameI;
     int offset = 0;
     while( offset < data.length )
@@ -262,7 +256,8 @@ public class MemoryHandler
       System.arraycopy(data, offset, frame.data, 0, length);
       index  += length;
       offset += length;
-    } 
+    }  
+    frame.timeStamp = System.currentTimeMillis();
   } 
   
   private Frame swap( long index ) throws IOException
@@ -284,10 +279,9 @@ public class MemoryHandler
         timeStamp = frame.timeStamp;
       }
     }
-    
     for(Page page : pageTable)
     {
-      if( page.index <= index && page.index + page.file.length() > index)
+      if( page.index <= index && (page.index + page.file.length()) > index)
       {
         evicted.writeAll();
         evicted.load( page );
