@@ -130,6 +130,9 @@ error:
     save:
       title: Save failure
       message: An error occurred when trying to save
+    open:
+      title: Open failure
+      message: An error occurred when trying to open a file
 channel:
   header: Channel
   start: Start

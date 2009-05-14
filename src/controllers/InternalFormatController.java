@@ -254,7 +254,8 @@ public class InternalFormatController extends ApplicationController
       }
       catch( Exception e )
       {
-        // TODO: Show some error...
+        ApesError.couldNotOpenFileError();
+        
         e.printStackTrace();
       }
     }

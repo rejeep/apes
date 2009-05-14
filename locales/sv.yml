@@ -130,6 +130,9 @@ error:
     save:
       title: Sparning misslyckades
       message: Ett fel uppstod vid sparning
+    open:
+      title: Filöppning misslyckades
+      message: Ett fel uppstod vid filöppning
 channel:
   header: Kanal
   start: Start

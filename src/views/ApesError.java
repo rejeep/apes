@@ -37,6 +37,15 @@ public class ApesError
     ApesError.showError( "if.save.title",
                          "if.save.message" );
   }
+  
+  /**
+   * Opening an internal format failed.
+   */
+  public static void couldNotOpenFileError()
+  {
+    ApesError.showError( "if.open.title",
+                         "if.open.message" );
+  }
 
 
   /**
