@@ -3,6 +3,7 @@ package apes.views.tabs;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import apes.lib.Language;
 
 /**
  * A tab close button.
@@ -34,9 +35,9 @@ public class TabCloseButton extends JButton
     setIcon( icon );
 
     setPreferredSize( new Dimension( width, height ) );
-
-    // TODO: should be in locale.
-    setToolTipText( "Close this tab" );
+    
+    Language language = Language.getInstance();
+    setToolTipText( language.get("tabs.close") );
     setContentAreaFilled( false );
     setFocusable( false );
     setBorderPainted( false );

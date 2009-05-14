@@ -144,3 +144,5 @@ channel:
     samples: Samplar
     seconds: Sekunder
     minutes: Minuter
+tabs:
+  close: Stäng denna flik

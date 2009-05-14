@@ -144,3 +144,5 @@ channel:
     samples: Samples
     seconds: Seconds
     minutes: Minutes
+tabs:
+  close: Close this tab
