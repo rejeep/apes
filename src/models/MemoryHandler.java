@@ -228,7 +228,7 @@ public class MemoryHandler
       
       int offset = (int)(index - frame.page.index);
       int length = frame.data.length - offset;
-      if( frame.page.index + offset + length > index + amount )
+      if( length > amount )
         length = amount;
       System.arraycopy(frame.data, offset, buf, 0, length);
       
