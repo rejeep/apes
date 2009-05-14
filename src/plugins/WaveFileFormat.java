@@ -193,7 +193,7 @@ public class WaveFileFormat implements AudioFormatPlugin
         b = bTemp;
       }
         
-      internalFormat.pasteSamples( written, b );
+      internalFormat.insertSamples( written, b );
       written += b.length;
     }
 

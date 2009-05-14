@@ -324,7 +324,7 @@ public class InternalFormat extends Observable
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
-  public int pasteSamples( int start, byte[] samples )
+  public int insertSamples( int start, byte[] samples )
   {
     if( samples == null || samples.length < sampleAmount )
       return -1;
@@ -344,9 +344,14 @@ public class InternalFormat extends Observable
     
     sampleAmount += samples.length;
     
-    updated();
-    
     return start + samples.length;
+  }
+
+  public int pasteSamples( int start, byte[] samples)
+  {
+    int index = insertSamples(start, samples);
+    updated();
+    return index;
   }
   
   /**
