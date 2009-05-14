@@ -534,7 +534,6 @@ public class ChannelView extends JPanel implements Runnable
      */
     private int getTime( int pixels )
     {
-      // TODO: Create methods for these.
       int firstVisibleSample = getFirstVisibleSample();
       int lastVisibelSample  = getLasrVisibleSample();
 
