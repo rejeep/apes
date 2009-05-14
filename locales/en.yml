@@ -82,7 +82,9 @@ help:
     name: apes - Audio Program for Editing Sound
     authors: Authors: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores and Simon Holm
 tags:
+  title: Edit tags information 
   save: Save tags
+  close: Exit
   name: Name
   track: Track
   artist: Artist
@@ -130,6 +132,9 @@ error:
     save:
       title: Save failure
       message: An error occurred when trying to save
+    open:
+      title: Open failure
+      message: An error occurred when trying to open a file
 channel:
   header: Channel
   start: Start
@@ -141,3 +146,5 @@ channel:
     samples: Samples
     seconds: Seconds
     minutes: Minutes
+tabs:
+  close: Close this tab

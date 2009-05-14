@@ -16,17 +16,12 @@ import apes.models.InternalFormat;
 /**
  * Channel controller.
  *
- * TODO: Bug when dragging a selection with mouse 3.
- *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ChannelController extends ApplicationController implements MouseListener, MouseMotionListener, MouseWheelListener
 {
   /**
    * True if mouse if pressed. False otherwise.
-   *
-   * TODO: You can get this information from MouseEvent, but it didn't
-   * work well in mouseDragged.
    */
   private boolean mouseDown;
 

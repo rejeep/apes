@@ -82,7 +82,9 @@ help:
     name: apes - Audio Program for Editing Sound
     authors: Författare: Johan Andersson, Daniel Kvick, Johan Ålander, Sophie Kores och Simon Holm
 tags:
+  title: Ändra tagginformation
   save: Spara taggar
+  close: Stäng
   name: Namn
   track: Låt
   artist: Artist
@@ -130,6 +132,9 @@ error:
     save:
       title: Sparning misslyckades
       message: Ett fel uppstod vid sparning
+    open:
+      title: Filöppning misslyckades
+      message: Ett fel uppstod vid filöppning
 channel:
   header: Kanal
   start: Start
@@ -141,3 +146,5 @@ channel:
     samples: Samplar
     seconds: Sekunder
     minutes: Minuter
+tabs:
+  close: Stäng denna flik
