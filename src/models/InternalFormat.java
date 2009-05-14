@@ -55,7 +55,7 @@ public class InternalFormat extends Observable
    *
    * @param tags        Tag information of the audio file.
    * @param samplerate  Amount of samples per second.
-   * @param channelList Channels containing all audio data.
+   * @param numChannels Number of channels.
    */
   public InternalFormat( Tags tags, int samplerate, int numChannels )
   {
@@ -133,8 +133,15 @@ public class InternalFormat extends Observable
   {
     if( index + amount > getSampleAmount() || index < 0 || amount < 1 )
       return null;
-    
-    return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * index * BYTES_PER_SAMPLE );
+
+    try
+    {
+      return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * index * BYTES_PER_SAMPLE );
+    } catch ( IOException e )
+    {
+      e.printStackTrace();
+      return null;
+    }
   }
   
   /**
@@ -242,8 +249,15 @@ public class InternalFormat extends Observable
   {
     if( start < 0 || start > stop || stop >= sampleAmount )
       return null;
-    
-    return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start) * channels * BYTES_PER_SAMPLE );
+
+    try
+    {
+      return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start) * channels * BYTES_PER_SAMPLE );
+    } catch ( IOException e )
+    {
+      e.printStackTrace();
+      return null;
+    }
   }
   
   /**
@@ -257,8 +271,14 @@ public class InternalFormat extends Observable
       return;
     
     int length = (stop - start);
-    if(memoryHandler.free( start * channels * BYTES_PER_SAMPLE, length * channels * BYTES_PER_SAMPLE ) )
-      sampleAmount -= length;
+    try
+    {
+      if(memoryHandler.free( start * channels * BYTES_PER_SAMPLE, length * channels * BYTES_PER_SAMPLE ) )
+        sampleAmount -= length;
+    } catch ( IOException e )
+    {
+      e.printStackTrace();
+    }
     updated();
   }
   
@@ -287,8 +307,14 @@ public class InternalFormat extends Observable
   {
     if( start < 0 || start + values.length >= sampleAmount )
       return;
-    
-    memoryHandler.write( start * channels * BYTES_PER_SAMPLE , values );
+
+    try
+    {
+      memoryHandler.write( start * channels * BYTES_PER_SAMPLE , values );
+    } catch ( IOException e )
+    {
+      e.printStackTrace();
+    }
     updated();
   }
   
@@ -302,8 +328,15 @@ public class InternalFormat extends Observable
   {
     if( samples == null || samples.length < sampleAmount )
       return -1;
-    
-    boolean alloc = memoryHandler.malloc(start * BYTES_PER_SAMPLE, samples.length);
+
+    boolean alloc = false;
+    try
+    {
+      alloc = memoryHandler.malloc(start * BYTES_PER_SAMPLE, samples.length);
+    } catch ( IOException e )
+    {
+      e.printStackTrace();
+    }
     if(!alloc)
       return -1;
     
