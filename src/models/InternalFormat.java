@@ -130,22 +130,22 @@ public class InternalFormat extends Observable
    * <code>amount</code> samples from each channel starting from
    * absolute index <code>index</code>.
    * 
-   * @param index The first sample to include in the chunk, as an
+   * @param indexS The first sample to include in the chunk, as an
    *          absolute index.
-   * @param amount Amount of samples in the chunk. If there are fewer
+   * @param amountS Amount of samples in the chunk. If there are fewer
    *          than <code>amount</code> samples after
    *          <code>index</code>, all remaining samples are
    *          included.
    * @return A byte array containing the requested data.
    */
-  public byte[] getChunk(int index, int amount)
+  public byte[] getChunk(int indexS, int amountS)
   {
-    if(index + amount > getSampleAmount() || index < 0 || amount < 1)
+    if(indexS + amountS > sampleAmount || indexS < 0 || amountS < 1)
       return null;
 
     try
     {
-      return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * channels * BYTES_PER_SAMPLE );
+      return memoryHandler.read( samplesToBytes(indexS), (int)samplesToBytes(amountS) );
     } catch ( IOException e )
     {
       e.printStackTrace();
@@ -157,23 +157,22 @@ public class InternalFormat extends Observable
    * Returns an approximate average of the specified interval.
    * 
    * @param channel What channel to perform average on.
-   * @param start First sample to consider.
-   * @param length Amount of samples to consider.
+   * @param startS First sample to consider.
+   * @param lengthS Amount of samples to consider.
    * @return
    */
-  public int getAverageAmplitude(int channel, int start, int length)
+  public int getAverageAmplitude(int channel, int startS, int lengthS)
   {
-    if( start < 0 || channel >= channels || length < 1 || start + length > sampleAmount )
+    if( startS < 0 || channel >= channels || lengthS < 1 || startS + lengthS > sampleAmount )
       return 0;
     
     int c = 0;
     int total = 0;
-    int step = length <= 50 ? 1 : Math.round(length * 0.1f);
+    int step = lengthS <= 50 ? 1 : Math.round(lengthS * 0.1f);
 
-    for(int i = 0; i < length; i += step, c++)
+    for(int i = 0; i < lengthS; i += step, c++)
     {
-      // System.out.println(getSample(channel, start + i));
-      total += getSample(channel, start + i);
+      total += getSample(channel, startS + i);
     }
 
     return Math.round((float)total/c);
@@ -239,9 +238,16 @@ public class InternalFormat extends Observable
     return (InternalFormat)FileHandler.loadObjectFile(filePath, fileName);
   }
 
-  public int getSample(int channel, int index)
+  /**
+   * TODO: Comment
+   *
+   * @param channel 
+   * @param indexS 
+   * @return 
+   */
+  public int getSample(int channel, int indexS)
   {
-    if( channel >= channels || index >= sampleAmount || index < 0)
+    if( channel >= channels || indexS >= sampleAmount || indexS < 0)
       return 0;
     
     int amplitude = 0;
@@ -249,7 +255,7 @@ public class InternalFormat extends Observable
       
     try
     {
-      b = memoryHandler.read( index * channels * BYTES_PER_SAMPLE + channel * BYTES_PER_SAMPLE, BYTES_PER_SAMPLE );
+      b = memoryHandler.read( samplesToBytes(indexS) + channel * BYTES_PER_SAMPLE, BYTES_PER_SAMPLE );
     }
     catch ( IOException e )
     {
@@ -266,19 +272,19 @@ public class InternalFormat extends Observable
    * Returns an array of Samples[] containing the data copied from
    * each channel.
    * 
-   * @param start The first index to copy.
-   * @param stop The last index to copy.
+   * @param startS The first index to copy.
+   * @param stopS The last index to copy.
    * @return All data copied.
    */
   // FIXME: How large chunks can we get?
-  public byte[] getSamples(int start, int stop)
+  public byte[] getSamples(int startS, int stopS)
   {
-    if(start < 0 || start > stop || stop >= sampleAmount)
+    if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return null;
 
     try
     {
-      return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start + 1) * channels * BYTES_PER_SAMPLE );
+      return memoryHandler.read( samplesToBytes(startS), (int)samplesToBytes(stopS - startS + 1) );
     } catch ( IOException e )
     {
       e.printStackTrace();
@@ -289,19 +295,19 @@ public class InternalFormat extends Observable
   /**
    * Removes all samples
    * 
-   * @param start
-   * @param stop
+   * @param startS
+   * @param stopS
    */
-  public void removeSamples(int start, int stop)
+  public void removeSamples(int startS, int stopS)
   {
-    if(start < 0 || start > stop || stop >= sampleAmount)
+    if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
 
-    int length = ( stop - start );
+    int lengthS = ( stopS - startS );
     try
     {
-      if(memoryHandler.free(start * channels * BYTES_PER_SAMPLE, length * channels * BYTES_PER_SAMPLE))
-        sampleAmount -= length;
+      if(memoryHandler.free(samplesToBytes(startS), samplesToBytes(lengthS)))
+        sampleAmount -= lengthS;
     }
     catch(IOException e)
     {
@@ -315,18 +321,18 @@ public class InternalFormat extends Observable
    * and returns them in a Samples[][] containing a Samples[] for each
    * channel.
    * 
-   * @param start First sample to cut away.
-   * @param stop Last sample to cut away.
+   * @param startS First sample to cut away.
+   * @param stopS Last sample to cut away.
    * @return An array containing arrays of Samples objects of the data
    *         removed from the channels.
    */
-  public byte[] cutSamples(int start, int stop)
+  public byte[] cutSamples(int startS, int stopS)
   {
-    if(start < 0 || start > stop || stop >= sampleAmount)
+    if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return null;
 
-    byte[] retVal = getSamples(start, stop);
-    removeSamples(start, stop);
+    byte[] retVal = getSamples(startS, stopS);
+    removeSamples(startS, stopS);
     return retVal;
   }
 
@@ -334,17 +340,17 @@ public class InternalFormat extends Observable
    * Sets all samples in the selected range to data taken from
    * <code>values</code>
    * 
-   * @param start First index to set as bytes.
+   * @param startB First index to set as bytes.
    * @param values An array of byte values to use for setting.
    */
-  public void setSamples(int start, byte[] values)
+  public void setSamples(int startB, byte[] values)
   {
-    if(start < 0 || start + values.length > sampleAmount * channels * BYTES_PER_SAMPLE)
+    if(startB < 0 || startB + values.length > samplesToBytes(sampleAmount))
       return;
     
     try
     {
-      memoryHandler.write(start, values);
+      memoryHandler.write(startB, values);
     }
     catch(IOException e)
     {
@@ -355,19 +361,19 @@ public class InternalFormat extends Observable
 
   /**
    * Inserts the provided samples at the specified index.
-   * @param start Index to insert at in bytes.
-   * @param samples Samples to insert at start.
+   * @param startB Index to insert at in bytes.
+   * @param samplesB Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
-  public int insertSamples(int start, byte[] samples)
+  public int insertSamples(int startB, byte[] samplesB)
   {
-    if( samples == null || start > sampleAmount * BYTES_PER_SAMPLE * channels)
+    if( samplesB == null || startB > samplesToBytes(sampleAmount) )
       return -1;
     
     boolean alloc = false;
     try
     {
-      alloc = memoryHandler.malloc(start, samples.length);
+      alloc = memoryHandler.malloc(startB, samplesB.length);
     } catch ( IOException e )
     {
       e.printStackTrace();
@@ -375,16 +381,23 @@ public class InternalFormat extends Observable
     if(!alloc)
       return -1;
     
-    sampleAmount += samples.length / ( channels * BYTES_PER_SAMPLE );
+    sampleAmount += bytesToSamples(samplesB.length);
     
-    setSamples( start, samples );
+    setSamples( startB, samplesB );
     
-    return start + samples.length;
+    return startB + samplesB.length;
   }
 
-  public int pasteSamples(int start, byte[] samples)
+  /**
+   * TODO: Comment
+   *
+   * @param startS
+   * @param samples
+   * @return 
+   */
+  public int pasteSamples(int startS, byte[] samples)
   {
-    int index = insertSamples(start * channels * BYTES_PER_SAMPLE, samples);
+    int index = insertSamples((int)samplesToBytes(startS), samples);
     updated();
     return index;
   }
@@ -392,21 +405,46 @@ public class InternalFormat extends Observable
   /**
    * Scales all samples in the internal format.
    * 
-   * @param start The start sample.
-   * @param stop The end sample.
+   * @param startS The start sample.
+   * @param stopS The end sample.
    * @param alpha The alpha value.
    */
-  public void scaleSamples( int start, int stop, float alpha )
+  public void scaleSamples( int startS, int stopS, float alpha )
   {
-    byte[] samples = getSamples( start, stop );
+    byte[] samples = getSamples( startS, stopS );
     for( byte b : samples )
       b *= alpha;
-    setSamples( start, samples );
+    setSamples( startS, samples );
   }
 
+  /**
+   * TODO: Comment
+   */
   public void updated()
   {
     setChanged();
     notifyObservers();
+  }
+  
+  /**
+   * Returns <code>samples</code> in bytes.
+   *
+   * @param samples Number of samples.
+   * @return Number of bytes.
+   */
+  public long samplesToBytes( long samples )
+  {
+    return samples * BYTES_PER_SAMPLE * channels;
+  }
+  
+  /**
+   * Returns <code>bytes</code> in samples.
+   *
+   * @param bytes Number of byes.
+   * @return Number of samples.
+   */  
+  public long bytesToSamples( long bytes )
+  {
+    return bytes / ( BYTES_PER_SAMPLE * channels );
   }
 }
