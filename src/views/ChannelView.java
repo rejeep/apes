@@ -404,9 +404,10 @@ public class ChannelView extends JPanel implements Runnable
   }
 
   /**
-   * TODO: Comment
+   * This is a graph over a channel.
    *
    * @author Simon Holm
+   * @author Johan Andersson (johandy@student.chalmers.se)
    */
   public class Graph extends JPanel
   {
