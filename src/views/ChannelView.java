@@ -617,11 +617,21 @@ public class ChannelView extends JPanel implements Runnable
     private void drawGraph()
     {
       g2.setColor( colorGraph );
-
-      // NOT EQUAL, RIGHT?
+      
       if( samplesPerPixel < 1 )
       {
+        float jump = (float)graphWidth / samples.length;
+        int pixel = Math.round(jump);
+        
+        for(int i = 1; i < samples.length; i++)
+        {
+          int x1 = samples[i - 1];
+          int x2 = samples[i];
+          
+          g2.drawLine( Math.round( pixel - jump), x1 , pixel, x2 );
 
+          pixel += Math.round(jump);
+        }
       }
       else
       {
