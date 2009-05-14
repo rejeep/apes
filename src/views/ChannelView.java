@@ -111,6 +111,10 @@ public class ChannelView extends JPanel implements Runnable
 
     graphs = new HashSet<ChannelView.Graph>();
 
+    // Set start zoom.
+    int numSamples = internalFormat.getSampleAmount();
+    setZoom( numSamples );
+    setCenter( numSamples / 2 );
     Config config = Config.getInstance();
     graphWidth = config.getIntOption( "graph_width" );
     graphHeight = config.getIntOption( "graph_height" );
