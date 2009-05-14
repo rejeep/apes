@@ -71,7 +71,7 @@ public class InternalFormat extends Observable
     sampleRate = samplerate;
     channels = numChannels;
     memoryHandler = new MemoryHandler();
-    sampleAmount = 5; // TODO: OBSERVE
+    sampleAmount = 0;
   }
 
   /**
@@ -145,9 +145,8 @@ public class InternalFormat extends Observable
 
     try
     {
-      return memoryHandler.read(channels * index * BYTES_PER_SAMPLE, amount * index * BYTES_PER_SAMPLE);
-    }
-    catch(IOException e)
+      return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * channels * BYTES_PER_SAMPLE );
+    } catch ( IOException e )
     {
       e.printStackTrace();
       return null;
@@ -164,6 +163,8 @@ public class InternalFormat extends Observable
    */
   public int getAverageAmplitude(int channel, int start, int length)
   {
+    if( start < 0 || channel > channels || length < 1 || start + length > sampleAmount )
+      return 0;
     int step = length <= 1000 ? 1 : length / 1000;
     int i = 0;
     int average = 0;
@@ -235,6 +236,8 @@ public class InternalFormat extends Observable
 
   public int getSample(int channel, int index)
   {
+    if( channel >= channels || index > sampleAmount || index < 0)
+      return 0;
     int amplitude = 0;
     index = index * channels + channel;
     byte[] b = getSamples(index, index);
@@ -259,9 +262,8 @@ public class InternalFormat extends Observable
 
     try
     {
-      return memoryHandler.read(start * channels * BYTES_PER_SAMPLE, ( stop - start ) * channels * BYTES_PER_SAMPLE);
-    }
-    catch(IOException e)
+      return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start + 1) * channels * BYTES_PER_SAMPLE );
+    } catch ( IOException e )
     {
       e.printStackTrace();
       return null;
@@ -337,32 +339,30 @@ public class InternalFormat extends Observable
 
   /**
    * Inserts the provided samples at the specified index.
-   * 
-   * @param start Index to insert at.
+   * @param start Index to insert at in bytes.
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
   public int insertSamples(int start, byte[] samples)
   {
-    if(samples == null || samples.length < sampleAmount)
+    if( samples == null || start > sampleAmount * BYTES_PER_SAMPLE * channels)
       return -1;
-
+    
     boolean alloc = false;
     try
     {
-      alloc = memoryHandler.malloc(start * BYTES_PER_SAMPLE, samples.length);
-    }
-    catch(IOException e)
+      alloc = memoryHandler.malloc(start, samples.length);
+    } catch ( IOException e )
     {
       e.printStackTrace();
     }
     if(!alloc)
       return -1;
-
-    setSamples(start, samples);
-
-    sampleAmount += samples.length;
-
+    
+    setSamples( start, samples );
+    
+    sampleAmount += samples.length / ( channels * BYTES_PER_SAMPLE );
+    
     return start + samples.length;
   }
 
