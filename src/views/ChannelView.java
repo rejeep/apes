@@ -40,7 +40,7 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * The internal format
    */
-  InternalFormat internalFormat;
+  private InternalFormat internalFormat;
   
   /**
    * The number of samples for each of the channels.
