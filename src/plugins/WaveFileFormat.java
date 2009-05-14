@@ -161,17 +161,14 @@ public class WaveFileFormat implements AudioFormatPlugin
     
     // 2 little
     int numChannels = bigToLittleEndian(dStream.readShort());
-    System.out.println("number of channels: " + numChannels);
     
     // 4 little
     int sampleRate = bigToLittleEndian(dStream.readInt());
-    System.out.println("samplerate: " + sampleRate);
     
     dStream.skip(6);
     
     // 2 little
     int bitsPerSample = bigToLittleEndian(dStream.readShort());
-    System.out.println("Bits per sample: " + bitsPerSample);
     
     dStream.skip( 4 );
     
@@ -185,16 +182,12 @@ public class WaveFileFormat implements AudioFormatPlugin
     
     int written = 0;
     byte b[] = new byte[IO_CHUNK_SIZE];
-    System.out.println("IO_CHUNCK_SIZE: " + IO_CHUNK_SIZE);
-    System.out.println("subChunk2Size: " + subChunk2Size);
     
     while( written < subChunk2Size )
     {
       int read = dStream.read(b);
       if( read < IO_CHUNK_SIZE )
       {
-        System.out.println("written: " + written);
-        System.out.println("read: " + read);
         byte[] bTemp = new byte[read];
         System.arraycopy( b, 0, bTemp, 0, read );
         b = bTemp;
