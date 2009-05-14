@@ -722,6 +722,7 @@ public class ChannelView extends JPanel implements Runnable
       // equally many samples as there are pixels.
       if( samplesPerPixel <= 1 )
       {
+        // Plus one because we want to draw the whole graph width.
         samples = new int[visibleSamples + 1];
         
         int firstVisibleSample = getFirstVisibleSample();
@@ -739,10 +740,10 @@ public class ChannelView extends JPanel implements Runnable
         int jump = visibleSamples / graphWidth;
         int firstVisibleSample = getFirstVisibleSample();
 
-
-        for( int i = firstVisibleSample; i < visibleSamples; i += jump )
+        for( int i = 0; i < samples.length; i++ )
         {
-          int sample = internalFormat.getAverageAmplitude( channel, i*jump , jump );
+          int start = firstVisibleSample + ( i * jump );
+          int sample = internalFormat.getAverageAmplitude( channel, start, jump );
           
           samples[i] = sample;
         }

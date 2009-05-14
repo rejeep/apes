@@ -163,15 +163,20 @@ public class InternalFormat extends Observable
    */
   public int getAverageAmplitude(int channel, int start, int length)
   {
-    if( start < 0 || channel > channels || length < 1 || start + length > sampleAmount )
+    if( start < 0 || channel >= channels || length < 1 || start + length > sampleAmount )
       return 0;
-    int step = length <= 1000 ? 1 : length / 1000;
-    int i = 0;
-    int average = 0;
-    for(; i < length; i += step)
-      average += getSample(channel, start + i);
+    
+    int c = 0;
+    int total = 0;
+    int step = length <= 50 ? 1 : Math.round(length * 0.1f);
 
-    return average / i;
+    for(int i = 0; i < length; i += step, c++)
+    {
+      System.out.println(getSample(channel, start + i));
+      total += getSample(channel, start + i);
+    }
+
+    return Math.round((float)total/c);
   }
 
   /**
@@ -236,10 +241,9 @@ public class InternalFormat extends Observable
 
   public int getSample(int channel, int index)
   {
-    if( channel >= channels || index > sampleAmount || index < 0)
+    if( channel >= channels || index >= sampleAmount || index < 0)
       return 0;
     int amplitude = 0;
-    index = index * channels + channel;
     byte[] b = getSamples(index, index);
     for(int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++)
       amplitude += b[i] << ( i * 8 );
