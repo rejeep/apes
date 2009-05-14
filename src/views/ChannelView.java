@@ -236,8 +236,8 @@ public class ChannelView extends JPanel implements Runnable
     if(pixels < 0 || pixels > graphWidth)
       return -1;
     int firstVisibleSample = centerSample - visibleSamples/2;
-    int samplesPerPixel = visibleSamples / graphWidth;
-    int samples = pixels*samplesPerPixel + firstVisibleSample;
+    float samplesPerPixel = (float)visibleSamples / graphWidth;
+    int samples = Math.round(pixels*samplesPerPixel + firstVisibleSample);
     return samples;
   }
 
@@ -251,7 +251,7 @@ public class ChannelView extends JPanel implements Runnable
   {
     int samples = pixelsToSamples(pixels);
     int sampleRate = player.getInternalFormat().getSampleRate();
-    int milliseconds = (samples / sampleRate) * 1000;
+    int milliseconds = Math.round(((float)samples / sampleRate) * 1000);
     return milliseconds;
   }
 
@@ -325,6 +325,16 @@ public class ChannelView extends JPanel implements Runnable
   public void setCenter(int sample)
   {
     centerSample = sample;
+  }
+
+  /**
+   * Returns the center position.
+   *
+   * @return The center position.
+   */
+  public int getCenter()
+  {
+    return centerSample;
   }
 
   /**
@@ -422,19 +432,58 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawStatus(Graphics2D g2)
     {
-      //inchannelController;
-      int seconds = pixelsToSeconds( mousePosX );
-      g2.drawString( "( " + seconds + " s)", 0, graphHeight );
+      String time = null;
+
+      if( shouldGoSmall() )
+      {
+        time = pixelsToMilliseconds( mousePosX ) + " ms";
+      }
+      else
+      {
+        time = pixelsToSeconds( mousePosX ) + " s";
+      }
+
+      g2.drawString( "( " + time + " )", 3, graphHeight - 3 );
     }
 
     private void drawRuler(Graphics2D g2)
     {
-      g2.setColor(Color.decode(Config.getInstance().getOption("color_ruler")));
-      int rulerWidth = Config.getInstance().getIntOption("ruler_width");
-      g2.fillRect(0,0, graphWidth-1, rulerWidth );
-      for(int i = 0; i < graphWidth; i += graphWidth/10)
-        g2.drawLine( i, 0, i, rulerWidth+5);
+      g2.setColor( Color.decode( Config.getInstance().getOption( "color_ruler" ) ) );
 
+      int rulerWidth = 3;
+      g2.fillRect( 0, 0, graphWidth - 1, rulerWidth );
+
+      for( int i = 0; i < graphWidth; i += graphWidth / 10 )
+      {
+        g2.drawLine( i, 0, i, rulerWidth + 3 );
+
+        int time;
+
+        if( shouldGoSmall() )
+        {
+          time = pixelsToMilliseconds( i );
+        }
+        else
+        {
+          time = pixelsToSeconds( i );
+        }
+
+        g2.drawString( "" + time, i, 20 );
+      }
+    }
+
+    /**
+     * Returns true if smaller units than seconds should used. False
+     * otherwise.
+     *
+     * @return true if smaller units than seconds.
+     */
+    private boolean shouldGoSmall()
+    {
+      int start = pixelsToSeconds( 0 );
+      int stop = pixelsToSeconds( graphWidth );
+
+      return stop - start < 5;
     }
 
     private void drawPlayMarker(Graphics2D g2)
@@ -452,7 +501,7 @@ public class ChannelView extends JPanel implements Runnable
 
     private void drawSelection(Graphics2D g2)
     {
-      if( getMarkStart() >= 0 && getMarkStop() > 0)
+      if( getMarkStart() >= 0 && getMarkStop() > 0 )
       {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         g2.setColor(Color.decode(Config.getInstance().getOption("color_selection")));
