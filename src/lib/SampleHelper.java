@@ -18,7 +18,7 @@ public class SampleHelper
    */
   public static int millisecondsToSamples( int sampleRate, int milliseconds )
   {
-    return ( milliseconds / 1000 ) * sampleRate;
+    return Math.round( ( milliseconds / 1000.0f ) * sampleRate );
   }
 
   /**
@@ -57,7 +57,7 @@ public class SampleHelper
    */
   public static int samplesToMilliseconds( int sampleRate, int samples )
   {
-    return ( samples / sampleRate ) * 1000;
+    return Math.round( (float)samples / sampleRate ) * 1000;
   }
   
   /**
@@ -70,7 +70,7 @@ public class SampleHelper
    */
   public static int samplesToSeconds( int sampleRate, int samples )
   {
-    return samples / sampleRate;
+    return Math.round( (float)samples / sampleRate );
   }
   
   /**
@@ -83,6 +83,6 @@ public class SampleHelper
    */
   public static int samplesToMinutes( int sampleRate, int samples )
   {
-    return ( samples / sampleRate ) / 60;
+    return Math.round( ( (float)samples / sampleRate ) / 60.0f );
   }
 }
