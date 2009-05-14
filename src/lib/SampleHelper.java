@@ -27,7 +27,7 @@ public class SampleHelper
     return ( samples / sampleRate ) * 1000;
   }
 
-  public static int samplesToseconds( int sampleRate, int samples )
+  public static int samplesToSeconds( int sampleRate, int samples )
   {
     return samples / sampleRate;
   }
