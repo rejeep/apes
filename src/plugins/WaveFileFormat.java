@@ -154,27 +154,29 @@ public class WaveFileFormat implements AudioFormatPlugin
     File file = new File( path, filename );
     FileInputStream fStream = new FileInputStream( file );
     DataInputStream dStream = new DataInputStream( fStream );
-    
 
     // Wave do not contain any tags
     Tags tag = null;
     dStream.skip( 22 );
     
     // 2 little
-    int numChannels = dStream.readShort();
+    int numChannels = bigToLittleEndian(dStream.readShort());
+    System.out.println("number of channels: " + numChannels);
     
     // 4 little
-    int sampleRate = dStream.readInt();
+    int sampleRate = bigToLittleEndian(dStream.readInt());
+    System.out.println("samplerate: " + sampleRate);
     
     dStream.skip(6);
     
     // 2 little
-    int bitsPerSample = dStream.readShort();
+    int bitsPerSample = bigToLittleEndian(dStream.readShort());
+    System.out.println("Bits per sample: " + bitsPerSample);
     
     dStream.skip( 4 );
     
     // 4 little
-    int subChunk2Size = dStream.readInt();
+    int subChunk2Size = bigToLittleEndian(dStream.readInt());
 
     int bytesPerSample = bitsPerSample/8;
 
@@ -183,11 +185,16 @@ public class WaveFileFormat implements AudioFormatPlugin
     
     int written = 0;
     byte b[] = new byte[IO_CHUNK_SIZE];
+    System.out.println("IO_CHUNCK_SIZE: " + IO_CHUNK_SIZE);
+    System.out.println("subChunk2Size: " + subChunk2Size);
+    
     while( written < subChunk2Size )
     {
       int read = dStream.read(b);
       if( read < IO_CHUNK_SIZE )
       {
+        System.out.println("written: " + written);
+        System.out.println("read: " + read);
         byte[] bTemp = new byte[read];
         System.arraycopy( b, 0, bTemp, 0, read );
         b = bTemp;
@@ -199,4 +206,24 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     return internalFormat;
   }
+
+  private static int bigToLittleEndian(int bigendian) {  
+    ByteBuffer buf = ByteBuffer.allocate(4);
+
+    buf.order(ByteOrder.BIG_ENDIAN);
+    buf.putInt(bigendian);
+
+    buf.order(ByteOrder.LITTLE_ENDIAN);
+    return buf.getInt(0);
+  }
+
+  private static int bigToLittleEndian(short bigendian) {  
+    ByteBuffer buf = ByteBuffer.allocate(2);
+
+    buf.order(ByteOrder.BIG_ENDIAN);
+    buf.putShort(bigendian);
+
+    buf.order(ByteOrder.LITTLE_ENDIAN);
+    return buf.getShort(0);
+}
 }
