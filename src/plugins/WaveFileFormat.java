@@ -168,8 +168,9 @@ public class WaveFileFormat implements AudioFormatPlugin
     dStream.skip(6);
     
     // 2 little
+    // TODO: Dangerous => Should be used!
     int bitsPerSample = bigToLittleEndian(dStream.readShort());
-    
+
     dStream.skip( 4 );
     
     // 4 little
