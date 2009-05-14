@@ -145,14 +145,8 @@ public class InternalFormat extends Observable
 
     try
     {
-<<<<<<< HEAD:src/models/InternalFormat.java
       return memoryHandler.read( channels * index * BYTES_PER_SAMPLE, amount * channels * BYTES_PER_SAMPLE );
     } catch ( IOException e )
-=======
-      return memoryHandler.read(channels * index * BYTES_PER_SAMPLE, amount * index * BYTES_PER_SAMPLE);
-    }
-    catch(IOException e)
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
     {
       e.printStackTrace();
       return null;
@@ -268,14 +262,8 @@ public class InternalFormat extends Observable
 
     try
     {
-<<<<<<< HEAD:src/models/InternalFormat.java
       return memoryHandler.read( start * channels * BYTES_PER_SAMPLE, (stop - start + 1) * channels * BYTES_PER_SAMPLE );
     } catch ( IOException e )
-=======
-      return memoryHandler.read(start * channels * BYTES_PER_SAMPLE, ( stop - start ) * channels * BYTES_PER_SAMPLE);
-    }
-    catch(IOException e)
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
     {
       e.printStackTrace();
       return null;
@@ -351,53 +339,30 @@ public class InternalFormat extends Observable
 
   /**
    * Inserts the provided samples at the specified index.
-<<<<<<< HEAD:src/models/InternalFormat.java
    * @param start Index to insert at in bytes.
-=======
-   * 
-   * @param start Index to insert at.
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
    * @param samples Samples to insert at start.
    * @return Index of the first sample after the inserted samples.
    */
   public int insertSamples(int start, byte[] samples)
   {
-<<<<<<< HEAD:src/models/InternalFormat.java
     if( samples == null || start > sampleAmount * BYTES_PER_SAMPLE * channels)
-=======
-    if(samples == null || samples.length < sampleAmount)
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
       return -1;
     
     boolean alloc = false;
     try
     {
-<<<<<<< HEAD:src/models/InternalFormat.java
       alloc = memoryHandler.malloc(start, samples.length);
     } catch ( IOException e )
-=======
-      alloc = memoryHandler.malloc(start * BYTES_PER_SAMPLE, samples.length);
-    }
-    catch(IOException e)
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
     {
       e.printStackTrace();
     }
     if(!alloc)
       return -1;
-<<<<<<< HEAD:src/models/InternalFormat.java
     
     setSamples( start, samples );
     
     sampleAmount += samples.length / ( channels * BYTES_PER_SAMPLE );
     
-=======
-
-    setSamples(start, samples);
-
-    sampleAmount += samples.length;
-
->>>>>>> b13dafb6b668540270645f4c8177eda47df70839:src/models/InternalFormat.java
     return start + samples.length;
   }
 
