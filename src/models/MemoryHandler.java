@@ -14,10 +14,8 @@ import java.util.List;
  */
 public class MemoryHandler
 { 
-  private final int INTEGER_BYTES = 4;
-  private final int PAGE_SIZE = 5; // Magic number.
-  private final int PAGE_SIZE_B = PAGE_SIZE * INTEGER_BYTES;
-  private final int FRAME_NUM = INTEGER_BYTES;
+  private final int PAGE_SIZE = 100000; // Magic number.
+  private final int FRAME_NUM = 100;
   private long usedMemory = 0;
   
   private Frame[] frameTable;
@@ -31,21 +29,21 @@ public class MemoryHandler
       frameTable[i] = new Frame();
   }
   
-  public boolean free(long index, long integers) throws IOException
+  public boolean free(long index, long bytes) throws IOException
   {
-    if( index < 0 || index + integers > usedMemory || integers <= 0 )
+    if( index < 0 || index + bytes > usedMemory || bytes <= 0 )
       return false;
     
     int frameF = find( index );
-    int frameL = find( index + integers - 1 );
+    int frameL = find( index + bytes - 1 );
     
     // Find new size
     Frame fstFrame = (frameF  == -1 ? swap(index)             : frameTable[frameF]);
-    Frame lstFrame = (frameL  == -1 ? swap(index + integers - 1)  : frameTable[frameL]);
+    Frame lstFrame = (frameL  == -1 ? swap(index + bytes - 1)  : frameTable[frameL]);
 
     long firstIndex = fstFrame.page.index;
     int fstSize = (int)(index - firstIndex);
-    int lstSize = (int)((lstFrame.data.length/INTEGER_BYTES + lstFrame.page.index) - (index + integers));
+    int lstSize = (int)((lstFrame.data.length + lstFrame.page.index) - (index + bytes));
 
     int size = fstSize + lstSize;
     
@@ -60,17 +58,17 @@ public class MemoryHandler
         newPages[i] = new Page(size / nPages);
        
       // Copy first data
-      newPages[0].file.write(fstFrame.data, 0, fstSize*INTEGER_BYTES );
+      newPages[0].file.write(fstFrame.data, 0, fstSize );
       
       // Copy last data
-      newPages[nPages - 1].file.write(lstFrame.data, (int)(index+integers - lstFrame.page.index), lstSize);
+      newPages[nPages - 1].file.write(lstFrame.data, (int)(index+bytes - lstFrame.page.index), lstSize);
     }  
     // Destroy pages
     System.out.println(pageTable.size());
     for( int i = 0; i < pageTable.size(); i++ )
     {
       Page p = pageTable.get(i);
-      if( p.index >= firstIndex && p.index < index + integers)
+      if( p.index >= firstIndex && p.index < index + bytes)
       {
         destroyPage(p);
         i--;
@@ -78,8 +76,8 @@ public class MemoryHandler
     }
     
     for(Page p : pageTable)
-      if(p.index > index + integers)
-        p.index -= integers;
+      if(p.index > index + bytes)
+        p.index -= bytes;
     
     // Add pages, set indices
     if(size != 0)
@@ -93,7 +91,7 @@ public class MemoryHandler
       }
     }
     
-    usedMemory -= integers;
+    usedMemory -= bytes;
     return true;
   }
   
@@ -104,9 +102,9 @@ public class MemoryHandler
    * @return Returns true if allocation succeeded, otherwise false.
    */
   // TODO: Fix small files.
-  public boolean malloc(long index, long integers) throws IOException
+  public boolean malloc(long index, long bytes) throws IOException
   {
-    if( index < 0 || index > usedMemory || integers <= 0 )
+    if( index < 0 || index > usedMemory || bytes <= 0 )
       return false;
     
     int frameI = find( index );
@@ -116,10 +114,10 @@ public class MemoryHandler
       // Doesn't exist
       if( swap(index) == null )
       {
-        Page[] pages = createPages(index, integers);
+        Page[] pages = createPages(index, bytes);
         for( Page p : pages )
           pageTable.add( p );
-        usedMemory += integers;
+        usedMemory += bytes;
         return true;
       }
     }
@@ -128,33 +126,33 @@ public class MemoryHandler
     Frame frame = frameTable[frameI];
     long firstIndex = index - frame.page.index;
     long frontSize = index - firstIndex;
-    long backSize = frame.page.file.length()/INTEGER_BYTES - frontSize;
-    long newSizeB = frame.page.file.length() + integers*INTEGER_BYTES;
-    long newSizeI = newSizeB / INTEGER_BYTES;
+    long backSize = frame.page.file.length() - frontSize;
+    long newSizeB = frame.page.file.length() + bytes;
+    long newSizeI = newSizeB;
     
     // Create pages
     Page[] pages = createPages( firstIndex, newSizeI );
     
     // Copy front data
     Page front0 = pages[0], front1 = null;
-    long front0CopySize = frontSize > PAGE_SIZE ? PAGE_SIZE_B : frontSize*INTEGER_BYTES;
+    long front0CopySize = frontSize > PAGE_SIZE ? PAGE_SIZE : frontSize;
     if( frontSize > PAGE_SIZE )
       front1 = pages[1]; 
     front0.file.write(frame.data, 0, (int)front0CopySize);
     if( front1 != null )
     {
-      front1.file.write(frame.data, (int)front0CopySize, (int)(frontSize*INTEGER_BYTES - PAGE_SIZE_B));
+      front1.file.write(frame.data, (int)front0CopySize, (int)(frontSize - PAGE_SIZE));
     }
     
     // Copy back data
     Page back0 = pages[pages.length-1], back1 = null;
-    long back0CopySize = backSize > PAGE_SIZE ? PAGE_SIZE_B : backSize*INTEGER_BYTES;
+    long back0CopySize = backSize > PAGE_SIZE ? PAGE_SIZE : backSize;
     if( backSize > PAGE_SIZE )
       back1 = pages[pages.length-2]; 
-    back0.file.write(frame.data, (int)(PAGE_SIZE_B - back0CopySize), (int)back0CopySize);
+    back0.file.write(frame.data, (int)(PAGE_SIZE - back0CopySize), (int)back0CopySize);
     if( back1 != null )
     {
-      back1.file.write(frame.data, (int)(PAGE_SIZE_B - (backSize*INTEGER_BYTES - back0CopySize)), (int)(backSize*INTEGER_BYTES - back0CopySize));
+      back1.file.write(frame.data, (int)(PAGE_SIZE - (backSize - back0CopySize)), (int)(backSize - back0CopySize));
     }
     
     // Remove old page from disk
@@ -168,14 +166,14 @@ public class MemoryHandler
     for( Page p : pageTable )
     {
       if( p.index > firstIndex )
-        p.index += integers;
+        p.index += bytes;
     }
     
     // Add new pages
     for( Page p : pages )
       pageTable.add( p );
         
-    usedMemory += integers;
+    usedMemory += bytes;
     
     return true;
   }
@@ -231,17 +229,15 @@ public class MemoryHandler
   // TODO: Well.. Yeah, implement
   public byte[] read( long index, int amount ) throws IOException
   {
-    index *= INTEGER_BYTES;
-    amount *= INTEGER_BYTES;
     Frame frame;
     int frameI;
     byte[] buf = new byte[amount];
     while( amount > 0 )
     {     
-      frameI = find(index/INTEGER_BYTES);
-      frame = (frameI  == -1 ? swap(index/INTEGER_BYTES) : frameTable[frameI]);
+      frameI = find(index);
+      frame = (frameI  == -1 ? swap(index) : frameTable[frameI]);
       
-      int offset = (int)(index - frame.page.index*INTEGER_BYTES);
+      int offset = (int)(index - frame.page.index);
       int length = frame.data.length - offset;
       System.arraycopy(frame.data, offset, buf, 0, length);
       
@@ -254,14 +250,13 @@ public class MemoryHandler
   
   public void write( long index, byte[] data ) throws IOException
   { 
-    index *= INTEGER_BYTES;
     Frame frame;
     int frameI;
     int offset = 0;
     while( offset < data.length )
     {
-      frameI = find( index/INTEGER_BYTES );
-      frame = (frameI  == -1 ? swap(index/INTEGER_BYTES) : frameTable[frameI]);
+      frameI = find( index );
+      frame = (frameI  == -1 ? swap( index ) : frameTable[frameI]);
       
       int length = Math.min(frame.data.length, data.length - offset);
       System.arraycopy(data, offset, frame.data, 0, length);
@@ -292,7 +287,7 @@ public class MemoryHandler
     
     for(Page page : pageTable)
     {
-      if( page.index <= index && page.index + page.file.length()/INTEGER_BYTES > index)
+      if( page.index <= index && page.index + page.file.length() > index)
       {
         evicted.writeAll();
         evicted.load( page );
@@ -309,7 +304,7 @@ public class MemoryHandler
     {
       Frame f = frameTable[i];
       if( f.page != null && (f.page.index <= index) && 
-          (f.page.index + f.page.file.length()/INTEGER_BYTES > index) )
+          (f.page.index + f.page.file.length() > index) )
         return i;
     }
     
