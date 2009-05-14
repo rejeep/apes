@@ -621,14 +621,14 @@ public class ChannelView extends JPanel implements Runnable
       if( samplesPerPixel < 1 )
       {
         float jump = (float)graphWidth / samples.length;
-        int pixel = Math.round(jump);
+        int pixel = 0;
         
-        for(int i = 1; i < samples.length; i++)
+        for(int i = 1; i <= samples.length; i++)
         {
           int x1 = samples[i - 1];
           int x2 = samples[i];
           
-          g2.drawLine( Math.round( pixel - jump), x1 , pixel, x2 );
+          g2.drawLine( pixel, x1 , Math.round( pixel + jump ), x2 );
 
           pixel += Math.round(jump);
         }
@@ -716,24 +716,19 @@ public class ChannelView extends JPanel implements Runnable
      */
     public void updateGraph()
     {
-      // Get number of samples.
-      int nrSamples = internalFormat.getSampleAmount();
-
       samplesPerPixel = visibleSamples / graphWidth;
 
       // If there are less samples per pixel than 1. Or if there are
       // equally many samples as there are pixels.
       if( samplesPerPixel <= 1 )
       {
-        samples = new int[nrSamples];
-
-        int i = 0;
-        SampleIterator it = new SampleIterator( internalFormat, channel );
-        while( it.hasNext() )
+        samples = new int[visibleSamples + 1];
+        
+        int firstVisibleSample = getFirstVisibleSample();
+        
+        for(int i = 0; i < samples.length; i++)
         {
-          int sample = it.next();
-
-          samples[i++] = sample;
+          samples[i] = internalFormat.getSample( channel, firstVisibleSample + i );
         }
       }
       // If there are more samples per pixel than 1.
@@ -741,10 +736,10 @@ public class ChannelView extends JPanel implements Runnable
       {
         samples = new int[graphWidth];
 
-        int jump = nrSamples / graphWidth;
+        int jump = visibleSamples / graphWidth;
         int firstVisibleSample = getFirstVisibleSample();
 
-        for( int i = firstVisibleSample; i < nrSamples; i += jump )
+        for( int i = firstVisibleSample; i < visibleSamples; i += jump )
         {
           int sample = internalFormat.getAverageAmplitude( channel, i, jump );
           
