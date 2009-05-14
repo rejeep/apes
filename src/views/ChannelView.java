@@ -41,11 +41,6 @@ public class ChannelView extends JPanel implements Runnable
    * The internal format
    */
   private InternalFormat internalFormat;
-  
-  /**
-   * The number of samples for each of the channels.
-   */
-  private int nrSamples;
 
   /**
    * The center sample of the channels
@@ -624,7 +619,8 @@ public class ChannelView extends JPanel implements Runnable
     {
       g2.setColor( colorGraph );
 
-      if( samplesPerPixel <= 1 )
+      // NOT EQUAL, RIGHT?
+      if( samplesPerPixel < 1 )
       {
 
       }
@@ -712,7 +708,7 @@ public class ChannelView extends JPanel implements Runnable
     public void updateGraph()
     {
       // Get number of samples.
-      nrSamples = internalFormat.getSampleAmount();
+      int nrSamples = internalFormat.getSampleAmount();
 
       samplesPerPixel = visibleSamples / graphWidth;
 
