@@ -176,8 +176,6 @@ public class WaveFileFormat implements AudioFormatPlugin
     // 4 little
     int subChunk2Size = bigToLittleEndian(dStream.readInt());
 
-    int bytesPerSample = bitsPerSample/8;
-
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
     
