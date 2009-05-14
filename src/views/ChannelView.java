@@ -740,10 +740,10 @@ public class ChannelView extends JPanel implements Runnable
         int jump = visibleSamples / graphWidth;
         int firstVisibleSample = getFirstVisibleSample();
 
-
-        for( int i = firstVisibleSample; i < visibleSamples; i += jump )
+        for( int i = 0; i < samples.length; i++ )
         {
-          int sample = internalFormat.getAverageAmplitude( channel, i*jump , jump );
+          int start = firstVisibleSample + ( i * jump );
+          int sample = internalFormat.getAverageAmplitude( channel, start, jump );
           
           samples[i] = sample;
         }
