@@ -172,7 +172,7 @@ public class InternalFormat extends Observable
 
     for(int i = 0; i < length; i += step, c++)
     {
-      System.out.println(getSample(channel, start + i));
+      // System.out.println(getSample(channel, start + i));
       total += getSample(channel, start + i);
     }
 
@@ -243,10 +243,22 @@ public class InternalFormat extends Observable
   {
     if( channel >= channels || index >= sampleAmount || index < 0)
       return 0;
+    
     int amplitude = 0;
-    byte[] b = getSamples(index, index);
-    for(int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++)
+    byte[] b = null;
+      
+    try
+    {
+      b = memoryHandler.read( index * channels * BYTES_PER_SAMPLE + channel * BYTES_PER_SAMPLE, BYTES_PER_SAMPLE );
+    }
+    catch ( IOException e )
+    {
+      e.printStackTrace();
+    }
+    
+    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
       amplitude += b[i] << ( i * 8 );
+    
     return amplitude;
   }
 
@@ -322,17 +334,17 @@ public class InternalFormat extends Observable
    * Sets all samples in the selected range to data taken from
    * <code>values</code>
    * 
-   * @param start First index to set
+   * @param start First index to set as bytes.
    * @param values An array of byte values to use for setting.
    */
   public void setSamples(int start, byte[] values)
   {
-    if(start < 0 || start + values.length >= sampleAmount)
+    if(start < 0 || start + values.length > sampleAmount * channels * BYTES_PER_SAMPLE)
       return;
-
+    
     try
     {
-      memoryHandler.write(start * channels * BYTES_PER_SAMPLE, values);
+      memoryHandler.write(start, values);
     }
     catch(IOException e)
     {
@@ -363,16 +375,16 @@ public class InternalFormat extends Observable
     if(!alloc)
       return -1;
     
-    setSamples( start, samples );
-    
     sampleAmount += samples.length / ( channels * BYTES_PER_SAMPLE );
+    
+    setSamples( start, samples );
     
     return start + samples.length;
   }
 
   public int pasteSamples(int start, byte[] samples)
   {
-    int index = insertSamples(start, samples);
+    int index = insertSamples(start * channels * BYTES_PER_SAMPLE, samples);
     updated();
     return index;
   }
