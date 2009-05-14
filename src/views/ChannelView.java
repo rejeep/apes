@@ -93,6 +93,11 @@ public class ChannelView extends JPanel implements Runnable
   private static enum Unit { SAMPLES, MILLISECONDS, SECONDS, MINUTES };
 
   /**
+   * Some graph colors.
+   */
+  private Color colorRuler, colorPlay, colorSelection, colorLine, colorGraph, colorBackground;
+
+  /**
    * Creates a new <code>ChannelView</code> instance.
    *
    * @param channelController The channel controller.
@@ -100,10 +105,12 @@ public class ChannelView extends JPanel implements Runnable
    */
   public ChannelView( InternalFormat internalFormat, ChannelController channelController, Player player )
   {
+    // Set layout.
     layout = new GridLayout( 0, 1 );
     layout.setVgap( 10 );
     setLayout( layout );
 
+    // Set some instance variables.
     this.internalFormat = internalFormat;
     this.sampleRate = internalFormat.getSampleRate();
     this.channelController = channelController;
@@ -115,9 +122,17 @@ public class ChannelView extends JPanel implements Runnable
     int numSamples = internalFormat.getSampleAmount();
     setZoom( numSamples );
     setCenter( numSamples / 2 );
+    
+    // Set configuration options.
     Config config = Config.getInstance();
-    graphWidth = config.getIntOption( "graph_width" );
-    graphHeight = config.getIntOption( "graph_height" );
+    graphWidth      = config.getIntOption( "graph_width" );
+    graphHeight     = config.getIntOption( "graph_height" );
+    colorRuler      = Color.decode( config.getOption( "color_ruler" ) );
+    colorPlay       = Color.decode( config.getOption( "color_play" ) );
+    colorSelection  = Color.decode( config.getOption( "color_selection" ) );
+    colorLine       = Color.decode( config.getOption( "color_lines" ) );
+    colorGraph      = Color.decode( config.getOption( "color_graph" ) );
+    colorBackground = Color.decode( config.getOption( "color_background" ) );
 
     new Thread( this ).start();
   }
@@ -521,7 +536,7 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawRuler()
     {
-      g2.setColor( Color.decode( Config.getInstance().getOption( "color_ruler" ) ) );
+      g2.setColor( colorRuler );
 
       int rulerWidth = 3;
       g2.fillRect( 0, 0, graphWidth - 1, rulerWidth );
@@ -548,7 +563,7 @@ public class ChannelView extends JPanel implements Runnable
         player++;
       }
 
-      g2.setColor( Color.decode( Config.getInstance().getOption( "color_play" ) ) );
+      g2.setColor( colorPlay );
       g2.drawLine( player, 0, player, graphHeight );
     }
 
@@ -563,7 +578,7 @@ public class ChannelView extends JPanel implements Runnable
       if( start >= 0 && stop > 0 )
       {
         g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, 0.25f ) );
-        g2.setColor( Color.decode( Config.getInstance().getOption( "color_selection" ) ) );
+        g2.setColor( colorSelection );
         g2.fillRect( start, 0, stop - start, graphHeight );
         g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, 1.0f ) );
       }
@@ -596,7 +611,7 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawLines()
     {
-      g2.setColor( Color.decode( Config.getInstance().getOption( "color_lines" ) ) );
+      g2.setColor( colorLine );
       g2.drawLine( 0, graphHeight / 2, graphWidth, graphHeight / 2 );
       g2.drawLine( 0, graphHeight, graphWidth, graphHeight );
       g2.drawLine( 0, 0, graphWidth, 0 );
@@ -607,7 +622,7 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawGraph()
     {
-      g2.setColor( Color.decode( Config.getInstance().getOption( "color_graph" ) ) );
+      g2.setColor( colorGraph );
 
       if( samplesPerPixel <= 1 )
       {
@@ -629,7 +644,7 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawBackground()
     {
-      g2.setBackground( Color.decode( Config.getInstance().getOption( "color_background" ) ) );
+      g2.setBackground( colorBackground );
       g2.clearRect( 0, 0, graphWidth - 1, graphHeight - 1 );
     }
 
