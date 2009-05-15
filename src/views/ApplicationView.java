@@ -85,7 +85,7 @@ public class ApplicationView extends JFrame
 
   /**
    * Creates a new <code>ApplicationView</code> instance.
-   * 
+   *
    * @param internalFormatController The internal format controller.
    * @param tagsController The tags controller.
    * @param languageController The language controller.
@@ -160,9 +160,16 @@ public class ApplicationView extends JFrame
     {
       public void windowClosing(WindowEvent e)
       {
-        int status = JOptionPane.showConfirmDialog(null, language.get("exit.confirm.message"), language.get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
-        
-        if(status == JOptionPane.YES_OPTION)
+        if(config.getBooleanOption("close_confirmation"))
+        {
+          int status = JOptionPane.showConfirmDialog(null, language.get("exit.confirm.message"), language.get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
+
+          if(status == JOptionPane.YES_OPTION)
+          {
+             System.exit(0);
+          }
+        }
+        else
         {
           System.exit(0);
         }
@@ -313,7 +320,7 @@ public class ApplicationView extends JFrame
       zoomSelection.addActionListener( internalFormatController );
       zoomSelection.setName( "zoomSelection" );
       zoom.add( zoomSelection );
-      
+
       JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
       zoomReset.addActionListener( internalFormatController );
       zoomReset.setName( "zoomReset" );
@@ -356,7 +363,7 @@ public class ApplicationView extends JFrame
       JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
       player.add( backward );
       // Player END
-      
+
       // Effects START
       JMenuItem effects = pluginController.getEffectMenu();
       add(effects);
@@ -485,7 +492,7 @@ public class ApplicationView extends JFrame
 
       ProgressView progressBar = ProgressView.getInstance();
       add(progressBar);
-      
+
       ImageButton backward = new BackwardButton();
       backward.addActionListener(playerController);
       backward.setName("backward");

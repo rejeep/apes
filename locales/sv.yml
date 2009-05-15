@@ -119,6 +119,7 @@ config:
   gui_error_messages: Använd GUI för att visa felmeddelanden
   wind: Spolningskonstant
   ruler_width: Linjallängd
+  close_confirmation: Bekräfta före stängning
 plugins:
   header: Plugins
   apply: Verkställ

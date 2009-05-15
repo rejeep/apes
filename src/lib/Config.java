@@ -121,6 +121,7 @@ public class Config
     addOption( "ruler_width",         "6",                  Type.INTEGER );
     addOption( "gui_error_messages",  "true",               Type.BOOLEAN );
     addOption( "wind",                "20",                 Type.INTEGER );
+    addOption( "close_confirmation",  "true",               Type.BOOLEAN );
   }
 
   /**

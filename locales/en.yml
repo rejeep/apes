@@ -119,6 +119,7 @@ config:
   gui_error_messages: Use GUI to show error messages
   wind: Forward / Backward constant
   ruler_width: Ruler width
+  close_confirmation: Confirm program quit
 plugins:
   header: Plugins
   apply: Apply
