@@ -419,9 +419,14 @@ public class Player extends Observable implements Runnable
         else
         {
           if( currentSample > getSampleAmount() )
+          {
             stop();
+          }
           else
-            pause();           
+          {
+            pause();         
+            setCurrentSample(getStart());
+          }
         }
         // If this is not present there will be no playing.
         try
@@ -438,7 +443,6 @@ public class Player extends Observable implements Runnable
         setStatus( Status.WAIT );
         break;
       case PAUSE:
-        setCurrentSample( getStart() );
         setStatus( Status.WAIT );
         break;
       }  
