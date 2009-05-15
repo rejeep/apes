@@ -6,15 +6,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.Map;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.lib.FileHandler;
-import apes.models.*;
+import apes.views.ProgressView;
+import apes.models.FileStatus;
+import apes.models.InternalFormat;
+import apes.models.Tags;
 
 /**
  * Module used for converting .wav-files to the internal format and
@@ -24,11 +24,11 @@ import apes.models.*;
  */
 public class WaveFileFormat implements AudioFormatPlugin
 {
-  
+
   /**
    * Magic number of samples to read and write.
    */
-  private final static int IO_CHUNK_SIZE = 100000; 
+  private final static int IO_CHUNK_SIZE = 100000;
   /**
    * TODO: Comment
    */
@@ -92,7 +92,7 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     subchunk2Size = numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE;
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
-    
+
     data = ByteBuffer.wrap( new byte[chunkSize - subchunk2Size] );
 
     // Start copy data
@@ -119,10 +119,10 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     File file = new File( path + fileName );
     FileOutputStream fStream = new FileOutputStream( file );
-    
+
     fStream.write( data.array() );
     int written = 0;
-     
+
     while( written < numSamples )
     {
       byte[] bytes = internalFormat.getChunk( written, IO_CHUNK_SIZE );
@@ -132,7 +132,7 @@ public class WaveFileFormat implements AudioFormatPlugin
       fStream.write(bytes);
       System.out.println("Writing to "+ file.getName());
     }
-    
+
     fStream.close();
   }
 
@@ -150,6 +150,8 @@ public class WaveFileFormat implements AudioFormatPlugin
   // TODO: Rewrite
   public InternalFormat importFile( String path, String filename ) throws Exception
   {
+    ProgressView progress = ProgressView.getInstance();
+
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
     //buffer.order( ByteOrder.LITTLE_ENDIAN );
 
@@ -160,15 +162,15 @@ public class WaveFileFormat implements AudioFormatPlugin
     // Wave do not contain any tags
     Tags tag = null;
     dStream.skip( 22 );
-    
+
     // 2 little
     int numChannels = bigToLittleEndian(dStream.readShort());
-    
+
     // 4 little
     int sampleRate = bigToLittleEndian(dStream.readInt());
-    
+
     dStream.skip(6);
-    
+
     // 2 little
     // TODO: Dangerous => Should be used!
     int bitsPerSample = bigToLittleEndian(dStream.readShort());
@@ -176,22 +178,25 @@ public class WaveFileFormat implements AudioFormatPlugin
     {
       System.out.println("STUPID PROGGRAMMER WAS HERE(WaveFileFormat)");
       System.exit(1);
-      
+
     }
 
     dStream.skip( 4 );
-    
+
     // 4 little
     int subChunk2Size = bigToLittleEndian(dStream.readInt());
 
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
-    
+
     int written = 0;
     byte b[] = new byte[IO_CHUNK_SIZE];
-    
+
+    progress.setMaximum(subChunk2Size);
     while( written < subChunk2Size )
     {
+      progress.setValue(written);
+      
       int read = dStream.read(b);
       if( read < IO_CHUNK_SIZE )
       {
@@ -199,15 +204,18 @@ public class WaveFileFormat implements AudioFormatPlugin
         System.arraycopy( b, 0, bTemp, 0, read );
         b = bTemp;
       }
-        
+
       internalFormat.insertSamples( written, b );
       written += b.length;
     }
+    progress.reset();
+    
     dStream.close();
     return internalFormat;
   }
 
-  private static int bigToLittleEndian(int bigendian) {  
+  private static int bigToLittleEndian(int bigendian)
+  {
     ByteBuffer buf = ByteBuffer.allocate(4);
 
     buf.order(ByteOrder.BIG_ENDIAN);
@@ -217,7 +225,8 @@ public class WaveFileFormat implements AudioFormatPlugin
     return buf.getInt(0);
   }
 
-  private static int bigToLittleEndian(short bigendian) {  
+  private static int bigToLittleEndian(short bigendian)
+  {
     ByteBuffer buf = ByteBuffer.allocate(2);
 
     buf.order(ByteOrder.BIG_ENDIAN);

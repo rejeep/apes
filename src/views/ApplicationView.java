@@ -47,6 +47,7 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
+import apes.views.ProgressView;
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -475,6 +476,9 @@ public class ApplicationView extends JFrame
     {
       setBorder(new LineBorder(Color.GRAY, 1, true));
 
+      ProgressView progressBar = ProgressView.getInstance();
+      add(progressBar);
+      
       ImageButton backward = new BackwardButton();
       backward.addActionListener(playerController);
       backward.setName("backward");
