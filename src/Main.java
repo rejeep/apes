@@ -40,7 +40,7 @@ public class Main extends JFrame
     config.parse();
 
     // Create the plugin handler
-    PluginHandler pluginHandler = new PluginHandler("build/apes/plugins");
+    PluginHandler pluginHandler = new PluginHandler(config.getOption("plugin_path"));
 
     // Fix language.
     Language language = Language.getInstance();

@@ -7,7 +7,9 @@ import java.awt.BorderLayout;
 import java.util.Map;
 import java.util.HashMap;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.BorderFactory;
 
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;
@@ -68,14 +70,20 @@ public class FadeTransform implements TransformPlugin, ActionListener
   public void showFrame()
   {
     frame = new JFrame();
-    frame.setLayout( new BorderLayout() );
+    JPanel bPanel = new JPanel();
+    
+    bPanel.setLayout( new BorderLayout(5, 5) );
+    bPanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
     
     JButton inButton = new JButton("Fade in");
     inButton.addActionListener(this);
-    frame.add(inButton, BorderLayout.NORTH);
+    bPanel.add(inButton, BorderLayout.NORTH);
+    
     JButton outButton = new JButton("Fade out");
     outButton.addActionListener(this);
-    frame.add(outButton, BorderLayout.SOUTH);
+    bPanel.add(outButton, BorderLayout.SOUTH);
+    
+    frame.add(bPanel);
     frame.setLocationRelativeTo(null);
     frame.setDefaultCloseOperation( frame.DISPOSE_ON_CLOSE );
     frame.pack();
