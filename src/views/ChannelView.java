@@ -618,6 +618,20 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawGraph()
     {
+      // If the player cursor is at the end of the screen. Then go to
+      // the next page.
+      int start = getFirstVisibleSample();
+      int stop = getLastVisibleSample();
+      int currentSample = player.getCurrentSample();
+      
+      if(visibleSamples > 100000 && currentSample > stop)
+      {
+        setCenter(visibleSamples + start + visibleSamples / 2);
+        
+        updateGraph();
+      }
+
+      // Repaint it.
       g2.setColor( colorGraph );
 
       int half = graphHeight / 2;
