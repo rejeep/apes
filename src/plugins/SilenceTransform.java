@@ -30,8 +30,10 @@ public class SilenceTransform implements TransformPlugin
   public Map<String, String> getDescriptions()
   {
     HashMap map = new HashMap<String, String>();
-    map.put("en", "A silence effect for testing purposes.");
-    map.put("sv", "En tystnadseffekt för testning.");
+    
+    map.put("en", "A silence effect that mutes the marked area.");
+    map.put("sv", "En tystnadseffekt som tar bort allt ljud.");
+    
     return map;
   }
 
