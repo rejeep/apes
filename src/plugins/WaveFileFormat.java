@@ -57,7 +57,7 @@ public class WaveFileFormat implements AudioFormatPlugin
   {
     return "wav";
   }
-
+  
   /**
    * Converts a file from the internal file format to .wav and stores
    * it on the disk
@@ -67,9 +67,35 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @param fileName The name of the file to be saved.
    * @throws Exception
    */
-  public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
+  public void exportFile( InternalFormat internalFormat, String path, String name ) throws Exception
   {
-    System.out.println("WAnt to export " + fileName);
+    exportFile(internalFormat, new File(path, name) ); 
+  }
+
+  /**
+   * Converts a file from the internal file format to .wav and stores
+   * it on the disk
+   *
+   * @param internalFormat The file to be converted.
+   * @param file File to write to
+   * @throws Exception
+   */
+  public void exportFile( InternalFormat internalFormat, File file ) throws Exception
+  {
+    exportFile( internalFormat, file, 0, internalFormat.getSampleAmount());
+  }
+  
+  /**
+   * 
+   * @param internalFormat The file to be converted.
+   * @param file File to write to
+   * @param start Start of interval to copy from in internal format in samples
+   * @param stop  End of interval to copy from in internal format in samples
+   * @throws Exception
+   */
+  public void exportFile( InternalFormat internalFormat, File file, long startS, long stopS ) throws Exception
+  {
+    System.out.println("WAnt to export " + file + " start " + startS + " stop " + stopS);
     ByteBuffer data; // contians data to be exported
 
     //TODO; Add better support for different headers
@@ -88,12 +114,12 @@ public class WaveFileFormat implements AudioFormatPlugin
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
-    int numSamples = internalFormat.getSampleAmount();
+    long numSamples = stopS-startS;
 
-    subchunk2Size = numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE;
+    subchunk2Size = (int)(numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
     
-    data = ByteBuffer.wrap( new byte[chunkSize - subchunk2Size] );
+    data = ByteBuffer.wrap( new byte[44] );
 
     // Start copy data
 
@@ -117,22 +143,24 @@ public class WaveFileFormat implements AudioFormatPlugin
     data.order( ByteOrder.LITTLE_ENDIAN );
     data.putInt( subchunk2Size );
 
-    File file = new File( path + fileName );
     FileOutputStream fStream = new FileOutputStream( file );
     
     fStream.write( data.array() );
     int written = 0;
      
-    while( written < numSamples )
+    System.out.println("A boat to copy");
+    System.out.println("Written: " + written);
+    System.out.println("numSamples: " + numSamples);
+    while( written < numSamples)
     {
-      byte[] bytes = internalFormat.getChunk( written, IO_CHUNK_SIZE );
+      byte[] bytes = internalFormat.getChunk( startS + written, IO_CHUNK_SIZE );
       if( bytes == null )
-        bytes = internalFormat.getChunk( written, numSamples - written );
+        bytes = internalFormat.getChunk( startS + written, (int)(numSamples - written) );
       written += IO_CHUNK_SIZE;
       fStream.write(bytes);
       System.out.println("Writing to "+ file.getName());
     }
-    
+    System.out.println("A done to copy");
     fStream.close();
   }
 

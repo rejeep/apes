@@ -6,12 +6,14 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 
 import apes.lib.ApesFile;
+import apes.lib.ApesFormat;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
 import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
+import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
 import apes.views.ApesError;
 
@@ -298,7 +300,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void save()
   {
-    internalFormat = playerHandler.getInternalFormat();
+    internalFormat = player.getInternalFormat();
 
     try
     {
@@ -317,7 +319,7 @@ public class InternalFormatController extends ApplicationController
    */
   public void saveAs()
   {
-    internalFormat = playerHandler.getInternalFormat();
+    internalFormat = player.getInternalFormat();
     ApesFile apesFile = ApesFile.open();
 
     try
@@ -334,7 +336,24 @@ public class InternalFormatController extends ApplicationController
   
   public void export()
   {
-    System.out.println("asdj");
+    ApesFile apesFile = ApesFile.open();
+    ApesFormat format = new ApesFormat(apesFile.getFile());
+    InternalFormat internalFormat = player.getInternalFormat();
     
+    if(format.isWave())
+    {
+      WaveFileFormat wav = new WaveFileFormat();
+      try{
+        if(player.getStop() != 0 && player.getStart() != player.getStop())
+          wav.exportFile( internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
+        else
+          wav.exportFile( internalFormat, apesFile.getFile());     
+      }
+      catch(Exception e)
+      {
+        e.printStackTrace();
+        System.exit(1);     
+      }
+     }
   }
 }
