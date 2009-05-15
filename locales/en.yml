@@ -107,6 +107,7 @@ config:
   graph_height: Graph Height
   undo: Undo history size
   language: Default Language
+  plugin_path: Plugin path
   color_play: Play line color
   color_graph: Graph color
   color_selection: Selection color

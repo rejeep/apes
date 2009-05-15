@@ -107,6 +107,7 @@ config:
   graph_height: Graf höjd
   undo: Ångrahistorik storlek
   language: Standardspråk
+  plugin_path: Plugin katalog
   color_play: Färg spelningslinje
   color_graph: Färg graf
   color_selection: Färg Valt område
