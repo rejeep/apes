@@ -284,11 +284,11 @@ public class ChannelView extends JPanel implements Runnable
     {
       return -1;
     }
-
+    
     int firstVisibleSample = getFirstVisibleSample();
-    float samplesPerPixel = (float)firstVisibleSample / graphWidth;
-    int samples = Math.round( ( pixels* samplesPerPixel ) + firstVisibleSample );
-
+    float samplesPerPixel = (float)visibleSamples / graphWidth;
+    int samples = Math.round( ( pixels * samplesPerPixel ) + firstVisibleSample );
+    
     return samples;
   }
 
