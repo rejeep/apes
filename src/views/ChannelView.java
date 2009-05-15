@@ -521,7 +521,7 @@ public class ChannelView extends JPanel implements Runnable
     {
       int time = getTime( mousePosX );;
       String unit = getUnit();
-      
+
       g2.setColor( colorStatus );
       g2.drawString( "( " + time + " " + unit + " )", 3, graphHeight - 3 );
     }
@@ -620,6 +620,8 @@ public class ChannelView extends JPanel implements Runnable
     {
       g2.setColor( colorGraph );
 
+      int half = graphHeight / 2;
+      
       if( samplesPerPixel < 1 )
       {
         float jump = (float)graphWidth / samples.length;
@@ -628,11 +630,11 @@ public class ChannelView extends JPanel implements Runnable
         for(int i = 1; i < samples.length; i++)
         {
           int x1 = pixel;
-          int x2 = Math.round( pixel + jump );
-          int y1 = ( graphHeight / 2 ) + samples[i - 1];
-          int y2 = ( graphHeight / 2 ) + samples[i];
-          
-          g2.drawLine( x1, y1 ,x2, y2 );
+          int x2 = Math.round(pixel + jump);
+          int y1 = half + samples[i - 1];
+          int y2 = half + samples[i];
+
+          g2.drawLine( x1, y1, x2, y2 );
 
           if(graphWidth / samples.length > 3)
           {
@@ -643,34 +645,15 @@ public class ChannelView extends JPanel implements Runnable
 
           pixel += Math.round(jump);
         }
-
-        // Draw a fake line at the end so that it looks nicer.
-        // This is not very nice.
-        // int y = graphHeight / 2;
-        // g2.drawLine( pixel, ( graphHeight / 2 ) + samples[samples.length - 1], graphWidth, y );
       }
       else
       {
-        int x21, x22;
-        
         for( int i = 0; i < graphWidth; i++ )
         {
-          int x11 = graphHeight / 2;
-          int x12 = x11 + samples[i];
+          int y1 = half + samples[i];
+          int y2 = half - samples[i];
           
-          if(x12 > 0)
-          {
-            x21 = graphHeight;
-            x22 = x11 - samples[i];
-          }
-          else
-          {
-            x21 = 0;
-            x22 = x11 + samples[i];
-          }
-          
-          g2.drawLine( i, x11 , i, x12 );
-          g2.drawLine( i, x21 , i, x22 );
+          g2.drawLine(i, y1, i, y2);
         }
       }
     }
@@ -784,25 +767,27 @@ public class ChannelView extends JPanel implements Runnable
       int minAmp = Short.MAX_VALUE;
       for( int i = 0; i < samples.length; i++)
       {
-        int sample = samples[i];
+        int amplitude = samples[i];
 
-        if( sample > maxAmp )
+        if( amplitude > maxAmp )
         {
-          maxAmp = sample;
+          maxAmp = amplitude;
         }
-        if( sample < minAmp )
+        if( amplitude < minAmp )
         {
-          minAmp = sample;
+          minAmp = amplitude;
         }
       }
 
       // Fix sample amplitudes so that they are in correct scale.
-      double heightScale = (double)( (float)( (float)graphHeight / 2 ) / ( maxAmp - minAmp ) );
+      // double heightScale = (double)( (float)( graphHeight / 2 ) / ( maxAmp - minAmp ) );
+      
+      float scale = (float)graphHeight / (float)( Math.abs(minAmp) + Math.abs(maxAmp) );
       for( int i = 0; i < samples.length; i++ )
       {
-        samples[i] = (int)Math.round( samples[i] * heightScale );
+        samples[i] = (int)(samples[i] * scale * 0.7f);
       }
-
+      
       repaint();
     }
 
