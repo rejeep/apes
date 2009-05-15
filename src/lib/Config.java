@@ -109,7 +109,7 @@ public class Config
     addOption( "maximized",           "true",               Type.BOOLEAN );
     addOption( "undo",                "10",                 Type.INTEGER );
     addOption( "language",            "en",                 Type.STRING  );
-    addOption( "plugin_path",         "build/apes/plugins", Type.STRING );
+    addOption( "plugin_path",         "build/apes/plugins", Type.STRING  );
     addOption( "color_play",          "#FFFFFF",            Type.STRING  );
     addOption( "color_graph",         "#000000",            Type.STRING  );
     addOption( "color_selection",     "#0000FF",            Type.STRING  );
@@ -117,6 +117,7 @@ public class Config
     addOption( "color_background",    "#939391",            Type.STRING  );
     addOption( "color_dots",          "#0000FF",            Type.STRING  );
     addOption( "color_ruler",         "#000000",            Type.STRING  );
+    addOption( "color_status",        "#FF0000",            Type.STRING  );
     addOption( "ruler_width",         "6",                  Type.INTEGER );
     addOption( "gui_error_messages",  "true",               Type.BOOLEAN );
     addOption( "wind",                "20",                 Type.INTEGER );

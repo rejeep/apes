@@ -90,7 +90,7 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Some graph colors.
    */
-  private Color colorRuler, colorPlay, colorSelection, colorLine, colorGraph, colorBackground, colorDots;
+  private Color colorRuler, colorPlay, colorSelection, colorLine, colorGraph, colorBackground, colorDots, colorStatus;
 
   /**
    * Creates a new <code>ChannelView</code> instance.
@@ -129,6 +129,7 @@ public class ChannelView extends JPanel implements Runnable
     colorGraph      = Color.decode( config.getOption( "color_graph" ) );
     colorBackground = Color.decode( config.getOption( "color_background" ) );
     colorDots       = Color.decode( config.getOption( "color_dots" ) );
+    colorStatus     = Color.decode( config.getOption( "color_status" ) );
 
     new Thread( this ).start();
   }
@@ -519,9 +520,9 @@ public class ChannelView extends JPanel implements Runnable
     private void drawStatus()
     {
       int time = getTime( mousePosX );;
-
       String unit = getUnit();
-
+      
+      g2.setColor( colorStatus );
       g2.drawString( "( " + time + " " + unit + " )", 3, graphHeight - 3 );
     }
 
