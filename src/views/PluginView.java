@@ -47,7 +47,12 @@ public class PluginView extends JFrame
    * Mapping to fetch selected values from checkboxes.
    */
   private Map<String, JCheckBox> choices;
-
+  
+  /**
+   * Mapping to change descriptions.
+   */
+  private Map<String, JTextArea> descs;
+  
   /**
    * The language object.
    */
@@ -62,6 +67,11 @@ public class PluginView extends JFrame
    * The effect menu.
    */
   private JMenu effectMenu;
+  
+  /**
+   * Last locale.
+   */
+  private String lastLocale;
 
   /**
    * Creates a new <code>PluginView/code> instance.
@@ -74,6 +84,7 @@ public class PluginView extends JFrame
     pluginController = pC;
     pluginHandler = pH;
     choices = new HashMap<String, JCheckBox>();
+    descs = new HashMap<String, JTextArea>();
     language = Language.getInstance();
     effectMenu = new ApesMenu( "menu.head.effects" );
   }
@@ -85,6 +96,7 @@ public class PluginView extends JFrame
   {
     if( !viewCreated )
     {
+      lastLocale = language.getLanguage();
       setLayout(new BorderLayout());
       add(createPluginPanel(), BorderLayout.NORTH);
       add(createButtonPanel(), BorderLayout.SOUTH);
@@ -93,8 +105,27 @@ public class PluginView extends JFrame
       setLocationRelativeTo( null );
       viewCreated = true;
     }
+    else
+    {
+      if( !lastLocale.equals( language.getLanguage() ) )
+      {
+        lastLocale = language.getLanguage();
+        updateDescriptions();
+      }
+    }
 
     setVisible(true);
+  }
+  
+  /**
+   * Update the descriptions when locale has changed.
+   */
+  public void updateDescriptions()
+  {
+    for( String p : descs.keySet() )
+    {
+      descs.get(p).setText(pluginHandler.getDescription(p, lastLocale));
+    }
   }
 
   /**
@@ -139,6 +170,7 @@ public class PluginView extends JFrame
       gridbag.setConstraints(pText, c);
       bottom.add(pText);
       choices.put(names.get(i), pBox);
+      descs.put(names.get(i), pText);
     }
     
     panel.add(bottom, BorderLayout.SOUTH);
