@@ -230,6 +230,9 @@ public class InternalFormatController extends ApplicationController
     
     zoom = stop - start;
     center = start + ( zoom / 2 );
+    
+    player.setStart( 0 );
+    player.setStop( 0 );
   }
 
   /**
