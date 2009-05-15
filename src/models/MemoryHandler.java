@@ -127,6 +127,11 @@ public class MemoryHandler
     long index0        = index;
     long index1        = index + bytes;
 
+    if(frame.page.index == index)
+    {
+      createPages(index, bytes);
+      return true;
+    }
     // Destroy old page
     destroyPage( frame.page );
 
