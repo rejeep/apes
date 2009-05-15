@@ -130,6 +130,8 @@ public class InternalFormatController extends ApplicationController
     {
       if(internalFormatView != null)
       {
+        // Make sure that the center sample is at a correct and valid
+        // location.
         int left = center - ( zoom / 2 );
         int right = center + ( zoom / 2 );
         int stop = player.getSampleAmount();
@@ -138,12 +140,12 @@ public class InternalFormatController extends ApplicationController
         {
           center = zoom / 2;
         }
-
-        if(right > stop)
+        else if(right > stop)
         {
           center = stop - ( zoom / 2 );
         }
         
+        // Set zoom options.
         internalFormatView.setCenter(center);
         internalFormatView.setZoom(zoom);
         internalFormatView.updateAll();
