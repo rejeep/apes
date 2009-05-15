@@ -75,6 +75,16 @@ public class Language extends Observable
 
     setChanged();
   }
+  
+  /**
+   * Returns the currently set language.
+   * 
+   * @return Returns the string for the set locale.
+   */
+  public String getLanguage()
+  {
+    return language;
+  }
 
   /**
    * Gets the text for the key.
