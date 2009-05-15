@@ -782,10 +782,10 @@ public class ChannelView extends JPanel implements Runnable
       // Fix sample amplitudes so that they are in correct scale.
       // double heightScale = (double)( (float)( graphHeight / 2 ) / ( maxAmp - minAmp ) );
       
-      float scale = (float)graphHeight / (float)( Math.abs(minAmp) + Math.abs(maxAmp) );
+      float scale = ((float)graphHeight / 2 ) / (float)( Math.abs(minAmp) + Math.abs(maxAmp) );
       for( int i = 0; i < samples.length; i++ )
       {
-        samples[i] = (int)(samples[i] * scale * 0.7f);
+        samples[i] = Math.round((samples[i] * scale));
       }
       
       repaint();
