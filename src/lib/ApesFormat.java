@@ -55,4 +55,16 @@ public class ApesFormat
 
     return name.matches(".*wave?$");
   }
+  
+  /**
+   * Returns true if file is an apes file. False otherwise.
+   * 
+   * @return True if apes. False otherwise.
+   */
+  public boolean isApes()
+  {
+    String name = file.getName().toLowerCase();
+
+    return name.matches(".*ape?$");
+  }
 }

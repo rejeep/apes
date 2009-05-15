@@ -1,5 +1,7 @@
 package apes.interfaces;
 
+import java.io.IOException;
+
 import apes.models.InternalFormat;
 
 /**
@@ -24,7 +26,7 @@ public interface AudioFormatPlugin extends Plugin
    * @return an <code>InternalFormat</code> value
    * @exception Exception if an error occurs
    */
-  InternalFormat importFile(String path, String filename) throws Exception;
+  InternalFormat importFile(String path, String filename) throws IOException;
 
   /**
    * Describe <code>exportFile</code> method here.
@@ -34,5 +36,5 @@ public interface AudioFormatPlugin extends Plugin
    * @param filename a <code>String</code> value
    * @exception Exception if an error occurs
    */
-  void exportFile(InternalFormat internalFormat, String path, String filename) throws Exception;
+  void exportFile(InternalFormat internalFormat, String path, String filename) throws IOException;
 }
