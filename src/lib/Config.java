@@ -100,25 +100,26 @@ public class Config
     types = new HashMap<String, Type>();
 
     // Default settings.
-    addOption( "volume",              "50",      Type.INTEGER );
-    addOption( "volume_label_format", "%v %",    Type.STRING  );
-    addOption( "frame_width",         "600",     Type.INTEGER );
-    addOption( "frame_height",        "400",     Type.INTEGER );
-    addOption( "graph_width",         "500",     Type.INTEGER );
-    addOption( "graph_height",        "300",     Type.INTEGER );
-    addOption( "maximized",           "true",    Type.BOOLEAN );
-    addOption( "undo",                "10",      Type.INTEGER );
-    addOption( "language",            "en",      Type.STRING  );
-    addOption( "color_play",          "#FFFFFF", Type.STRING  );
-    addOption( "color_graph",         "#000000", Type.STRING  );
-    addOption( "color_selection",     "#0000FF", Type.STRING  );
-    addOption( "color_lines",         "#FFFF00", Type.STRING  );
-    addOption( "color_background",    "#939391", Type.STRING  );
-    // addOption( "color_background", "#ac71ac", Type.STRING );
-    addOption( "color_ruler",         "#000000", Type.STRING  );
-    addOption( "ruler_width",         "6",       Type.INTEGER );
-    addOption( "gui_error_messages",  "true",    Type.BOOLEAN );
-    addOption( "wind",                "20",      Type.INTEGER );
+    addOption( "volume",              "50",                 Type.INTEGER );
+    addOption( "volume_label_format", "%v %",               Type.STRING  );
+    addOption( "frame_width",         "600",                Type.INTEGER );
+    addOption( "frame_height",        "400",                Type.INTEGER );
+    addOption( "graph_width",         "500",                Type.INTEGER );
+    addOption( "graph_height",        "300",                Type.INTEGER );
+    addOption( "maximized",           "true",               Type.BOOLEAN );
+    addOption( "undo",                "10",                 Type.INTEGER );
+    addOption( "language",            "en",                 Type.STRING  );
+    addOption( "plugin_path",         "build/apes/plugins", Type.STRING );
+    addOption( "color_play",          "#FFFFFF",            Type.STRING  );
+    addOption( "color_graph",         "#000000",            Type.STRING  );
+    addOption( "color_selection",     "#0000FF",            Type.STRING  );
+    addOption( "color_lines",         "#FFFF00",            Type.STRING  );
+    addOption( "color_background",    "#939391",            Type.STRING  );
+    // addOption( "color_background", "#ac71ac",            Type.STRING );
+    addOption( "color_ruler",         "#000000",            Type.STRING  );
+    addOption( "ruler_width",         "6",                  Type.INTEGER );
+    addOption( "gui_error_messages",  "true",               Type.BOOLEAN );
+    addOption( "wind",                "20",                 Type.INTEGER );
   }
 
   /**
