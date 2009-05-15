@@ -130,6 +130,20 @@ public class InternalFormatController extends ApplicationController
     {
       if(internalFormatView != null)
       {
+        int left = center - ( zoom / 2 );
+        int right = center + ( zoom / 2 );
+        int stop = player.getSampleAmount();
+        
+        if(left < 0)
+        {
+          center = zoom / 2;
+        }
+
+        if(right > stop)
+        {
+          center = stop - ( zoom / 2 );
+        }
+        
         internalFormatView.setCenter(center);
         internalFormatView.setZoom(zoom);
         internalFormatView.updateAll();
