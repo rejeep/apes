@@ -55,8 +55,10 @@ public class FadeTransform implements TransformPlugin, ActionListener
   public Map<String, String> getDescriptions()
   {
     HashMap map = new HashMap<String, String>();
-    map.put("en", "Fade");
-    map.put("sv", "-");
+    
+    map.put("en", "Fades the volume of a marked area either in or out.");
+    map.put("sv", "Höjer volymen stegvis från noll, alternativt sänker den till noll.");
+    
     return map;
   }
   
