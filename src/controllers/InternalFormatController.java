@@ -277,14 +277,26 @@ public class InternalFormatController extends ApplicationController
   public void open()
   {
     ApesFile apesFile = ApesFile.open();
+    ApesFormat format = new ApesFormat(apesFile.getFile());
+    
+    
 
     if(apesFile != null)
     {
       try
       {
-        InternalFormatView internalFormatView = new InternalFormatView(apesFile.getInternalFormat());
-
-        tabs.add(internalFormatView);
+        InternalFormatView internalFormatView; 
+        if(format.isWave())
+        {
+          internalFormatView = new InternalFormatView(apesFile.getInternalFormat());
+          tabs.add(internalFormatView);
+        }
+        else if(format.isApes())
+        {
+          internalFormatView = new InternalFormatView(InternalFormat.load(apesFile.getParent(), apesFile.getName()));
+          tabs.add(internalFormatView); 
+        }
+        
       }
       catch(Exception e)
       {
@@ -301,10 +313,13 @@ public class InternalFormatController extends ApplicationController
   public void save()
   {
     internalFormat = player.getInternalFormat();
-
+    
     try
     {
-      internalFormat.save();
+      if(!internalFormat.getFileStatus().openedByInternal())
+        saveAs();
+      else
+        internalFormat.save();
     }
     catch(IOException e)
     {

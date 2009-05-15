@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @param fileName The name of the file to be saved.
    * @throws Exception
    */
-  public void exportFile( InternalFormat internalFormat, String path, String name ) throws Exception
+  public void exportFile( InternalFormat internalFormat, String path, String name ) throws IOException
   {
     exportFile(internalFormat, new File(path, name) ); 
   }
@@ -80,7 +81,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @param file File to write to
    * @throws Exception
    */
-  public void exportFile( InternalFormat internalFormat, File file ) throws Exception
+  public void exportFile( InternalFormat internalFormat, File file ) throws IOException
   {
     exportFile( internalFormat, file, 0, internalFormat.getSampleAmount());
   }
@@ -93,7 +94,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    * @param stop  End of interval to copy from in internal format in samples
    * @throws Exception
    */
-  public void exportFile( InternalFormat internalFormat, File file, long startS, long stopS ) throws Exception
+  public void exportFile( InternalFormat internalFormat, File file, long startS, long stopS ) throws IOException
   {
     System.out.println("WAnt to export " + file + " start " + startS + " stop " + stopS);
     ByteBuffer data; // contians data to be exported
@@ -176,7 +177,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    * happens
    */
   // TODO: Rewrite
-  public InternalFormat importFile( String path, String filename ) throws Exception
+  public InternalFormat importFile( String path, String filename ) throws IOException
   {
     //ByteBuffer buffer = FileHandler.loadFile( path, filename );
     //buffer.order( ByteOrder.LITTLE_ENDIAN );

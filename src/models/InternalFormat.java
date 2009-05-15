@@ -1,6 +1,8 @@
 package apes.models;
 
 import apes.models.MemoryHandler;
+import apes.plugins.WaveFileFormat;
+
 import java.awt.Point;
 import java.io.IOException;
 import java.util.List;
@@ -190,7 +192,10 @@ public class InternalFormat extends Observable
    */
   public void saveAs(String filePath, String fileName) throws IOException
   {
-    FileHandler.saveObjectToFile(filePath, fileName, this);
+    WaveFileFormat wav = new WaveFileFormat();
+    wav.exportFile( this, filePath, fileName); 
+    fileStatus.setFileName(fileName);
+    fileStatus.setFilePath(filePath);
   }
 
   /**
@@ -198,12 +203,23 @@ public class InternalFormat extends Observable
    */
   public void save() throws IOException
   {
-    FileHandler.saveObjectToFile(fileStatus.getFilepath(), fileStatus.getFileName(), this);
+    WaveFileFormat wav = new WaveFileFormat();
+    wav.exportFile( this, fileStatus.getFilepath(), fileStatus.getFileName());
   }
-
-  /*
-   * public void savePart() { //TODO: IMPLEMENT }
+  
+  /**
+   * load an internal format
+   * @param filePath
+   * @param fileName
+   * @throws IOException
    */
+  public static InternalFormat load(String filePath, String fileName) throws IOException
+  {
+    WaveFileFormat wav = new WaveFileFormat();
+    InternalFormat internalFormat = wav.importFile( filePath, fileName); 
+    internalFormat.fileStatus.setOpenedByInternal();  
+    return internalFormat;
+  }
 
   /**
    * Get the <code>FileStatus</code>.
@@ -223,19 +239,6 @@ public class InternalFormat extends Observable
   public void setFileStatus(FileStatus fileStatus)
   {
     this.fileStatus = fileStatus;
-  }
-
-  /**
-   * Load file
-   * 
-   * @param filePath Where the file is located.
-   * @param fileName The name of the file.
-   * @return Returns an internal format.
-   */
-  public static InternalFormat load(String filePath, String fileName) throws IOException, ClassNotFoundException
-  {
-    // TODO: add error handling or some sort of response
-    return (InternalFormat)FileHandler.loadObjectFile(filePath, fileName);
   }
 
   /**
