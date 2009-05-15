@@ -126,7 +126,7 @@ public class PluginView extends JFrame
     for(int i=0; i<names.size(); i++)
     {
       JCheckBox pBox = new JCheckBox(names.get(i), pluginHandler.isLoaded(names.get(i)));
-      JTextArea pText = new JTextArea(pluginHandler.getDescription(names.get(i), "en"));
+      JTextArea pText = new JTextArea(pluginHandler.getDescription(names.get(i), language.getLanguage()));
       
       c.gridx = 0;
       c.gridy = i+1;
