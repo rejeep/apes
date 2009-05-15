@@ -17,7 +17,7 @@ import apes.views.ApesError;
 
 /**
  * Controller for the internal format.
- * 
+ *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatController extends ApplicationController
@@ -79,7 +79,7 @@ public class InternalFormatController extends ApplicationController
 
   /**
    * Creates a new <code>InternalFormatController</code>.
-   * 
+   *
    * @param tabs The tabs model.
    * @param undoManager The undo manager.
    */
@@ -93,7 +93,7 @@ public class InternalFormatController extends ApplicationController
   public void beforeFilter() throws Exception
   {
     player = playerHandler.getCurrentPlayer();
-    
+
     if(name.matches("^zoom.*"))
     {
       // This may throw an exception if there's no tab. But thats what
@@ -114,7 +114,7 @@ public class InternalFormatController extends ApplicationController
       {
         throw new Exception();
       }
-      
+
       selection = player.getSelection();
 
       if(selection.x == selection.y)
@@ -135,7 +135,7 @@ public class InternalFormatController extends ApplicationController
         int left = center - ( zoom / 2 );
         int right = center + ( zoom / 2 );
         int stop = player.getSampleAmount();
-        
+
         if(left < 0)
         {
           center = zoom / 2;
@@ -144,7 +144,7 @@ public class InternalFormatController extends ApplicationController
         {
           center = stop - ( zoom / 2 );
         }
-        
+
         // Set zoom options.
         internalFormatView.setCenter(center);
         internalFormatView.setZoom(zoom);
@@ -213,7 +213,7 @@ public class InternalFormatController extends ApplicationController
   {
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom / InternalFormatView.ZOOM;
-    
+
     int currentCenter = internalFormatView.getCenter();
     int currentSample = player.getCurrentSample();
 
@@ -231,7 +231,7 @@ public class InternalFormatController extends ApplicationController
 
     int currentCenter = internalFormatView.getCenter();
     int stop = player.getSampleAmount();
-      
+
     zoom = newZoom > stop ? stop : newZoom;
     center = currentCenter;
   }
@@ -243,12 +243,15 @@ public class InternalFormatController extends ApplicationController
   {
     int start = player.getStart();
     int stop = player.getStop();
-    
-    zoom = stop - start;
-    center = start + ( zoom / 2 );
-    
-    player.setStart( 0 );
-    player.setStop( 0 );
+
+    if(start != stop)
+    {
+      zoom = stop - start;
+      center = start + ( zoom / 2 );
+
+      player.setStart( 0 );
+      player.setStop( 0 );
+    }
   }
 
   /**
