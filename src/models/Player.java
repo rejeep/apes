@@ -8,7 +8,7 @@ import java.util.Observable;
 
 /**
  * This class plays an internal format.
- *
+ * TODO: May be a bug when reaching end of file, making strange noises without stopping or something
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Player extends Observable implements Runnable
