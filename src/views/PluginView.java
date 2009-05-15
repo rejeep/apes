@@ -54,7 +54,7 @@ public class PluginView extends JFrame
   private Language language;
 
   /**
-   *
+   * True if view has been created.
    */
   private boolean viewCreated = false;
   
