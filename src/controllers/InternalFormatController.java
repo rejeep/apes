@@ -92,6 +92,8 @@ public class InternalFormatController extends ApplicationController
 
   public void beforeFilter() throws Exception
   {
+    player = playerHandler.getCurrentPlayer();
+    
     if(name.matches("^zoom.*"))
     {
       // This may throw an exception if there's no tab. But thats what
@@ -112,8 +114,7 @@ public class InternalFormatController extends ApplicationController
       {
         throw new Exception();
       }
-
-      player = playerHandler.getCurrentPlayer();
+      
       selection = player.getSelection();
 
       if(selection.x == selection.y)
@@ -196,7 +197,11 @@ public class InternalFormatController extends ApplicationController
   {
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom / InternalFormatView.ZOOM;
+    
+    int currentCenter = internalFormatView.getCenter();
+    int currentSample = player.getCurrentSample();
 
+    center = currentSample == 0 ? currentCenter : currentSample;
     zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
   }
 
@@ -205,13 +210,14 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomOut()
   {
-    player = playerHandler.getCurrentPlayer();
-
     int currentZoom = internalFormatView.getZoom();
     int newZoom = currentZoom * InternalFormatView.ZOOM;
-    int stop = player.getSampleAmount();
 
+    int currentCenter = internalFormatView.getCenter();
+    int stop = player.getSampleAmount();
+      
     zoom = newZoom > stop ? stop : newZoom;
+    center = currentCenter;
   }
 
   /**
@@ -219,10 +225,11 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomSelection()
   {
-    player = playerHandler.getCurrentPlayer();
-
-    zoom = player.getStop() - player.getStart();
-    center = internalFormatView.getCenter() / 2;
+    int start = player.getStart();
+    int stop = player.getStop();
+    
+    zoom = stop - start;
+    center = start + ( zoom / 2 );
   }
 
   /**
@@ -230,10 +237,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void zoomReset()
   {
-    Player player = playerHandler.getCurrentPlayer();
-
     zoom = player.getSampleAmount();
-    center = internalFormatView.getCenter() / 2;
+    center = zoom / 2;
   }
 
   /**
