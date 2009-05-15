@@ -264,7 +264,7 @@ public class PluginHandler
 
     if( files.length == 0 )
     {
-      // -
+      return;
     }
     else
     {
@@ -312,7 +312,7 @@ public class PluginHandler
       }
       else
       {
-        System.out.println("Wrong filename for plugin");
+        System.out.println("Wrong filename for plugin.");
         return;
       }
       
@@ -321,6 +321,7 @@ public class PluginHandler
     }
     catch( ClassNotFoundException e )
     {
+      System.out.println("ClassNotFoundException");
     }
   }
   
@@ -337,7 +338,6 @@ public class PluginHandler
     {
       if( TransformPlugin.class.isAssignableFrom( cls ) )
       {
-        // transforms.add( (TransformPlugin)cls.newInstance() );
         TransformPlugin tp = (TransformPlugin)cls.newInstance();
         pi.setTransformObject(tp);
         
@@ -352,7 +352,6 @@ public class PluginHandler
       }
       else if( AudioFormatPlugin.class.isAssignableFrom( cls ) )
       {
-        // formats.add( (AudioFormatPlugin)cls.newInstance() );
         AudioFormatPlugin afp = (AudioFormatPlugin)cls.newInstance();
         pi.setAudioFormatObject(afp);
         
@@ -372,11 +371,11 @@ public class PluginHandler
     }
     catch( InstantiationException e )
     {
-      // -
+      System.out.println("InstantiationException");
     }
     catch( IllegalAccessException e )
     {
-      // -
+      System.out.println("IllegalAccessException");
     }
   }
 }
@@ -414,7 +413,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( IOException e )
     {
-      System.out.println( "IOException\n" );
+      System.out.println( "IOException" );
     }
 
     if( classBytes == null )
@@ -431,7 +430,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( ClassFormatError e )
     {
-      System.out.println( "ClassFormatError\n" );
+      System.out.println( "ClassFormatError" );
     }
     
     return null;
@@ -459,7 +458,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( MalformedURLException e )
     {
-      // -
+      System.out.println("MalformedURLException");
     }
     
     return null;
@@ -484,7 +483,6 @@ class PluginInfo
   /**
    * The description of the plugin.
    */
-  // private String desc;
   private Map<String, String> desc;
   
   /**
@@ -507,10 +505,14 @@ class PluginInfo
    */
   private TransformPlugin tObject;
   
+  /**
+   * Constructor.
+   */
   public PluginInfo()
   {
     desc = new HashMap<String, String>();
   }
+  
   /**
    * Returns path to plugin.
    * 
