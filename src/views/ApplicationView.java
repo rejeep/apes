@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -27,6 +28,7 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
+import apes.models.InternalFormat;
 import apes.models.Tabs;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -47,7 +49,7 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
-import apes.views.ProgressView;
+
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -142,7 +144,7 @@ public class ApplicationView extends JFrame
     setTitle(language.get("help.about.name"));
 
     // Exit on close.
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
     // Set icon.
     setIconImage(Toolkit.getDefaultToolkit().createImage("images/apes.png"));
@@ -153,12 +155,17 @@ public class ApplicationView extends JFrame
     // Make frame visible.
     setVisible(true);
 
-    // Do something before close
+    // Is runned when the program close button is pressed.
     addWindowListener(new WindowAdapter()
     {
       public void windowClosing(WindowEvent e)
       {
-      // Do before exit
+        int status = JOptionPane.showConfirmDialog(null, language.get("exit.confirm.message"), language.get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
+        
+        if(status == JOptionPane.YES_OPTION)
+        {
+          System.exit(0);
+        }
       }
     });
   }

@@ -151,3 +151,7 @@ channel:
     minutes: Minutes
 tabs:
   close: Close this tab
+exit:
+  confirm:
+    title: Are you sure?
+    message: Are you sure you want to quit apes?
