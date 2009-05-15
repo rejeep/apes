@@ -114,16 +114,8 @@ public class MemoryHandler
       // Doesn't exist
       if( (frame = swap(index)) == null )
       {
-        Page[] pages = createPages(index, bytes);
-        long newIndex = index;
-        for( int i = 0; i < pages.length; ++i )
-        {
-          pages[i].index = newIndex;
-          newIndex += pages[i].file.length();
-        }
-        for( Page p : pages )
-          pageTable.add( p );
-        usedMemory += bytes;
+        createPages(index, bytes);
+        
         return true;
       }
     }
@@ -134,21 +126,11 @@ public class MemoryHandler
     long index0        = index;
     long index1        = index + bytes;
 
-    // Create pages
-    Page[] pages = createPages( firstIndex, bytes + frame.page.file.length() );
-
     // Destroy old page
     destroyPage( frame.page );
 
-    long newIndex = firstIndex;
-    for( int i = 0; i < pages.length; ++i )
-    {
-      pages[i].index = newIndex;
-      newIndex += pages[i].file.length();
-    }
-
-    for(Page p : pages)
-      pageTable.add(p);
+    // Create pages
+    createPages( firstIndex, bytes + frame.data.length );
 
     int amountToCopy = frame.data.length;
     byte[] fst = new byte[amountToCopy/2];
@@ -159,8 +141,6 @@ public class MemoryHandler
 
     write(index0, fst);
     write(index1, lst);
-    
-    usedMemory += bytes;
 
     return true;
   }
@@ -172,21 +152,50 @@ public class MemoryHandler
 
     if( amount <= PAGE_SIZE)
     {
-      Page[] page = new Page[1];
-      page[0] = new Page(amount);
-      page[0].index = index;
-      return page;
+      Page[] pages = new Page[1];
+      
+      Page page = new Page(amount);
+      page.index = index;
+      
+      pages[0] = page;
+      pageTable.add(page);
+      
+      usedMemory += amount;
+      
+      return pages;
     }
-
+    
+    // Update indexes of pages after insertion point.
+    for(Page page : pageTable)
+    {
+      if(page.index >= index)
+      {
+        page.index += amount;
+      }
+    }
+    
+    // Create and add pages
     int numPages = (int)(amount / PAGE_SIZE);
     Page[] pages = new Page[numPages];
     for( int i = 0; i < pages.length - 1; i++ )
     {
-      pages[i] = new Page(PAGE_SIZE);
-      pages[i].index = index + i*PAGE_SIZE;
+      Page page = new Page(PAGE_SIZE);
+      // Set index
+      page.index = index + i*PAGE_SIZE;
+
+      // Add pages
+      pages[i] = page;
+      pageTable.add(page);
     }
-    pages[pages.length - 1] = new Page( PAGE_SIZE + amount % PAGE_SIZE );
-    pages[pages.length - 1].index = index + (pages.length-1)*PAGE_SIZE;
+    
+    Page page = new Page( PAGE_SIZE + amount % PAGE_SIZE );
+    page.index = index + ( pages.length - 1 ) * PAGE_SIZE;
+    
+    pageTable.add(page);
+    pages[pages.length - 1] = page;
+    
+    usedMemory += amount;
+    
     return pages;
   }
 
@@ -198,18 +207,31 @@ public class MemoryHandler
    */
   private Frame destroyPage( Page page ) throws IOException
   {
-    page.file.close();
     page.tempFile.delete();
     pageTable.remove(page);
+    
     for( Frame f : frameTable )
     {
       if(f.page == page)
       {
+        usedMemory -= f.page.file.length();
+        page.file.close();
         f.page = null;
         f.timeStamp = Long.MAX_VALUE;
+        
         return f;
       }
     }
+    
+    // Update indexes that comes after the one that was removed.
+    for(Page pageX : pageTable)
+    {
+      if(pageX.index > page.index)
+      {
+        pageX.index -= page.file.length();
+      }
+    }
+    
     return null;
   }
 
@@ -296,6 +318,7 @@ public class MemoryHandler
         return evicted;
       }
     }
+    
     return null;
   }
 
