@@ -59,6 +59,16 @@ public class ApesFile
   {
     return file.getParent();
   }
+  
+  /**
+   * Returns the file.
+   * 
+   * @return The file.
+   */
+  public File getFile()
+  {
+    return file;
+  }
 
   /**
    * Creates new internal format from the file.

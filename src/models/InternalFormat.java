@@ -138,7 +138,7 @@ public class InternalFormat extends Observable
    *          included.
    * @return A byte array containing the requested data.
    */
-  public byte[] getChunk(int indexS, int amountS)
+  public byte[] getChunk(long indexS, int amountS)
   {
     if(indexS + amountS > sampleAmount || indexS < 0 || amountS < 1)
       return null;
