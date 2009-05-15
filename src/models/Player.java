@@ -383,27 +383,12 @@ public class Player extends Observable implements Runnable
    */
   private boolean playingAllowed()
   {
-    boolean allowed = true;
     int start = getStart();
     int stop = getStop();
 
-    if( stop != 0 )
-    {
-      if( start != stop )
-      {
-        if( currentSample > stop )
-        {
-          allowed = false;
-        }
-      }
-
-      if( currentSample >= getSampleAmount() )
-      {
-        allowed = false;
-      }
-    }
-
-    return allowed;
+    if( (stop != 0 && start != stop && currentSample > stop) || (currentSample > getSampleAmount()))
+      return false;
+    return true;
   }
 
   /**
@@ -415,43 +400,29 @@ public class Player extends Observable implements Runnable
   {
     while( true )
     {
-      if( status != Status.WAIT )
+      switch(status)
       {
-        if( status == Status.PLAY )
+      case WAIT:
+        break;
+      case PLAY:
+        if( playingAllowed() )
         {
-          if( playingAllowed() )
-          {
-            System.out.println("Current Sample: " + currentSample);
-            byte[] data = internalFormat.getChunk( currentSample, CHUNK_SIZE );
+          int chunk = CHUNK_SIZE;
+          if(getSampleAmount() < currentSample + CHUNK_SIZE)
+            chunk = getSampleAmount() - currentSample;
+          byte[] data = internalFormat.getChunk( currentSample, chunk );
 
-            line.write( data, 0, data.length );
+          line.write( data, 0, data.length );
 
-            increaseCurrentSample();
-          }
-          else
-          {
-            if( currentSample >= getSampleAmount() )
-            {
-              stop();
-            }
-            else
-            {
-              pause();
-
-              setCurrentSample( getStart() );
-            }
-          }
+          increaseCurrentSample();
         }
         else
         {
-          if( status == Status.STOP )
-          {
-            currentSample = 0;
-          }
-
-          setStatus( Status.WAIT );
+          if( currentSample > getSampleAmount() )
+            stop();
+          else
+            pause();           
         }
-
         // If this is not present there will be no playing.
         try
         {
@@ -461,7 +432,16 @@ public class Player extends Observable implements Runnable
         {
           e.printStackTrace();
         }
-      }
+        break;
+      case STOP:
+        currentSample = 0;
+        setStatus( Status.WAIT );
+        break;
+      case PAUSE:
+        setCurrentSample( getStart() );
+        setStatus( Status.WAIT );
+        break;
+      }  
     }
   }
 }
