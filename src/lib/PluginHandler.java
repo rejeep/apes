@@ -206,14 +206,6 @@ public class PluginHandler
     }
     return null;
   }
-  
-  /**
-   * TODO
-   */
-  public ArrayList<PluginInfo> getPluginInfo()
-  {
-    return plugins;
-  }
 
   /**
    * Unloads a plugin.
