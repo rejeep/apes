@@ -43,9 +43,9 @@ public class InternalFormat extends Observable
    */
   private MemoryHandler memoryHandler;
 
-  public final static int BITS_PER_SAMPLE = 16;
+  public final int bitsPerSample;
 
-  public final static int BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8;
+  public final int bytesPerSample;
 
   /**
    * Length of each channel in samples.
@@ -60,7 +60,7 @@ public class InternalFormat extends Observable
    * @param samplerate Amount of samples per second.
    * @param numChannels Number of channels.
    */
-  public InternalFormat(Tags tags, int samplerate, int numChannels)
+  public InternalFormat(Tags tags, int samplerate, int numChannels, int bitsPerSample)
   {
     if(tags == null)
     {
@@ -70,7 +70,10 @@ public class InternalFormat extends Observable
     {
       this.tags = tags;
     }
-    sampleRate = samplerate;
+    
+    this.bitsPerSample = bitsPerSample;
+    this.bytesPerSample = bitsPerSample / 8;
+    this.sampleRate = samplerate;
     channels = numChannels;
     memoryHandler = new MemoryHandler();
     sampleAmount = 0;
@@ -258,14 +261,14 @@ public class InternalFormat extends Observable
       
     try
     {
-      b = memoryHandler.read( samplesToBytes(indexS) + channel * BYTES_PER_SAMPLE, BYTES_PER_SAMPLE );
+      b = memoryHandler.read( samplesToBytes(indexS) + channel * bytesPerSample, bytesPerSample );
     }
     catch ( IOException e )
     {
       e.printStackTrace();
     }
     
-    for(int i = 0; i < BYTES_PER_SAMPLE; i++)
+    for(int i = 0; i < bytesPerSample; i++)
       amplitude += b[i] << ( i * 8 );
     
     return amplitude;
@@ -438,7 +441,7 @@ public class InternalFormat extends Observable
    */
   public long samplesToBytes( long samples )
   {
-    return samples * BYTES_PER_SAMPLE * channels;
+    return samples * bytesPerSample * channels;
   }
   
   /**
@@ -449,6 +452,6 @@ public class InternalFormat extends Observable
    */  
   public long bytesToSamples( long bytes )
   {
-    return bytes / ( BYTES_PER_SAMPLE * channels );
+    return bytes / ( bytesPerSample * channels );
   }
 }

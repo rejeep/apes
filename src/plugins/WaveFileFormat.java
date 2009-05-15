@@ -109,15 +109,15 @@ public class WaveFileFormat implements AudioFormatPlugin
     short  audioFormat   = 1;
     short  numChannels   = (short)internalFormat.getNumChannels();
     int    sampleRate    = internalFormat.getSampleRate();
-    int    byteRate      = sampleRate * numChannels * (InternalFormat.BYTES_PER_SAMPLE);
-    short  blockAlign    = (short)(numChannels * (InternalFormat.BYTES_PER_SAMPLE));
-    short  bitsPerSample = InternalFormat.BITS_PER_SAMPLE;
+    int    byteRate      = sampleRate * numChannels * (internalFormat.bytesPerSample);
+    short  blockAlign    = (short)(numChannels * (internalFormat.bytesPerSample));
+    short  bitsPerSample = (short)internalFormat.bitsPerSample;
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
     long numSamples = stopS-startS;
 
-    subchunk2Size = (int)(numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE);
+    subchunk2Size = (int)(numSamples * numChannels * internalFormat.bytesPerSample);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
     data = ByteBuffer.wrap( new byte[44] );
 
@@ -212,6 +212,7 @@ public class WaveFileFormat implements AudioFormatPlugin
     int subChunk2Size = bigToLittleEndian(dStream.readInt());
 
     InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels );
+    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels, bitsPerSample );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
 
     int written = 0;

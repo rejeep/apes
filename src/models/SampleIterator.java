@@ -73,7 +73,7 @@ public class SampleIterator
       byte[] bytes = intForm.getChunk((int)samplesIndex, 1);
       samplesIndex += intForm.getNumChannels();
       int amplitude = 0;
-      for(int i = 0; i < InternalFormat.BYTES_PER_SAMPLE; i++)
+      for(int i = 0; i < intForm.bytesPerSample; i++)
         amplitude += bytes[i] << ( i * 8 );
       return amplitude;
     }
