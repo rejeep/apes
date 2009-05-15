@@ -151,8 +151,14 @@ public class InternalFormatController extends ApplicationController
         internalFormatView.updateAll();
       }
     }
-    else
+    else if(name.matches("copy|cut|paste|delete"))
     {
+      if(name.matches("cut|delete"))
+      {
+        player.setStart(0);
+        player.setStop(0);
+      }
+      
       undoManager.addEdit(edit);
     }
   }
