@@ -114,6 +114,8 @@ config:
   color_lines: Line color
   color_background: Background color
   color_ruler: Ruler color
+  color_dots: Sample dot colors
+  color_status: Status text color
   gui_error_messages: Use GUI to show error messages
   wind: Forward / Backward constant
   ruler_width: Ruler width
