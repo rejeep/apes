@@ -100,9 +100,10 @@ public class MemoryHandler
    * @param integers Amount of data to allocate, in INTEGER_BYTES.
    * @return Returns true if allocation succeeded, otherwise false.
    */
-  // TODO: Fix small files.
+  // TODO: Fix small files. 
+  // INDEX OK DO START AT 0!!
   public boolean malloc(long index, long bytes) throws IOException
-  {
+  {  
     if( index < 0 || index > usedMemory || bytes <= 0 )
       return false;
 
@@ -110,7 +111,7 @@ public class MemoryHandler
     Frame frame;
     // Not in memory
     if( frameI == -1 )
-    {
+    {    
       // Doesn't exist
       if( (frame = swap(index)) == null )
       {
@@ -121,11 +122,16 @@ public class MemoryHandler
     }
     else
       frame = frameTable[frameI];
-
+    
     long firstIndex    = frame.page.index;
     long index0        = index;
     long index1        = index + bytes;
 
+    if(frame.page.index == index)
+    {
+      createPages(index, bytes);
+      return true;
+    }
     // Destroy old page
     destroyPage( frame.page );
 
@@ -150,6 +156,15 @@ public class MemoryHandler
     if( amount < 1 || index < 0 )
       return null;
 
+    // Update indexes of pages after insertion point.
+    for(Page page : pageTable)
+    {
+      if(page.index >= index)
+      {
+        page.index += amount;
+      }
+    }
+    
     if( amount <= PAGE_SIZE)
     {
       Page[] pages = new Page[1];
@@ -163,15 +178,6 @@ public class MemoryHandler
       usedMemory += amount;
       
       return pages;
-    }
-    
-    // Update indexes of pages after insertion point.
-    for(Page page : pageTable)
-    {
-      if(page.index >= index)
-      {
-        page.index += amount;
-      }
     }
     
     // Create and add pages
@@ -329,7 +335,9 @@ public class MemoryHandler
       Frame f = frameTable[i];
       if( f.page != null && (f.page.index <= index) &&
           (f.page.index + f.page.file.length() > index) )
+      {
         return i;
+      }
     }
 
     return -1;
@@ -368,7 +376,7 @@ public class MemoryHandler
       tempFile = File.createTempFile("apes", "page");
       tempFile.deleteOnExit();
       file = new RandomAccessFile(tempFile, "rw");
-      file.setLength( l * Integer.SIZE / 8  );
+      file.setLength( l );
       setIndex(pageTable.size());
     }
 

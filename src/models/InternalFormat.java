@@ -343,6 +343,7 @@ public class InternalFormat extends Observable
    * @param startB First index to set as bytes.
    * @param values An array of byte values to use for setting.
    */
+  // INDEX OK  !!!
   public void setSamples(int startB, byte[] values)
   {
     if(startB < 0 || startB + values.length > samplesToBytes(sampleAmount))
