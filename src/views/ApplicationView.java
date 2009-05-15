@@ -227,6 +227,8 @@ public class ApplicationView extends JFrame
       file.add( saveAs );
 
       JMenuItem export = new ApesMenuItem( "menu.file.export" );
+      export.addActionListener( internalFormatController );
+      export.setName( "export" );
       file.add( export );
 
       JMenuItem quit = new ApesMenuItem( "menu.file.quit" );

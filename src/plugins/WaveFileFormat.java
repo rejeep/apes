@@ -69,6 +69,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public void exportFile( InternalFormat internalFormat, String path, String fileName ) throws Exception
   {
+    System.out.println("WAnt to export " + fileName);
     ByteBuffer data; // contians data to be exported
 
     //TODO; Add better support for different headers
@@ -129,6 +130,7 @@ public class WaveFileFormat implements AudioFormatPlugin
         bytes = internalFormat.getChunk( written, numSamples - written );
       written += IO_CHUNK_SIZE;
       fStream.write(bytes);
+      System.out.println("Writing to "+ file.getName());
     }
     
     fStream.close();
@@ -170,6 +172,12 @@ public class WaveFileFormat implements AudioFormatPlugin
     // 2 little
     // TODO: Dangerous => Should be used!
     int bitsPerSample = bigToLittleEndian(dStream.readShort());
+    if(bitsPerSample != 16)
+    {
+      System.out.println("STUPID PROGGRAMMER WAS HERE(WaveFileFormat)");
+      System.exit(1);
+      
+    }
 
     dStream.skip( 4 );
     
@@ -195,7 +203,7 @@ public class WaveFileFormat implements AudioFormatPlugin
       internalFormat.insertSamples( written, b );
       written += b.length;
     }
-
+    dStream.close();
     return internalFormat;
   }
 
@@ -217,5 +225,5 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     buf.order(ByteOrder.LITTLE_ENDIAN);
     return buf.getShort(0);
-}
+  }
 }
