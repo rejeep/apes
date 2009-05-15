@@ -199,6 +199,7 @@ public class InternalFormat extends Observable
     wav.exportFile( this, filePath, fileName); 
     fileStatus.setFileName(fileName);
     fileStatus.setFilePath(filePath);
+    fileStatus.setOpenedByInternal();
   }
 
   /**
@@ -208,6 +209,7 @@ public class InternalFormat extends Observable
   {
     WaveFileFormat wav = new WaveFileFormat();
     wav.exportFile( this, fileStatus.getFilepath(), fileStatus.getFileName());
+    fileStatus.setOpenedByInternal();
   }
   
   /**
