@@ -3,7 +3,7 @@ package apes.controllers;
 import java.util.Map;
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
-import javax.swing.*;
+import javax.swing.JMenu;
 import java.awt.event.ActionEvent;
 import java.awt.Point;
 
@@ -47,7 +47,6 @@ public class PluginController extends ApplicationController
     pluginHandler = pH;;
     this.playerHandler = PlayerHandler.getInstance();
     pluginView = new PluginView(pluginHandler, this);
-    // effectMenu = new JMenu( "menu.head.effects" );
     pluginView.updateEffectMenu();
   }
 
@@ -59,6 +58,11 @@ public class PluginController extends ApplicationController
     pluginView.create();
   }
 
+  /**
+   * Returns the effects menu from PluginView.
+   * 
+   * @return JMenu of effects.
+   */
   public JMenu getEffectMenu()
   {
     return pluginView.getEffectMenu();
