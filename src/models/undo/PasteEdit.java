@@ -1,6 +1,7 @@
 package apes.models.undo;
 
 import apes.models.InternalFormat;
+import apes.models.MemoryHandler;
 
 import java.awt.Point;
 
@@ -17,34 +18,34 @@ public class PasteEdit extends AbstractUndoableEdit
 {
   private InternalFormat internalFormat;
 
-  private byte[] paste;
+  private MemoryHandler paste;
 
   private int start, stop;
 
   private boolean undoable;
 
-  public PasteEdit(InternalFormat intForm, Point marked, byte[] p)
+  public PasteEdit(InternalFormat intForm, Point marked, MemoryHandler p)
   {
     internalFormat = intForm;
     start = marked.x;
     stop = marked.y;
-    paste = p;
+    paste = new MemoryHandler();
+    paste.transfer(p, 0, (int)(p.getUsedMemory() - 1), 0);
     redo();
   }
 
   public void redo()
   {
-    System.out.println("Redoing paste");
-    stop = internalFormat.pasteSamples(start, paste);
+    internalFormat.pasteSamples(start, paste);
+    paste.dispose();
     undoable = true;
-    System.out.println("Redoing paste");
   }
 
   public void undo()
   {
-    paste = internalFormat.cutSamples(start, stop);
+    paste.dispose();
+    internalFormat.cutSamples(start, stop, paste);
     undoable = false;
-    System.out.println("Undoing cut");
   }
 
   public boolean canRedo()

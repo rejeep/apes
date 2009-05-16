@@ -29,6 +29,11 @@ public class MemoryHandler
       frameTable[i] = new Frame();
   }
 
+  public long getUsedMemory()
+  {
+    return usedMemory;
+  }
+  
   public boolean free(long index, long bytes) throws IOException
   {
     if( index < 0 || index + bytes > usedMemory || bytes <= 0 )
@@ -295,6 +300,40 @@ public class MemoryHandler
     frame.timeStamp = System.currentTimeMillis();
   }
 
+  public void dispose()
+  {
+    try
+    {
+      free(0, usedMemory);
+    }catch(Exception e){e.printStackTrace();}
+  }
+  /**
+   * @param source
+   * @param start
+   * @param amount
+   */
+  public void transfer(MemoryHandler source, long start, long stop, long putAt )
+  {
+    if( start < 0 || start > stop || source.usedMemory < stop || putAt > usedMemory)
+      return;
+    
+    // Allocate memory
+    try
+    {
+      long amount = stop - start + 1;
+      malloc(putAt, amount);
+      
+      // Copy memory
+      for(long i = putAt, index = start; index <= stop; i+=PAGE_SIZE, index += PAGE_SIZE)
+      {
+        int chunkSize = amount > PAGE_SIZE? PAGE_SIZE : (int)amount;
+        byte[] chunk = source.read(index, chunkSize);
+        write(i, chunk); 
+        amount -= PAGE_SIZE;
+      }
+    }catch(Exception e){e.printStackTrace();}
+  }
+  
   private Frame swap( long index ) throws IOException
   {
     long timeStamp = Long.MAX_VALUE;

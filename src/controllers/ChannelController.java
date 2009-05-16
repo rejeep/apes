@@ -154,7 +154,8 @@ public class ChannelController extends ApplicationController implements MouseLis
       InternalFormat internalFormat = player.getInternalFormat();
       int numChannels = internalFormat.getNumChannels();
 
-      internalFormat.scaleSamples(start, stop, 1.0f - rotation * 0.1f);
+      for(int i = 0; i < numChannels; i++)
+        internalFormat.scaleSamples(i, start, stop, 1.0f - rotation * 0.1f);
     }
   }
 

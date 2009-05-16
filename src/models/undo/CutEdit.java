@@ -1,6 +1,7 @@
 package apes.models.undo;
 
 import apes.models.InternalFormat;
+import apes.models.MemoryHandler;
 
 import java.awt.Point;
 
@@ -15,7 +16,7 @@ import javax.swing.undo.AbstractUndoableEdit;
  */
 public class CutEdit extends AbstractUndoableEdit
 {
-  private byte[] cutout;
+  private MemoryHandler cutout;
 
   private InternalFormat internalFormat;
 
@@ -35,7 +36,8 @@ public class CutEdit extends AbstractUndoableEdit
     internalFormat = intForm;
     start = marked.x;
     stop = marked.y;
-
+    cutout = new MemoryHandler();
+    
     redo();
   }
 
@@ -45,7 +47,8 @@ public class CutEdit extends AbstractUndoableEdit
    */
   public void redo()
   {
-    cutout = internalFormat.cutSamples(start, stop);
+    cutout.dispose();
+    internalFormat.cutSamples(start, stop, cutout);
     undoable = true;
   }
 
@@ -56,7 +59,7 @@ public class CutEdit extends AbstractUndoableEdit
   public void undo()
   {
     internalFormat.pasteSamples(start, cutout);
-    cutout = null;
+    cutout.dispose();
     undoable = false;
   }
 
@@ -76,7 +79,7 @@ public class CutEdit extends AbstractUndoableEdit
    * 
    * @return Returns cutout.
    */
-  public byte[] getCutout()
+  public MemoryHandler getCutout()
   {
     return cutout;
   }
