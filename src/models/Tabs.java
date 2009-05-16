@@ -3,8 +3,10 @@ package apes.models;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
-import apes.views.InternalFormatView;
 import javax.swing.SingleSelectionModel;
+import apes.lib.PlayerHandler;
+
+import apes.views.InternalFormatView;
 
 /**
  * Keeps track of tabs. All adding and removing of tabs should be done
@@ -102,6 +104,9 @@ public class Tabs extends Observable
     
     setChanged();
     notifyObservers( tab );
+    
+    // Remove the internal format from the player handler.
+    PlayerHandler.getInstance().remove(tab.getInternalFormat());
   }
   
   /**

@@ -17,6 +17,7 @@ import apes.models.MemoryHandler;
 import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
 import apes.views.ApesError;
+import apes.views.ApesMessage;
 
 /**
  * Controller for the internal format.
@@ -81,6 +82,12 @@ public class InternalFormatController extends ApplicationController
   private UndoManager undoManager;
 
   /**
+   * So that messages can be shown.
+   */
+  private ApesMessage apesMessage;
+
+
+  /**
    * Creates a new <code>InternalFormatController</code>.
    *
    * @param tabs The tabs model.
@@ -96,6 +103,10 @@ public class InternalFormatController extends ApplicationController
 
   public void beforeFilter() throws Exception
   {
+    // So that we can show messages.
+    apesMessage = ApesMessage.getInstance();
+
+    // The current player.
     player = playerHandler.getCurrentPlayer();
 
     if(name.matches("^zoom.*"))
@@ -162,7 +173,7 @@ public class InternalFormatController extends ApplicationController
         player.setStart(0);
         player.setStop(0);
       }
-      
+
       undoManager.addEdit(edit);
     }
   }
@@ -173,7 +184,10 @@ public class InternalFormatController extends ApplicationController
   public void undo()
   {
     if(undoManager.canUndo())
+    {
       undoManager.undo();
+      apesMessage.print("undo");
+    }
   }
 
   /**
@@ -182,7 +196,10 @@ public class InternalFormatController extends ApplicationController
   public void redo()
   {
     if(undoManager.canRedo())
+    {
       undoManager.redo();
+      apesMessage.print("redo");
+    }
   }
 
   /**
@@ -192,6 +209,7 @@ public class InternalFormatController extends ApplicationController
   {
     clipboard.dispose();
     internalFormat.copy(selection.x, selection.y, clipboard);
+    apesMessage.print("copy");
   }
 
   /**
@@ -203,6 +221,7 @@ public class InternalFormatController extends ApplicationController
     MemoryHandler cutout  = ( (CutEdit)edit ).getCutout(); 
     clipboard.dispose();
     clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory()-1, 0);
+    apesMessage.print("cut");
   }
 
   /**
@@ -211,7 +230,10 @@ public class InternalFormatController extends ApplicationController
   public void paste()
   {
     if(clipboard.getUsedMemory() > 0)
+    {
       edit = new PasteEdit(internalFormat, selection, clipboard);
+      apesMessage.print("paste");
+    }
   }
 
   /**
@@ -220,6 +242,7 @@ public class InternalFormatController extends ApplicationController
   public void delete()
   {
     edit = new CutEdit(internalFormat, selection);
+    apesMessage.print("delete");
   }
 
   /**
@@ -235,6 +258,8 @@ public class InternalFormatController extends ApplicationController
 
     center = currentSample == 0 ? currentCenter : currentSample;
     zoom = newZoom < InternalFormatView.MAX_ZOOM ? InternalFormatView.MAX_ZOOM : newZoom;
+
+    apesMessage.print("zoom.in");
   }
 
   /**
@@ -250,6 +275,8 @@ public class InternalFormatController extends ApplicationController
 
     zoom = newZoom > stop ? stop : newZoom;
     center = currentCenter;
+
+    apesMessage.print("zoom.out");
   }
 
   /**
@@ -268,6 +295,8 @@ public class InternalFormatController extends ApplicationController
       player.setStart( 0 );
       player.setStop( 0 );
     }
+
+    apesMessage.print("zoom.selection");
   }
 
   /**
@@ -277,6 +306,8 @@ public class InternalFormatController extends ApplicationController
   {
     zoom = player.getSampleAmount();
     center = zoom / 2;
+
+    apesMessage.print("zoom.reset");
   }
 
   /**
@@ -286,14 +317,12 @@ public class InternalFormatController extends ApplicationController
   {
     ApesFile apesFile = ApesFile.open();
     ApesFormat format = new ApesFormat(apesFile.getFile());
-    
-    
 
     if(apesFile != null)
     {
       try
       {
-        InternalFormatView internalFormatView; 
+        InternalFormatView internalFormatView;
         if(format.isWave())
         {
           internalFormatView = new InternalFormatView(apesFile.getInternalFormat());
@@ -302,9 +331,10 @@ public class InternalFormatController extends ApplicationController
         else if(format.isApes())
         {
           internalFormatView = new InternalFormatView(InternalFormat.load(apesFile.getParent(), apesFile.getName()));
-          tabs.add(internalFormatView); 
+          tabs.add(internalFormatView);
         }
-        
+
+        apesMessage.print("file.open");
       }
       catch(Exception e)
       {
@@ -321,13 +351,15 @@ public class InternalFormatController extends ApplicationController
   public void save()
   {
     internalFormat = player.getInternalFormat();
-    
+
     try
     {
       if(!internalFormat.getFileStatus().openedByInternal())
         saveAs();
       else
         internalFormat.save();
+
+      apesMessage.print("file.save");
     }
     catch(IOException e)
     {
@@ -348,6 +380,8 @@ public class InternalFormatController extends ApplicationController
     try
     {
       internalFormat.saveAs(apesFile.getParent(), apesFile.getName());
+
+      apesMessage.print("file.save_as");
     }
     catch(IOException e)
     {
@@ -356,27 +390,30 @@ public class InternalFormatController extends ApplicationController
       e.printStackTrace();
     }
   }
-  
+
   public void export()
   {
     ApesFile apesFile = ApesFile.open();
     ApesFormat format = new ApesFormat(apesFile.getFile());
     InternalFormat internalFormat = player.getInternalFormat();
-    
+
     if(format.isWave())
     {
       WaveFileFormat wav = new WaveFileFormat();
-      try{
+      try
+      {
         if(player.getStop() != 0 && player.getStart() != player.getStop())
           wav.exportFile( internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
         else
-          wav.exportFile( internalFormat, apesFile.getFile());     
+          wav.exportFile( internalFormat, apesFile.getFile());
+        
+        apesMessage.print("file.export");
       }
       catch(Exception e)
       {
         e.printStackTrace();
-        System.exit(1);     
+        System.exit(1);
       }
-     }
+    }
   }
 }

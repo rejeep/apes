@@ -114,9 +114,12 @@ config:
   color_lines: Färg linjer
   color_background: Bakgrundsfärg
   color_ruler: Färg linjal
+  color_dots: Färg sampleprick
+  color_status: Färg status text
   gui_error_messages: Använd GUI för att visa felmeddelanden
   wind: Spolningskonstant
   ruler_width: Linjallängd
+  close_confirmation: Bekräfta före stängning
 plugins:
   header: Plugins
   apply: Verkställ
@@ -149,3 +152,24 @@ channel:
     minutes: Minuter
 tabs:
   close: Stäng denna flik
+exit:
+  confirm:
+    title: Är du säker?
+    message: Tänk efter Sven-Arne. Har du något osparat?
+message:
+  undo: Ångrade senaste operationen
+  redo: Ångrade senaste ångringen
+  copy: Kopierade markerat stycke
+  cut: Klippte ut markerat stycke
+  paste: Klistrade in vid makering
+  delete: Tog bort markerat stycke
+  zoom: 
+    in: Zoomade in
+    out: Zoomade ut
+    selection: Zoomade in markerat stycke
+    reset: Zoom återställd
+  file: 
+    open: Öppning av fil lyckades
+    save: Sparning till fil lyckades
+    save_as: Sparning till fil lyckades
+    export: Exportering till fil lyckades

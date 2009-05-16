@@ -21,6 +21,14 @@ import apes.models.Tags;
  * Module used for converting .wav-files to the internal format and
  * converting the internal format to .wav-files.
  *
+ * NOTE!
+ * This file has no support for more chunks than the necessary. If you
+ * want to add support. Read here:
+ * <ul>
+ * <li>http://www.sonicspot.com/guide/wavefiles.html</li>
+ * <li>http://ccrma.stanford.edu/courses/422/projects/WaveFormat/</li>
+ * </ul>
+ * 
  * @author Simon Holm
  */
 public class WaveFileFormat implements AudioFormatPlugin
@@ -96,7 +104,6 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public void exportFile( InternalFormat internalFormat, File file, long startS, long stopS ) throws IOException
   {
-    System.out.println("WAnt to export " + file + " start " + startS + " stop " + stopS);
     ByteBuffer data; // contians data to be exported
 
     //TODO; Add better support for different headers
@@ -109,15 +116,15 @@ public class WaveFileFormat implements AudioFormatPlugin
     short  audioFormat   = 1;
     short  numChannels   = (short)internalFormat.getNumChannels();
     int    sampleRate    = internalFormat.getSampleRate();
-    int    byteRate      = sampleRate * numChannels * (InternalFormat.BYTES_PER_SAMPLE);
-    short  blockAlign    = (short)(numChannels * (InternalFormat.BYTES_PER_SAMPLE));
-    short  bitsPerSample = InternalFormat.BITS_PER_SAMPLE;
+    int    byteRate      = sampleRate * numChannels * (internalFormat.bytesPerSample);
+    short  blockAlign    = (short)(numChannels * (internalFormat.bytesPerSample));
+    short  bitsPerSample = (short)internalFormat.bitsPerSample;
     byte[] subchunk2ID   = {'d','a','t','a'};
     int    subchunk2Size;
 
     long numSamples = stopS-startS;
 
-    subchunk2Size = (int)(numSamples * numChannels * InternalFormat.BYTES_PER_SAMPLE);
+    subchunk2Size = (int)(numSamples * numChannels * internalFormat.bytesPerSample);
     chunkSize = 4+(8+subchunk1Size)+(8+subchunk2Size);
     data = ByteBuffer.wrap( new byte[44] );
 
@@ -156,7 +163,6 @@ public class WaveFileFormat implements AudioFormatPlugin
         bytes = internalFormat.getChunk( startS + written, (int)(numSamples - written) );
       written += IO_CHUNK_SIZE;
       fStream.write(bytes);
-      System.out.println("Writing to "+ file.getName());
     }
     fStream.close();
   }
@@ -186,8 +192,14 @@ public class WaveFileFormat implements AudioFormatPlugin
 
     // Wave do not contain any tags
     Tags tag = null;
-    dStream.skip( 22 );
-
+    
+    dStream.skip( 16 );
+    
+    // 4 little
+    int subChunk1Size = bigToLittleEndian(dStream.readInt());
+    
+    dStream.skip(2);
+    
     // 2 little
     int numChannels = bigToLittleEndian(dStream.readShort());
 
@@ -195,25 +207,21 @@ public class WaveFileFormat implements AudioFormatPlugin
     int sampleRate = bigToLittleEndian(dStream.readInt());
 
     dStream.skip(6);
-
+    
     // 2 little
-    // TODO: Dangerous => Should be used!
     int bitsPerSample = bigToLittleEndian(dStream.readShort());
-    if(bitsPerSample != 16)
-    {
-      System.out.println("STUPID PROGGRAMMER WAS HERE(WaveFileFormat)");
-      System.exit(1);
 
-    }
-
+    // Because subChunk1Size contains "16 + extra format bytes".
+    dStream.skip( subChunk1Size - 16 );
+    
     dStream.skip( 4 );
 
     // 4 little
     int subChunk2Size = bigToLittleEndian(dStream.readInt());
 
-    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels );
+    InternalFormat internalFormat = new InternalFormat( tag, sampleRate, numChannels, bitsPerSample );
     internalFormat.setFileStatus( new FileStatus( path, filename ) );
-
+    
     int written = 0;
     byte b[] = new byte[IO_CHUNK_SIZE];
 

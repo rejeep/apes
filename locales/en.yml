@@ -114,9 +114,12 @@ config:
   color_lines: Line color
   color_background: Background color
   color_ruler: Ruler color
+  color_dots: Sample dot colors
+  color_status: Status text color
   gui_error_messages: Use GUI to show error messages
   wind: Forward / Backward constant
   ruler_width: Ruler width
+  close_confirmation: Confirm program quit
 plugins:
   header: Plugins
   apply: Apply
@@ -149,3 +152,24 @@ channel:
     minutes: Minutes
 tabs:
   close: Close this tab
+exit:
+  confirm:
+    title: Are you sure?
+    message: Are you sure you want to quit apes?
+message:
+  undo: Undo executed
+  redo: Redo executed
+  copy: Copied the selected region
+  cut: Cutted the selected region
+  paste: Pasted to mark
+  delete: Deleted the selected region
+  zoom:
+    in: Zoomed in
+    out: Zoomed out
+    selection: Zoomed to selection
+    reset: Zoom reset
+  file:
+    open: Opened file successfully
+    save: Saved file successfully
+    save_as: Saved file successfully as
+    export: Exported file successfully
