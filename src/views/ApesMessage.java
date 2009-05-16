@@ -57,7 +57,7 @@ public class ApesMessage extends JPanel implements Runnable
   private static int OCCUR_TIME = 1000;
   
   /**
-   * How long the message should be vissible.
+   * How long the message should be visible.
    */
   private static int DURATION_TIME = 5000;
   
