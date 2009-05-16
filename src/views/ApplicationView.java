@@ -49,7 +49,7 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
-
+import apes.views.ApesMessage;
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -120,14 +120,23 @@ public class ApplicationView extends JFrame
 
     // Set layout.
     setLayout(new BorderLayout());
+        
+    // Initialize apes message.
+    ApesMessage apesMessage = ApesMessage.getInstance();
 
+    JPanel wrapper = new JPanel();
+    wrapper.setLayout(new BorderLayout());
+    add(wrapper, BorderLayout.CENTER);
+    
     // Add tab stuff.
     TabsView tabsView = new TabsView(tabsController);
     Tabs tabs = tabsController.getTabs();
     tabs.addObserver(tabsView);
     tabs.setModel(tabsView.getModel());
-    add(tabsView, BorderLayout.CENTER);
-
+    // add(tabsView, BorderLayout.CENTER);
+    wrapper.add(tabsView, BorderLayout.NORTH);
+    wrapper.add(apesMessage, BorderLayout.SOUTH);
+    
     // Set the menu.
     setJMenuBar(this.new Menu());
 
