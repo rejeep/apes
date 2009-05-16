@@ -58,6 +58,9 @@ public class PluginController extends ApplicationController
     pluginView.create();
   }
 
+  /**
+   * Returns the effects menu from PluginView.
+   */
   public JMenu getEffectMenu()
   {
     return pluginView.getEffectMenu();
