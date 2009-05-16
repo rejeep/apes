@@ -100,7 +100,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
   {
     this.internalFormat = internalFormat;
     this.selection = selection;
-    interval = 100;
+    interval = 10000;
     showFrame();
   }
   
@@ -111,31 +111,35 @@ public class FadeTransform implements TransformPlugin, ActionListener
    */
   public void doFade(Boolean flag)
   {
-    int curr = 0;
-    float scale = 1.0f;
-    
-    int diff = selection.y - selection.x;
-    int steps = diff / interval;
-    int spill = diff % interval;
-  
- 
-    for(int j=0; j<steps; j++)
+    for( int channel = 0; channel < internalFormat.getNumChannels(); channel++ )
     {
-      if(flag)
-      {
-        scale = (float) j / steps;
-      }
-      else
-      {
-        scale = (float) j / steps;
-        scale = (float) (1.0f - scale);
-      }
-      curr = selection.x + (j*interval);
-      internalFormat.scaleSamples(curr, curr+interval-1, scale);
-    }
+      int curr = 0;
+      float scale = 1.0f;
+      
+      int diff = selection.y - selection.x;
+      int steps = diff / interval;
+      int spill = diff % interval;
     
-    curr = selection.x + steps*interval;
-    internalFormat.scaleSamples(curr, curr+spill, scale);
+   
+      System.out.println("steps: " + steps);
+      for(int j=0; j<steps; j++)
+      {
+        if(flag)
+        {
+          scale = (float) j / steps;
+        }
+        else
+        {
+          scale = (float) j / steps;
+          scale = (float) (1.0f - scale);
+        }
+        curr = selection.x + (j*interval);
+        internalFormat.scaleSamples(channel, curr, curr+interval-1, scale);
+      }
+      
+      curr = selection.x + steps*interval;
+      internalFormat.scaleSamples(channel, curr, curr+spill, scale);
+    }
   }
   
   /**

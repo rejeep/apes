@@ -13,6 +13,7 @@ import apes.models.Player;
 import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
+import apes.models.MemoryHandler;
 import apes.plugins.WaveFileFormat;
 import apes.views.InternalFormatView;
 import apes.views.ApesError;
@@ -27,7 +28,7 @@ public class InternalFormatController extends ApplicationController
   /**
    * Values copied or cut.
    */
-  private byte[] clipboard;
+  private MemoryHandler clipboard;
 
   /**
    * An internal format view object used by the zoom methods.
@@ -90,6 +91,7 @@ public class InternalFormatController extends ApplicationController
     this.tabs = tabs;
     this.undoManager = undoManager;
     this.playerHandler = PlayerHandler.getInstance();
+    this.clipboard = new MemoryHandler();
   }
 
   public void beforeFilter() throws Exception
@@ -170,7 +172,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void undo()
   {
-    undoManager.undo();
+    if(undoManager.canUndo())
+      undoManager.undo();
   }
 
   /**
@@ -178,7 +181,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void redo()
   {
-    undoManager.redo();
+    if(undoManager.canRedo())
+      undoManager.redo();
   }
 
   /**
@@ -186,7 +190,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    clipboard = internalFormat.getSamples(selection.x, selection.y);
+    clipboard.dispose();
+    internalFormat.copy(selection.x, selection.y, clipboard);
   }
 
   /**
@@ -195,7 +200,9 @@ public class InternalFormatController extends ApplicationController
   public void cut()
   {
     edit = new CutEdit(internalFormat, selection);
-    clipboard = ( (CutEdit)edit ).getCutout();
+    MemoryHandler cutout  = ( (CutEdit)edit ).getCutout(); 
+    clipboard.dispose();
+    clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory()-1, 0);
   }
 
   /**
@@ -203,7 +210,8 @@ public class InternalFormatController extends ApplicationController
    */
   public void paste()
   {
-    edit = new PasteEdit(internalFormat, selection, clipboard);
+    if(clipboard.getUsedMemory() > 0)
+      edit = new PasteEdit(internalFormat, selection, clipboard);
   }
 
   /**

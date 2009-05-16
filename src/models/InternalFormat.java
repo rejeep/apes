@@ -306,7 +306,7 @@ public class InternalFormat extends Observable
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
 
-    int lengthS = ( stopS - startS );
+    int lengthS = ( stopS - startS + 1);
     try
     {
       if(memoryHandler.free(samplesToBytes(startS), samplesToBytes(lengthS)))
@@ -319,6 +319,11 @@ public class InternalFormat extends Observable
     updated();
   }
 
+  public void copy(int startS, int stopS, MemoryHandler mH)
+  {
+    mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0);
+  }
+  
   /**
    * Removes the samples in the specified interval from all channel
    * and returns them in a Samples[][] containing a Samples[] for each
@@ -329,14 +334,14 @@ public class InternalFormat extends Observable
    * @return An array containing arrays of Samples objects of the data
    *         removed from the channels.
    */
-  public byte[] cutSamples(int startS, int stopS)
+  public void cutSamples(int startS, int stopS, MemoryHandler mH)
   {
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
-      return null;
+      return;
 
-    byte[] retVal = getSamples(startS, stopS);
+    mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0L);
     removeSamples(startS, stopS);
-    return retVal;
+    updated();
   }
 
   /**
@@ -347,7 +352,7 @@ public class InternalFormat extends Observable
    * @param values An array of byte values to use for setting.
    */
   // INDEX OK  !!!
-  public void setSamples(int startB, byte[] values)
+  public void setSamples(long startB, byte[] values)
   {
     if(startB < 0 || startB + values.length > samplesToBytes(sampleAmount))
       return;
@@ -399,11 +404,10 @@ public class InternalFormat extends Observable
    * @param samples
    * @return 
    */
-  public int pasteSamples(int startS, byte[] samples)
+  public void pasteSamples(int startS, MemoryHandler m)
   {
-    int index = insertSamples((int)samplesToBytes(startS), samples);
+    memoryHandler.transfer(m, 0, (int)(m.getUsedMemory()-1), (long)samplesToBytes(startS));
     updated();
-    return index;
   }
 
   /**
@@ -413,12 +417,20 @@ public class InternalFormat extends Observable
    * @param stopS The end sample.
    * @param alpha The alpha value.
    */
-  public void scaleSamples( int startS, int stopS, float alpha )
+  public void scaleSamples( int channel, int startS, int stopS, float alpha )
   {
-    byte[] samples = getSamples( startS, stopS );
-    for( byte b : samples )
-      b *= alpha;
-    setSamples( startS, samples );
+    for(int i = startS; i <= stopS; i++)
+    {
+      setSample(channel, i, Math.round(getSample(channel, i)*alpha));
+    }
+  }
+
+  private void setSample( int channel, long index, int value )
+  {
+    byte[] sample = new byte[BYTES_PER_SAMPLE];
+    for( int i = 0; i < BYTES_PER_SAMPLE; i++ )
+      sample[i] = (byte)(value << (8*i)); 
+    setSamples( (int)samplesToBytes(index) + channel*BYTES_PER_SAMPLE, sample );
   }
 
   /**
