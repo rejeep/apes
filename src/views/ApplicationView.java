@@ -421,13 +421,8 @@ public class ApplicationView extends JFrame
       setBorder(new LineBorder(Color.GRAY, 1, true));
 
       ImageButton open = new OpenButton();
-      open.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
-        {
-          internalFormatController.open();
-        }
-      });
+      open.addActionListener(internalFormatController);
+      open.setName("open");
       add(open);
 
       ImageButton save = new SaveButton();
