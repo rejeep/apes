@@ -650,7 +650,7 @@ public class ChannelView extends JPanel implements Runnable
 
           g2.drawLine( x1, y1, x2, y2 );
 
-          if(graphWidth / samples.length > 3)
+          if(graphWidth / samples.length > 5)
           {
             g2.setColor( colorDots );
             g2.fillOval( x2 - 3, y2 - 3, 6, 6 );
