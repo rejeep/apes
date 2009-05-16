@@ -77,7 +77,7 @@ public class Config
    * Regexp to match an option in the configuration file. It uses
    * grouping to extract the key and value.
    */
-  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]{0,1})(.*)\\2$";
+  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]?)(.*)\\2$";
 
   /**
    * Different types an option can be.
