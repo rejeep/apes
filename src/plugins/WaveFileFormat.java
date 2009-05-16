@@ -104,7 +104,6 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public void exportFile( InternalFormat internalFormat, File file, long startS, long stopS ) throws IOException
   {
-    System.out.println("WAnt to export " + file + " start " + startS + " stop " + stopS);
     ByteBuffer data; // contians data to be exported
 
     //TODO; Add better support for different headers
@@ -164,7 +163,6 @@ public class WaveFileFormat implements AudioFormatPlugin
         bytes = internalFormat.getChunk( startS + written, (int)(numSamples - written) );
       written += IO_CHUNK_SIZE;
       fStream.write(bytes);
-      System.out.println("Writing to "+ file.getName());
     }
     fStream.close();
   }
