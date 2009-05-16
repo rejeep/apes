@@ -13,13 +13,10 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 import java.lang.ClassLoader;
 import java.lang.InstantiationException;
-import javax.swing.*;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.interfaces.TransformPlugin;
 import apes.controllers.PluginController;
-import apes.views.ApesMenu;
-import apes.views.ApesMenuItem;
 
 /**
  * Class for loading/unloading plugins.
