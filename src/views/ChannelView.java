@@ -691,14 +691,8 @@ public class ChannelView extends JPanel implements Runnable
      */
     private int getTime( int pixels )
     {
-      int firstVisibleSample = getFirstVisibleSample();
-      int lastVisibelSample  = getLastVisibleSample();
-
-      int start = SampleHelper.samplesToMilliseconds( sampleRate, firstVisibleSample );
-      int stop = SampleHelper.samplesToMilliseconds( sampleRate, lastVisibelSample );
-      int diff = stop - start;
-
       int time = -1;
+      int diff = SampleHelper.samplesToMilliseconds( sampleRate, visibleSamples );
 
       // If diff is larger than five minutes.
       if( diff > 5 * 1000 * 60 )

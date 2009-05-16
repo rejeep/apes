@@ -28,12 +28,12 @@ import java.util.TreeMap;
  * </pre>
  * 
  * </p>
- * <p>
- * An option in the configuration file should consist of: At least one
- * character from a-z, then an arbitrary number of spaces, then an
- * equal sign, then again an arbitrary number of spaces and then the
- * value optionally in quotes.
+ * <p> An option in the configuration file should consist of: At least
+ * one character from a-z (underscore may separate words), then an
+ * arbitrary number of spaces, then an equal sign, then again an
+ * arbitrary number of spaces and then the value optionally in quotes.
  * </p>
+ *
  * <p>
  * Here are some options that are valid.
  * </p>
@@ -77,7 +77,7 @@ public class Config
    * Regexp to match an option in the configuration file. It uses
    * grouping to extract the key and value.
    */
-  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]{0,1})(.*)\\2$";
+  private static final String OPTION_REGEXP = "^([a-z_]+)\\s*=\\s*([\"]?)(.*)\\2$";
 
   /**
    * Different types an option can be.
