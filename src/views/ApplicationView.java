@@ -391,7 +391,7 @@ public class ApplicationView extends JFrame
       JMenu tools = new ApesMenu( "menu.head.tools" );
       add( tools );
 
-      JMenuItem properties = new ApesMenuItem( "menu.tools.properties", KeyEvent.VK_T );
+      JMenuItem properties = new ApesMenuItem( "menu.tools.properties", KeyEvent.VK_I );
       properties.addActionListener( configController );
       properties.setName( "show" );
       tools.add( properties );
