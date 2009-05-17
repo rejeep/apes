@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
@@ -28,7 +29,6 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Config;
 import apes.lib.Language;
-import apes.models.InternalFormat;
 import apes.models.Tabs;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -49,7 +49,6 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
-import apes.views.ApesMessage;
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -120,14 +119,14 @@ public class ApplicationView extends JFrame
 
     // Set layout.
     setLayout(new BorderLayout());
-        
+
     // Initialize apes message.
     ApesMessage apesMessage = ApesMessage.getInstance();
 
     JPanel wrapper = new JPanel();
     wrapper.setLayout(new BorderLayout());
     add(wrapper, BorderLayout.CENTER);
-    
+
     // Add tab stuff.
     TabsView tabsView = new TabsView(tabsController);
     Tabs tabs = tabsController.getTabs();
@@ -136,7 +135,7 @@ public class ApplicationView extends JFrame
     // add(tabsView, BorderLayout.CENTER);
     wrapper.add(tabsView, BorderLayout.NORTH);
     wrapper.add(apesMessage, BorderLayout.SOUTH);
-    
+
     // Set the menu.
     setJMenuBar(this.new Menu());
 
@@ -175,7 +174,7 @@ public class ApplicationView extends JFrame
 
           if(status == JOptionPane.YES_OPTION)
           {
-             System.exit(0);
+            System.exit(0);
           }
         }
         else
@@ -235,27 +234,27 @@ public class ApplicationView extends JFrame
       JMenu file = new ApesMenu( "menu.head.file" );
       add( file );
 
-      JMenuItem open = new ApesMenuItem( "menu.file.open" );
+      JMenuItem open = new ApesMenuItem( "menu.file.open", KeyEvent.VK_O );
       open.addActionListener( internalFormatController );
       open.setName( "open" );
       file.add( open );
 
-      JMenuItem save = new ApesMenuItem( "menu.file.save" );
+      JMenuItem save = new ApesMenuItem( "menu.file.save", KeyEvent.VK_S );
       save.addActionListener( internalFormatController );
       save.setName( "save" );
       file.add( save );
 
-      JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as" );
+      JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as", KeyEvent.VK_W );
       saveAs.addActionListener( internalFormatController );
       saveAs.setName( "saveAs" );
       file.add( saveAs );
 
-      JMenuItem export = new ApesMenuItem( "menu.file.export" );
+      JMenuItem export = new ApesMenuItem( "menu.file.export", KeyEvent.VK_E );
       export.addActionListener( internalFormatController );
       export.setName( "export" );
       file.add( export );
 
-      JMenuItem quit = new ApesMenuItem( "menu.file.quit" );
+      JMenuItem quit = new ApesMenuItem( "menu.file.quit", KeyEvent.VK_Q );
       // Exit program is this is clicked.
       quit.addActionListener( new ActionListener()
       {
@@ -272,37 +271,37 @@ public class ApplicationView extends JFrame
       JMenu edit = new ApesMenu( "menu.head.edit" );
       add( edit );
 
-      JMenuItem undo = new ApesMenuItem( "menu.edit.undo" );
+      JMenuItem undo = new ApesMenuItem( "menu.edit.undo", KeyEvent.VK_Z );
       undo.addActionListener( internalFormatController );
       undo.setName( "undo" );
       edit.add( undo );
 
-      JMenuItem redo = new ApesMenuItem( "menu.edit.redo" );
+      JMenuItem redo = new ApesMenuItem( "menu.edit.redo", KeyEvent.VK_R );
       redo.addActionListener( internalFormatController );
       redo.setName( "redo" );
       edit.add( redo );
 
-      JMenuItem cut = new ApesMenuItem( "menu.edit.cut" );
+      JMenuItem cut = new ApesMenuItem( "menu.edit.cut", KeyEvent.VK_X );
       cut.addActionListener( internalFormatController );
       cut.setName( "cut" );
       edit.add( cut );
 
-      JMenuItem copy = new ApesMenuItem( "menu.edit.copy" );
+      JMenuItem copy = new ApesMenuItem( "menu.edit.copy", KeyEvent.VK_C );
       copy.addActionListener( internalFormatController );
       copy.setName( "copy" );
       edit.add( copy );
 
-      JMenuItem paste = new ApesMenuItem( "menu.edit.paste" );
+      JMenuItem paste = new ApesMenuItem( "menu.edit.paste", KeyEvent.VK_V );
       paste.addActionListener( internalFormatController );
       paste.setName( "paste" );
       edit.add( paste );
 
-      JMenuItem delete = new ApesMenuItem( "menu.edit.delete" );
+      JMenuItem delete = new ApesMenuItem( "menu.edit.delete", KeyEvent.VK_D );
       delete.addActionListener( internalFormatController );
       delete.setName( "delete" );
       edit.add( delete );
 
-      JMenuItem tags = new ApesMenuItem( "menu.edit.tags" );
+      JMenuItem tags = new ApesMenuItem( "menu.edit.tags", KeyEvent.VK_T );
       tags.addActionListener( tagsController );
       tags.setName( "edit" );
       edit.add( tags );
@@ -315,22 +314,22 @@ public class ApplicationView extends JFrame
       JMenu zoom = new ApesMenu( "menu.head.zoom" );
       view.add( zoom );
 
-      JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in" );
+      JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in", "alt shift I" );
       zoomIn.addActionListener( internalFormatController );
       zoomIn.setName( "zoomIn" );
       zoom.add( zoomIn );
 
-      JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out" );
+      JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out", "alt shift O" );
       zoomOut.addActionListener( internalFormatController );
       zoomOut.setName( "zoomOut" );
       zoom.add( zoomOut );
 
-      JMenuItem zoomSelection = new ApesMenuItem( "menu.view.zoom.selection" );
+      JMenuItem zoomSelection = new ApesMenuItem( "menu.view.zoom.selection", "alt shift S" );
       zoomSelection.addActionListener( internalFormatController );
       zoomSelection.setName( "zoomSelection" );
       zoom.add( zoomSelection );
 
-      JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset" );
+      JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset", "alt shift R" );
       zoomReset.addActionListener( internalFormatController );
       zoomReset.setName( "zoomReset" );
       zoom.add( zoomReset );
@@ -357,19 +356,29 @@ public class ApplicationView extends JFrame
       JMenu player = new ApesMenu( "menu.head.player" );
       add( player );
 
-      JMenuItem play = new ApesMenuItem( "menu.player.play" );
+      JMenuItem play = new ApesMenuItem( "menu.player.play", "alt P" );
+      play.addActionListener(playerController);
+      play.setName("play");
       player.add( play );
 
-      JMenuItem pause = new ApesMenuItem( "menu.player.pause" );
+      JMenuItem pause = new ApesMenuItem( "menu.player.pause", "alt C" );
+      pause.addActionListener(playerController);
+      pause.setName("pause");
       player.add( pause );
 
-      JMenuItem stop = new ApesMenuItem( "menu.player.stop" );
+      JMenuItem stop = new ApesMenuItem( "menu.player.stop", "alt S" );
+      stop.addActionListener(playerController);
+      stop.setName("stop");
       player.add( stop );
 
-      JMenuItem forward = new ApesMenuItem( "menu.player.forward" );
+      JMenuItem forward = new ApesMenuItem( "menu.player.forward", "alt F" );
+      forward.addActionListener(playerController);
+      forward.setName("forward");
       player.add( forward );
 
-      JMenuItem backward = new ApesMenuItem( "menu.player.backward" );
+      JMenuItem backward = new ApesMenuItem( "menu.player.backward", "alt B" );
+      backward.addActionListener(playerController);
+      backward.setName("backward");
       player.add( backward );
       // Player END
 
@@ -382,12 +391,12 @@ public class ApplicationView extends JFrame
       JMenu tools = new ApesMenu( "menu.head.tools" );
       add( tools );
 
-      JMenuItem properties = new ApesMenuItem( "menu.tools.properties" );
+      JMenuItem properties = new ApesMenuItem( "menu.tools.properties", KeyEvent.VK_T );
       properties.addActionListener( configController );
       properties.setName( "show" );
       tools.add( properties );
 
-      JMenuItem plugins = new ApesMenuItem( "menu.tools.plugins" );
+      JMenuItem plugins = new ApesMenuItem( "menu.tools.plugins", KeyEvent.VK_P );
       plugins.addActionListener( pluginController );
       plugins.setName( "plugin" );
       tools.add( plugins);

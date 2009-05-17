@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.Observable;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
+import java.awt.event.InputEvent;
 
 /**
  * This extends {@link javax.swing.JMenuItem JMenuItem} with locale
@@ -61,7 +63,38 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
       setIcon(icon);
     }
   }
+  
+  /**
+   * Creates a new <code>ApesMenuItem</code> instance. The menu will
+   * then also be able to reach with key, that is assumed to start
+   * with <code>control</code>.
+   * 
+   * @param tag The Language tag.
+   * @param key The key to connect to this menu item.
+   */
+  public ApesMenuItem(String tag, int key)
+  {
+    this(tag);
+    
+    // Set keybinding.
+    setAccelerator(KeyStroke.getKeyStroke(key, InputEvent.CTRL_DOWN_MASK));
+  }
 
+  /**
+   * Creates a new <code>ApesMenuItem</code> instance. The menu will
+   * then also be able to reach with key.
+   * 
+   * @param tag The Language tag.
+   * @param keyStroke The keystroke as a string.
+   */
+  public ApesMenuItem(String tag, String keyStroke)
+  {
+    this(tag);
+    
+    // Set keybinding.
+    setAccelerator(KeyStroke.getKeyStroke(keyStroke));
+  }
+  
   public void update(Observable o, Object arg)
   {
     setText(language.get(tag));
