@@ -36,7 +36,6 @@ public class MemoryHandler
   
   public boolean free(long index, long bytes) throws IOException
   {
-    System.out.println("FREE used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     if( index < 0 || index + bytes > usedMemory || bytes <= 0 )
       return false;
 
@@ -77,22 +76,20 @@ public class MemoryHandler
       // Copy data
       write(index, data);
     }
-
-    System.out.println("FREE END used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     return true;
   }
 
   /**
    * Allocates new memory and effectively inserts it at the given index. Inserted data is to be considered uninitialized.
    * @param index Position in memory where to add new memory.
-   * @param integers Amount of data to allocate, in INTEGER_BYTES.
+   * @param bytes Amount of data to allocate, in INTEGER_BYTES.
    * @return Returns true if allocation succeeded, otherwise false.
+   * @throws IOException IOException
    */
-  // TODO: Fix small files. 
-  // INDEX OK DO START AT 0!!
+  // TODO: Fix small files.
+
   public boolean malloc(long index, long bytes) throws IOException
   {  
-    System.out.println("MALLOC used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     if( index < 0 || index > usedMemory || bytes <= 0 )
       return false;
 
@@ -105,7 +102,6 @@ public class MemoryHandler
       if( (frame = swap(index)) == null )
       {
         createPages(index, bytes);
-        System.out.println("MALLOC SPECIAL OLYMPICS EDITION used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
         return true;
       }
     }
@@ -119,7 +115,6 @@ public class MemoryHandler
     if(frame.page.index == index)
     {
       createPages(index, bytes);
-      System.out.println("MALLOC PRECISION used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
       return true;
     }
     // Destroy old page
@@ -127,8 +122,6 @@ public class MemoryHandler
 
     // Create pages
     createPages( firstIndex, bytes + frame.data.length );
-
-    int amountToCopy = frame.data.length;
     
     byte[] fst = new byte[(int)(index - firstIndex + 1)];
     byte[] lst = new byte[frame.data.length - fst.length];
@@ -138,7 +131,6 @@ public class MemoryHandler
   
     write(index0, fst);
     write(index1, lst);
-    System.out.println("MALLOC END used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
 
     return true;
   }
@@ -201,7 +193,7 @@ public class MemoryHandler
    * Removes a page from the system.
    * @param page Page to remove.
    * @return The frame which contained the specified page. If no such frame exists, returns null.
-   * @throws IOException
+   * @throws IOException IOException
    */
   private Frame destroyPage( Page page ) throws IOException
   {
@@ -233,7 +225,6 @@ public class MemoryHandler
     return null;
   }
 
-  // TODO: Well.. Yeah, implement
   public byte[] read( long index, int amount ) throws IOException
   {
     Frame frame = null;
@@ -270,7 +261,7 @@ public class MemoryHandler
     Frame frame = null;
     int frameI;
     int offset = 0;
-    int targetPos = 0;
+    int targetPos;
 
     while( offset < data.length )
     {
@@ -298,7 +289,8 @@ public class MemoryHandler
   /**
    * @param source
    * @param start
-   * @param amount
+   * @param stop
+   * @param putAt
    */
   public void transfer(MemoryHandler source, long start, long stop, long putAt )
   {
@@ -390,8 +382,7 @@ public class MemoryHandler
     }
 
   }
-  private static short count = 0;
-
+  
   private class Page
   {
     private RandomAccessFile file;
