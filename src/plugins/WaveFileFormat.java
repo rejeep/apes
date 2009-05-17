@@ -51,7 +51,7 @@ public class WaveFileFormat implements AudioFormatPlugin
    */
   public Map<String, String> getDescriptions()
   {
-    HashMap map = new HashMap<String, String>();
+    Map<String, String> map = new HashMap<String, String>();
     map.put("en", "Support for .wav files.");
     map.put("sv", "Stöd för .wav filer.");
     return map;
