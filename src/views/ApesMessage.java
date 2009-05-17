@@ -70,7 +70,6 @@ public class ApesMessage extends JPanel implements Runnable
     // Set panel settings.
     setSize(WIDTH, 0);
     setLayout(new FlowLayout(FlowLayout.LEFT));
-    setVisible(false);
     
     // The label the text is on.
     label = new JLabel();
@@ -102,29 +101,16 @@ public class ApesMessage extends JPanel implements Runnable
   {
     while(true)
     {
+      label.setText(message);
+      
       if(message == null)
       {
         sleep(100);
       }
       else
       {
-        // We want the message to appear.
-        setSize(WIDTH, 0);
-        label.setText(message);
-        setVisible(true);
-        int sleep = OCCUR_TIME / HEIGHT;
-        
-        for(int i = 0; i < HEIGHT; i++)
-        {
-          setSize(WIDTH, i);
-          sleep(sleep);
-        }
-        
-        // Reset
         message = null;
         sleep(DURATION_TIME);
-        setSize(WIDTH, 0);
-        setVisible(false);
       }
     }
   }
