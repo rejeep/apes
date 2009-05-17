@@ -264,10 +264,9 @@ public class MemoryHandler
 
   public void write( long index, byte[] data ) throws IOException
   {
-    System.out.println("TRY WRITE");
+    
     if( index < 0 || index + data.length > usedMemory || data.length < 1 )
       return;
-    System.out.println("WRITING" + " index: " + index + " bytes " + data.length);
     Frame frame = null;
     int frameI;
     int offset = 0;
@@ -278,10 +277,11 @@ public class MemoryHandler
       frameI = find( index );
       frame = (frameI  == -1 ? swap( index ) : frameTable[frameI]);
       targetPos = (int)(index - frame.page.index);
-      
+
       int length = Math.min(frame.data.length - targetPos, data.length - offset);
-      
+
       System.arraycopy(data, offset, frame.data, targetPos, length);
+
       index  += length;
       offset += length;
     }
@@ -302,7 +302,6 @@ public class MemoryHandler
    */
   public void transfer(MemoryHandler source, long start, long stop, long putAt )
   {
-    System.out.println("Transfer: start: " +start+ " stop: " +stop+ " putAt: " + putAt);
     if( start < 0 || start > stop || source.usedMemory < stop || putAt > usedMemory)
       return;
     

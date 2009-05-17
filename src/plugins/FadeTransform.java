@@ -111,35 +111,34 @@ public class FadeTransform implements TransformPlugin, ActionListener
    */
   public void doFade(Boolean flag)
   {
-    for( int channel = 0; channel < internalFormat.getNumChannels(); channel++ )
-    {
-      int curr = 0;
-      float scale = 1.0f;
-      
-      int diff = selection.y - selection.x;
-      int steps = diff / interval;
-      int spill = diff % interval;
+  
+    int curr = 0;
+    float scale = 1.0f;
     
-   
-      System.out.println("steps: " + steps);
-      for(int j=0; j<steps; j++)
+    int diff = selection.y - selection.x;
+    int steps = diff / interval;
+    int spill = diff % interval;
+  
+ 
+    System.out.println("steps: " + steps);
+    for(int j=0; j<steps; j++)
+    {
+      if(flag)
       {
-        if(flag)
-        {
-          scale = (float) j / steps;
-        }
-        else
-        {
-          scale = (float) j / steps;
-          scale = (float) (1.0f - scale);
-        }
-        curr = selection.x + (j*interval);
-        internalFormat.scaleSamples(channel, curr, curr+interval-1, scale);
+        scale = (float) j / steps;
       }
-      
-      curr = selection.x + steps*interval;
-      internalFormat.scaleSamples(channel, curr, curr+spill, scale);
+      else
+      {
+        scale = (float) j / steps;
+        scale = (float) (1.0f - scale);
+      }
+      curr = selection.x + (j*interval);
+      internalFormat.scaleSamples(curr, curr+interval-1, scale);
     }
+    
+    curr = selection.x + steps*interval;
+    internalFormat.scaleSamples(curr, curr+spill, scale);
+    internalFormat.updated();
   }
   
   /**
