@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JPanel;
@@ -161,7 +162,9 @@ public class ChannelView extends JPanel implements Runnable
   {
     for( ChannelView.Graph graph : graphs )
     {
+      double d = System.currentTimeMillis();
       graph.updateGraph();
+      System.out.println("Updating graph took " + (System.currentTimeMillis() - d) + " ms");
     }
   }
 
@@ -744,13 +747,26 @@ public class ChannelView extends JPanel implements Runnable
       // equally many samples as there are pixels.
       if( samplesPerPixel <= 1 )
       {
-        samples = new int[visibleSamples];
-
         int firstVisibleSample = getFirstVisibleSample();
+        ByteBuffer bytes = ByteBuffer.wrap(internalFormat.getSamples(firstVisibleSample, firstVisibleSample+visibleSamples));
+        samples = new int[visibleSamples];
 
         for(int i = 0; i < samples.length; i++)
         {
-          samples[i] = internalFormat.getSample( channel, firstVisibleSample + i );
+          int index = (int)(internalFormat.samplesToBytes(i) + channel*internalFormat.bytesPerSample);
+          switch(internalFormat.bytesPerSample)
+          {
+            case 2:
+              samples[i] = bytes.getShort( index );
+              break;
+            case 4:
+              samples[i] = bytes.getInt( index );
+              break;
+              
+            default:
+              System.out.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
+              System.exit( 1 );
+          }
         }
       }
       // If there are more samples per pixel than 1.
