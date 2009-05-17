@@ -302,23 +302,17 @@ public class PluginHandler
       if( path.endsWith( ".class" ) )
       {
         cls = cl.loadClass(path, "apes.plugins." + name);
+        instancePlugin(cls, pi);
       }
       else if( path.endsWith( ".jar" ) )
       {
         cls = cl.loadClass(path, "apes.plugins." + name);
+        instancePlugin(cls, pi);
       }
-      else
-      {
-        System.out.println("Wrong filename for plugin.");
-        return;
-      }
-      
-      instancePlugin(cls, pi);
-      
     }
     catch( ClassNotFoundException e )
     {
-      System.out.println("ClassNotFoundException");
+      e.printStackTrace();
     }
   }
   
@@ -361,18 +355,14 @@ public class PluginHandler
           plugins.add(pi);
         }
       }
-      else
-      {
-        System.out.println("instancePlugin: Not a valid class?");
-      }
     }
     catch( InstantiationException e )
     {
-      System.out.println("InstantiationException");
+      e.printStackTrace();
     }
     catch( IllegalAccessException e )
     {
-      System.out.println("IllegalAccessException");
+      e.printStackTrace();
     }
   }
 }
@@ -410,7 +400,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( IOException e )
     {
-      System.out.println( "IOException" );
+      e.printStackTrace();
     }
 
     if( classBytes == null )
@@ -427,7 +417,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( ClassFormatError e )
     {
-      System.out.println( "ClassFormatError" );
+      e.printStackTrace();
     }
     
     return null;
@@ -455,7 +445,7 @@ class PluginLoader extends ClassLoader
     }
     catch ( MalformedURLException e )
     {
-      System.out.println("MalformedURLException");
+      e.printStackTrace();
     }
     
     return null;
