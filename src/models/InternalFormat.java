@@ -9,6 +9,7 @@ import java.util.List;
 
 import apes.lib.FileHandler;
 import java.util.Observable;
+import java.nio.ByteBuffer;
 
 /**
  * Describes the audio in a format suitable for internal
@@ -285,7 +286,7 @@ public class InternalFormat extends Observable
    * @return All data copied.
    */
   // FIXME: How large chunks can we get?
-  public byte[] getSamples(int startS, int stopS)
+  public byte[] getSamples(long startS, long stopS)
   {
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return null;
@@ -405,7 +406,7 @@ public class InternalFormat extends Observable
    * TODO: Comment
    *
    * @param startS
-   * @param samples
+   * @param m
    * @return 
    */
   public void pasteSamples(long startS, MemoryHandler m)
@@ -422,11 +423,49 @@ public class InternalFormat extends Observable
    * @param stopS The end sample.
    * @param alpha The alpha value.
    */
-  public void scaleSamples( int channel, int startS, int stopS, float alpha )
+  public void scaleSamples( long startS, long stopS, float alpha )
   {
-    for(int i = startS; i <= stopS; i++)
+    final int IO_SIZE = 100000; // Amount in samples
+    
+    ByteBuffer toWrite = null;
+
+    int nToWriteS = IO_SIZE;
+
+    if(alpha == 0)
+      toWrite = ByteBuffer.wrap(new byte[(int)samplesToBytes(nToWriteS)]);
+
+    for(long iS = startS; iS < stopS; iS++)
     {
-      setSample(channel, i, Math.round(getSample(channel, i)*alpha));
+      if((stopS - iS + 1) < IO_SIZE)
+      {
+        nToWriteS = (int)(stopS - iS + 1);
+        if(alpha == 0)
+          toWrite = ByteBuffer.wrap(new byte[(int)samplesToBytes(nToWriteS)]);    
+      }
+
+      if(alpha != 0) 
+      {
+        toWrite = ByteBuffer.wrap(getSamples(iS, iS+nToWriteS));
+
+        for(int index = 0; index < nToWriteS; ++index)
+        {
+          switch(bytesPerSample)
+          {
+            case 2:
+              toWrite.putShort( index, (short)Math.round(toWrite.getShort() * alpha));
+              break;
+            case 4:
+              toWrite.putInt( index, Math.round(toWrite.getInt() * alpha));
+              break;
+            default:
+              System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
+              System.exit( 1 );
+          }
+        }
+      }
+
+      setSamples(samplesToBytes(iS), toWrite.array());
+      iS += nToWriteS;
     }
   }
 
