@@ -754,6 +754,7 @@ public class ChannelView extends JPanel implements Runnable
         for(int i = 0; i < samples.length; i++)
         {
           int index = (int)(internalFormat.samplesToBytes(i) + channel*internalFormat.bytesPerSample);
+          
           switch(internalFormat.bytesPerSample)
           {
             case 2:
