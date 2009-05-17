@@ -3,11 +3,8 @@ package apes.models;
 import apes.models.MemoryHandler;
 import apes.plugins.WaveFileFormat;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.util.List;
 
-import apes.lib.FileHandler;
 import java.util.Observable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -177,9 +174,33 @@ public class InternalFormat extends Observable
     int total = 0;
     int step = lengthS <= 50 ? 1 : Math.round(lengthS * 0.1f);
 
-    for(int i = 0; i < lengthS; i += step, c++)
+    final int IO_SIZE = 100000; // Amount in samples
+    
+    ByteBuffer buffer;
+    int nToRead = IO_SIZE;
+
+    for(int iS = startS; iS < startS+lengthS; iS++)
     {
-      total += getSample(channel, startS + i);
+      if(iS+nToRead > startS+lengthS)
+        nToRead = startS+lengthS - iS;
+
+      buffer = ByteBuffer.wrap( getSamples(iS, iS+nToRead) );
+      for(int i = 0; i < nToRead; i+=step, c++)
+      {
+        switch(bytesPerSample)
+        {
+          case 2:
+            total += buffer.getShort((int)(samplesToBytes(i) + channel*bytesPerSample));
+            break;
+          case 4:
+            total += buffer.getInt((int)(samplesToBytes(i) + channel*bytesPerSample));
+            break;
+          default:
+            System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE AVERAGING");
+            System.exit( 1 );
+        }
+      }
+      iS += nToRead;
     }
 
     return Math.round((float)total/c);
