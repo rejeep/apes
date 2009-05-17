@@ -36,6 +36,7 @@ public class MemoryHandler
   
   public boolean free(long index, long bytes) throws IOException
   {
+    System.out.println("FREE used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     if( index < 0 || index + bytes > usedMemory || bytes <= 0 )
       return false;
 
@@ -43,7 +44,7 @@ public class MemoryHandler
     int frameL = find( index + bytes - 1 );
 
     // Find new size
-    Frame fstFrame = (frameF  == -1 ? swap(index)             : frameTable[frameF]);
+    Frame fstFrame = (frameF  == -1 ? swap(index)              : frameTable[frameF]);
     Frame lstFrame = (frameL  == -1 ? swap(index + bytes - 1)  : frameTable[frameL]);
 
     long firstIndex = fstFrame.page.index;
@@ -51,51 +52,33 @@ public class MemoryHandler
     int lstSize = (int)((lstFrame.data.length + lstFrame.page.index) - (index + bytes));
 
     int size = fstSize + lstSize;
-
-    Page[] newPages = null;
-    int nPages = 0;
+    
+    // Destroy pages
+    List<Page> doomed = new ArrayList<Page>();
+    for( Page p : pageTable )
+      if( p.index >= firstIndex && p.index < index + bytes)
+        doomed.add(p);
+    
+    for(Page p : doomed)
+      destroyPage(p);
+    
+    doomed.clear();
+    
     if( size != 0 )
     {
       // Create pages
-      nPages = size > PAGE_SIZE ? 2 : 1;
-      newPages = new Page[nPages];
-      for(int i = 0; i < newPages.length; ++i)
-        newPages[i] = new Page(size / nPages);
-
-      // Copy first data
-      newPages[0].file.write(fstFrame.data, 0, fstSize );
-
-      // Copy last data
-      newPages[nPages - 1].file.write(lstFrame.data, (int)(index+bytes - lstFrame.page.index), lstSize);
-    }
-    // Destroy pages
-    for( int i = 0; i < pageTable.size(); i++ )
-    {
-      Page p = pageTable.get(i);
-      if( p.index >= firstIndex && p.index < index + bytes)
-      {
-        destroyPage(p);
-        i--;
-      }
+      createPages(index, size);
+      byte[] data = new byte[size];
+      
+      // Copy arrays
+      System.arraycopy(fstFrame.data, 0, data, 0, fstSize);
+      System.arraycopy(lstFrame.data, lstFrame.data.length-lstSize, data, fstSize, lstSize);
+      
+      // Copy data
+      write(index, data);
     }
 
-    for(Page p : pageTable)
-      if(p.index > index + bytes)
-        p.index -= bytes;
-
-    // Add pages, set indices
-    if(size != 0)
-    {
-      pageTable.add( newPages[0] );
-      newPages[0].index = firstIndex;
-      if( nPages == 2 )
-      {
-        pageTable.add( newPages[1] );
-        newPages[1].index = firstIndex + fstSize;
-      }
-    }
-
-    usedMemory -= bytes;
+    System.out.println("FREE END used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     return true;
   }
 
@@ -109,6 +92,7 @@ public class MemoryHandler
   // INDEX OK DO START AT 0!!
   public boolean malloc(long index, long bytes) throws IOException
   {  
+    System.out.println("MALLOC used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
     if( index < 0 || index > usedMemory || bytes <= 0 )
       return false;
 
@@ -121,7 +105,7 @@ public class MemoryHandler
       if( (frame = swap(index)) == null )
       {
         createPages(index, bytes);
-        
+        System.out.println("MALLOC SPECIAL OLYMPICS EDITION used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
         return true;
       }
     }
@@ -135,6 +119,7 @@ public class MemoryHandler
     if(frame.page.index == index)
     {
       createPages(index, bytes);
+      System.out.println("MALLOC PRECISION used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
       return true;
     }
     // Destroy old page
@@ -144,14 +129,16 @@ public class MemoryHandler
     createPages( firstIndex, bytes + frame.data.length );
 
     int amountToCopy = frame.data.length;
-    byte[] fst = new byte[amountToCopy/2];
-    byte[] lst = new byte[amountToCopy/2 + (amountToCopy&1)];
+    
+    byte[] fst = new byte[(int)(index - firstIndex + 1)];
+    byte[] lst = new byte[frame.data.length - fst.length];
     
     System.arraycopy(frame.data, 0         , fst, 0, fst.length);
     System.arraycopy(frame.data, fst.length, lst, 0, lst.length);
-
+  
     write(index0, fst);
     write(index1, lst);
+    System.out.println("MALLOC END used memory: " +usedMemory+ " index: " + index + " bytes " + bytes);
 
     return true;
   }
@@ -277,9 +264,10 @@ public class MemoryHandler
 
   public void write( long index, byte[] data ) throws IOException
   {
+    System.out.println("TRY WRITE");
     if( index < 0 || index + data.length > usedMemory || data.length < 1 )
       return;
-
+    System.out.println("WRITING" + " index: " + index + " bytes " + data.length);
     Frame frame = null;
     int frameI;
     int offset = 0;
@@ -314,6 +302,7 @@ public class MemoryHandler
    */
   public void transfer(MemoryHandler source, long start, long stop, long putAt )
   {
+    System.out.println("Transfer: start: " +start+ " stop: " +stop+ " putAt: " + putAt);
     if( start < 0 || start > stop || source.usedMemory < stop || putAt > usedMemory)
       return;
     
@@ -326,7 +315,7 @@ public class MemoryHandler
       // Copy memory
       for(long i = putAt, index = start; index <= stop; i+=PAGE_SIZE, index += PAGE_SIZE)
       {
-        int chunkSize = amount > PAGE_SIZE? PAGE_SIZE : (int)amount;
+        int chunkSize = amount > PAGE_SIZE ? PAGE_SIZE : (int)amount;
         byte[] chunk = source.read(index, chunkSize);
         write(i, chunk); 
         amount -= PAGE_SIZE;

@@ -306,12 +306,12 @@ public class InternalFormat extends Observable
    * @param startS
    * @param stopS
    */
-  public void removeSamples(int startS, int stopS)
+  public void removeSamples(long startS, long stopS)
   {
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
 
-    int lengthS = ( stopS - startS + 1);
+    long lengthS = ( stopS - startS + 1);
     try
     {
       if(memoryHandler.free(samplesToBytes(startS), samplesToBytes(lengthS)))
@@ -339,11 +339,10 @@ public class InternalFormat extends Observable
    * @return An array containing arrays of Samples objects of the data
    *         removed from the channels.
    */
-  public void cutSamples(int startS, int stopS, MemoryHandler mH)
+  public void cutSamples(long startS, long stopS, MemoryHandler mH)
   {
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
-
     mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0L);
     removeSamples(startS, stopS);
     updated();
@@ -409,9 +408,10 @@ public class InternalFormat extends Observable
    * @param samples
    * @return 
    */
-  public void pasteSamples(int startS, MemoryHandler m)
+  public void pasteSamples(long startS, MemoryHandler m)
   {
     memoryHandler.transfer(m, 0, (int)(m.getUsedMemory()-1), (long)samplesToBytes(startS));
+    sampleAmount += bytesToSamples(m.getUsedMemory());
     updated();
   }
 

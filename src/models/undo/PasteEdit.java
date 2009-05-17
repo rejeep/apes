@@ -20,7 +20,7 @@ public class PasteEdit extends AbstractUndoableEdit
 
   private MemoryHandler paste;
 
-  private int start, stop;
+  private long start, stop;
 
   private boolean undoable;
 
@@ -28,14 +28,17 @@ public class PasteEdit extends AbstractUndoableEdit
   {
     internalFormat = intForm;
     start = marked.x;
-    stop = marked.y;
+    stop = start + p.getUsedMemory();
     paste = new MemoryHandler();
+    System.out.println("New paste edit from: " + start + " to: " + stop + " size: " + p.getUsedMemory());
+    System.out.println("Copy from clipBoard to Paste");
     paste.transfer(p, 0, (int)(p.getUsedMemory() - 1), 0);
     redo();
   }
 
   public void redo()
   {
+    System.out.println("paste to internalformat");
     internalFormat.pasteSamples(start, paste);
     paste.dispose();
     undoable = true;
