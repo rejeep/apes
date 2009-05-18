@@ -170,8 +170,7 @@ public class InternalFormatController extends ApplicationController
     {
       if(name.matches("cut|delete"))
       {
-        player.setStart(0);
-        player.setStop(0);
+        player.setAllMarks( 0 );
       }
 
       undoManager.addEdit(edit);
