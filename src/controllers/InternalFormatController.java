@@ -184,7 +184,6 @@ public class InternalFormatController extends ApplicationController
   // Funkar inte efter cut
   public void undo()
   {
-    System.out.println("== UNDO ==");
     if(undoManager.canUndo())
     {
       undoManager.undo();
@@ -197,7 +196,6 @@ public class InternalFormatController extends ApplicationController
    */
   public void redo()
   {
-    System.out.println("== REDO ==");
     if(undoManager.canRedo())
     {
       undoManager.redo();
@@ -210,7 +208,6 @@ public class InternalFormatController extends ApplicationController
    */
   public void copy()
   {
-    System.out.println("== COPY ==");
     clipboard.dispose();
     internalFormat.copy(selection.x, selection.y, clipboard);
     apesMessage.print("copy");
@@ -222,7 +219,6 @@ public class InternalFormatController extends ApplicationController
   // Cut funkar inte 2ggr i rad
   public void cut()
   {
-    System.out.println("== CUT ==");
     edit = new CutEdit(internalFormat, selection);
     MemoryHandler cutout  = ( (CutEdit)edit ).getCutout(); 
     clipboard.dispose();
@@ -237,7 +233,6 @@ public class InternalFormatController extends ApplicationController
   {
     if(clipboard.getUsedMemory() > 0)
     {
-      System.out.println("== PASTE ==");
       edit = new PasteEdit(internalFormat, selection, clipboard);
       apesMessage.print("paste");
     }
