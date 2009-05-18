@@ -372,10 +372,8 @@ public class InternalFormat extends Observable
   {
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
-//    if(mH.getUsedMemory() == 0)
-//      System.out.println("Memory handler empty");
+    
     mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0L);
-//    System.out.println("Memory handler contains " + bytesToSamples(mH.getUsedMemory()));
     removeSamples(startS, stopS);
     updated();
   }
