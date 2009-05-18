@@ -13,20 +13,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.TreeMap;
+import apes.views.ApesError;
 
 /**
  * <p>
  * This class handles the user specific configuration file. This class
  * uses the Singleton pattern. That means that if you want to use this
  * class you should create an object like this:
- * 
+ *
  * <pre>
  * Config config = Config.getInstance();
  * </pre>
- * 
+ *
  * </p>
  * <p> An option in the configuration file should consist of: At least
  * one character from a-z (underscore may separate words), then an
@@ -46,7 +47,7 @@ import java.util.TreeMap;
  * <li>option_two=value</li>
  * </ul>
  * And lines starting with a <code>#</code> is a comment.
- * 
+ *
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Config
@@ -164,7 +165,7 @@ public class Config
 
   /**
    * Get the absolute path to the configuration file.
-   * 
+   *
    * @return the absolute path to the configuration file.
    */
   public String getFilePath()
@@ -174,17 +175,30 @@ public class Config
 
   /**
    * Set the configuration file.
-   * 
+   *
    * @param path The absolute path to the file.
    */
   public void setFilePath( String path )
   {
     this.file = new File( path );
+
+    // Create file if it does not exist.
+    if(!file.exists())
+    {
+      try
+      {
+        file.createNewFile();
+      }
+      catch(IOException e)
+      {
+        ApesError.couldNotCreateConfigurationFile();
+      }
+    }
   }
 
   /**
    * Get the value for <code>key</code>.
-   * 
+   *
    * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
@@ -196,7 +210,7 @@ public class Config
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be true or false instead of "true" and "false".
-   * 
+   *
    * @param key The configuration key.
    * @return the value for <code>key</code> casted to a boolean.
    *         "true" option will return true. Everything else will
@@ -210,7 +224,7 @@ public class Config
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be not be a string, but an integer.
-   * 
+   *
    * @param key The configuration key.
    * @return the value for <code>key</code> casted to an integer.
    * @exception NumberFormatException if there was no value to key.
@@ -222,7 +236,7 @@ public class Config
 
   /**
    * Adds an option.
-   * 
+   *
    * @param key The option key.
    * @param default_value The default value.
    * @param type The type (string, integer, boolean).
@@ -236,7 +250,7 @@ public class Config
 
   /**
    * Return the types map.
-   * 
+   *
    * @param key The configuration key.
    * @return The map containing all types.
    */
@@ -247,7 +261,7 @@ public class Config
 
   /**
    * Return the options map.
-   * 
+   *
    * @return The map containing all options.
    */
   public Map<String, String> getOptions()
@@ -324,7 +338,7 @@ public class Config
 
   /**
    * Returns a string of an option.
-   * 
+   *
    * @param key The key option.
    * @return The option as a string (key = value).
    */
@@ -335,7 +349,7 @@ public class Config
 
   /**
    * Will return an instance of this class.
-   * 
+   *
    * @return An instance of this class.
    */
   public static Config getInstance()

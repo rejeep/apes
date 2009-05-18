@@ -139,6 +139,11 @@ error:
     open:
       title: Open failure
       message: An error occurred when trying to open a file
+  config:
+    file:
+      create:
+        title: Could not save config file
+        message: An error occurred when trying to save the configuration file
 channel:
   header: Channel
   start: Start
