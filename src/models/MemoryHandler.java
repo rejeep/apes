@@ -131,7 +131,7 @@ public class MemoryHandler implements Serializable
     System.arraycopy(frame.data, 0         , fst, 0, fst.length);
     System.arraycopy(frame.data, fst.length, lst, 0, lst.length);
 
-    write(index0, fst);
+    write(firstIndex, fst);
     write(index1, lst);
 
     return true;
