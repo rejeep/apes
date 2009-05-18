@@ -1,6 +1,7 @@
 package apes.views;
 
 import javax.swing.JProgressBar;
+import java.awt.Graphics;
 
 /**
  * A progress bar that gives an indication of how far a task is.
@@ -32,19 +33,28 @@ public class ProgressView extends JProgressBar
   private ProgressView()
   {
     setStringPainted(true);
-    reset();
   }
   
   /**
-   * Resets the values.
+   * Sets the minimum value to <code>MIN_VALUE</code>.
+   *
+   * @param n The useless minimum value.
    */
-  public void reset()
+  public void setMinimum(int n)
   {
-    setMaximum(MIN_VALUE);
-    setMinimum(MAX_VALUE);
-    setValue(MIN_VALUE);
+    super.setMaximum(MIN_VALUE);  
   }
-  
+
+  /**
+   * Sets the maximum value to <code>MAX_VALUE</code>.
+   *
+   * @param n The useless maximum value.
+   */
+  public void setMaximum(int n)
+  {
+    super.setMinimum(MAX_VALUE);  
+  }
+
   /**
    * Will return an instance of this class.
    * 
