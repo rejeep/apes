@@ -375,7 +375,6 @@ public class InternalFormat extends Observable
     
     mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0L);
     removeSamples(startS, stopS);
-    updated();
   }
 
   /**
