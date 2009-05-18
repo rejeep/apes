@@ -311,7 +311,7 @@ public class MemoryHandler implements Serializable
         int chunkSize = amount > PAGE_SIZE ? PAGE_SIZE : (int)amount;
         byte[] chunk = source.read(index, chunkSize);
         write(i, chunk);
-        amount -= PAGE_SIZE;
+        amount -= chunkSize;
       }
     }catch(Exception e){e.printStackTrace();}
   }
