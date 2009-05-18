@@ -741,6 +741,13 @@ public class ChannelView extends JPanel implements Runnable
      */
     public void updateGraph()
     {
+      int amount = internalFormat.getSampleAmount();
+      if(visibleSamples > amount)
+      {
+        visibleSamples = amount;
+        centerSample = visibleSamples / 2;
+      }
+      
       samplesPerPixel = visibleSamples / graphWidth;
 
       // If there are less samples per pixel than 1. Or if there are
