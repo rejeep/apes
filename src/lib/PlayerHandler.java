@@ -276,6 +276,7 @@ public class PlayerHandler
     }
 
     players.remove( player );
+    internalFormat.close();
   }
 
   /**

@@ -240,6 +240,15 @@ public class InternalFormat extends Observable
   }
   
   /**
+   * Closes all streams and cleans up the <code>InternalFormat</code>
+   */
+  public void close()
+  {
+    memoryHandler.dispose();
+    this.channels = 0;
+  }
+  
+  /**
    * load an internal format
    * @param filePath
    * @param fileName
