@@ -49,6 +49,7 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
+import java.awt.FlowLayout;
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -132,8 +133,7 @@ public class ApplicationView extends JFrame
     Tabs tabs = tabsController.getTabs();
     tabs.addObserver(tabsView);
     tabs.setModel(tabsView.getModel());
-    // add(tabsView, BorderLayout.CENTER);
-    wrapper.add(tabsView, BorderLayout.NORTH);
+    wrapper.add(tabsView, BorderLayout.CENTER);
     wrapper.add(apesMessage, BorderLayout.SOUTH);
 
     // Set the menu.
