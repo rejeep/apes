@@ -225,10 +225,10 @@ public class WaveFileFormat implements AudioFormatPlugin
     int written = 0;
     byte b[] = new byte[IO_CHUNK_SIZE];
 
-    progress.setMaximum(subChunk2Size);
     while( written < subChunk2Size )
     {
-      progress.setValue(written);
+      int percent = Math.round(written / (float)subChunk2Size * 100);
+      progress.setValue(percent);
       
       int read = dStream.read(b);
       if( read < IO_CHUNK_SIZE )
@@ -241,7 +241,6 @@ public class WaveFileFormat implements AudioFormatPlugin
       internalFormat.insertSamples( written, b );
       written += b.length;
     }
-    progress.reset();
     
     dStream.close();
     return internalFormat;
