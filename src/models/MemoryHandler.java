@@ -1,18 +1,19 @@
 package apes.models;
 
 import java.io.File;
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.Serializable;
 
 
 /**
  * This is not a class.
  * @author Daniel Kvick (kvick@student.chalmers.se)
  */
-public class MemoryHandler
+public class MemoryHandler implements Serializable
 {
   private final int PAGE_SIZE = 100000; // Magic number.
   private final int FRAME_NUM = 100;
