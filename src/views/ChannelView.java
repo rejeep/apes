@@ -164,7 +164,6 @@ public class ChannelView extends JPanel implements Runnable
     {
       double d = System.currentTimeMillis();
       graph.updateGraph();
-      System.out.println("Updating graph took " + (System.currentTimeMillis() - d) + " ms");
     }
   }
 
