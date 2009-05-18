@@ -37,7 +37,6 @@ public class CutEdit extends AbstractUndoableEdit
     start = marked.x;
     stop = marked.y;
     cutout = new MemoryHandler();
-    System.out.println("New cut edit from: " + start + " to: " + stop);
     redo();
   }
 

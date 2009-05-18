@@ -60,14 +60,16 @@ public class MemoryHandler implements Serializable
         doomed.add(p);
 
     for(Page p : doomed)
+    {
       destroyPage(p);
+    }
 
     doomed.clear();
 
     if( size != 0 )
     {
       // Create pages
-      createPages(index, size);
+      createPages(firstIndex, size);
       byte[] data = new byte[size];
       // Copy arrays
       System.arraycopy(fstFrame.data, 0, data, 0, fstSize);
@@ -77,6 +79,27 @@ public class MemoryHandler implements Serializable
       write(index, data);
     }
     return true;
+  }
+  
+  public void printErrr(long index, String title) throws IOException
+  {
+    System.out.println("=========");
+    System.out.println(title);
+    System.out.println("---------");
+    System.out.println("Page inventory - origin " + index);
+    int fileCount = 0;
+    for (Page page : pageTable)
+    {
+      if(page.index > index)
+      {
+        System.out.println("After, index " + page.index + " size " + page.file.length());
+        fileCount++;
+      }
+      else
+        System.out.println("Before, index " + page.index + " size " + page.file.length());
+    }
+    System.out.println(fileCount + " pages after selection\n");
+    System.out.println("=========");
   }
 
   /**
@@ -140,6 +163,8 @@ public class MemoryHandler implements Serializable
     if( amount < 1 || index < 0 )
       return null;
 
+    System.out.println("Creating pages for " + amount + " bytes");
+    printErrr(index, "Beginning of create");
     // Update indexes of pages after insertion point.
     for(Page page : pageTable)
     {
@@ -149,18 +174,21 @@ public class MemoryHandler implements Serializable
       }
     }
 
+    printErrr(index, "Updated indexes");
     if( amount <= PAGE_SIZE)
     {
       Page[] pages = new Page[1];
 
       Page page = new Page(amount);
       page.index = index;
+      System.out.println("Inserting page at " + index);
 
       pages[0] = page;
       pageTable.add(page);
 
       usedMemory += amount;
 
+      printErrr(index, "Returning from create");
       return pages;
     }
 
@@ -196,26 +224,24 @@ public class MemoryHandler implements Serializable
    * @throws IOException IOException
    */
   private Frame destroyPage( Page page ) throws IOException
-  {
-    long mem = usedMemory - page.file.length();
+  { 
+    // Update indexes that comes after the one that was removed.
+    for(Page pageX : pageTable)
+    {
+      if(pageX.index > page.index)
+      {
+        pageX.index -= page.file.length();
+      }
+    }
     
     for( Frame f : frameTable )
     {
       if(f.page == page)
       {
-        // Update indexes that comes after the one that was removed.
-        for(Page pageX : pageTable)
-        {
-          if(pageX.index > page.index)
-          {
-            pageX.index -= page.file.length();
-          }
-        }
-        
         usedMemory -= f.page.file.length();
         page.file.close();
         f.page = null;
-        f.timeStamp = Long.MAX_VALUE;
+        f.timeStamp = Long.MIN_VALUE;
         
         page.tempFile.delete();
         pageTable.remove(page);

@@ -742,6 +742,7 @@ public class ChannelView extends JPanel implements Runnable
     public void updateGraph()
     {
       int amount = internalFormat.getSampleAmount();
+      System.out.println("Amount of samples " + amount);
       if(visibleSamples > amount)
       {
         visibleSamples = amount;
