@@ -145,7 +145,12 @@ error:
           title: Kunde inte spara konfigurationsfil
           message: Ett fel uppstod vis sparning av konfigurationsfil
 channel:
-  header: Kanal
+  information:
+    sample_rate: Samplingsfrekvens
+    num_channels: Antal kanaler
+    num_samples: Antal mätpunkter
+    bytes_per_sample: Bytes per mätpunkt
+    bits_per_sample: Bitar per mätpunkt
   start: Start
   stop: Stop
   player: Spelare

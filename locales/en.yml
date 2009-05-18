@@ -145,7 +145,12 @@ error:
         title: Could not save config file
         message: An error occurred when trying to save the configuration file
 channel:
-  header: Channel
+  information:
+    sample_rate: Sample rate
+    num_channels: Num channels
+    num_samples: Num samples
+    bytes_per_sample: Bytes per sample
+    bits_per_sample: Bits per sample
   start: Start
   stop: Stop
   player: Player
