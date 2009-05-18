@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import apes.lib.Language;
+import java.awt.Dimension;
 
 /**
  * Use this class to send the user a message. A message can be something like:
@@ -68,7 +69,8 @@ public class ApesMessage extends JPanel implements Runnable
   private ApesMessage()
   {
     // Set panel settings.
-    setSize(WIDTH, 0);
+    setSize(WIDTH, HEIGHT);
+    setPreferredSize(new Dimension(WIDTH, HEIGHT));
     setLayout(new FlowLayout(FlowLayout.LEFT));
     
     // The label the text is on.
