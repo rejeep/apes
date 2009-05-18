@@ -775,7 +775,7 @@ public class ChannelView extends JPanel implements Runnable
       {
         samples = new int[graphWidth];
 
-        int jump = visibleSamples / graphWidth;
+        int jump = Math.round((float)visibleSamples / graphWidth);
         int firstVisibleSample = getFirstVisibleSample();
 
         for( int i = 0; i < samples.length; i++ )
