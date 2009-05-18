@@ -139,11 +139,11 @@ error:
     open:
       title: Filöppning misslyckades
       message: Ett fel uppstod vid filöppning
-      config:
-  file:
-    create:
-      title: Kunde inte spara konfigurationsfil
-      message: Ett fel uppstod vis sparning av konfigurationsfil
+    config:
+      file:
+        create:
+          title: Kunde inte spara konfigurationsfil
+          message: Ett fel uppstod vis sparning av konfigurationsfil
 channel:
   header: Kanal
   start: Start
