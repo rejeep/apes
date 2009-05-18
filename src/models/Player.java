@@ -16,8 +16,8 @@ public class Player extends Observable implements Runnable
   /**
    * How large is a chunk.
    */
-  private final static int CHUNK_SIZE = 1024; 
-  
+  private final static int CHUNK_SIZE = 1024;
+
   /**
    * The data line.
    */
@@ -117,12 +117,12 @@ public class Player extends Observable implements Runnable
     int start = getStart();
     int stop = getStop();
     int max = stop;
-      
+
     if( stop == 0 || start == stop )
     {
       max = getSampleAmount();
     }
-    
+
     setCurrentSample( temp >= max ? max : temp );
   }
 
@@ -140,7 +140,7 @@ public class Player extends Observable implements Runnable
     {
       min = 0;
     }
-    
+
     setCurrentSample( temp < min ? min : temp );
   }
 
@@ -424,7 +424,7 @@ public class Player extends Observable implements Runnable
           }
           else
           {
-            pause();         
+            pause();
             setCurrentSample(getStart());
           }
         }
@@ -439,13 +439,13 @@ public class Player extends Observable implements Runnable
         }
         break;
       case STOP:
-        currentSample = 0;
+        currentSample = getStart() == getStop() ? 0 : getStart();
         setStatus( Status.WAIT );
         break;
       case PAUSE:
         setStatus( Status.WAIT );
         break;
-      }  
+      }
     }
   }
 }
