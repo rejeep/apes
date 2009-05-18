@@ -81,27 +81,6 @@ public class MemoryHandler implements Serializable
     return true;
   }
   
-  public void printErrr(long index, String title) throws IOException
-  {
-    System.out.println("=========");
-    System.out.println(title);
-    System.out.println("---------");
-    System.out.println("Page inventory - origin " + index);
-    int fileCount = 0;
-    for (Page page : pageTable)
-    {
-      if(page.index > index)
-      {
-        System.out.println("After, index " + page.index + " size " + page.file.length());
-        fileCount++;
-      }
-      else
-        System.out.println("Before, index " + page.index + " size " + page.file.length());
-    }
-    System.out.println(fileCount + " pages after selection\n");
-    System.out.println("=========");
-  }
-
   /**
    * Allocates new memory and effectively inserts it at the given index. Inserted data is to be considered uninitialized.
    * @param index Position in memory where to add new memory.
@@ -163,8 +142,6 @@ public class MemoryHandler implements Serializable
     if( amount < 1 || index < 0 )
       return null;
 
-    System.out.println("Creating pages for " + amount + " bytes");
-    printErrr(index, "Beginning of create");
     // Update indexes of pages after insertion point.
     for(Page page : pageTable)
     {
@@ -174,21 +151,18 @@ public class MemoryHandler implements Serializable
       }
     }
 
-    printErrr(index, "Updated indexes");
     if( amount <= PAGE_SIZE)
     {
       Page[] pages = new Page[1];
 
       Page page = new Page(amount);
       page.index = index;
-      System.out.println("Inserting page at " + index);
 
       pages[0] = page;
       pageTable.add(page);
 
       usedMemory += amount;
 
-      printErrr(index, "Returning from create");
       return pages;
     }
 
