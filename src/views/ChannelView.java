@@ -792,6 +792,11 @@ public class ChannelView extends JPanel implements Runnable
 
           samples[i] = sample;
         }
+        int[] newSamples = new int[graphWidth];
+        newSamples[0] = samples[0];
+        for(int i = 1; i < graphWidth; i++)
+          newSamples[i] = samples[i] - samples[i-1];
+        samples = newSamples;
       }
 
       // Set min and max amplitude.
