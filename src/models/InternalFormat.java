@@ -150,11 +150,15 @@ public class InternalFormat extends Observable
     try
     {
       return memoryHandler.read( samplesToBytes(indexS), (int)samplesToBytes(amountS) );
-    } catch ( IOException e )
+    }
+    catch ( IOException e )
     {
       e.printStackTrace();
-      return null;
+      
+      System.exit(1);
     }
+    
+    return null;
   }
 
   /**
