@@ -180,7 +180,7 @@ public class MemoryHandler implements Serializable
       pageTable.add(page);
     }
 
-    Page page = new Page( PAGE_SIZE + amount % PAGE_SIZE );
+    Page page = new Page( PAGE_SIZE + ( amount % PAGE_SIZE ) );
     page.index = index + ( pages.length - 1 ) * PAGE_SIZE;
 
     pageTable.add(page);
