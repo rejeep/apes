@@ -765,7 +765,7 @@ public class ChannelView extends JPanel implements Runnable
               break;
               
             default:
-              System.out.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
+              System.err.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
               System.exit( 1 );
           }
         }
