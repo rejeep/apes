@@ -76,7 +76,7 @@ public class MemoryHandler implements Serializable
       System.arraycopy(lstFrame.data, lstFrame.data.length-lstSize, data, fstSize, lstSize);
 
       // Copy data
-      write(index, data);
+      write(firstIndex, data);
     }
     return true;
   }
@@ -302,7 +302,7 @@ public class MemoryHandler implements Serializable
     // Allocate memory
     try
     {
-      long amount = stop - start + 1;
+      long amount = stop - start + 2;
       malloc(putAt, amount);
 
       // Copy memory
