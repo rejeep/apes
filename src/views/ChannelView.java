@@ -822,6 +822,24 @@ public class ChannelView extends JPanel implements Runnable
       
       repaint();
     }
+    
+    /**
+     * Low pass filter
+     * 
+     * 
+     */
+    private byte[] applyLowPassFilter(byte[] samples, float dt, float RC)
+    {
+      byte[] retVal = new byte[samples.length];
+      float alpha = dt / (RC + dt);
+      retVal[0] = samples[0];
+      
+      for(int i = 1; i < samples.length; ++i)
+      {
+        retVal[i] = alpha * samples[i] + (i - alpha) * retVal[i-1];
+      }
+      return retVal;
+    }
 
     /**
      * Returns the start mark position in pixels.
