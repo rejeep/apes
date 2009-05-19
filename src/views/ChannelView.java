@@ -820,6 +820,8 @@ public class ChannelView extends JPanel implements Runnable
         samples[i] = Math.round((samples[i] * scale));
       }
       
+      applyLowPassFilter(samples, 0.1);
+      
       repaint();
     }
     
@@ -828,16 +830,18 @@ public class ChannelView extends JPanel implements Runnable
      * 
      * 
      */
-    private byte[] applyLowPassFilter(byte[] samples, float alpha)
+    private int[] applyLowPassFilter(int[] samples, float alpha)
     {
-      byte[] retVal = new byte[samples.length];
-      retVal[0] = samples[0];
+      float[] tmp = new float[samples.length];
+      tmp[0] = samples[0];
       
       for(int i = 1; i < samples.length; ++i)
-      {
-        retVal[i] = alpha * samples[i] + (i - alpha) * retVal[i-1];
-      }
-      return retVal;
+        tmp[i] = alpha * samples[i] + (1 - alpha) * tmp[i-1];
+        
+      for(int i = 0; i < samples.length; ++i)
+        samples[i] = Math.round(tmp[i]);
+
+      return samples;
     }
 
     /**
