@@ -64,7 +64,7 @@
     </jar>
   </target>
 
-  <target name="run" depends="dist">
+  <target name="run">
     <java jar="${dist.dir}/${build.jar}" fork="true" />
   </target>
 
