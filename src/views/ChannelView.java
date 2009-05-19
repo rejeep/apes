@@ -828,10 +828,9 @@ public class ChannelView extends JPanel implements Runnable
      * 
      * 
      */
-    private byte[] applyLowPassFilter(byte[] samples, float dt, float RC)
+    private byte[] applyLowPassFilter(byte[] samples, float alpha)
     {
       byte[] retVal = new byte[samples.length];
-      float alpha = dt / (RC + dt);
       retVal[0] = samples[0];
       
       for(int i = 1; i < samples.length; ++i)
