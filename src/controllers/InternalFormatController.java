@@ -132,9 +132,12 @@ public class InternalFormatController extends ApplicationController
 
       selection = player.getSelection();
 
-      if(selection.x == selection.y)
+      if(!name.equals("paste"))
       {
-        throw new Exception();
+        if(selection.x == selection.y)
+        {
+          throw new Exception();
+        }
       }
     }
   }
@@ -219,7 +222,7 @@ public class InternalFormatController extends ApplicationController
   public void cut()
   {
     edit = new CutEdit(internalFormat, selection);
-    MemoryHandler cutout  = ( (CutEdit)edit ).getCutout(); 
+    MemoryHandler cutout  = ( (CutEdit)edit ).getCutout();
     clipboard.dispose();
     clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory()-1, 0);
     apesMessage.print("cut");
@@ -407,7 +410,7 @@ public class InternalFormatController extends ApplicationController
           wav.exportFile( internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
         else
           wav.exportFile( internalFormat, apesFile.getFile());
-        
+
         apesMessage.print("file.export");
       }
       catch(Exception e)
