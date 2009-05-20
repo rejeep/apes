@@ -19,10 +19,9 @@ import apes.models.SampleIterator;
 import apes.models.InternalFormat;
 import apes.lib.SampleHelper;
 
-
 /**
  * View for all channel graphs.
- *
+ * 
  * @author Simon Holm
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -86,25 +85,28 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * List of possible time units.
    */
-  private static enum Unit { SAMPLES, MILLISECONDS, SECONDS, MINUTES };
+  private static enum Unit {
+    SAMPLES, MILLISECONDS, SECONDS, MINUTES
+  };
 
   /**
    * Some graph colors.
    */
-  private Color colorRuler, colorPlay, colorSelection, colorLine, colorGraph, colorBackground, colorDots, colorStatus;
+  private Color colorRuler, colorPlay, colorSelection, colorLine, colorGraph,
+      colorBackground, colorDots, colorStatus;
 
   /**
    * Creates a new <code>ChannelView</code> instance.
-   *
+   * 
    * @param channelController The channel controller.
    * @param player The player.
    */
-  public ChannelView( InternalFormat internalFormat, ChannelController channelController, Player player )
+  public ChannelView(InternalFormat internalFormat, ChannelController channelController, Player player)
   {
     // Set layout.
-    layout = new GridLayout( 0, 1 );
-    layout.setVgap( 10 );
-    setLayout( layout );
+    layout = new GridLayout(0, 1);
+    layout.setVgap(10);
+    setLayout(layout);
 
     // Set some instance variables.
     this.internalFormat = internalFormat;
@@ -116,43 +118,43 @@ public class ChannelView extends JPanel implements Runnable
 
     // Set start zoom.
     int numSamples = internalFormat.getSampleAmount();
-    setZoom( numSamples );
-    setCenter( numSamples / 2 );
+    setZoom(numSamples);
+    setCenter(numSamples / 2);
 
     // Set configuration options.
     Config config = Config.getInstance();
-    graphWidth      = config.getIntOption( "graph_width" );
-    graphHeight     = config.getIntOption( "graph_height" );
-    colorRuler      = Color.decode( config.getOption( "color_ruler" ) );
-    colorPlay       = Color.decode( config.getOption( "color_play" ) );
-    colorSelection  = Color.decode( config.getOption( "color_selection" ) );
-    colorLine       = Color.decode( config.getOption( "color_lines" ) );
-    colorGraph      = Color.decode( config.getOption( "color_graph" ) );
-    colorBackground = Color.decode( config.getOption( "color_background" ) );
-    colorDots       = Color.decode( config.getOption( "color_dots" ) );
-    colorStatus     = Color.decode( config.getOption( "color_status" ) );
+    graphWidth = config.getIntOption("graph_width");
+    graphHeight = config.getIntOption("graph_height");
+    colorRuler = Color.decode(config.getOption("color_ruler"));
+    colorPlay = Color.decode(config.getOption("color_play"));
+    colorSelection = Color.decode(config.getOption("color_selection"));
+    colorLine = Color.decode(config.getOption("color_lines"));
+    colorGraph = Color.decode(config.getOption("color_graph"));
+    colorBackground = Color.decode(config.getOption("color_background"));
+    colorDots = Color.decode(config.getOption("color_dots"));
+    colorStatus = Color.decode(config.getOption("color_status"));
 
-    new Thread( this ).start();
+    new Thread(this).start();
   }
 
   /**
    * Adds a channel graph to this view.
-   *
+   * 
    * @param channel The channel.
    */
-  public void addChannel( int channel )
+  public void addChannel(int channel)
   {
     // Add one more row to the layout.
-    layout.setRows( layout.getRows() + 1 );
+    layout.setRows(layout.getRows() + 1);
 
     // Create a new graph.
-    ChannelView.Graph graph = this.new Graph( this, channel );
+    ChannelView.Graph graph = this.new Graph(this, channel);
 
     // Add to set of graphs.
-    graphs.add( graph );
+    graphs.add(graph);
 
     // Add to this panel.
-    add( graph );
+    add(graph);
   }
 
   /**
@@ -160,7 +162,7 @@ public class ChannelView extends JPanel implements Runnable
    */
   public void updateInternalFormat()
   {
-    for( ChannelView.Graph graph : graphs )
+    for(ChannelView.Graph graph : graphs)
     {
       double d = System.currentTimeMillis();
       graph.updateGraph();
@@ -169,7 +171,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the graph width.
-   *
+   * 
    * @return The graph width.
    */
   public int getGraphWidth()
@@ -179,7 +181,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the graph height.
-   *
+   * 
    * @return The graph height.
    */
   public int getGraphHeight()
@@ -192,15 +194,15 @@ public class ChannelView extends JPanel implements Runnable
    */
   public void run()
   {
-    while( true )
+    while(true)
     {
       this.repaint();
 
       try
       {
-        Thread.sleep( 17 ); // 60 fps
+        Thread.sleep(17); // 60 fps
       }
-      catch ( InterruptedException e )
+      catch(InterruptedException e)
       {
         e.printStackTrace();
       }
@@ -210,15 +212,15 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a position in a channel to pixels in the graph based on
    * samples.
-   *
+   * 
    * @param samples The position in the channel in samples.
    * @return -1 if the sample is outside the graph otherwise where in
    *         the graph.
    */
-  public int samplesToPixels( int samples )
+  public int samplesToPixels(int samples)
   {
     int firstVisibleSample = getFirstVisibleSample();
-    int lastVisibelSample  = getLastVisibleSample();
+    int lastVisibelSample = getLastVisibleSample();
 
     if(samples < firstVisibleSample || samples > lastVisibelSample)
       return -1;
@@ -233,65 +235,65 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a position in a channel to pixels in the graph based on
    * milliseconds.
-   *
+   * 
    * @param milliseconds The position in the channel in milliseconds.
    * @return -1 if the time is outside the graph otherwise where in
    *         the graph.
    */
-  public int millisecondsToPixels( int milliseconds )
+  public int millisecondsToPixels(int milliseconds)
   {
-    int samples = SampleHelper.millisecondsToSamples( sampleRate, milliseconds );
+    int samples = SampleHelper.millisecondsToSamples(sampleRate, milliseconds);
 
-    return samplesToPixels( samples );
+    return samplesToPixels(samples);
   }
 
   /**
    * Transform a position in a channel to pixels in the graph based on
    * seconds.
-   *
+   * 
    * @param seconds The position in the channel in seconds.
    * @return -1 if the time is outside the graph otherwise where in
    *         the graph.
    */
-  public int secondsToPixels( int seconds )
+  public int secondsToPixels(int seconds)
   {
-    int samples = SampleHelper.secondsToSamples( sampleRate, seconds );
+    int samples = SampleHelper.secondsToSamples(sampleRate, seconds);
 
-    return samplesToPixels( samples );
+    return samplesToPixels(samples);
   }
 
   /**
    * Transform a position in a channel to pixels in the graph based on
    * minutes.
-   *
+   * 
    * @param minutes The position in the channel in seconds.
    * @return -1 if the time is outside the graph otherwise where in
    *         the graph.
    */
-  public int minutesToPixels( int minutes )
+  public int minutesToPixels(int minutes)
   {
-    int samples = SampleHelper.millisecondsToSamples( sampleRate, minutes );
+    int samples = SampleHelper.millisecondsToSamples(sampleRate, minutes);
 
-    return samplesToPixels( samples );
+    return samplesToPixels(samples);
   }
 
   /**
    * Transform a number of pixels to samples in the channel.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The absolute samples in the channel, -1 if outside the
    *         graph.
    */
-  public int pixelsToSamples( int pixels )
+  public int pixelsToSamples(int pixels)
   {
-    if( pixels < 0 || pixels > graphWidth )
+    if(pixels < 0 || pixels > graphWidth)
     {
       return -1;
     }
 
     int firstVisibleSample = getFirstVisibleSample();
     float samplesPerPixel = (float)visibleSamples / graphWidth;
-    int samples = Math.round( ( pixels * samplesPerPixel ) + firstVisibleSample );
+    int samples = Math.round( ( pixels * samplesPerPixel ) + firstVisibleSample);
 
     return samples;
   }
@@ -299,51 +301,51 @@ public class ChannelView extends JPanel implements Runnable
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The millisecnods in the channel, -1 if outside the graph.
    */
-  public int pixelsToMilliseconds( int pixels )
+  public int pixelsToMilliseconds(int pixels)
   {
-    int samples = pixelsToSamples( pixels );
+    int samples = pixelsToSamples(pixels);
 
-    return SampleHelper.samplesToMilliseconds( sampleRate, samples );
+    return SampleHelper.samplesToMilliseconds(sampleRate, samples);
   }
 
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The seconds in the channel, -1 if outside the graph.
    */
-  public int pixelsToSeconds( int pixels )
+  public int pixelsToSeconds(int pixels)
   {
-    int samples = pixelsToSamples( pixels );
+    int samples = pixelsToSamples(pixels);
 
-    return SampleHelper.samplesToSeconds( sampleRate, samples );
+    return SampleHelper.samplesToSeconds(sampleRate, samples);
   }
 
   /**
    * Transform a number of pixels to milliseconds in the channel.
    * Observ that the numbers are rounded down.
-   *
+   * 
    * @param pixels How many pixels in the graph in the x-axis
    * @return The minutes in the channel, -1 if outside the graph.
    */
-  public int pixelsToMinutes( int pixels )
+  public int pixelsToMinutes(int pixels)
   {
-    int samples = pixelsToSamples( pixels );
+    int samples = pixelsToSamples(pixels);
 
-    return SampleHelper.samplesToMinutes( sampleRate, samples );
+    return SampleHelper.samplesToMinutes(sampleRate, samples);
   }
 
   /**
    * Set the x position of the mouse.
-   *
+   * 
    * @param mousePosX The x position.
    */
-  public void setMousePosX( int mousePosX )
+  public void setMousePosX(int mousePosX)
   {
     this.mousePosX = mousePosX;
   }
@@ -354,7 +356,7 @@ public class ChannelView extends JPanel implements Runnable
    */
   public void updatePlayer()
   {
-    for( ChannelView.Graph graph : graphs )
+    for(ChannelView.Graph graph : graphs)
     {
       graph.repaint();
     }
@@ -362,7 +364,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the level of zoom.
-   *
+   * 
    * @return Number of samples visible.
    */
   public int getZoom()
@@ -372,28 +374,28 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Sets the level of zoom.
-   *
+   * 
    * @param samples The number of samples to be viewed in the view.
    */
-  public void setZoom( int samples )
+  public void setZoom(int samples)
   {
     visibleSamples = samples;
   }
 
   /**
    * Sets the center of the view.
-   *
+   * 
    * @param sample The sample that should be in the center of the
    *          view.
    */
-  public void setCenter( int sample )
+  public void setCenter(int sample)
   {
     centerSample = sample;
   }
 
   /**
    * Returns the center position.
-   *
+   * 
    * @return The center position.
    */
   public int getCenter()
@@ -403,7 +405,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the first visible sample.
-   *
+   * 
    * @return The first visible sample.
    */
   public int getFirstVisibleSample()
@@ -413,7 +415,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * Returns the last visible sample.
-   *
+   * 
    * @return The last visible sample.
    */
   public int getLastVisibleSample()
@@ -423,7 +425,7 @@ public class ChannelView extends JPanel implements Runnable
 
   /**
    * This is a graph over a channel.
-   *
+   * 
    * @author Simon Holm
    * @author Johan Andersson (johandy@student.chalmers.se)
    */
@@ -462,21 +464,21 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Creates a new <code>ChannelGraph</code> instance.
-     *
+     * 
      * @param channelView The view that this graph is placed on.
      * @param channel The channel.
      */
-    public Graph( ChannelView channelView, int channel )
+    public Graph(ChannelView channelView, int channel)
     {
       // Set graph size.
-      Dimension size = new Dimension( graphWidth, graphHeight );
-      setPreferredSize( size );
-      setSize( size );
+      Dimension size = new Dimension(graphWidth, graphHeight);
+      setPreferredSize(size);
+      setSize(size);
 
       // Set events for the graph.
-      addMouseListener( channelController );
-      addMouseMotionListener( channelController );
-      addMouseWheelListener( channelController );
+      addMouseListener(channelController);
+      addMouseMotionListener(channelController);
+      addMouseWheelListener(channelController);
 
       this.channelView = channelView;
       this.channel = channel;
@@ -486,7 +488,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the view that this graph is placed on.
-     *
+     * 
      * @return The view.
      */
     public ChannelView getChannelView()
@@ -496,12 +498,12 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Draws the view.
-     *
+     * 
      * @param g A graphics object.
      */
-    public void paintComponent( Graphics g )
+    public void paintComponent(Graphics g)
     {
-      super.paintComponent( g );
+      super.paintComponent(g);
       g2 = (Graphics2D)g;
 
       drawBackground();
@@ -521,11 +523,11 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawStatus()
     {
-      int time = getTime( mousePosX );;
+      int time = getTime(mousePosX);;
       String unit = getUnit();
 
-      g2.setColor( colorStatus );
-      g2.drawString( "( " + time + " " + unit + " )", 3, graphHeight - 3 );
+      g2.setColor(colorStatus);
+      g2.drawString("( " + time + " " + unit + " )", 3, graphHeight - 3);
     }
 
     /**
@@ -534,18 +536,18 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawRuler()
     {
-      g2.setColor( colorRuler );
+      g2.setColor(colorRuler);
 
       int rulerWidth = 3;
-      g2.fillRect( 0, 0, graphWidth - 1, rulerWidth );
+      g2.fillRect(0, 0, graphWidth - 1, rulerWidth);
 
-      for( int i = 0; i < graphWidth; i += graphWidth / 10 )
+      for(int i = 0; i < graphWidth; i += graphWidth / 10)
       {
-        g2.drawLine( i, 0, i, rulerWidth + 3 );
+        g2.drawLine(i, 0, i, rulerWidth + 3);
 
-        int time = getTime( i );
+        int time = getTime(i);
 
-        g2.drawString( "" + time, i, 20 );
+        g2.drawString("" + time, i, 20);
       }
     }
 
@@ -556,13 +558,13 @@ public class ChannelView extends JPanel implements Runnable
     {
       int player = getMarkPlayer();
 
-      if( player == 0 )
+      if(player == 0)
       {
         player++;
       }
 
-      g2.setColor( colorPlay );
-      g2.drawLine( player, 0, player, graphHeight );
+      g2.setColor(colorPlay);
+      g2.drawLine(player, 0, player, graphHeight);
     }
 
     /**
@@ -573,12 +575,12 @@ public class ChannelView extends JPanel implements Runnable
       int start = getMarkStart();
       int stop = getMarkStop();
 
-      if( start >= 0 && stop > 0 )
+      if(start >= 0 && stop > 0)
       {
-        g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, 0.25f ) );
-        g2.setColor( colorSelection );
-        g2.fillRect( start, 0, stop - start, graphHeight );
-        g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, 1.0f ) );
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+        g2.setColor(colorSelection);
+        g2.fillRect(start, 0, stop - start, graphHeight);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
       }
     }
 
@@ -590,16 +592,16 @@ public class ChannelView extends JPanel implements Runnable
       int start = getMarkStart();
       int stop = getMarkStop();
 
-      if( start != stop )
+      if(start != stop)
       {
-        if( start >= 0 )
+        if(start >= 0)
         {
-          g2.drawLine( start + 1, 0, start + 1, graphHeight );
+          g2.drawLine(start + 1, 0, start + 1, graphHeight);
         }
 
-        if( stop > 0 )
+        if(stop > 0)
         {
-          g2.drawLine( stop - 1, 0, stop - 1, graphHeight );
+          g2.drawLine(stop - 1, 0, stop - 1, graphHeight);
         }
       }
     }
@@ -609,10 +611,10 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawLines()
     {
-      g2.setColor( colorLine );
-      g2.drawLine( 0, graphHeight / 2, graphWidth, graphHeight / 2 );
-      g2.drawLine( 0, graphHeight, graphWidth, graphHeight );
-      g2.drawLine( 0, 0, graphWidth, 0 );
+      g2.setColor(colorLine);
+      g2.drawLine(0, graphHeight / 2, graphWidth, graphHeight / 2);
+      g2.drawLine(0, graphHeight, graphWidth, graphHeight);
+      g2.drawLine(0, 0, graphWidth, 0);
     }
 
     /**
@@ -625,20 +627,20 @@ public class ChannelView extends JPanel implements Runnable
       int start = getFirstVisibleSample();
       int stop = getLastVisibleSample();
       int currentSample = player.getCurrentSample();
-      
+
       if(visibleSamples > 100000 && currentSample > stop)
       {
         setCenter(visibleSamples + start + visibleSamples / 2);
-        
+
         updateGraph();
       }
 
       // Repaint it.
-      g2.setColor( colorGraph );
+      g2.setColor(colorGraph);
 
       int half = graphHeight / 2;
-      
-      if( samplesPerPixel < 1 )
+
+      if(samplesPerPixel < 1)
       {
         float jump = (float)graphWidth / samples.length;
         int pixel = 0;
@@ -650,13 +652,13 @@ public class ChannelView extends JPanel implements Runnable
           int y1 = half + samples[i - 1];
           int y2 = half + samples[i];
 
-          g2.drawLine( x1, y1, x2, y2 );
+          g2.drawLine(x1, y1, x2, y2);
 
           if(graphWidth / samples.length > 5)
           {
-            g2.setColor( colorDots );
-            g2.fillOval( x2 - 3, y2 - 3, 6, 6 );
-            g2.setColor( colorGraph );
+            g2.setColor(colorDots);
+            g2.fillOval(x2 - 3, y2 - 3, 6, 6);
+            g2.setColor(colorGraph);
           }
 
           pixel += Math.round(jump);
@@ -664,11 +666,11 @@ public class ChannelView extends JPanel implements Runnable
       }
       else
       {
-        for( int i = 0; i < graphWidth; i++ )
+        for(int i = 0; i < graphWidth; i++)
         {
           int y1 = half + samples[i];
           int y2 = half - samples[i];
-          
+
           g2.drawLine(i, y1, i, y2);
         }
       }
@@ -679,37 +681,37 @@ public class ChannelView extends JPanel implements Runnable
      */
     private void drawBackground()
     {
-      g2.setBackground( colorBackground );
-      g2.clearRect( 0, 0, graphWidth - 1, graphHeight - 1 );
+      g2.setBackground(colorBackground);
+      g2.clearRect(0, 0, graphWidth - 1, graphHeight - 1);
     }
 
     /**
      * Returns an appropriate time depending on the zoom. The
      * <code>timeUnit</code> variable is also set to the correct
      * unit.
-     *
+     * 
      * @param pixels The pixel position.
      * @return The time.
      */
-    private int getTime( int pixels )
+    private int getTime(int pixels)
     {
       int time = -1;
-      int diff = SampleHelper.samplesToMilliseconds( sampleRate, visibleSamples );
+      int diff = SampleHelper.samplesToMilliseconds(sampleRate, visibleSamples);
 
       // If diff is larger than five minutes.
-      if( diff > 5 * 1000 * 60 )
+      if(diff > 5 * 1000 * 60)
       {
         time = pixelsToMinutes(pixels);
         timeUnit = Unit.MINUTES;
       }
       // If diff is larger than one minute.
-      else if( diff > 10 * 1000 )
+      else if(diff > 10 * 1000)
       {
         time = pixelsToSeconds(pixels);
         timeUnit = Unit.SECONDS;
       }
       // If diff is larger than one tenth of a second.
-      else if( diff > 100 )
+      else if(diff > 100)
       {
         time = pixelsToMilliseconds(pixels);
         timeUnit = Unit.MILLISECONDS;
@@ -725,7 +727,7 @@ public class ChannelView extends JPanel implements Runnable
 
     /**
      * Returns the current unit as a string.
-     *
+     * 
      * @return The unit.
      */
     private String getUnit()
@@ -746,33 +748,33 @@ public class ChannelView extends JPanel implements Runnable
         visibleSamples = amount;
         centerSample = visibleSamples / 2;
       }
-      
+
       samplesPerPixel = visibleSamples / graphWidth;
 
       // If there are less samples per pixel than 1. Or if there are
       // equally many samples as there are pixels.
-      if( samplesPerPixel <= 1 )
+      if(samplesPerPixel <= 1)
       {
         int firstVisibleSample = getFirstVisibleSample();
-        ByteBuffer bytes = ByteBuffer.wrap(internalFormat.getSamples(firstVisibleSample, firstVisibleSample+visibleSamples));
+        ByteBuffer bytes = ByteBuffer.wrap(internalFormat.getSamples(firstVisibleSample, firstVisibleSample + visibleSamples));
         samples = new int[visibleSamples];
 
         for(int i = 0; i < samples.length; i++)
         {
-          int index = (int)(internalFormat.samplesToBytes(i) + channel*internalFormat.bytesPerSample);
-          
+          int index = (int) ( internalFormat.samplesToBytes(i) + channel * internalFormat.bytesPerSample );
+
           switch(internalFormat.bytesPerSample)
           {
-            case 2:
-              samples[i] = bytes.getShort( index );
-              break;
-            case 4:
-              samples[i] = bytes.getInt( index );
-              break;
-              
-            default:
-              System.err.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
-              System.exit( 1 );
+          case 2:
+            samples[i] = bytes.getShort(index);
+            break;
+          case 4:
+            samples[i] = bytes.getInt(index);
+            break;
+
+          default:
+            System.err.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
+            System.exit(1);
           }
         }
       }
@@ -784,10 +786,10 @@ public class ChannelView extends JPanel implements Runnable
         int jump = Math.round((float)visibleSamples / graphWidth);
         int firstVisibleSample = getFirstVisibleSample();
 
-        for( int i = 0; i < samples.length; i++ )
+        for(int i = 0; i < samples.length; i++)
         {
           int start = firstVisibleSample + ( i * jump );
-          int sample = internalFormat.getAverageAmplitude( channel, start, jump );
+          int sample = internalFormat.getAverageAmplitude(channel, start, jump);
 
           samples[i] = sample;
         }
@@ -796,60 +798,61 @@ public class ChannelView extends JPanel implements Runnable
       // Set min and max amplitude.
       int maxAmp = Short.MIN_VALUE;
       int minAmp = Short.MAX_VALUE;
-      for( int i = 0; i < samples.length; i++)
+      for(int i = 0; i < samples.length; i++)
       {
         int amplitude = samples[i];
 
-        if( amplitude > maxAmp )
+        if(amplitude > maxAmp)
         {
           maxAmp = amplitude;
         }
-        if( amplitude < minAmp )
+        if(amplitude < minAmp)
         {
           minAmp = amplitude;
         }
       }
 
       // Fix sample amplitudes so that they are in correct scale.
-      // double heightScale = (double)( (float)( graphHeight / 2 ) / ( maxAmp - minAmp ) );
-      
-      float scale = ((float)graphHeight / 2 ) / (float)( Math.abs(minAmp) + Math.abs(maxAmp) );
-      for( int i = 0; i < samples.length; i++ )
+      // double heightScale = (double)( (float)( graphHeight / 2 ) / (
+      // maxAmp - minAmp ) );
+
+      float scale = ( (float)graphHeight / 2 ) / (float) ( Math.abs(minAmp) + Math.abs(maxAmp) );
+      for(int i = 0; i < samples.length; i++)
       {
-        samples[i] = Math.round((samples[i] * scale));
+        samples[i] = Math.round( ( samples[i] * scale ));
       }
-      
+
       repaint();
     }
 
     /**
      * Returns the start mark position in pixels.
-     *
+     * 
      * @return The start mark position.
      */
     private int getMarkStart()
     {
-      return samplesToPixels( player.getStart() );
+      return samplesToPixels(player.getStart());
     }
 
     /**
      * Returns the stop mark position in pixels.
-     *
+     * 
      * @return The stop mark position.
      */
     private int getMarkStop()
     {
-      return samplesToPixels( player.getStop() );
+      return samplesToPixels(player.getStop());
     }
 
     /**
      * Returns the player mark position in pixels.
-     *
+     * 
      * @return The player mark position.
      */
     private int getMarkPlayer()
     {
-      return samplesToPixels( player.getCurrentSample() );
+      return samplesToPixels(player.getCurrentSample());
     }
   }
 }

@@ -23,18 +23,18 @@ import apes.views.ApesError;
  * This class handles the user specific configuration file. This class
  * uses the Singleton pattern. That means that if you want to use this
  * class you should create an object like this:
- *
+ * 
  * <pre>
  * Config config = Config.getInstance();
  * </pre>
- *
+ * 
  * </p>
- * <p> An option in the configuration file should consist of: At least
- * one character from a-z (underscore may separate words), then an
+ * <p>
+ * An option in the configuration file should consist of: At least one
+ * character from a-z (underscore may separate words), then an
  * arbitrary number of spaces, then an equal sign, then again an
  * arbitrary number of spaces and then the value optionally in quotes.
  * </p>
- *
  * <p>
  * Here are some options that are valid.
  * </p>
@@ -47,7 +47,7 @@ import apes.views.ApesError;
  * <li>option_two=value</li>
  * </ul>
  * And lines starting with a <code>#</code> is a comment.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Config
@@ -83,7 +83,9 @@ public class Config
   /**
    * Different types an option can be.
    */
-  public enum Type { BOOLEAN, STRING, INTEGER };
+  public enum Type {
+    BOOLEAN, STRING, INTEGER
+  };
 
   /**
    * Creates a new <code>Config</code> instance. A default file name
@@ -92,7 +94,7 @@ public class Config
   private Config()
   {
     // Default configuration file.
-    setFilePath( System.getProperty( "user.home" ) + File.separator + ".apes" );
+    setFilePath(System.getProperty("user.home") + File.separator + ".apes");
 
     // Initialize options map.
     options = new TreeMap<String, String>();
@@ -101,28 +103,28 @@ public class Config
     types = new HashMap<String, Type>();
 
     // Default settings.
-    addOption( "volume",              "50",                 Type.INTEGER );
-    addOption( "volume_label_format", "%v %",               Type.STRING  );
-    addOption( "frame_width",         "600",                Type.INTEGER );
-    addOption( "frame_height",        "400",                Type.INTEGER );
-    addOption( "graph_width",         "500",                Type.INTEGER );
-    addOption( "graph_height",        "300",                Type.INTEGER );
-    addOption( "maximized",           "true",               Type.BOOLEAN );
-    addOption( "undo",                "10",                 Type.INTEGER );
-    addOption( "language",            "en",                 Type.STRING  );
-    addOption( "plugin_path",         "build/apes/plugins", Type.STRING  );
-    addOption( "color_play",          "#FFFFFF",            Type.STRING  );
-    addOption( "color_graph",         "#000000",            Type.STRING  );
-    addOption( "color_selection",     "#0000FF",            Type.STRING  );
-    addOption( "color_lines",         "#FFFF00",            Type.STRING  );
-    addOption( "color_background",    "#939391",            Type.STRING  );
-    addOption( "color_dots",          "#0000FF",            Type.STRING  );
-    addOption( "color_ruler",         "#000000",            Type.STRING  );
-    addOption( "color_status",        "#FF0000",            Type.STRING  );
-    addOption( "ruler_width",         "6",                  Type.INTEGER );
-    addOption( "gui_error_messages",  "true",               Type.BOOLEAN );
-    addOption( "wind",                "20",                 Type.INTEGER );
-    addOption( "close_confirmation",  "true",               Type.BOOLEAN );
+    addOption("volume", "50", Type.INTEGER);
+    addOption("volume_label_format", "%v %", Type.STRING);
+    addOption("frame_width", "600", Type.INTEGER);
+    addOption("frame_height", "400", Type.INTEGER);
+    addOption("graph_width", "500", Type.INTEGER);
+    addOption("graph_height", "300", Type.INTEGER);
+    addOption("maximized", "true", Type.BOOLEAN);
+    addOption("undo", "10", Type.INTEGER);
+    addOption("language", "en", Type.STRING);
+    addOption("plugin_path", "build/apes/plugins", Type.STRING);
+    addOption("color_play", "#FFFFFF", Type.STRING);
+    addOption("color_graph", "#000000", Type.STRING);
+    addOption("color_selection", "#0000FF", Type.STRING);
+    addOption("color_lines", "#FFFF00", Type.STRING);
+    addOption("color_background", "#939391", Type.STRING);
+    addOption("color_dots", "#0000FF", Type.STRING);
+    addOption("color_ruler", "#000000", Type.STRING);
+    addOption("color_status", "#FF0000", Type.STRING);
+    addOption("ruler_width", "6", Type.INTEGER);
+    addOption("gui_error_messages", "true", Type.BOOLEAN);
+    addOption("wind", "20", Type.INTEGER);
+    addOption("close_confirmation", "true", Type.BOOLEAN);
   }
 
   /**
@@ -132,31 +134,31 @@ public class Config
   public void parse()
   {
     // Only parse if there is any file.
-    if( file.isFile() )
+    if(file.isFile())
     {
       try
       {
-        Scanner scanner = new Scanner( file );
-        Pattern pattern = Pattern.compile( OPTION_REGEXP );
+        Scanner scanner = new Scanner(file);
+        Pattern pattern = Pattern.compile(OPTION_REGEXP);
         Matcher matcher;
         String line;
 
         // Go through all lines in configuration file.
-        while( scanner.hasNextLine() )
+        while(scanner.hasNextLine())
         {
           line = scanner.nextLine();
-          matcher = pattern.matcher( line );
+          matcher = pattern.matcher(line);
 
           // If line matches an option.
-          if( matcher.matches() )
+          if(matcher.matches())
           {
-            options.put( matcher.group( 1 ), matcher.group( 3 ) );
+            options.put(matcher.group(1), matcher.group(3));
           }
         }
 
         scanner.close();
       }
-      catch( FileNotFoundException e )
+      catch(FileNotFoundException e)
       {
         e.printStackTrace();
       }
@@ -165,7 +167,7 @@ public class Config
 
   /**
    * Get the absolute path to the configuration file.
-   *
+   * 
    * @return the absolute path to the configuration file.
    */
   public String getFilePath()
@@ -175,12 +177,12 @@ public class Config
 
   /**
    * Set the configuration file.
-   *
+   * 
    * @param path The absolute path to the file.
    */
-  public void setFilePath( String path )
+  public void setFilePath(String path)
   {
-    this.file = new File( path );
+    this.file = new File(path);
 
     // Create file if it does not exist.
     if(!file.exists())
@@ -198,70 +200,70 @@ public class Config
 
   /**
    * Get the value for <code>key</code>.
-   *
+   * 
    * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
-  public String getOption( String key )
+  public String getOption(String key)
   {
-    return options.get( key );
+    return options.get(key);
   }
 
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be true or false instead of "true" and "false".
-   *
+   * 
    * @param key The configuration key.
    * @return the value for <code>key</code> casted to a boolean.
    *         "true" option will return true. Everything else will
    *         return false.
    */
-  public boolean getBooleanOption( String key )
+  public boolean getBooleanOption(String key)
   {
-    return "true".equals( getOption( key ) );
+    return "true".equals(getOption(key));
   }
 
   /**
    * Same as {@link Config#getOption getOption} except that the value
    * will be not be a string, but an integer.
-   *
+   * 
    * @param key The configuration key.
    * @return the value for <code>key</code> casted to an integer.
    * @exception NumberFormatException if there was no value to key.
    */
-  public int getIntOption( String key ) throws NumberFormatException
+  public int getIntOption(String key) throws NumberFormatException
   {
-    return new Integer( getOption( key ) );
+    return new Integer(getOption(key));
   }
 
   /**
    * Adds an option.
-   *
+   * 
    * @param key The option key.
    * @param default_value The default value.
    * @param type The type (string, integer, boolean).
    */
-  public void addOption( String key, String default_value, Type type )
+  public void addOption(String key, String default_value, Type type)
   {
-    options.put( key, default_value );
+    options.put(key, default_value);
 
-    types.put( key, type );
+    types.put(key, type);
   }
 
   /**
    * Return the types map.
-   *
+   * 
    * @param key The configuration key.
    * @return The map containing all types.
    */
-  public Type getType( String key )
+  public Type getType(String key)
   {
-    return types.get( key );
+    return types.get(key);
   }
 
   /**
    * Return the options map.
-   *
+   * 
    * @return The map containing all options.
    */
   public Map<String, String> getOptions()
@@ -279,46 +281,45 @@ public class Config
       // Read in the whole file. This must be done because a file can
       // not be written to while read from.
       List<String> lines = new ArrayList<String>();
-      Scanner scanner = new Scanner( file );
-      while( scanner.hasNextLine() )
+      Scanner scanner = new Scanner(file);
+      while(scanner.hasNextLine())
       {
         lines.add(scanner.nextLine());
       }
       scanner.close();
 
-
-      PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( file ) ) );
+      PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
       Set<String> added = new HashSet<String>();
-      Pattern pattern = Pattern.compile( OPTION_REGEXP );
+      Pattern pattern = Pattern.compile(OPTION_REGEXP);
       Matcher matcher;
       String key;
 
-      for( String line : lines )
+      for(String line : lines)
       {
-        matcher = pattern.matcher( line );
+        matcher = pattern.matcher(line);
 
-        if( matcher.matches() )
+        if(matcher.matches())
         {
-          key = matcher.group( 1 );
+          key = matcher.group(1);
 
-          out.write( toOption( key ) );
+          out.write(toOption(key));
 
-          added.add( key );
+          added.add(key);
         }
         else
         {
-          out.write( line );
+          out.write(line);
         }
 
         out.println();
       }
 
       // Add options that where not in the file already.
-      for( String option : options.keySet() )
+      for(String option : options.keySet())
       {
-        if( !added.contains( option ) )
+        if(!added.contains(option))
         {
-          out.write( toOption( option ) );
+          out.write(toOption(option));
 
           out.println();
         }
@@ -326,11 +327,11 @@ public class Config
 
       out.close();
     }
-    catch( FileNotFoundException e )
+    catch(FileNotFoundException e)
     {
       e.printStackTrace();
     }
-    catch( IOException e )
+    catch(IOException e)
     {
       e.printStackTrace();
     }
@@ -338,23 +339,23 @@ public class Config
 
   /**
    * Returns a string of an option.
-   *
+   * 
    * @param key The key option.
    * @return The option as a string (key = value).
    */
-  private String toOption( String key )
+  private String toOption(String key)
   {
-    return key + " = " + options.get( key );
+    return key + " = " + options.get(key);
   }
 
   /**
    * Will return an instance of this class.
-   *
+   * 
    * @return An instance of this class.
    */
   public static Config getInstance()
   {
-    if( instance == null )
+    if(instance == null)
     {
       instance = new Config();
     }

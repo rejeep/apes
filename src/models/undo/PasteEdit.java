@@ -32,7 +32,7 @@ public class PasteEdit extends AbstractUndoableEdit
     paste = new MemoryHandler();
     System.out.println("New paste edit from: " + start + " to: " + stop + " size: " + p.getUsedMemory());
     System.out.println("Copy from clipBoard to Paste");
-    paste.transfer(p, 0, (int)(p.getUsedMemory() - 1), 0);
+    paste.transfer(p, 0, (int) ( p.getUsedMemory() - 1 ), 0);
     redo();
   }
 

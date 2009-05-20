@@ -63,7 +63,7 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
       setIcon(icon);
     }
   }
-  
+
   /**
    * Creates a new <code>ApesMenuItem</code> instance. The menu will
    * then also be able to reach with key, that is assumed to start
@@ -75,7 +75,7 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
   public ApesMenuItem(String tag, int key)
   {
     this(tag);
-    
+
     // Set keybinding.
     setAccelerator(KeyStroke.getKeyStroke(key, InputEvent.CTRL_DOWN_MASK));
   }
@@ -90,11 +90,11 @@ public class ApesMenuItem extends JMenuItem implements LanguageObserver
   public ApesMenuItem(String tag, String keyStroke)
   {
     this(tag);
-    
+
     // Set keybinding.
     setAccelerator(KeyStroke.getKeyStroke(keyStroke));
   }
-  
+
   public void update(Observable o, Object arg)
   {
     setText(language.get(tag));

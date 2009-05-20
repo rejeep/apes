@@ -31,6 +31,7 @@ public class FileStatus
    * Opened by internalformat?
    */
   private boolean opened;
+
   /**
    * Creates a new <code>FileStatus</code> instance and sets
    * <code>filePath</code> and <code>fileName</code>.
@@ -41,7 +42,7 @@ public class FileStatus
     setFileName(fileName);
     opened = false;
   }
-  
+
   /**
    * Set opened by internal format
    */
@@ -49,7 +50,7 @@ public class FileStatus
   {
     opened = true;
   }
-  
+
   public boolean openedByInternal()
   {
     return opened;

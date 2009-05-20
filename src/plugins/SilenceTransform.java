@@ -30,10 +30,10 @@ public class SilenceTransform implements TransformPlugin
   public Map<String, String> getDescriptions()
   {
     Map<String, String> map = new HashMap<String, String>();
-    
+
     map.put("en", "A silence effect that mutes the marked area.");
     map.put("sv", "En tystnadseffekt som tar bort allt ljud.");
-    
+
     return map;
   }
 
@@ -43,7 +43,7 @@ public class SilenceTransform implements TransformPlugin
    * @param internalFormat The internal format.
    * @param selection The selected region.
    */
-  public void apply( InternalFormat internalFormat, Point selection )
+  public void apply(InternalFormat internalFormat, Point selection)
   {
     internalFormat.scaleSamples(selection.x, selection.y, 0);
     internalFormat.updated();

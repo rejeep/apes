@@ -6,7 +6,7 @@ import apes.lib.Config;
 
 /**
  * Apes error messages.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApesError
@@ -53,7 +53,7 @@ public class ApesError
 
   /**
    * Show a dialog error box or prints to STDERR.
-   *
+   * 
    * @param titleTag The title locale tag except "error.".
    * @param messageTag The message locale tag except "error.".
    */

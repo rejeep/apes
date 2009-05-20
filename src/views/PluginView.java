@@ -47,12 +47,12 @@ public class PluginView extends JFrame
    * Mapping to fetch selected values from checkboxes.
    */
   private Map<String, JCheckBox> choices;
-  
+
   /**
    * Mapping to change descriptions.
    */
   private Map<String, JTextArea> descs;
-  
+
   /**
    * The language object.
    */
@@ -62,12 +62,12 @@ public class PluginView extends JFrame
    * True if view has been created.
    */
   private boolean viewCreated = false;
-  
+
   /**
    * The effect menu.
    */
   private JMenu effectMenu;
-  
+
   /**
    * Last locale.
    */
@@ -86,7 +86,7 @@ public class PluginView extends JFrame
     choices = new HashMap<String, JCheckBox>();
     descs = new HashMap<String, JTextArea>();
     language = Language.getInstance();
-    effectMenu = new ApesMenu( "menu.head.effects" );
+    effectMenu = new ApesMenu("menu.head.effects");
   }
 
   /**
@@ -94,20 +94,20 @@ public class PluginView extends JFrame
    */
   public void create()
   {
-    if( !viewCreated )
+    if(!viewCreated)
     {
       lastLocale = language.getLanguage();
       setLayout(new BorderLayout());
       add(createPluginPanel(), BorderLayout.NORTH);
       add(createButtonPanel(), BorderLayout.SOUTH);
-      setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+      setDefaultCloseOperation(DISPOSE_ON_CLOSE);
       pack();
-      setLocationRelativeTo( null );
+      setLocationRelativeTo(null);
       viewCreated = true;
     }
     else
     {
-      if( !lastLocale.equals( language.getLanguage() ) )
+      if(!lastLocale.equals(language.getLanguage()))
       {
         lastLocale = language.getLanguage();
         updateDescriptions();
@@ -116,13 +116,13 @@ public class PluginView extends JFrame
 
     setVisible(true);
   }
-  
+
   /**
    * Update the descriptions when locale has changed.
    */
   public void updateDescriptions()
   {
-    for( String p : descs.keySet() )
+    for(String p : descs.keySet())
     {
       descs.get(p).setText(pluginHandler.getDescription(p, lastLocale));
     }
@@ -136,34 +136,34 @@ public class PluginView extends JFrame
   public JPanel createPluginPanel()
   {
     JPanel panel = new JPanel();
-    panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-    panel.setLayout( new BorderLayout() );
-    
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    panel.setLayout(new BorderLayout());
+
     JPanel top = new JPanel();
-    JLabel header = new ApesLabel( "plugins.header" );
-    header.setFont( new Font( "verdana", 1, 20 ) );
+    JLabel header = new ApesLabel("plugins.header");
+    header.setFont(new Font("verdana", 1, 20));
     top.add(header);
     panel.add(top, BorderLayout.NORTH);
-    
+
     JPanel bottom = new JPanel();
     GridBagConstraints c = new GridBagConstraints();
     GridBagLayout gridbag = new GridBagLayout();
-    
+
     bottom.setLayout(gridbag);
-    bottom.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-    
+    bottom.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
     ArrayList<String> names = pluginHandler.getPluginNames();
-    
-    for(int i=0; i<names.size(); i++)
+
+    for(int i = 0; i < names.size(); i++)
     {
       JCheckBox pBox = new JCheckBox(names.get(i), pluginHandler.isLoaded(names.get(i)));
       JTextArea pText = new JTextArea(pluginHandler.getDescription(names.get(i), language.getLanguage()));
-      
+
       c.gridx = 0;
-      c.gridy = i+1;
+      c.gridy = i + 1;
       c.gridwidth = 1;;
       c.ipadx = 10;
-      c.fill = GridBagConstraints.HORIZONTAL; 
+      c.fill = GridBagConstraints.HORIZONTAL;
       gridbag.setConstraints(pBox, c);
       bottom.add(pBox);
       c.gridx = 1;
@@ -172,12 +172,12 @@ public class PluginView extends JFrame
       choices.put(names.get(i), pBox);
       descs.put(names.get(i), pText);
     }
-    
+
     panel.add(bottom, BorderLayout.SOUTH);
-    
+
     return panel;
   }
-  
+
   /**
    * Returns the bottom panel with buttons.
    * 
@@ -186,36 +186,36 @@ public class PluginView extends JFrame
   public JPanel createButtonPanel()
   {
     JPanel panel = new JPanel();
-    
-    JButton applyButton = new JButton( language.get( "plugins.apply" ) );
+
+    JButton applyButton = new JButton(language.get("plugins.apply"));
     applyButton.addActionListener(pluginController);
     applyButton.setName("apply");
     panel.add(applyButton);
-    
-    JButton closeButton = new JButton( language.get( "plugins.close" ) );
+
+    JButton closeButton = new JButton(language.get("plugins.close"));
     closeButton.addActionListener(pluginController);
     closeButton.setName("close");
     panel.add(closeButton);
-    
+
     return panel;
   }
-  
+
   /**
    * Updates the effects menu.
    */
   public void updateEffectMenu()
   {
     effectMenu.removeAll();
-    
-    for (TransformPlugin p : pluginHandler.getTransforms())
+
+    for(TransformPlugin p : pluginHandler.getTransforms())
     {
-        JMenuItem effect = new JMenuItem( p.getName() );
-        effect.setName( "doEffect" );
-        effect.addActionListener( pluginController );
-        effectMenu.add(effect);
+      JMenuItem effect = new JMenuItem(p.getName());
+      effect.setName("doEffect");
+      effect.addActionListener(pluginController);
+      effectMenu.add(effect);
     }
   }
-  
+
   /**
    * Returns the effects menu.
    * 
@@ -225,7 +225,7 @@ public class PluginView extends JFrame
   {
     return effectMenu;
   }
-    
+
   /**
    * Returns mapping with plugin names and checkboxes.
    * 

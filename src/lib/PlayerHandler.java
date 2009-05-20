@@ -65,7 +65,6 @@ public class PlayerHandler
    */
   private static PlayerHandler instance = null;
 
-
   /**
    * Creates a new <code>PlayerHandler</code>.
    */
@@ -84,22 +83,22 @@ public class PlayerHandler
   {
     try
     {
-      AudioFormat format = new AudioFormat( internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat.getNumChannels(), true, false );
-      DataLine.Info info = new DataLine.Info( SourceDataLine.class, format );
+      AudioFormat format = new AudioFormat(internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat.getNumChannels(), true, false);
+      DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
-      if( line != null )
+      if(line != null)
       {
         line.close();
       }
 
-      line = (SourceDataLine) AudioSystem.getLine( info );
-      line.open( format );
+      line = (SourceDataLine)AudioSystem.getLine(info);
+      line.open(format);
       line.start();
 
       // Get volume control.
-      gainControl = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN );
+      gainControl = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
     }
-    catch( Exception e )
+    catch(Exception e)
     {
       e.printStackTrace();
     }
@@ -110,7 +109,7 @@ public class PlayerHandler
    */
   public void play()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.play();
     }
@@ -121,7 +120,7 @@ public class PlayerHandler
    */
   public void pause()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.pause();
     }
@@ -132,7 +131,7 @@ public class PlayerHandler
    */
   public void stop()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.stop();
     }
@@ -143,7 +142,7 @@ public class PlayerHandler
    */
   public void forward()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.forward();
     }
@@ -154,7 +153,7 @@ public class PlayerHandler
    */
   public void backward()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.backward();
     }
@@ -175,17 +174,17 @@ public class PlayerHandler
    * 
    * @param volume The new volume.
    */
-  public void setVolume( int volume )
+  public void setVolume(int volume)
   {
-    if( volume >= MIN_VALUE && volume <= MAX_VALUE )
+    if(volume >= MIN_VALUE && volume <= MAX_VALUE)
     {
       this.volume = volume;
 
-      float value = (float)( Math.log( this.volume / 100.0 ) / Math.log( 10.0 ) * 20.0 );
+      float value = (float) ( Math.log(this.volume / 100.0) / Math.log(10.0) * 20.0 );
 
-      if( gainControl != null )
+      if(gainControl != null)
       {
-        gainControl.setValue( value );
+        gainControl.setValue(value);
       }
     }
   }
@@ -197,7 +196,7 @@ public class PlayerHandler
    */
   public InternalFormat getInternalFormat()
   {
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       return currentPlayer.getInternalFormat();
     }
@@ -213,30 +212,30 @@ public class PlayerHandler
    * @return The player that is associated with
    *         <code>internalFormat</code>.
    */
-  public Player setInternalFormat( InternalFormat internalFormat )
+  public Player setInternalFormat(InternalFormat internalFormat)
   {
     this.internalFormat = internalFormat;
 
     // Pause if there's a player.
-    if( currentPlayer != null )
+    if(currentPlayer != null)
     {
       currentPlayer.pause();
     }
 
     // Get or create a new player.
-    Player player = getPlayer( internalFormat );
+    Player player = getPlayer(internalFormat);
 
-    if( player == null )
+    if(player == null)
     {
-      player = new Player( internalFormat );
+      player = new Player(internalFormat);
     }
 
     init();
 
-    players.add( player );
+    players.add(player);
     currentPlayer = player;
-    currentPlayer.setLine( line );
-    
+    currentPlayer.setLine(line);
+
     return player;
   }
 
@@ -246,11 +245,11 @@ public class PlayerHandler
    * @param internalFormat The internal format the Player should have.
    * @return The Player.
    */
-  public Player getPlayer( InternalFormat internalFormat )
+  public Player getPlayer(InternalFormat internalFormat)
   {
-    for( Player player : players )
+    for(Player player : players)
     {
-      if( player.getInternalFormat().equals(internalFormat) )
+      if(player.getInternalFormat().equals(internalFormat))
       {
         return player;
       }
@@ -265,17 +264,17 @@ public class PlayerHandler
    * 
    * @param internalFormat an <code>InternalFormat</code> value
    */
-  public void remove( InternalFormat internalFormat )
+  public void remove(InternalFormat internalFormat)
   {
-    Player player = getPlayer( internalFormat );
+    Player player = getPlayer(internalFormat);
     player.stop();
 
-    if( player.equals( currentPlayer ) )
+    if(player.equals(currentPlayer))
     {
       currentPlayer = null;
     }
 
-    players.remove( player );
+    players.remove(player);
     internalFormat.close();
   }
 
@@ -291,7 +290,7 @@ public class PlayerHandler
 
   public static PlayerHandler getInstance()
   {
-    if( instance == null )
+    if(instance == null)
     {
       instance = new PlayerHandler();
     }

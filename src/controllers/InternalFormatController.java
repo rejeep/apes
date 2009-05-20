@@ -21,7 +21,7 @@ import apes.views.ApesMessage;
 
 /**
  * Controller for the internal format.
- *
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class InternalFormatController extends ApplicationController
@@ -86,10 +86,9 @@ public class InternalFormatController extends ApplicationController
    */
   private ApesMessage apesMessage;
 
-
   /**
    * Creates a new <code>InternalFormatController</code>.
-   *
+   * 
    * @param tabs The tabs model.
    * @param undoManager The undo manager.
    */
@@ -173,7 +172,7 @@ public class InternalFormatController extends ApplicationController
     {
       if(name.matches("cut|delete"))
       {
-        player.setAllMarks( 0 );
+        player.setAllMarks(0);
       }
 
       undoManager.addEdit(edit);
@@ -222,9 +221,9 @@ public class InternalFormatController extends ApplicationController
   public void cut()
   {
     edit = new CutEdit(internalFormat, selection);
-    MemoryHandler cutout  = ( (CutEdit)edit ).getCutout();
+    MemoryHandler cutout = ( (CutEdit)edit ).getCutout();
     clipboard.dispose();
-    clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory()-1, 0);
+    clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory() - 1, 0);
     apesMessage.print("cut");
   }
 
@@ -296,8 +295,8 @@ public class InternalFormatController extends ApplicationController
       zoom = stop - start;
       center = start + ( zoom / 2 );
 
-      player.setStart( 0 );
-      player.setStop( 0 );
+      player.setStart(0);
+      player.setStop(0);
     }
 
     apesMessage.print("zoom.selection");
@@ -407,9 +406,9 @@ public class InternalFormatController extends ApplicationController
       try
       {
         if(player.getStop() != 0 && player.getStart() != player.getStop())
-          wav.exportFile( internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
+          wav.exportFile(internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
         else
-          wav.exportFile( internalFormat, apesFile.getFile());
+          wav.exportFile(internalFormat, apesFile.getFile());
 
         apesMessage.print("file.export");
       }

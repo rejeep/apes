@@ -49,23 +49,23 @@ public class ConfigController extends ApplicationController
   {
     Map<String, Component> newOptions = configView.getNewOptions();
 
-    for( String key : newOptions.keySet() )
+    for(String key : newOptions.keySet())
     {
-      Config.Type type = config.getType( key );
+      Config.Type type = config.getType(key);
       String value = null;
 
-      if( type == Config.Type.INTEGER || type == Config.Type.STRING )
+      if(type == Config.Type.INTEGER || type == Config.Type.STRING)
       {
-        value = ((JTextField)newOptions.get( key )).getText();
+        value = ( (JTextField)newOptions.get(key) ).getText();
       }
-      else if( type == Config.Type.BOOLEAN )
+      else if(type == Config.Type.BOOLEAN)
       {
-        JCheckBox checkBox = (JCheckBox)newOptions.get( key );
+        JCheckBox checkBox = (JCheckBox)newOptions.get(key);
 
         value = checkBox.isSelected() ? "true" : "false";
       }
 
-      config.addOption( key, value, type );
+      config.addOption(key, value, type);
     }
 
     config.save();

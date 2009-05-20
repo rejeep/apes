@@ -1,4 +1,4 @@
-package apes.views.buttons;
+wpackage apes.views.buttons;
 
 /**
  * This button is for deleting the selected region.

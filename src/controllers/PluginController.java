@@ -98,10 +98,10 @@ public class PluginController extends ApplicationController
   {
     Map<String, JCheckBox> choices = pluginView.getChoices();
     ArrayList<String> names = pluginHandler.getPluginNames();
-    
+
     for(String name : names)
     {
-      if( !(pluginHandler.isLoaded(name) == choices.get(name).isSelected()) )
+      if(! ( pluginHandler.isLoaded(name) == choices.get(name).isSelected() ))
       {
         if(pluginHandler.isLoaded(name))
         {
@@ -113,7 +113,7 @@ public class PluginController extends ApplicationController
         }
       }
     }
-    
+
     // update effects menu
     pluginView.updateEffectMenu();
   }
@@ -143,7 +143,7 @@ public class PluginController extends ApplicationController
   {
     Map<String, JCheckBox> choices = pluginView.getChoices();
     ArrayList<String> names = pluginHandler.getPluginNames();
-    
+
     for(String name : names)
     {
       choices.get(name).setSelected(pluginHandler.isLoaded(name));

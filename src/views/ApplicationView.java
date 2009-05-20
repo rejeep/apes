@@ -85,7 +85,7 @@ public class ApplicationView extends JFrame
 
   /**
    * Creates a new <code>ApplicationView</code> instance.
-   *
+   * 
    * @param internalFormatController The internal format controller.
    * @param tagsController The tags controller.
    * @param languageController The language controller.
@@ -231,155 +231,155 @@ public class ApplicationView extends JFrame
      */
     public Menu()
     {
-      JMenu file = new ApesMenu( "menu.head.file" );
-      add( file );
+      JMenu file = new ApesMenu("menu.head.file");
+      add(file);
 
-      JMenuItem open = new ApesMenuItem( "menu.file.open", KeyEvent.VK_O );
-      open.addActionListener( internalFormatController );
-      open.setName( "open" );
-      file.add( open );
+      JMenuItem open = new ApesMenuItem("menu.file.open", KeyEvent.VK_O);
+      open.addActionListener(internalFormatController);
+      open.setName("open");
+      file.add(open);
 
-      JMenuItem save = new ApesMenuItem( "menu.file.save", KeyEvent.VK_S );
-      save.addActionListener( internalFormatController );
-      save.setName( "save" );
-      file.add( save );
+      JMenuItem save = new ApesMenuItem("menu.file.save", KeyEvent.VK_S);
+      save.addActionListener(internalFormatController);
+      save.setName("save");
+      file.add(save);
 
-      JMenuItem saveAs = new ApesMenuItem( "menu.file.save_as", KeyEvent.VK_W );
-      saveAs.addActionListener( internalFormatController );
-      saveAs.setName( "saveAs" );
-      file.add( saveAs );
+      JMenuItem saveAs = new ApesMenuItem("menu.file.save_as", KeyEvent.VK_W);
+      saveAs.addActionListener(internalFormatController);
+      saveAs.setName("saveAs");
+      file.add(saveAs);
 
-      JMenuItem export = new ApesMenuItem( "menu.file.export", KeyEvent.VK_E );
-      export.addActionListener( internalFormatController );
-      export.setName( "export" );
-      file.add( export );
+      JMenuItem export = new ApesMenuItem("menu.file.export", KeyEvent.VK_E);
+      export.addActionListener(internalFormatController);
+      export.setName("export");
+      file.add(export);
 
-      JMenuItem quit = new ApesMenuItem( "menu.file.quit", KeyEvent.VK_Q );
+      JMenuItem quit = new ApesMenuItem("menu.file.quit", KeyEvent.VK_Q);
       // Exit program is this is clicked.
-      quit.addActionListener( new ActionListener()
+      quit.addActionListener(new ActionListener()
       {
-        public void actionPerformed( ActionEvent e )
+        public void actionPerformed(ActionEvent e)
         {
-          System.exit( 0 );
+          System.exit(0);
         }
-      } );
+      });
 
-      file.add( quit );
+      file.add(quit);
       // File END
 
       // Edit START
-      JMenu edit = new ApesMenu( "menu.head.edit" );
-      add( edit );
+      JMenu edit = new ApesMenu("menu.head.edit");
+      add(edit);
 
-      JMenuItem undo = new ApesMenuItem( "menu.edit.undo", KeyEvent.VK_Z );
-      undo.addActionListener( internalFormatController );
-      undo.setName( "undo" );
-      edit.add( undo );
+      JMenuItem undo = new ApesMenuItem("menu.edit.undo", KeyEvent.VK_Z);
+      undo.addActionListener(internalFormatController);
+      undo.setName("undo");
+      edit.add(undo);
 
-      JMenuItem redo = new ApesMenuItem( "menu.edit.redo", KeyEvent.VK_R );
-      redo.addActionListener( internalFormatController );
-      redo.setName( "redo" );
-      edit.add( redo );
+      JMenuItem redo = new ApesMenuItem("menu.edit.redo", KeyEvent.VK_R);
+      redo.addActionListener(internalFormatController);
+      redo.setName("redo");
+      edit.add(redo);
 
-      JMenuItem cut = new ApesMenuItem( "menu.edit.cut", KeyEvent.VK_X );
-      cut.addActionListener( internalFormatController );
-      cut.setName( "cut" );
-      edit.add( cut );
+      JMenuItem cut = new ApesMenuItem("menu.edit.cut", KeyEvent.VK_X);
+      cut.addActionListener(internalFormatController);
+      cut.setName("cut");
+      edit.add(cut);
 
-      JMenuItem copy = new ApesMenuItem( "menu.edit.copy", KeyEvent.VK_C );
-      copy.addActionListener( internalFormatController );
-      copy.setName( "copy" );
-      edit.add( copy );
+      JMenuItem copy = new ApesMenuItem("menu.edit.copy", KeyEvent.VK_C);
+      copy.addActionListener(internalFormatController);
+      copy.setName("copy");
+      edit.add(copy);
 
-      JMenuItem paste = new ApesMenuItem( "menu.edit.paste", KeyEvent.VK_V );
-      paste.addActionListener( internalFormatController );
-      paste.setName( "paste" );
-      edit.add( paste );
+      JMenuItem paste = new ApesMenuItem("menu.edit.paste", KeyEvent.VK_V);
+      paste.addActionListener(internalFormatController);
+      paste.setName("paste");
+      edit.add(paste);
 
-      JMenuItem delete = new ApesMenuItem( "menu.edit.delete", KeyEvent.VK_D );
-      delete.addActionListener( internalFormatController );
-      delete.setName( "delete" );
-      edit.add( delete );
+      JMenuItem delete = new ApesMenuItem("menu.edit.delete", KeyEvent.VK_D);
+      delete.addActionListener(internalFormatController);
+      delete.setName("delete");
+      edit.add(delete);
 
-      JMenuItem tags = new ApesMenuItem( "menu.edit.tags", KeyEvent.VK_T );
-      tags.addActionListener( tagsController );
-      tags.setName( "edit" );
-      edit.add( tags );
+      JMenuItem tags = new ApesMenuItem("menu.edit.tags", KeyEvent.VK_T);
+      tags.addActionListener(tagsController);
+      tags.setName("edit");
+      edit.add(tags);
       // Edit END
 
       // View START
-      JMenu view = new ApesMenu( "menu.head.view" );
-      add( view );
+      JMenu view = new ApesMenu("menu.head.view");
+      add(view);
 
-      JMenu zoom = new ApesMenu( "menu.head.zoom" );
-      view.add( zoom );
+      JMenu zoom = new ApesMenu("menu.head.zoom");
+      view.add(zoom);
 
-      JMenuItem zoomIn = new ApesMenuItem( "menu.view.zoom.in", "alt shift I" );
-      zoomIn.addActionListener( internalFormatController );
-      zoomIn.setName( "zoomIn" );
-      zoom.add( zoomIn );
+      JMenuItem zoomIn = new ApesMenuItem("menu.view.zoom.in", "alt shift I");
+      zoomIn.addActionListener(internalFormatController);
+      zoomIn.setName("zoomIn");
+      zoom.add(zoomIn);
 
-      JMenuItem zoomOut = new ApesMenuItem( "menu.view.zoom.out", "alt shift O" );
-      zoomOut.addActionListener( internalFormatController );
-      zoomOut.setName( "zoomOut" );
-      zoom.add( zoomOut );
+      JMenuItem zoomOut = new ApesMenuItem("menu.view.zoom.out", "alt shift O");
+      zoomOut.addActionListener(internalFormatController);
+      zoomOut.setName("zoomOut");
+      zoom.add(zoomOut);
 
-      JMenuItem zoomSelection = new ApesMenuItem( "menu.view.zoom.selection", "alt shift S" );
-      zoomSelection.addActionListener( internalFormatController );
-      zoomSelection.setName( "zoomSelection" );
-      zoom.add( zoomSelection );
+      JMenuItem zoomSelection = new ApesMenuItem("menu.view.zoom.selection", "alt shift S");
+      zoomSelection.addActionListener(internalFormatController);
+      zoomSelection.setName("zoomSelection");
+      zoom.add(zoomSelection);
 
-      JMenuItem zoomReset = new ApesMenuItem( "menu.view.zoom.reset", "alt shift R" );
-      zoomReset.addActionListener( internalFormatController );
-      zoomReset.setName( "zoomReset" );
-      zoom.add( zoomReset );
+      JMenuItem zoomReset = new ApesMenuItem("menu.view.zoom.reset", "alt shift R");
+      zoomReset.addActionListener(internalFormatController);
+      zoomReset.setName("zoomReset");
+      zoom.add(zoomReset);
 
-      JMenu languages = new ApesMenu( "menu.view.languages" );
-      view.add( languages );
+      JMenu languages = new ApesMenu("menu.view.languages");
+      view.add(languages);
 
-      for( String lang : language.getLanguages() )
+      for(String lang : language.getLanguages())
       {
-        Locale locale = new Locale( lang );
+        Locale locale = new Locale(lang);
 
-        String tempName = locale.getDisplayName().replaceFirst( "reg", "" );
+        String tempName = locale.getDisplayName().replaceFirst("reg", "");
         char[] chars = tempName.toCharArray();
-        chars[0] = Character.toUpperCase( chars[0] );
-        String name = new String( chars );
-        JMenuItem menuItem = new JMenuItem( name );
-        menuItem.addActionListener( languageController );
-        menuItem.setName( lang );
-        languages.add( menuItem );
+        chars[0] = Character.toUpperCase(chars[0]);
+        String name = new String(chars);
+        JMenuItem menuItem = new JMenuItem(name);
+        menuItem.addActionListener(languageController);
+        menuItem.setName(lang);
+        languages.add(menuItem);
       }
       // View END
 
       // Player START
-      JMenu player = new ApesMenu( "menu.head.player" );
-      add( player );
+      JMenu player = new ApesMenu("menu.head.player");
+      add(player);
 
-      JMenuItem play = new ApesMenuItem( "menu.player.play", "alt P" );
+      JMenuItem play = new ApesMenuItem("menu.player.play", "alt P");
       play.addActionListener(playerController);
       play.setName("play");
-      player.add( play );
+      player.add(play);
 
-      JMenuItem pause = new ApesMenuItem( "menu.player.pause", "alt C" );
+      JMenuItem pause = new ApesMenuItem("menu.player.pause", "alt C");
       pause.addActionListener(playerController);
       pause.setName("pause");
-      player.add( pause );
+      player.add(pause);
 
-      JMenuItem stop = new ApesMenuItem( "menu.player.stop", "alt S" );
+      JMenuItem stop = new ApesMenuItem("menu.player.stop", "alt S");
       stop.addActionListener(playerController);
       stop.setName("stop");
-      player.add( stop );
+      player.add(stop);
 
-      JMenuItem forward = new ApesMenuItem( "menu.player.forward", "alt F" );
+      JMenuItem forward = new ApesMenuItem("menu.player.forward", "alt F");
       forward.addActionListener(playerController);
       forward.setName("forward");
-      player.add( forward );
+      player.add(forward);
 
-      JMenuItem backward = new ApesMenuItem( "menu.player.backward", "alt B" );
+      JMenuItem backward = new ApesMenuItem("menu.player.backward", "alt B");
       backward.addActionListener(playerController);
       backward.setName("backward");
-      player.add( backward );
+      player.add(backward);
       // Player END
 
       // Effects START
@@ -388,31 +388,31 @@ public class ApplicationView extends JFrame
       // Effects END
 
       // Tools START
-      JMenu tools = new ApesMenu( "menu.head.tools" );
-      add( tools );
+      JMenu tools = new ApesMenu("menu.head.tools");
+      add(tools);
 
-      JMenuItem properties = new ApesMenuItem( "menu.tools.properties", KeyEvent.VK_I );
-      properties.addActionListener( configController );
-      properties.setName( "show" );
-      tools.add( properties );
+      JMenuItem properties = new ApesMenuItem("menu.tools.properties", KeyEvent.VK_I);
+      properties.addActionListener(configController);
+      properties.setName("show");
+      tools.add(properties);
 
-      JMenuItem plugins = new ApesMenuItem( "menu.tools.plugins", KeyEvent.VK_P );
-      plugins.addActionListener( pluginController );
-      plugins.setName( "plugin" );
-      tools.add( plugins);
+      JMenuItem plugins = new ApesMenuItem("menu.tools.plugins", KeyEvent.VK_P);
+      plugins.addActionListener(pluginController);
+      plugins.setName("plugin");
+      tools.add(plugins);
       // Tools END
 
       // Help START
-      JMenu help = new ApesMenu( "menu.head.help" );
-      add( help );
+      JMenu help = new ApesMenu("menu.head.help");
+      add(help);
 
-      JMenuItem manual = new ApesMenuItem( "menu.help.manual" );
-      help.add( manual );
+      JMenuItem manual = new ApesMenuItem("menu.help.manual");
+      help.add(manual);
 
-      JMenuItem about = new ApesMenuItem( "menu.help.about" );
-      about.addActionListener( helpController );
-      about.setName( "about" );
-      help.add( about );
+      JMenuItem about = new ApesMenuItem("menu.help.about");
+      about.addActionListener(helpController);
+      about.setName("about");
+      help.add(about);
       // Help END
     }
   }

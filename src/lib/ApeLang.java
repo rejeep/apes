@@ -25,7 +25,6 @@ public class ApeLang
    */
   private static final int INDENTATION = 2;
 
-
   /**
    * Constructor, parses an ApeLang file.
    * 
@@ -33,10 +32,10 @@ public class ApeLang
    * @param file The name of the file to read.
    * @throws Exception Throws exception when the parsing goes wrong.
    */
-  public ApeLang( String path, String file ) throws Exception
+  public ApeLang(String path, String file) throws Exception
   {
     dictionary = new HashMap<String, String>();
-    parse( path, file );
+    parse(path, file);
   }
 
   /**
@@ -46,11 +45,11 @@ public class ApeLang
    * @param file a <code>String</code> value
    * @exception Exception if an error occurs
    */
-  private void parse( String path, String file ) throws Exception
+  private void parse(String path, String file) throws Exception
   {
     InputStreamReader inputStreamReader;
-    inputStreamReader = new InputStreamReader( new FileInputStream( path + "/" + file ) );
-    BufferedReader bufferedReader = new BufferedReader( inputStreamReader );
+    inputStreamReader = new InputStreamReader(new FileInputStream(path + "/" + file));
+    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
     int depth;
     int nLine = 0;
@@ -59,56 +58,56 @@ public class ApeLang
     String line;
 
     // TODO: Speed up
-    while( (line = bufferedReader.readLine() ) != null )
+    while( ( line = bufferedReader.readLine() ) != null)
     {
       depth = 0;
       for(int i = 0; line.charAt(i) == ' '; ++i)
-        if((i & 1) == 1)
+        if( ( i & 1 ) == 1)
           depth++;
 
-      if( depth == 0 || line.charAt( depth * INDENTATION - 1 ) == ' ' )
+      if(depth == 0 || line.charAt(depth * INDENTATION - 1) == ' ')
       {
         // Pattern that matches a tag with following text: "key: Some
         // text"
-        Pattern withTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s+(.+)$" );
-        Matcher withTextMatcher = withTextPattern.matcher( line );
+        Pattern withTextPattern = Pattern.compile("^\\s*([a-z_]+):\\s+(.+)$");
+        Matcher withTextMatcher = withTextPattern.matcher(line);
 
         // Pattern that matches a tag without any following text:
         // "key:"
-        Pattern withoutTextPattern = Pattern.compile( "^\\s*([a-z_]+):\\s*$" );
-        Matcher withoutTextMatcher = withoutTextPattern.matcher( line );
+        Pattern withoutTextPattern = Pattern.compile("^\\s*([a-z_]+):\\s*$");
+        Matcher withoutTextMatcher = withoutTextPattern.matcher(line);
 
-        String[] tokens = group.split( "\\." );
+        String[] tokens = group.split("\\.");
         group = "";
 
-        for( int i = 0; i < depth; ++i )
+        for(int i = 0; i < depth; ++i)
         {
           group = group + "." + tokens[i + 1];
         }
 
-        if( withoutTextMatcher.matches() )
+        if(withoutTextMatcher.matches())
         {
-          String key = withoutTextMatcher.group( 1 );
+          String key = withoutTextMatcher.group(1);
           group = group + "." + key;
           ++depth;
         }
-        else if( withTextMatcher.matches() )
+        else if(withTextMatcher.matches())
         {
-          String key = withTextMatcher.group( 1 );
-          String text = withTextMatcher.group( 2 );
+          String key = withTextMatcher.group(1);
+          String text = withTextMatcher.group(2);
 
           group += "." + key;
 
-          dictionary.put( group.substring( 1, group.length() ), text );
+          dictionary.put(group.substring(1, group.length()), text);
         }
         else
         {
-          throw new Exception( "Syntax error: Line " + nLine + ", bad word match." );
+          throw new Exception("Syntax error: Line " + nLine + ", bad word match.");
         }
       }
       else
       {
-        throw new Exception( "Syntax error: Line " + nLine + ", bad whitespace match." );
+        throw new Exception("Syntax error: Line " + nLine + ", bad whitespace match.");
       }
 
       ++nLine;
@@ -122,8 +121,8 @@ public class ApeLang
    * @return Returns the word that corresponds to the key in the
    *         dictionary.
    */
-  public String get( String key )
+  public String get(String key)
   {
-    return dictionary.get( key );
+    return dictionary.get(key);
   }
 }

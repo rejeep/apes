@@ -21,12 +21,12 @@ public class Tabs extends Observable
    * A set with all tabs.
    */
   private Set<Tab> tabs;
-  
+
   /**
    * The default model.
    */
   private SingleSelectionModel model;
-  
+
   /**
    * Creates a new <code>Tabs</code> instance.
    */
@@ -34,31 +34,31 @@ public class Tabs extends Observable
   {
     tabs = new HashSet<Tab>();
   }
-  
+
   /**
    * Adds a new tab.
    * 
    * @param internalFormatView The internal format view to add to the
    *          tab panel.
    */
-  public void add( InternalFormatView internalFormatView )
+  public void add(InternalFormatView internalFormatView)
   {
-    Tab tab = new Tab( tabs.size(), internalFormatView );
-    tabs.add( tab );
-      
+    Tab tab = new Tab(tabs.size(), internalFormatView);
+    tabs.add(tab);
+
     setChanged();
-    notifyObservers( tab );
+    notifyObservers(tab);
   }
-  
+
   /**
    * Adds a new tab.
    * 
    * @param internalFormat The internal format to add to the tab
    *          panel.
    */
-  public void add( InternalFormat internalFormat )
+  public void add(InternalFormat internalFormat)
   {
-    add( new InternalFormatView( internalFormat ) );
+    add(new InternalFormatView(internalFormat));
   }
 
   /**
@@ -66,7 +66,7 @@ public class Tabs extends Observable
    * 
    * @param model The default model.
    */
-  public void setModel( SingleSelectionModel model )
+  public void setModel(SingleSelectionModel model)
   {
     this.model = model;
   }
@@ -78,37 +78,37 @@ public class Tabs extends Observable
    */
   public Tab getSelectedTab()
   {
-    return findTabByIndex( model.getSelectedIndex() );
+    return findTabByIndex(model.getSelectedIndex());
   }
-  
+
   /**
    * Removes <code>tab</code> with index <code>index</code>.
    * 
    * @param index The index of the tab that should be removed.
    */
-  public void remove( int index )
+  public void remove(int index)
   {
-    Tab tab = findTabByIndex( index );
-    
-    tabs.remove( tab );
-    
+    Tab tab = findTabByIndex(index);
+
+    tabs.remove(tab);
+
     // If a tab is removed, the indexes are changed. So we must update
     // all indexes.
-    for( Tab tabX : tabs )
+    for(Tab tabX : tabs)
     {
-      if( tabX.getIndex() > tab.getIndex() )
+      if(tabX.getIndex() > tab.getIndex())
       {
         tabX.decIndex();
       }
     }
-    
+
     setChanged();
-    notifyObservers( tab );
-    
+    notifyObservers(tab);
+
     // Remove the internal format from the player handler.
     PlayerHandler.getInstance().remove(tab.getInternalFormat());
   }
-  
+
   /**
    * Returns true if <code>tab</code> is in the list of tabs. False
    * otherwise.
@@ -117,33 +117,33 @@ public class Tabs extends Observable
    * @return True if <code>tab</code> is in the list of tabs. False
    *         otherwise.
    */
-  public boolean contains( Tab tab )
+  public boolean contains(Tab tab)
   {
-    return tabs.contains( tab );
+    return tabs.contains(tab);
   }
-  
+
   /**
    * Returns the tab with index <code>index</code>.
    * 
    * @param index The index.
    * @return The tab with index index, or null if there's no such tab.
    */
-  public Tab get( int index )
+  public Tab get(int index)
   {
-    return findTabByIndex( index );
+    return findTabByIndex(index);
   }
-  
+
   /**
    * See {@link Tabs#get get}
    * 
    * @param index -
    * @return -
    */
-  private Tab findTabByIndex( int index )
+  private Tab findTabByIndex(int index)
   {
-    for( Tab tab : tabs )
+    for(Tab tab : tabs)
     {
-      if( tab.getIndex() == index )
+      if(tab.getIndex() == index)
       {
         return tab;
       }
@@ -151,7 +151,7 @@ public class Tabs extends Observable
 
     return null;
   }
-  
+
   /**
    * This class is a tab that holds information about the index and
    * what internal format view.
@@ -162,7 +162,7 @@ public class Tabs extends Observable
      * The tab index.
      */
     private int index;
-    
+
     /**
      * The internal format view.
      */
@@ -174,12 +174,12 @@ public class Tabs extends Observable
      * @param index The tab index.
      * @param internalFormatView The view to place on the tab panel.
      */
-    public Tab( int index, InternalFormatView internalFormatView )
+    public Tab(int index, InternalFormatView internalFormatView)
     {
       this.index = index;
       this.internalFormatView = internalFormatView;
     }
-    
+
     /**
      * Return this tab index.
      * 
@@ -189,7 +189,7 @@ public class Tabs extends Observable
     {
       return index;
     }
-    
+
     /**
      * Return the tab title, which is the same as the file name.
      * 
@@ -209,7 +209,7 @@ public class Tabs extends Observable
     {
       return internalFormatView;
     }
-    
+
     /**
      * Returns the internal format for this tab.
      * 
@@ -219,7 +219,7 @@ public class Tabs extends Observable
     {
       return internalFormatView.getInternalFormat();
     }
-    
+
     /**
      * Decreases this tab index (by one).
      */

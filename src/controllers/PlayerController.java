@@ -56,7 +56,7 @@ public class PlayerController extends ApplicationController
   {
     playerHandler.play();
   }
-  
+
   /**
    * Stop playing.
    */

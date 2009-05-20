@@ -30,18 +30,19 @@ public class Tags
    * @param key The tag key
    * @param value The tag value
    */
-  public void put( String key, String value )
+  public void put(String key, String value)
   {
-    tags.put( key, value );
+    tags.put(key, value);
   }
+
   /**
    * Gets the value given a specific key.
    * 
    * @param key The tag key
    * @return The tag value. Or null if it does not exist.
    */
-  public String get( String key )
+  public String get(String key)
   {
-    return (String)tags.get( key );
+    return (String)tags.get(key);
   }
 }

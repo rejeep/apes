@@ -75,7 +75,7 @@ public class Language extends Observable
 
     setChanged();
   }
-  
+
   /**
    * Returns the currently set language.
    * 

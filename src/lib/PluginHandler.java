@@ -29,7 +29,7 @@ public class PluginHandler
    * Arraylist of plugins.
    */
   private ArrayList<PluginInfo> plugins;
-  
+
   /**
    * Custom classloader.
    */
@@ -40,14 +40,14 @@ public class PluginHandler
    * 
    * @param path The path to load plugins from.
    */
-  public PluginHandler (String path)
+  public PluginHandler(String path)
   {
     plugins = new ArrayList<PluginInfo>();
     cl = new PluginLoader();
     addPluginsInPath(path);
-    
+
   }
-  
+
   /**
    * Returns an ArrayList of the plugin names.
    * 
@@ -56,22 +56,22 @@ public class PluginHandler
   public ArrayList<String> getPluginNames()
   {
     ArrayList list = new ArrayList<String>();
-    
+
     for(PluginInfo p : plugins)
     {
       list.add(p.getName());
     }
-    
+
     return list;
   }
-  
+
   /**
    * Returns the description of a plugin.
    * 
    * @param name Name of the plugin.
    * @return The description.
    */
-  
+
   public String getDescription(String name, String language)
   {
     for(PluginInfo p : plugins)
@@ -81,10 +81,10 @@ public class PluginHandler
         return p.getDescription(language);
       }
     }
-    
+
     return null;
   }
-  
+
   /**
    * Returns true if the plugin is loaded.
    * 
@@ -99,7 +99,7 @@ public class PluginHandler
         return p.isLoaded();
       }
     }
-    
+
     return false;
   }
 
@@ -109,9 +109,9 @@ public class PluginHandler
    * @return ArrayList of TransformPlugins.
    */
   public ArrayList<TransformPlugin> getTransforms()
-  {    
+  {
     ArrayList list = new ArrayList<TransformPlugin>();
-    
+
     for(PluginInfo p : plugins)
     {
       if(p.getType().equals("transform") && p.isLoaded())
@@ -119,7 +119,7 @@ public class PluginHandler
         list.add(p.getTransformObject());
       }
     }
-    
+
     return list;
   }
 
@@ -129,9 +129,9 @@ public class PluginHandler
    * @return ArrayList of AudioFormatPlugins.
    */
   public ArrayList<AudioFormatPlugin> getFormats()
-  {    
+  {
     ArrayList list = new ArrayList<AudioFormatPlugin>();
-    
+
     for(PluginInfo p : plugins)
     {
       if(p.getType().equals("format") && p.isLoaded())
@@ -139,7 +139,7 @@ public class PluginHandler
         list.add(p.getAudioFormatObject());
       }
     }
-    
+
     return list;
   }
 
@@ -150,22 +150,21 @@ public class PluginHandler
    * 
    * @param str A path pointing to either a file or a directory.
    */
-  public void addPlugin( String str )
+  public void addPlugin(String str)
   {
-    File file = new File( str );
+    File file = new File(str);
 
     if(file.isDirectory())
     {
-      addPluginsInPath( file.getPath() );
+      addPluginsInPath(file.getPath());
     }
-    else if( file.isFile() )
+    else if(file.isFile())
     {
       PluginInfo pi = new PluginInfo();
-      loadFile( file.getPath(), file.getName().substring( 0, file.getName().indexOf( "." ) ),
-        pi );
+      loadFile(file.getPath(), file.getName().substring(0, file.getName().indexOf(".")), pi);
     }
   }
-  
+
   /**
    * Returns a TransformPlugin object.
    * 
@@ -174,17 +173,16 @@ public class PluginHandler
    */
   public TransformPlugin getTransform(String name)
   {
-    for(int i=0; i<plugins.size(); i++)
+    for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) &&
-        plugins.get(i).getType().equals("transform"))
-        {
-          return plugins.get(i).getTransformObject();
-        }
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("transform"))
+      {
+        return plugins.get(i).getTransformObject();
+      }
     }
     return null;
   }
-  
+
   /**
    * Returns a AudioFormatPlugin object.
    * 
@@ -193,13 +191,12 @@ public class PluginHandler
    */
   public AudioFormatPlugin getAudioFormat(String name)
   {
-    for(int i=0; i<plugins.size(); i++)
+    for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) &&
-        plugins.get(i).getType().equals("format"))
-        {
-          return plugins.get(i).getAudioFormatObject();
-        }
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("format"))
+      {
+        return plugins.get(i).getAudioFormatObject();
+      }
     }
     return null;
   }
@@ -209,9 +206,9 @@ public class PluginHandler
    * 
    * @param name The name of the plugin.
    */
-  public void unloadPlugin( String name )
+  public void unloadPlugin(String name)
   {
-    for(int i=0; i<plugins.size(); i++)
+    for(int i = 0; i < plugins.size(); i++)
     {
       if(plugins.get(i).getName().equals(name))
       {
@@ -231,20 +228,20 @@ public class PluginHandler
       }
     }
   }
-  
+
   /**
    * Loads an unloaded plugin.
    * 
    * @param name The name of the plugin.
    */
-  public void loadPlugin( String name )
+  public void loadPlugin(String name)
   {
     for(PluginInfo p : plugins)
     {
       if(p.getName().equals(name))
       {
-        File file = new File( p.getPath() );
-        loadFile( file.getPath(), file.getName().substring( 0, file.getName().indexOf( "." )), p);
+        File file = new File(p.getPath());
+        loadFile(file.getPath(), file.getName().substring(0, file.getName().indexOf(".")), p);
       }
     }
   }
@@ -254,12 +251,12 @@ public class PluginHandler
    * 
    * @param path Directory.
    */
-  private void addPluginsInPath( String path )
+  private void addPluginsInPath(String path)
   {
-    File dir = new File( path );
+    File dir = new File(path);
     String[] files = dir.list();
 
-    if( files.length == 0 )
+    if(files.length == 0)
     {
       return;
     }
@@ -267,17 +264,16 @@ public class PluginHandler
     {
       FilenameFilter filter = new FilenameFilter()
       {
-        public boolean accept( File d, String n )
+        public boolean accept(File d, String n)
         {
-          return !n.startsWith( "." );
+          return !n.startsWith(".");
         }
       };
 
-      files = dir.list( filter );
-      for (String f : files)
+      files = dir.list(filter);
+      for(String f : files)
       {
-        loadFile( path + "/" + f, f.substring( 0, f.indexOf( "." ) ), 
-          new PluginInfo() );
+        loadFile(path + "/" + f, f.substring(0, f.indexOf(".")), new PluginInfo());
       }
     }
   }
@@ -289,7 +285,7 @@ public class PluginHandler
    * @param name Name of class to load.
    * @param pi PluginInfo object.
    */
-  private void loadFile( String path, String name, PluginInfo pi )
+  private void loadFile(String path, String name, PluginInfo pi)
   {
     Class cls;
     try
@@ -298,24 +294,24 @@ public class PluginHandler
       {
         pi.setPath(path);
       }
-      
-      if( path.endsWith( ".class" ) )
+
+      if(path.endsWith(".class"))
       {
         cls = cl.loadClass(path, "apes.plugins." + name);
         instancePlugin(cls, pi);
       }
-      else if( path.endsWith( ".jar" ) )
+      else if(path.endsWith(".jar"))
       {
         cls = cl.loadClass(path, "apes.plugins." + name);
         instancePlugin(cls, pi);
       }
     }
-    catch( ClassNotFoundException e )
+    catch(ClassNotFoundException e)
     {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Creates a new instance of the class and adds it to the list of
    * loaded plugins.
@@ -323,15 +319,15 @@ public class PluginHandler
    * @param cls Class object.
    * @param pi The PluginInfo object to assign it to.
    */
-  private void instancePlugin( Class<?> cls, PluginInfo pi )
+  private void instancePlugin(Class<?> cls, PluginInfo pi)
   {
     try
     {
-      if( TransformPlugin.class.isAssignableFrom( cls ) )
+      if(TransformPlugin.class.isAssignableFrom(cls))
       {
         TransformPlugin tp = (TransformPlugin)cls.newInstance();
         pi.setTransformObject(tp);
-        
+
         if(!plugins.contains(pi))
         {
           pi.setName(tp.getName());
@@ -341,11 +337,11 @@ public class PluginHandler
           plugins.add(pi);
         }
       }
-      else if( AudioFormatPlugin.class.isAssignableFrom( cls ) )
+      else if(AudioFormatPlugin.class.isAssignableFrom(cls))
       {
         AudioFormatPlugin afp = (AudioFormatPlugin)cls.newInstance();
         pi.setAudioFormatObject(afp);
-        
+
         if(!plugins.contains(pi))
         {
           pi.setName(afp.getName());
@@ -356,16 +352,17 @@ public class PluginHandler
         }
       }
     }
-    catch( InstantiationException e )
+    catch(InstantiationException e)
     {
       e.printStackTrace();
     }
-    catch( IllegalAccessException e )
+    catch(IllegalAccessException e)
     {
       e.printStackTrace();
     }
   }
 }
+
 
 /**
  * Custom loader to avoid loading with the system ClassLoader.
@@ -379,50 +376,50 @@ class PluginLoader extends ClassLoader
    * @param name The name.
    * @return The class.
    */
-  public Class loadClass( String location, String name) throws
-    ClassNotFoundException
+  public Class loadClass(String location, String name) throws ClassNotFoundException
   {
     int BUFFER_SIZE = 4096;
     byte[] classBytes = null;
-    
-    // read the class file
-    try {
 
-      FileInputStream in = new FileInputStream( location );
+    // read the class file
+    try
+    {
+
+      FileInputStream in = new FileInputStream(location);
       ByteArrayOutputStream buf = new ByteArrayOutputStream();
       int c;
-      while ( ( c = in.read() ) != -1 )
+      while( ( c = in.read() ) != -1)
       {
-        buf.write( c );
+        buf.write(c);
       }
       classBytes = buf.toByteArray();
 
     }
-    catch ( IOException e )
+    catch(IOException e)
     {
       e.printStackTrace();
     }
 
-    if( classBytes == null )
+    if(classBytes == null)
     {
-      throw new ClassNotFoundException( "Cannot load class" );
+      throw new ClassNotFoundException("Cannot load class");
     }
 
     // turn it to a class
     try
     {
-      Class<?> cls = defineClass( name, classBytes, 0, classBytes.length );
-      resolveClass( cls );
+      Class<?> cls = defineClass(name, classBytes, 0, classBytes.length);
+      resolveClass(cls);
       return cls;
     }
-    catch ( ClassFormatError e )
+    catch(ClassFormatError e)
     {
       e.printStackTrace();
     }
-    
+
     return null;
   }
-  
+
   /**
    * Loads a JAR file. Untested :-)
    * 
@@ -430,27 +427,26 @@ class PluginLoader extends ClassLoader
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
    */
-  public Class loadJAR( String location, String name) throws
-    ClassNotFoundException
+  public Class loadJAR(String location, String name) throws ClassNotFoundException
   {
     try
     {
-      File pluginFile = new File( location );
+      File pluginFile = new File(location);
       URL[] locations = new URL[] { pluginFile.toURL() };
-      URLClassLoader classloader =
-        new URLClassLoader( locations );
+      URLClassLoader classloader = new URLClassLoader(locations);
 
-      Class<?> cls = classloader.loadClass( name );
+      Class<?> cls = classloader.loadClass(name);
       return cls;
     }
-    catch ( MalformedURLException e )
+    catch(MalformedURLException e)
     {
       e.printStackTrace();
     }
-    
+
     return null;
   }
 }
+
 
 /**
  * Class to hold plugin information.
@@ -461,37 +457,37 @@ class PluginInfo
    * The path to the plugin file.
    */
   private String path;
-  
+
   /**
    * The name of the plugin.
    */
   private String name;
-  
+
   /**
    * The description of the plugin.
    */
   private Map<String, String> desc;
-  
+
   /**
    * The type of the plugin, "format" or "transform".
    */
   private String type;
-  
+
   /**
    * The state of the plugin.
    */
   private Boolean loaded;
-  
+
   /**
    * Holder for a AudioFormatPlugin object.
    */
   private AudioFormatPlugin fObject;
-  
+
   /**
    * Holder for a TransformPlugin object.
    */
   private TransformPlugin tObject;
-  
+
   /**
    * Constructor.
    */
@@ -499,7 +495,7 @@ class PluginInfo
   {
     desc = new HashMap<String, String>();
   }
-  
+
   /**
    * Returns path to plugin.
    * 
@@ -509,7 +505,7 @@ class PluginInfo
   {
     return path;
   }
-  
+
   /**
    * Sets the path to the plugin.
    * 
@@ -519,7 +515,7 @@ class PluginInfo
   {
     path = str;
   }
-  
+
   /**
    * Returns the name of the plugin.
    * 
@@ -529,7 +525,7 @@ class PluginInfo
   {
     return name;
   }
-  
+
   /**
    * Sets the name of the plugin.
    * 
@@ -539,7 +535,7 @@ class PluginInfo
   {
     name = str;
   }
-  
+
   /**
    * Returns the plugin description.
    * 
@@ -548,16 +544,16 @@ class PluginInfo
    */
   public String getDescription(String language)
   {
-    if( desc.containsKey(language) )
+    if(desc.containsKey(language))
     {
       return desc.get(language);
     }
     else
     {
-    return desc.get("en");
+      return desc.get("en");
     }
   }
-  
+
   /**
    * Sets the plugin description.
    * 
@@ -567,7 +563,7 @@ class PluginInfo
   {
     desc = map;
   }
-  
+
   /**
    * Returns the type.
    * 
@@ -577,7 +573,7 @@ class PluginInfo
   {
     return type;
   }
-  
+
   /**
    * Sets the plugin type.
    * 
@@ -587,7 +583,7 @@ class PluginInfo
   {
     type = str;
   }
-  
+
   /**
    * Returns true if the plugin is loaded.
    * 
@@ -597,7 +593,7 @@ class PluginInfo
   {
     return loaded;
   }
-  
+
   /**
    * Returns the AudioFormatPlugin object.
    * 
@@ -607,7 +603,7 @@ class PluginInfo
   {
     return fObject;
   }
-  
+
   /**
    * Sets the AudioFormatPlugin object.
    * 
@@ -618,7 +614,7 @@ class PluginInfo
     fObject = obj;
     loaded = true;
   }
-  
+
   /**
    * Returns the TransformPlugin object.
    * 
@@ -628,7 +624,7 @@ class PluginInfo
   {
     return tObject;
   }
-  
+
   /**
    * Sets the TransformPlugin object.
    * 
@@ -639,7 +635,7 @@ class PluginInfo
     tObject = obj;
     loaded = true;
   }
-  
+
   /**
    * Unloads the plugin object.
    */

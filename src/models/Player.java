@@ -7,8 +7,10 @@ import apes.lib.Config;
 import java.util.Observable;
 
 /**
- * This class plays an internal format.
- * TODO: May be a bug when reaching end of file, making strange noises without stopping or something
+ * This class plays an internal format. TODO: May be a bug when
+ * reaching end of file, making strange noises without stopping or
+ * something
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class Player extends Observable implements Runnable
@@ -26,7 +28,9 @@ public class Player extends Observable implements Runnable
   /**
    * Different status a Player can be in.
    */
-  public enum Status { PLAY, PAUSE, STOP, WAIT };
+  public enum Status {
+    PLAY, PAUSE, STOP, WAIT
+  };
 
   /**
    * This variable holds the current status for the player.
@@ -67,17 +71,17 @@ public class Player extends Observable implements Runnable
 
   /**
    * Creates a new <code>Player</code>.
-   *
+   * 
    * @param internalFormat The internal format that is to be played.
    */
-  public Player( InternalFormat internalFormat )
+  public Player(InternalFormat internalFormat)
   {
     this.internalFormat = internalFormat;
-    this.wind = Config.getInstance().getIntOption( "wind" );
+    this.wind = Config.getInstance().getIntOption("wind");
 
-    setStatus( Status.WAIT );
+    setStatus(Status.WAIT);
 
-    thread = new Thread( this );
+    thread = new Thread(this);
     thread.start();
   }
 
@@ -86,18 +90,16 @@ public class Player extends Observable implements Runnable
    */
   public void play()
   {
-    setStatus( Status.PLAY );
+    setStatus(Status.PLAY);
   }
 
   /**
-   * Pauses playing if any.
-   *
-   * TODO: Should stop at once when pause is pressed. But calling
-   * line.stop() does not help.
+   * Pauses playing if any. TODO: Should stop at once when pause is
+   * pressed. But calling line.stop() does not help.
    */
   public void pause()
   {
-    setStatus( Status.PAUSE );
+    setStatus(Status.PAUSE);
   }
 
   /**
@@ -105,7 +107,7 @@ public class Player extends Observable implements Runnable
    */
   public void stop()
   {
-    setStatus( Status.STOP );
+    setStatus(Status.STOP);
   }
 
   /**
@@ -118,12 +120,12 @@ public class Player extends Observable implements Runnable
     int stop = getStop();
     int max = stop;
 
-    if( stop == 0 || start == stop )
+    if(stop == 0 || start == stop)
     {
       max = getSampleAmount();
     }
 
-    setCurrentSample( temp >= max ? max : temp );
+    setCurrentSample(temp >= max ? max : temp);
   }
 
   /**
@@ -136,17 +138,17 @@ public class Player extends Observable implements Runnable
     int stop = getStop();
     int min = start;
 
-    if( start == stop )
+    if(start == stop)
     {
       min = 0;
     }
 
-    setCurrentSample( temp < min ? min : temp );
+    setCurrentSample(temp < min ? min : temp);
   }
 
   /**
    * Returns the wind length.
-   *
+   * 
    * @return The wins length.
    */
   private int getWindLength()
@@ -156,17 +158,18 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns the selection as a point. x is start and y i stop.
-   *
+   * 
    * @return The selection.
    */
   public Point getSelection()
   {
-    return new Point( getStart(), getStop() );
+    return new Point(getStart(), getStop());
   }
 
   /**
-   * Returns the <code>InternalFormat</code> connected to this player.
-   *
+   * Returns the <code>InternalFormat</code> connected to this
+   * player.
+   * 
    * @return the <code>InternalFormat</code>.
    */
   public InternalFormat getInternalFormat()
@@ -177,14 +180,14 @@ public class Player extends Observable implements Runnable
   /**
    * Set the <code>InternalFormat</code> for this player.
    */
-  public void setInternalFormat( InternalFormat internalFormat )
+  public void setInternalFormat(InternalFormat internalFormat)
   {
     this.internalFormat = internalFormat;
   }
 
   /**
    * Returns current status.
-   *
+   * 
    * @return Current status.
    */
   public Status getStatus()
@@ -194,27 +197,27 @@ public class Player extends Observable implements Runnable
 
   /**
    * Sets the status to <code>status</code>
-   *
+   * 
    * @param status The new status.
    */
-  private void setStatus( Status status )
+  private void setStatus(Status status)
   {
     this.status = status;
   }
 
   /**
    * Sets the line for this player.
-   *
+   * 
    * @param line The line.
    */
-  public void setLine( SourceDataLine line )
+  public void setLine(SourceDataLine line)
   {
     this.line = line;
   }
 
   /**
    * Returns true if the player is playing. False otherwise.
-   *
+   * 
    * @return true if playing. False otherwise.
    */
   public boolean isPlaying()
@@ -224,7 +227,7 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns the number of samples.
-   *
+   * 
    * @return The number of samples.
    */
   public int getSampleAmount()
@@ -234,7 +237,7 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns currentSample.
-   *
+   * 
    * @return currentSample.
    */
   public int getCurrentSample()
@@ -244,10 +247,10 @@ public class Player extends Observable implements Runnable
 
   /**
    * Sets the current sample position.
-   *
+   * 
    * @param currentSample The position.
    */
-  public void setCurrentSample( int currentSample )
+  public void setCurrentSample(int currentSample)
   {
     this.currentSample = currentSample;
 
@@ -256,22 +259,22 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns start position.
-   *
+   * 
    * @return The start position.
    */
   public int getStart()
   {
-    return Math.min( fixed, moving );
+    return Math.min(fixed, moving);
   }
 
   /**
    * Sets the start position.
-   *
+   * 
    * @param start the start position.
    */
-  public void setStart( int start )
+  public void setStart(int start)
   {
-    if( moving < fixed )
+    if(moving < fixed)
     {
       moving = start;
     }
@@ -285,22 +288,22 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns stop position.
-   *
+   * 
    * @return The stop position.
    */
   public int getStop()
   {
-    return Math.max( fixed, moving );
+    return Math.max(fixed, moving);
   }
 
   /**
    * Sets the stop position.
-   *
+   * 
    * @param stop the stop position.
    */
-  public void setStop( int stop )
+  public void setStop(int stop)
   {
-    if( moving > fixed )
+    if(moving > fixed)
     {
       moving = stop;
     }
@@ -314,10 +317,10 @@ public class Player extends Observable implements Runnable
 
   /**
    * Sets the moving mark to <code>mark</code>.
-   *
+   * 
    * @param mark The <code>mark</code>.
    */
-  public void setMark( int mark )
+  public void setMark(int mark)
   {
     moving = mark;
 
@@ -326,30 +329,30 @@ public class Player extends Observable implements Runnable
 
   /**
    * Change mark closest to <code>mark</code> to <code>mark.</code>.
-   *
+   * 
    * @param mark The mark.
    */
-  public void setClosestMark( int mark )
+  public void setClosestMark(int mark)
   {
-    int fromMoving = Math.abs( mark - moving );
-    int fromFixed = Math.abs( mark - fixed );
+    int fromMoving = Math.abs(mark - moving);
+    int fromFixed = Math.abs(mark - fixed);
 
-    if( fromMoving > fromFixed )
+    if(fromMoving > fromFixed)
     {
       int temp = fixed;
       fixed = moving;
       moving = temp;
     }
 
-    setMark( mark );
+    setMark(mark);
   }
 
   /**
    * Set all marks to <code>mark</code>.
-   *
+   * 
    * @param mark The mark.
    */
-  public void setAllMarks( int mark )
+  public void setAllMarks(int mark)
   {
     moving = mark;
     fixed = mark;
@@ -363,7 +366,7 @@ public class Player extends Observable implements Runnable
    */
   private void increaseCurrentSample()
   {
-    setCurrentSample( currentSample + CHUNK_SIZE );
+    setCurrentSample(currentSample + CHUNK_SIZE);
   }
 
   /**
@@ -378,7 +381,7 @@ public class Player extends Observable implements Runnable
 
   /**
    * Returns true if playing is allowed. False otherwise.
-   *
+   * 
    * @return True if playing is allowed. False otherwise.
    */
   private boolean playingAllowed()
@@ -386,7 +389,7 @@ public class Player extends Observable implements Runnable
     int start = getStart();
     int stop = getStop();
 
-    if( (stop != 0 && start != stop && currentSample > stop) || (currentSample > getSampleAmount()))
+    if( ( stop != 0 && start != stop && currentSample > stop ) || ( currentSample > getSampleAmount() ))
       return false;
     return true;
   }
@@ -398,27 +401,27 @@ public class Player extends Observable implements Runnable
    */
   public void run()
   {
-    while( true )
+    while(true)
     {
       switch(status)
       {
       case WAIT:
         break;
       case PLAY:
-        if( playingAllowed() )
+        if(playingAllowed())
         {
           int chunk = CHUNK_SIZE;
           if(getSampleAmount() < currentSample + CHUNK_SIZE)
             chunk = getSampleAmount() - currentSample;
-          byte[] data = internalFormat.getChunk( currentSample, chunk );
+          byte[] data = internalFormat.getChunk(currentSample, chunk);
 
-          line.write( data, 0, data.length );
+          line.write(data, 0, data.length);
 
           increaseCurrentSample();
         }
         else
         {
-          if( currentSample > getSampleAmount() )
+          if(currentSample > getSampleAmount())
           {
             stop();
           }
@@ -431,19 +434,19 @@ public class Player extends Observable implements Runnable
         // If this is not present there will be no playing.
         try
         {
-          Thread.sleep( 0 );
+          Thread.sleep(0);
         }
-        catch( InterruptedException e )
+        catch(InterruptedException e)
         {
           e.printStackTrace();
         }
         break;
       case STOP:
         currentSample = getStart() == getStop() ? 0 : getStart();
-        setStatus( Status.WAIT );
+        setStatus(Status.WAIT);
         break;
       case PAUSE:
-        setStatus( Status.WAIT );
+        setStatus(Status.WAIT);
         break;
       }
     }

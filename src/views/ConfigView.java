@@ -36,7 +36,7 @@ public class ConfigView extends JFrame
    * The controller.
    */
   private ConfigController configController;
-  
+
   /**
    * A language object.
    */
@@ -48,14 +48,13 @@ public class ConfigView extends JFrame
    */
   private Map<String, Component> newOptions;
 
-
   /**
    * Creates a new <code>ConfigView</code> instance.
    * 
    * @param config The model.
    * @param configController The controller.
    */
-  public ConfigView( Config config, ConfigController configController )
+  public ConfigView(Config config, ConfigController configController)
   {
     this.config = config;
     this.configController = configController;
@@ -68,25 +67,25 @@ public class ConfigView extends JFrame
    */
   public void create()
   {
-    setLayout( new BorderLayout() );
-    
-    setTitle( language.get( "config.header" ) );
+    setLayout(new BorderLayout());
+
+    setTitle(language.get("config.header"));
 
     // Create top and bottom panel.
     JPanel topPanel = topPanel();
-    add( topPanel, BorderLayout.NORTH );
+    add(topPanel, BorderLayout.NORTH);
 
     JPanel bottomPanel = bottomPanel();
-    add( bottomPanel, BorderLayout.SOUTH );
+    add(bottomPanel, BorderLayout.SOUTH);
 
     pack();
 
-    setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     // Start in center on screen.
-    setLocationRelativeTo( null );
+    setLocationRelativeTo(null);
 
-    setVisible( true );
+    setVisible(true);
   }
 
   /**
@@ -100,45 +99,45 @@ public class ConfigView extends JFrame
     Set<String> keys = options.keySet();
 
     JPanel panel = new JPanel();
-    panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-    panel.setLayout( new BorderLayout() );
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    panel.setLayout(new BorderLayout());
 
-    JPanel top = new JPanel( new FlowLayout() );
-    panel.add( top, BorderLayout.NORTH );
+    JPanel top = new JPanel(new FlowLayout());
+    panel.add(top, BorderLayout.NORTH);
 
-    JLabel header = new ApesLabel( "config.header" );
-    header.setFont( new Font( "verdana", 1, 20 ) );
-    top.add( header );
+    JLabel header = new ApesLabel("config.header");
+    header.setFont(new Font("verdana", 1, 20));
+    top.add(header);
 
-    JPanel bottom = new JPanel( new GridLayout( options.size(), 2 ) );
-    panel.add( bottom, BorderLayout.SOUTH );
+    JPanel bottom = new JPanel(new GridLayout(options.size(), 2));
+    panel.add(bottom, BorderLayout.SOUTH);
 
-    for( String key : keys )
+    for(String key : keys)
     {
-      JLabel label = new ApesLabel( "config." + key );
-      label.setBorder( BorderFactory.createEmptyBorder( 0, 0, 0, 10 ) );
-      bottom.add( label );
+      JLabel label = new ApesLabel("config." + key);
+      label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+      bottom.add(label);
 
-      String value = options.get( key );
+      String value = options.get(key);
 
-      Config.Type type = config.getType( key );
+      Config.Type type = config.getType(key);
 
-      if( type == Config.Type.INTEGER || type == Config.Type.STRING )
+      if(type == Config.Type.INTEGER || type == Config.Type.STRING)
       {
-        JTextField textField = new JTextField( value );
+        JTextField textField = new JTextField(value);
 
-        bottom.add( textField );
+        bottom.add(textField);
 
-        newOptions.put( key, textField );
+        newOptions.put(key, textField);
       }
-      else if( type == Config.Type.BOOLEAN )
+      else if(type == Config.Type.BOOLEAN)
       {
         JCheckBox checkBox = new JCheckBox();
-        checkBox.setSelected( config.getBooleanOption( key ) );
+        checkBox.setSelected(config.getBooleanOption(key));
 
-        bottom.add( checkBox );
+        bottom.add(checkBox);
 
-        newOptions.put( key, checkBox );
+        newOptions.put(key, checkBox);
       }
     }
 
@@ -154,15 +153,15 @@ public class ConfigView extends JFrame
   {
     JPanel panel = new JPanel();
 
-    JButton close = new ApesButton( "config.properties.close" );
-    close.addActionListener( configController );
-    close.setName( "close" );
-    panel.add( close );
+    JButton close = new ApesButton("config.properties.close");
+    close.addActionListener(configController);
+    close.setName("close");
+    panel.add(close);
 
-    JButton save = new ApesButton( "config.properties.save" );
-    save.addActionListener( configController );
-    save.setName( "save" );
-    panel.add( save );
+    JButton save = new ApesButton("config.properties.save");
+    save.addActionListener(configController);
+    save.setName("save");
+    panel.add(save);
 
     return panel;
   }

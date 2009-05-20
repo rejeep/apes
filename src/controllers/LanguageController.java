@@ -15,7 +15,6 @@ public class LanguageController extends ApplicationController
    */
   private Language language;
 
-
   /**
    * Creates a new <code>LanguageController</code> instance.
    */
@@ -28,13 +27,13 @@ public class LanguageController extends ApplicationController
   public void methodMissing()
   {
     // Set new language.
-    language.setLanguage( name );
+    language.setLanguage(name);
 
     try
     {
       language.load();
     }
-    catch( Exception e )
+    catch(Exception e)
     {
       e.printStackTrace();
     }

@@ -55,7 +55,7 @@ public class ApesFormat
 
     return name.matches(".*wave?$");
   }
-  
+
   /**
    * Returns true if file is an apes file. False otherwise.
    * 
