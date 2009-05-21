@@ -1,5 +1,7 @@
 package apes.models;
 
+import javax.swing.KeyStroke;
+
 /**
  * <p>
  * This class handles user specific key bindings. This class uses the Singleton
@@ -29,6 +31,8 @@ package apes.models;
  * <p>
  * Lines starting with a <code>#</code> is a comment.
  * </p>
+ * 
+ * <p>See {@link KeyStroke#getKeyStroke(String)} for information on how to write the key bindings.</p>
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
