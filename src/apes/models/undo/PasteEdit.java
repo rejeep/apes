@@ -30,8 +30,6 @@ public class PasteEdit extends AbstractUndoableEdit
     start = marked.x;
     stop = start + p.getUsedMemory();
     paste = new MemoryHandler();
-    System.out.println("New paste edit from: " + start + " to: " + stop + " size: " + p.getUsedMemory());
-    System.out.println("Copy from clipBoard to Paste");
     paste.transfer(p, 0, (int) ( p.getUsedMemory() - 1 ), 0);
     redo();
   }
@@ -39,7 +37,6 @@ public class PasteEdit extends AbstractUndoableEdit
   @Override
   public void redo()
   {
-    System.out.println("paste to internalformat");
     internalFormat.pasteSamples(start, paste);
     paste.dispose();
     undoable = true;
