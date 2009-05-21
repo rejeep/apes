@@ -1,12 +1,13 @@
 package apes.views;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import apes.lib.Language;
-import java.awt.Dimension;
 
 /**
  * Use this class to send the user a message. A message can be
@@ -54,12 +55,6 @@ public class ApesMessage extends JPanel implements Runnable
    * The panel height.
    */
   private final static int HEIGHT = 25;
-
-  /**
-   * How many milliseconds it should take for the panel to occur when
-   * printing a message.
-   */
-  private static int OCCUR_TIME = 1000;
 
   /**
    * How long the message should be visible.

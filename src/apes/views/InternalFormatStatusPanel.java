@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,7 +17,6 @@ import apes.controllers.ChannelController;
 import apes.lib.SampleHelper;
 import apes.models.InternalFormat;
 import apes.models.Player;
-import javax.swing.BorderFactory;
 
 /**
  * Panel with information about the internal format and some controls

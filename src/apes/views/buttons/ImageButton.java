@@ -3,12 +3,13 @@ package apes.views.buttons;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Observable;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.util.Observable;
 
 /**
  * <p>

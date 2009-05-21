@@ -1,9 +1,11 @@
 package apes.views;
 
+import java.util.Observable;
+
 import javax.swing.JLabel;
+
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.util.Observable;
 
 /**
  * Like JLabel except that it takes locale tag as argument instead of

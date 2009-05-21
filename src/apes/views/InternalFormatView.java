@@ -2,8 +2,8 @@ package apes.views;
 
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JPanel;
-import java.awt.*;
 
 import apes.controllers.ChannelController;
 import apes.lib.PlayerHandler;

@@ -1,7 +1,7 @@
 package apes.exceptions;
 
 /**
- * Used when some file format are unvalid or unsupported.
+ * Used when some file format are invalid or unsupported.
  * 
  * @author Simon Holm
  */

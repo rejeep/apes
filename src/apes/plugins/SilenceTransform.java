@@ -1,8 +1,8 @@
 package apes.plugins;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;

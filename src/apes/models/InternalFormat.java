@@ -1,13 +1,11 @@
 package apes.models;
 
-import apes.models.MemoryHandler;
-import apes.plugins.WaveFileFormat;
-
 import java.io.IOException;
-
-import java.util.Observable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Observable;
+
+import apes.plugins.WaveFileFormat;
 
 /**
  * Describes the audio in a format suitable for internal

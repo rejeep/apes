@@ -3,9 +3,9 @@ package apes.lib;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
+import java.util.Observable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Observable;
 
 /**
  * Singleton class for setting the language of the application also

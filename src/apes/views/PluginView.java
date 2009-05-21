@@ -1,30 +1,27 @@
 package apes.views;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Font;
-import java.awt.Component;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JFrame;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.BorderFactory;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import apes.controllers.PluginController;
+import apes.interfaces.TransformPlugin;
 import apes.lib.Language;
 import apes.lib.PluginHandler;
-import apes.views.ApesMenu;
-import apes.interfaces.TransformPlugin;
-import apes.controllers.PluginController;
 
 /**
  * Graphical view for the plugins.

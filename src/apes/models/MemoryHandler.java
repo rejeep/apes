@@ -3,10 +3,10 @@ package apes.models;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.Serializable;
 
 /**
  * This is not a class.
@@ -115,7 +115,6 @@ public class MemoryHandler implements Serializable
       frame = frameTable[frameI];
 
     long firstIndex = frame.page.index;
-    long index0 = index;
     long index1 = index + bytes;
 
     if(frame.page.index == index)

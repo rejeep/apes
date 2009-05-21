@@ -1,10 +1,11 @@
 package apes.views;
 
+import java.util.Observable;
+
 import javax.swing.JButton;
 
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.util.Observable;
 
 /**
  * Like JButton except that it takes locale tag as argument instead of

@@ -1,8 +1,10 @@
 package apes.views.tabs;
 
 import java.awt.FlowLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import apes.controllers.TabsController;
 
 /**

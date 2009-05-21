@@ -1,15 +1,16 @@
 package apes.plugins;
 
+import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.BorderLayout;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.BorderFactory;
 
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;
@@ -56,7 +57,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
    */
   public Map<String, String> getDescriptions()
   {
-    HashMap map = new HashMap<String, String>();
+    HashMap<String, String> map = new HashMap<String, String>();
 
     map.put("en", "Fades the volume of a marked area either in or out.");
     map.put("sv", "Höjer volymen stegvis från noll, alternativt sänker den till noll.");
@@ -85,7 +86,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
 
     frame.add(bPanel);
     frame.setLocationRelativeTo(null);
-    frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
@@ -119,7 +120,6 @@ public class FadeTransform implements TransformPlugin, ActionListener
     int steps = diff / interval;
     int spill = diff % interval;
 
-    System.out.println("steps: " + steps);
     for(int j = 0; j < steps; j++)
     {
       if(flag)

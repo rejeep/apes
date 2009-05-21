@@ -1,16 +1,15 @@
 package apes.controllers;
 
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import apes.models.InternalFormat;
 import apes.models.Player;
 import apes.views.ChannelView;
 import apes.views.InternalFormatStatusPanel;
-import apes.models.InternalFormat;
 
 /**
  * Channel controller.
@@ -152,8 +151,6 @@ public class ChannelController extends ApplicationController implements MouseLis
       int stop = player.getStop();
 
       InternalFormat internalFormat = player.getInternalFormat();
-      int numChannels = internalFormat.getNumChannels();
-
       internalFormat.scaleSamples(start, stop, 1.0f - rotation * 0.1f);
       internalFormat.updated();
     }

@@ -2,6 +2,7 @@ package apes.controllers;
 
 import java.awt.Point;
 import java.io.IOException;
+
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 
@@ -9,15 +10,15 @@ import apes.lib.ApesFile;
 import apes.lib.ApesFormat;
 import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
+import apes.models.MemoryHandler;
 import apes.models.Player;
 import apes.models.Tabs;
 import apes.models.undo.CutEdit;
 import apes.models.undo.PasteEdit;
-import apes.models.MemoryHandler;
 import apes.plugins.WaveFileFormat;
-import apes.views.InternalFormatView;
 import apes.views.ApesError;
 import apes.views.ApesMessage;
+import apes.views.InternalFormatView;
 
 /**
  * Controller for the internal format.

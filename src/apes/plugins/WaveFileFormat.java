@@ -11,11 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import apes.interfaces.AudioFormatPlugin;
-import apes.lib.FileHandler;
-import apes.views.ProgressView;
 import apes.models.FileStatus;
 import apes.models.InternalFormat;
 import apes.models.Tags;
+import apes.views.ProgressView;
 
 /**
  * Module used for converting .wav-files to the internal format and

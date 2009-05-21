@@ -1,8 +1,9 @@
 package apes.views;
 
 import javax.swing.JOptionPane;
-import apes.lib.Language;
+
 import apes.lib.Config;
+import apes.lib.Language;
 
 /**
  * Apes error messages.

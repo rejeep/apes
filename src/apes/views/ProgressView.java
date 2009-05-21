@@ -1,7 +1,6 @@
 package apes.views;
 
 import javax.swing.JProgressBar;
-import java.awt.Graphics;
 
 /**
  * A progress bar that gives an indication of how far a task is. TODO:

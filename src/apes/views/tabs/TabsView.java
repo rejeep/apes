@@ -2,6 +2,7 @@ package apes.views.tabs;
 
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JTabbedPane;
 
 import apes.controllers.TabsController;

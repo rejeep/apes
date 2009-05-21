@@ -1,9 +1,11 @@
 package apes.views;
 
+import java.util.Observable;
+
 import javax.swing.JComboBox;
+
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
-import java.util.Observable;
 
 /**
  * Like JComboBox except that it takes an array of locale tags as

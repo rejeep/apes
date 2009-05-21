@@ -1,8 +1,15 @@
 package apes.lib;
 
-import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
+
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 
 /**
  * A helper class to load and save files from and to the disk.

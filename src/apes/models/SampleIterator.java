@@ -1,8 +1,6 @@
 package apes.models;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
-import apes.models.InternalFormat;
 
 public class SampleIterator
 {
@@ -17,7 +15,7 @@ public class SampleIterator
   private long samplesIndex;
 
   /**
-   * Consts a SampleIterator iterating over all samples in the given
+   * Consists a SampleIterator iterating over all samples in the given
    * <code>Channel</code>.
    * 
    * @param c The <code>Channel</code> to iterate over.

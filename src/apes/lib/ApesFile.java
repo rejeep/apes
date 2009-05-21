@@ -1,10 +1,12 @@
 package apes.lib;
 
 import java.io.File;
+
+import javax.swing.JFileChooser;
+
+import apes.exceptions.UnidentifiedLanguageException;
 import apes.interfaces.AudioFormatPlugin;
 import apes.models.InternalFormat;
-import javax.swing.JFileChooser;
-import apes.exceptions.UnidentifiedLanguageException;
 import apes.views.ApesError;
 
 /**

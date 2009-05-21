@@ -1,22 +1,19 @@
 package apes.lib;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.MalformedURLException;
-import java.lang.ClassLoader;
-import java.lang.InstantiationException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import apes.interfaces.AudioFormatPlugin;
 import apes.interfaces.TransformPlugin;
-import apes.controllers.PluginController;
 
 /**
  * Class for loading/unloading plugins.
@@ -55,7 +52,7 @@ public class PluginHandler
    */
   public ArrayList<String> getPluginNames()
   {
-    ArrayList list = new ArrayList<String>();
+    ArrayList<String> list = new ArrayList<String>();
 
     for(PluginInfo p : plugins)
     {
@@ -110,7 +107,7 @@ public class PluginHandler
    */
   public ArrayList<TransformPlugin> getTransforms()
   {
-    ArrayList list = new ArrayList<TransformPlugin>();
+    ArrayList<TransformPlugin> list = new ArrayList<TransformPlugin>();
 
     for(PluginInfo p : plugins)
     {
@@ -130,7 +127,7 @@ public class PluginHandler
    */
   public ArrayList<AudioFormatPlugin> getFormats()
   {
-    ArrayList list = new ArrayList<AudioFormatPlugin>();
+    ArrayList<AudioFormatPlugin> list = new ArrayList<AudioFormatPlugin>();
 
     for(PluginInfo p : plugins)
     {
@@ -287,7 +284,8 @@ public class PluginHandler
    */
   private void loadFile(String path, String name, PluginInfo pi)
   {
-    Class cls;
+    Class<?> cls;
+    
     try
     {
       if(!plugins.contains(pi))
@@ -376,9 +374,8 @@ class PluginLoader extends ClassLoader
    * @param name The name.
    * @return The class.
    */
-  public Class loadClass(String location, String name) throws ClassNotFoundException
+  public Class<?> loadClass(String location, String name) throws ClassNotFoundException
   {
-    int BUFFER_SIZE = 4096;
     byte[] classBytes = null;
 
     // read the class file
@@ -427,7 +424,8 @@ class PluginLoader extends ClassLoader
    * @param name Name of JAR to load.
    * @throws ClassNotFoundException
    */
-  public Class loadJAR(String location, String name) throws ClassNotFoundException
+  @SuppressWarnings("deprecation")
+  public Class<?> loadJAR(String location, String name) throws ClassNotFoundException
   {
     try
     {

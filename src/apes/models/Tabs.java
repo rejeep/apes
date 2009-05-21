@@ -3,9 +3,10 @@ package apes.models;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
-import javax.swing.SingleSelectionModel;
-import apes.lib.PlayerHandler;
 
+import javax.swing.SingleSelectionModel;
+
+import apes.lib.PlayerHandler;
 import apes.views.InternalFormatView;
 
 /**

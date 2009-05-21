@@ -1,8 +1,10 @@
 package apes.views.tabs;
 
 import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
 import apes.lib.Language;
 
 /**

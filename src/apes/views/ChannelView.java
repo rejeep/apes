@@ -6,18 +6,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.JPanel;
 
 import apes.controllers.ChannelController;
 import apes.lib.Config;
-import apes.models.Player;
-import apes.models.SampleIterator;
-import apes.models.InternalFormat;
 import apes.lib.SampleHelper;
+import apes.models.InternalFormat;
+import apes.models.Player;
 
 /**
  * View for all channel graphs.
@@ -164,7 +163,6 @@ public class ChannelView extends JPanel implements Runnable
   {
     for(ChannelView.Graph graph : graphs)
     {
-      double d = System.currentTimeMillis();
       graph.updateGraph();
     }
   }

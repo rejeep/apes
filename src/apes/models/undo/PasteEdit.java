@@ -1,11 +1,11 @@
 package apes.models.undo;
 
-import apes.models.InternalFormat;
-import apes.models.MemoryHandler;
-
 import java.awt.Point;
 
 import javax.swing.undo.AbstractUndoableEdit;
+
+import apes.models.InternalFormat;
+import apes.models.MemoryHandler;
 
 /**
  * PasteEdit records changes which occurs after performing a paste

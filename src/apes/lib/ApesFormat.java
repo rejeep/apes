@@ -1,9 +1,10 @@
 package apes.lib;
 
 import java.io.File;
+
+import apes.exceptions.UnidentifiedLanguageException;
 import apes.interfaces.AudioFormatPlugin;
 import apes.plugins.WaveFileFormat;
-import apes.exceptions.UnidentifiedLanguageException;
 
 /**
  * This class is to get information about what format a file is in.

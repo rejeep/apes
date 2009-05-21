@@ -1,10 +1,11 @@
 package apes.models;
 
 import java.awt.Point;
-import java.lang.InterruptedException;
-import javax.sound.sampled.SourceDataLine;
-import apes.lib.Config;
 import java.util.Observable;
+
+import javax.sound.sampled.SourceDataLine;
+
+import apes.lib.Config;
 
 /**
  * This class plays an internal format. TODO: May be a bug when

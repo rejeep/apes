@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -49,7 +50,6 @@ import apes.views.buttons.ZoomOutButton;
 import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
-import java.awt.FlowLayout;
 
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -81,8 +81,6 @@ public class ApplicationView extends JFrame
 
   private PlayerController playerController;
 
-  private TabsController tabsController;
-
   /**
    * Creates a new <code>ApplicationView</code> instance.
    * 
@@ -108,8 +106,6 @@ public class ApplicationView extends JFrame
     this.pluginController = pluginController;
     this.helpController = helpController;
     this.playerController = playerController;
-    this.tabsController = tabsController;
-
     // These should by default be white.
     String[] whites = { "Panel", "Label", "Slider", "Frame", "CheckBox", "TextField", "TextArea", "MenuBar", "Menu", "MenuItem" };
 

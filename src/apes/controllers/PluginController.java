@@ -1,19 +1,18 @@
 package apes.controllers;
 
-import java.util.Map;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Map;
+
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
-import java.awt.event.ActionEvent;
-import java.awt.Point;
 
-import apes.views.PluginView;
-import apes.lib.PluginHandler;
-import apes.interfaces.TransformPlugin;
-import apes.views.ApesMenuItem;
 import apes.lib.PlayerHandler;
+import apes.lib.PluginHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
+import apes.views.PluginView;
 
 /**
  * Plugin controller.
