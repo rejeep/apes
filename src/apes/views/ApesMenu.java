@@ -9,9 +9,9 @@ import javax.swing.JMenu;
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
 
+
 /**
- * This extends {@link javax.swing.JMenuItem JMenu} with locale
- * functionality.
+ * This extends {@link javax.swing.JMenuItem JMenu} with locale functionality.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

@@ -2,6 +2,7 @@ package apes.controllers;
 
 import apes.views.HelpView;
 
+
 /**
  * This controller handles all help related events.
  * 

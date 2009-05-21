@@ -11,17 +11,18 @@ import javax.swing.JButton;
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
 
+
 /**
  * <p>
- * Creates a button with an icon on it. The button is stripped down so
- * that all that is visible is the icon. All buttons should have it's
- * own button class and extend this class which does the base job.
+ * Creates a button with an icon on it. The button is stripped down so that all
+ * that is visible is the icon. All buttons should have it's own button class
+ * and extend this class which does the base job.
  * </p>
  * <p>
- * The reason all buttons are in a separate class and that this class
- * does not handle all cases (because it would have been easy), is
- * because there may come additional features for these buttons. And
- * then doing it this way make it more extensible.
+ * The reason all buttons are in a separate class and that this class does not
+ * handle all cases (because it would have been easy), is because there may come
+ * additional features for these buttons. And then doing it this way make it
+ * more extensible.
  * </p>
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
@@ -98,9 +99,8 @@ public abstract class ImageButton extends JButton implements LanguageObserver
   }
 
   /**
-   * Returns the hover button icon. By standard should this image be
-   * named same as the regular image but with "_hover" added to the
-   * end.
+   * Returns the hover button icon. By standard should this image be named same
+   * as the regular image but with "_hover" added to the end.
    * 
    * @return The hover button icon.
    */
@@ -110,9 +110,8 @@ public abstract class ImageButton extends JButton implements LanguageObserver
   }
 
   /**
-   * Returns the click button icon. By standard should this image be
-   * named same as the regular image but with "_click" added to the
-   * end.
+   * Returns the click button icon. By standard should this image be named same
+   * as the regular image but with "_click" added to the end.
    * 
    * @return The click button icon.
    */
@@ -124,8 +123,8 @@ public abstract class ImageButton extends JButton implements LanguageObserver
   /**
    * Returns an ImageIcon object for an image.
    * 
-   * @return An ImageIcon object for an image if it exist. If not, a
-   *         default icon is returned.
+   * @return An ImageIcon object for an image if it exist. If not, a default
+   *         icon is returned.
    */
   private ImageIcon getButtonIcon(String postfix)
   {
@@ -187,8 +186,8 @@ public abstract class ImageButton extends JButton implements LanguageObserver
 
   /**
    * Returns the name and name only of the image. If the image name is
-   * <code>person_with_hat.png</code>, then this method should
-   * return <code>person_with_hat</code>.
+   * <code>person_with_hat.png</code>, then this method should return
+   * <code>person_with_hat</code>.
    * 
    * @return The name of the image without extension.
    */

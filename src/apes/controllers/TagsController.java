@@ -5,6 +5,7 @@ import apes.models.InternalFormat;
 import apes.models.Tags;
 import apes.views.TagsView;
 
+
 /**
  * This class handles events related to tags.
  */

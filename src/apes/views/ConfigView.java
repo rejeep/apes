@@ -21,6 +21,7 @@ import apes.controllers.ConfigController;
 import apes.lib.Language;
 import apes.models.Config;
 
+
 /**
  * A graphical view for the configuration file.
  * 
@@ -44,8 +45,8 @@ public class ConfigView extends JFrame
   private Language language;
 
   /**
-   * Contains all new option names as key. And the component as value.
-   * This is so that the new value can be fetched from the component.
+   * Contains all new option names as key. And the component as value. This is
+   * so that the new value can be fetched from the component.
    */
   private Map<String, Component> newOptions;
 

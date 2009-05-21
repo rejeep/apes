@@ -7,6 +7,7 @@ import java.util.Map;
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;
 
+
 /**
  * A simple silence effect.
  */

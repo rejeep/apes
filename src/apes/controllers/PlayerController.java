@@ -5,6 +5,7 @@ import javax.swing.JSlider;
 import apes.lib.PlayerHandler;
 import apes.views.VolumePanel;
 
+
 /**
  * Controller for the player.
  * 
@@ -70,7 +71,7 @@ public class PlayerController extends ApplicationController
    */
   public void volume()
   {
-    VolumePanel panel = (VolumePanel) ( (JSlider)event.getSource() ).getParent();
+    VolumePanel panel = (VolumePanel)((JSlider)event.getSource()).getParent();
 
     playerHandler.setVolume(panel.getVolume());
 

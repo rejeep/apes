@@ -14,6 +14,7 @@ import apes.models.InternalFormat;
 import apes.models.Player;
 import apes.views.PluginView;
 
+
 /**
  * Plugin controller.
  * 
@@ -43,7 +44,7 @@ public class PluginController extends ApplicationController
    */
   public PluginController(PluginHandler pH)
   {
-    pluginHandler = pH;;
+    pluginHandler = pH;
     this.playerHandler = PlayerHandler.getInstance();
     pluginView = new PluginView(pluginHandler, this);
     pluginView.updateEffectMenu();
@@ -100,7 +101,7 @@ public class PluginController extends ApplicationController
 
     for(String name : names)
     {
-      if(! ( pluginHandler.isLoaded(name) == choices.get(name).isSelected() ))
+      if(!(pluginHandler.isLoaded(name) == choices.get(name).isSelected()))
       {
         if(pluginHandler.isLoaded(name))
         {

@@ -9,10 +9,11 @@ import javax.swing.SingleSelectionModel;
 import apes.lib.PlayerHandler;
 import apes.views.InternalFormatView;
 
+
 /**
- * Keeps track of tabs. All adding and removing of tabs should be done
- * through this model. The view should then listen to this and update
- * itself when something happens.
+ * Keeps track of tabs. All adding and removing of tabs should be done through
+ * this model. The view should then listen to this and update itself when
+ * something happens.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -39,8 +40,7 @@ public class Tabs extends Observable
   /**
    * Adds a new tab.
    * 
-   * @param internalFormatView The internal format view to add to the
-   *          tab panel.
+   * @param internalFormatView The internal format view to add to the tab panel.
    */
   public void add(InternalFormatView internalFormatView)
   {
@@ -54,8 +54,7 @@ public class Tabs extends Observable
   /**
    * Adds a new tab.
    * 
-   * @param internalFormat The internal format to add to the tab
-   *          panel.
+   * @param internalFormat The internal format to add to the tab panel.
    */
   public void add(InternalFormat internalFormat)
   {
@@ -111,12 +110,10 @@ public class Tabs extends Observable
   }
 
   /**
-   * Returns true if <code>tab</code> is in the list of tabs. False
-   * otherwise.
+   * Returns true if <code>tab</code> is in the list of tabs. False otherwise.
    * 
    * @param tab The tab to look for.
-   * @return True if <code>tab</code> is in the list of tabs. False
-   *         otherwise.
+   * @return True if <code>tab</code> is in the list of tabs. False otherwise.
    */
   public boolean contains(Tab tab)
   {
@@ -154,8 +151,8 @@ public class Tabs extends Observable
   }
 
   /**
-   * This class is a tab that holds information about the index and
-   * what internal format view.
+   * This class is a tab that holds information about the index and what
+   * internal format view.
    */
   public class Tab
   {

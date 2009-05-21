@@ -7,9 +7,10 @@ import javax.swing.undo.AbstractUndoableEdit;
 import apes.models.InternalFormat;
 import apes.models.MemoryHandler;
 
+
 /**
- * CutEdit records changes which occurs after performing a cut action.
- * CutEdit provides undo/redo support for CutAction.
+ * CutEdit records changes which occurs after performing a cut action. CutEdit
+ * provides undo/redo support for CutAction.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)
@@ -28,8 +29,8 @@ public class CutEdit extends AbstractUndoableEdit
    * Constructs the CutEdit and performs the cut.
    * 
    * @param c Channel to be affected.
-   * @param marked A point where [x,y] describes the interval to cut
-   *          as absolute indexes.
+   * @param marked A point where [x,y] describes the interval to cut as absolute
+   *          indexes.
    */
   public CutEdit(InternalFormat intForm, Point marked)
   {
@@ -41,8 +42,8 @@ public class CutEdit extends AbstractUndoableEdit
   }
 
   /**
-   * Performs the action of cutting the selected interval from the
-   * selected Channel.
+   * Performs the action of cutting the selected interval from the selected
+   * Channel.
    */
   @Override
   public void redo()
@@ -53,8 +54,7 @@ public class CutEdit extends AbstractUndoableEdit
   }
 
   /**
-   * Undoes the cutting by pasting the cutout into the file at
-   * selected index.
+   * Undoes the cutting by pasting the cutout into the file at selected index.
    */
   @Override
   public void undo()
@@ -77,8 +77,7 @@ public class CutEdit extends AbstractUndoableEdit
   }
 
   /**
-   * Returns an array of Samples containing all samples cut from the
-   * Channel.
+   * Returns an array of Samples containing all samples cut from the Channel.
    * 
    * @return Returns cutout.
    */

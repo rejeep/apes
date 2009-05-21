@@ -12,12 +12,14 @@ import apes.models.Player;
 import apes.views.ChannelView;
 import apes.views.InternalFormatStatusPanel;
 
+
 /**
  * Channel controller.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
-public class ChannelController extends ApplicationController implements MouseListener, MouseMotionListener, MouseWheelListener
+public class ChannelController extends ApplicationController implements MouseListener,
+    MouseMotionListener, MouseWheelListener
 {
   /**
    * True if mouse if pressed. False otherwise.
@@ -225,8 +227,7 @@ public class ChannelController extends ApplicationController implements MouseLis
   }
 
   /**
-   * Returns true if there's any selection in the graph. False
-   * otherwise.
+   * Returns true if there's any selection in the graph. False otherwise.
    * 
    * @return True if selection. False otherwise.
    */
@@ -239,8 +240,7 @@ public class ChannelController extends ApplicationController implements MouseLis
   }
 
   /**
-   * Returns true if <code>x</code> and <code>y</code> is in the
-   * graph panel.
+   * Returns true if <code>x</code> and <code>y</code> is in the graph panel.
    * 
    * @param x A value on the x-axis.
    * @param y A value on the y-axis.
@@ -248,6 +248,7 @@ public class ChannelController extends ApplicationController implements MouseLis
    */
   public boolean inView(int x, int y)
   {
-    return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView.getGraphHeight() - 1;
+    return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView
+        .getGraphHeight() - 1;
   }
 }

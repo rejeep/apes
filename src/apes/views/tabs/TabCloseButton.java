@@ -7,6 +7,7 @@ import javax.swing.JButton;
 
 import apes.lib.Language;
 
+
 /**
  * A tab close button.
  * 

@@ -16,6 +16,7 @@ import javax.swing.WindowConstants;
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;
 
+
 /**
  * Effect plugin that fades in or out.
  */
@@ -130,9 +131,9 @@ public class FadeTransform implements TransformPlugin, ActionListener
       else
       {
         scale = (float)j / steps;
-        scale = ( 1.0f - scale );
+        scale = (1.0f - scale);
       }
-      curr = selection.x + ( j * interval );
+      curr = selection.x + (j * interval);
       internalFormat.scaleSamples(curr, curr + interval - 1, scale);
     }
 

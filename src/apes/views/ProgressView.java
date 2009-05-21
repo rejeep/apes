@@ -2,9 +2,10 @@ package apes.views;
 
 import javax.swing.JProgressBar;
 
+
 /**
- * A progress bar that gives an indication of how far a task is. TODO:
- * How to use.
+ * A progress bar that gives an indication of how far a task is. TODO: How to
+ * use.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

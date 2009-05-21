@@ -9,9 +9,10 @@ import apes.interfaces.AudioFormatPlugin;
 import apes.models.InternalFormat;
 import apes.views.ApesError;
 
+
 /**
- * Create a new object of this class with a file on the system. Then
- * you can get all kinds of information and other objects.
+ * Create a new object of this class with a file on the system. Then you can get
+ * all kinds of information and other objects.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -76,8 +77,8 @@ public class ApesFile
    * Creates new internal format from the file.
    * 
    * @return A new internal format.
-   * @exception Exception Is something went wrong in creating the
-   *              internal format.
+   * @exception Exception Is something went wrong in creating the internal
+   *              format.
    */
   public InternalFormat getInternalFormat() throws Exception
   {
@@ -89,8 +90,8 @@ public class ApesFile
   /**
    * Opens a file with a graphical interface.
    * 
-   * @return An <code>ApesFile</code> for the selected file, or null
-   *         of no file was selected.
+   * @return An <code>ApesFile</code> for the selected file, or null of no file
+   *         was selected.
    */
   public static ApesFile open()
   {

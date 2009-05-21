@@ -2,7 +2,6 @@ package apes.models;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 
 
 /**
@@ -95,8 +94,7 @@ public class Config extends ApesConfiguration
   /**
    * Get the value for <code>key</code>.
    * 
-   * @param key
-   *          The configuration key.
+   * @param key The configuration key.
    * @return the value for <code>key</code>.
    */
   public String getOption(String key)
@@ -108,8 +106,7 @@ public class Config extends ApesConfiguration
    * Same as {@link Config#getOption getOption} except that the value will be
    * true or false instead of "true" and "false".
    * 
-   * @param key
-   *          The configuration key.
+   * @param key The configuration key.
    * @return the value for <code>key</code> casted to a boolean. "true" option
    *         will return true. Everything else will return false.
    */
@@ -122,11 +119,9 @@ public class Config extends ApesConfiguration
    * Same as {@link Config#getOption getOption} except that the value will be
    * not be a string, but an integer.
    * 
-   * @param key
-   *          The configuration key.
+   * @param key The configuration key.
    * @return the value for <code>key</code> casted to an integer.
-   * @exception NumberFormatException
-   *              if there was no value to key.
+   * @exception NumberFormatException if there was no value to key.
    */
   public int getIntOption(String key) throws NumberFormatException
   {
@@ -136,12 +131,9 @@ public class Config extends ApesConfiguration
   /**
    * Adds an option.
    * 
-   * @param key
-   *          The option key.
-   * @param default_value
-   *          The default value.
-   * @param type
-   *          The type (string, integer, boolean).
+   * @param key The option key.
+   * @param default_value The default value.
+   * @param type The type (string, integer, boolean).
    */
   public void addOption(String key, String default_value, Type type)
   {
@@ -153,8 +145,7 @@ public class Config extends ApesConfiguration
   /**
    * Return the types map.
    * 
-   * @param key
-   *          The configuration key.
+   * @param key The configuration key.
    * @return The map containing all types.
    */
   public Type getType(String key)
@@ -166,12 +157,6 @@ public class Config extends ApesConfiguration
   public String getConfigurationFileName()
   {
     return "config";
-  }
-  
-  @Override
-  public void match(String line, Matcher matcher)
-  {
-    options.put(matcher.group(1), matcher.group(3));
   }
 
   /**

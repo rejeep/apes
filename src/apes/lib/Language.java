@@ -7,9 +7,10 @@ import java.util.Observable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
- * Singleton class for setting the language of the application also
- * works as an observable for ApesObserver.
+ * Singleton class for setting the language of the application also works as an
+ * observable for ApesObserver.
  * 
  * @author Simon Holm
  */
@@ -41,9 +42,9 @@ public class Language extends Observable
   private String language;
 
   /**
-   * Creates a new <code>Language</code> instance. Private so that
-   * you cant create an object of this class without using {@link
-   * Language#getInstance getInstance}.
+   * Creates a new <code>Language</code> instance. Private so that you cant
+   * create an object of this class without using {@link Language#getInstance
+   * getInstance}.
    */
   private Language()
   {
@@ -107,8 +108,8 @@ public class Language extends Observable
   }
 
   /**
-   * Loads the dictionary into the memory from the file specified.
-   * This will also notify all the observers looking at Language.
+   * Loads the dictionary into the memory from the file specified. This will
+   * also notify all the observers looking at Language.
    * 
    * @throws Exception Throws an exception if the parsing goes wrong.
    */
@@ -120,8 +121,8 @@ public class Language extends Observable
   }
 
   /**
-   * Returns an array of all available languages. The array will
-   * contain the name of the locale. For example: [ "en", "sv", "dk" ]
+   * Returns an array of all available languages. The array will contain the
+   * name of the locale. For example: [ "en", "sv", "dk" ]
    * 
    * @return All available languages.
    */
@@ -167,8 +168,8 @@ public class Language extends Observable
   private class LanguageFileFilter implements FilenameFilter
   {
     /**
-     * Returns true if the given file matches a valid language file.
-     * False otherwise.
+     * Returns true if the given file matches a valid language file. False
+     * otherwise.
      * 
      * @param dir The directory.
      * @param name The file name.

@@ -2,9 +2,10 @@ package apes.controllers;
 
 import apes.lib.Language;
 
+
 /**
- * This class handles the program languages. For example it switches
- * between them.
+ * This class handles the program languages. For example it switches between
+ * them.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

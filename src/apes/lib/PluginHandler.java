@@ -15,6 +15,7 @@ import java.util.Map;
 import apes.interfaces.AudioFormatPlugin;
 import apes.interfaces.TransformPlugin;
 
+
 /**
  * Class for loading/unloading plugins.
  * 
@@ -141,9 +142,8 @@ public class PluginHandler
   }
 
   /**
-   * Given a path pointing to a directory or a file, will try to add
-   * all plugins in the directory or the plugin the path was pointing
-   * to.
+   * Given a path pointing to a directory or a file, will try to add all plugins
+   * in the directory or the plugin the path was pointing to.
    * 
    * @param str A path pointing to either a file or a directory.
    */
@@ -172,7 +172,8 @@ public class PluginHandler
   {
     for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("transform"))
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType()
+          .equals("transform"))
       {
         return plugins.get(i).getTransformObject();
       }
@@ -190,7 +191,8 @@ public class PluginHandler
   {
     for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("format"))
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType()
+          .equals("format"))
       {
         return plugins.get(i).getAudioFormatObject();
       }
@@ -213,9 +215,8 @@ public class PluginHandler
         {
           plugins.get(i).unLoad();
           /*
-           * discard the old classloader to remove any references to
-           * the class. Read somewhere that two gc() should do the
-           * trick :-)
+           * discard the old classloader to remove any references to the class.
+           * Read somewhere that two gc() should do the trick :-)
            */
           cl = new PluginLoader();
           System.gc();
@@ -285,7 +286,7 @@ public class PluginHandler
   private void loadFile(String path, String name, PluginInfo pi)
   {
     Class<?> cls;
-    
+
     try
     {
       if(!plugins.contains(pi))
@@ -311,8 +312,8 @@ public class PluginHandler
   }
 
   /**
-   * Creates a new instance of the class and adds it to the list of
-   * loaded plugins.
+   * Creates a new instance of the class and adds it to the list of loaded
+   * plugins.
    * 
    * @param cls Class object.
    * @param pi The PluginInfo object to assign it to.
@@ -385,7 +386,7 @@ class PluginLoader extends ClassLoader
       FileInputStream in = new FileInputStream(location);
       ByteArrayOutputStream buf = new ByteArrayOutputStream();
       int c;
-      while( ( c = in.read() ) != -1)
+      while((c = in.read()) != -1)
       {
         buf.write(c);
       }

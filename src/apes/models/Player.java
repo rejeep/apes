@@ -7,9 +7,8 @@ import javax.sound.sampled.SourceDataLine;
 
 
 /**
- * This class plays an internal format. TODO: May be a bug when
- * reaching end of file, making strange noises without stopping or
- * something
+ * This class plays an internal format. TODO: May be a bug when reaching end of
+ * file, making strange noises without stopping or something
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -28,7 +27,8 @@ public class Player extends Observable implements Runnable
   /**
    * Different status a Player can be in.
    */
-  public enum Status {
+  public enum Status
+  {
     PLAY, PAUSE, STOP, WAIT
   };
 
@@ -58,14 +58,13 @@ public class Player extends Observable implements Runnable
   private int moving;
 
   /**
-   * Tells how long a wind should be. The larger value, the less wind
-   * amount.
+   * Tells how long a wind should be. The larger value, the less wind amount.
    */
   private int wind;
 
   /**
-   * This class must be run as a thread. Otherwise nothing can be done
-   * while playing.
+   * This class must be run as a thread. Otherwise nothing can be done while
+   * playing.
    */
   private Thread thread;
 
@@ -94,8 +93,8 @@ public class Player extends Observable implements Runnable
   }
 
   /**
-   * Pauses playing if any. TODO: Should stop at once when pause is
-   * pressed. But calling line.stop() does not help.
+   * Pauses playing if any. TODO: Should stop at once when pause is pressed. But
+   * calling line.stop() does not help.
    */
   public void pause()
   {
@@ -167,8 +166,7 @@ public class Player extends Observable implements Runnable
   }
 
   /**
-   * Returns the <code>InternalFormat</code> connected to this
-   * player.
+   * Returns the <code>InternalFormat</code> connected to this player.
    * 
    * @return the <code>InternalFormat</code>.
    */
@@ -389,65 +387,64 @@ public class Player extends Observable implements Runnable
     int start = getStart();
     int stop = getStop();
 
-    if( ( stop != 0 && start != stop && currentSample > stop ) || ( currentSample > getSampleAmount() ))
+    if((stop != 0 && start != stop && currentSample > stop) || (currentSample > getSampleAmount()))
       return false;
     return true;
   }
 
   /**
-   * Will run in a thread. And for each time in the loop the current
-   * status is checked. And depending on status, sound will be played,
-   * paused or stopped.
+   * Will run in a thread. And for each time in the loop the current status is
+   * checked. And depending on status, sound will be played, paused or stopped.
    */
   public void run()
   {
     while(true)
     {
-      switch(status)
+      switch (status)
       {
-      case WAIT:
-        break;
-      case PLAY:
-        if(playingAllowed())
-        {
-          int chunk = CHUNK_SIZE;
-          if(getSampleAmount() < currentSample + CHUNK_SIZE)
-            chunk = getSampleAmount() - currentSample;
-          byte[] data = internalFormat.getChunk(currentSample, chunk);
-
-          line.write(data, 0, data.length);
-
-          increaseCurrentSample();
-        }
-        else
-        {
-          if(currentSample > getSampleAmount())
+        case WAIT:
+          break;
+        case PLAY:
+          if(playingAllowed())
           {
-            stop();
+            int chunk = CHUNK_SIZE;
+            if(getSampleAmount() < currentSample + CHUNK_SIZE)
+              chunk = getSampleAmount() - currentSample;
+            byte[] data = internalFormat.getChunk(currentSample, chunk);
+
+            line.write(data, 0, data.length);
+
+            increaseCurrentSample();
           }
           else
           {
-            pause();
-            setCurrentSample(getStart());
+            if(currentSample > getSampleAmount())
+            {
+              stop();
+            }
+            else
+            {
+              pause();
+              setCurrentSample(getStart());
+            }
           }
-        }
-        // If this is not present there will be no playing.
-        try
-        {
-          Thread.sleep(0);
-        }
-        catch(InterruptedException e)
-        {
-          e.printStackTrace();
-        }
-        break;
-      case STOP:
-        currentSample = getStart() == getStop() ? 0 : getStart();
-        setStatus(Status.WAIT);
-        break;
-      case PAUSE:
-        setStatus(Status.WAIT);
-        break;
+          // If this is not present there will be no playing.
+          try
+          {
+            Thread.sleep(0);
+          }
+          catch(InterruptedException e)
+          {
+            e.printStackTrace();
+          }
+          break;
+        case STOP:
+          currentSample = getStart() == getStop() ? 0 : getStart();
+          setStatus(Status.WAIT);
+          break;
+        case PAUSE:
+          setStatus(Status.WAIT);
+          break;
       }
     }
   }

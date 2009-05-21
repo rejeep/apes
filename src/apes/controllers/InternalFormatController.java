@@ -20,6 +20,7 @@ import apes.views.ApesError;
 import apes.views.ApesMessage;
 import apes.views.InternalFormatView;
 
+
 /**
  * Controller for the internal format.
  * 
@@ -152,8 +153,8 @@ public class InternalFormatController extends ApplicationController
       {
         // Make sure that the center sample is at a correct and valid
         // location.
-        int left = center - ( zoom / 2 );
-        int right = center + ( zoom / 2 );
+        int left = center - (zoom / 2);
+        int right = center + (zoom / 2);
         int stop = player.getSampleAmount();
 
         if(left < 0)
@@ -162,7 +163,7 @@ public class InternalFormatController extends ApplicationController
         }
         else if(right > stop)
         {
-          center = stop - ( zoom / 2 );
+          center = stop - (zoom / 2);
         }
 
         // Set zoom options.
@@ -224,7 +225,7 @@ public class InternalFormatController extends ApplicationController
   public void cut()
   {
     edit = new CutEdit(internalFormat, selection);
-    MemoryHandler cutout = ( (CutEdit)edit ).getCutout();
+    MemoryHandler cutout = ((CutEdit)edit).getCutout();
     clipboard.dispose();
     clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory() - 1, 0);
     apesMessage.print("cut");
@@ -296,7 +297,7 @@ public class InternalFormatController extends ApplicationController
     if(start != stop)
     {
       zoom = stop - start;
-      center = start + ( zoom / 2 );
+      center = start + (zoom / 2);
 
       player.setStart(0);
       player.setStop(0);
@@ -336,7 +337,8 @@ public class InternalFormatController extends ApplicationController
         }
         else if(format.isApes())
         {
-          internalFormatView = new InternalFormatView(InternalFormat.load(apesFile.getParent(), apesFile.getName()));
+          internalFormatView = new InternalFormatView(InternalFormat.load(apesFile
+              .getParent(), apesFile.getName()));
           tabs.add(internalFormatView);
         }
 
@@ -409,7 +411,8 @@ public class InternalFormatController extends ApplicationController
       try
       {
         if(player.getStop() != 0 && player.getStart() != player.getStop())
-          wav.exportFile(internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
+          wav.exportFile(internalFormat, apesFile.getFile(), player.getStart(), player
+              .getStop());
         else
           wav.exportFile(internalFormat, apesFile.getFile());
 

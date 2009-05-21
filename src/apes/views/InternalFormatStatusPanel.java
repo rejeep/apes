@@ -18,9 +18,9 @@ import apes.lib.SampleHelper;
 import apes.models.InternalFormat;
 import apes.models.Player;
 
+
 /**
- * Panel with information about the internal format and some controls
- * for it.
+ * Panel with information about the internal format and some controls for it.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -67,14 +67,14 @@ public class InternalFormatStatusPanel extends JPanel
   private Player player;
 
   /**
-   * Contains a mark as key and a combo box as value. Used to be able
-   * to write more dynamic code.
+   * Contains a mark as key and a combo box as value. Used to be able to write
+   * more dynamic code.
    */
   private Map<Mark, JComboBox> unitMap;
 
   /**
-   * Contains a mark as key and a text field as value. Used to be able
-   * to write more dynamic code.
+   * Contains a mark as key and a text field as value. Used to be able to write
+   * more dynamic code.
    */
   private Map<Mark, JTextField> valueMap;
 
@@ -86,7 +86,8 @@ public class InternalFormatStatusPanel extends JPanel
   /**
    * The different marks.
    */
-  private enum Mark {
+  private enum Mark
+  {
     START, STOP, PLAYER
   };
 
@@ -151,7 +152,8 @@ public class InternalFormatStatusPanel extends JPanel
     top.add(header);
 
     String[] labels = { "sample_rate", "num_channels", "num_samples", "bytes_per_sample", "bits_per_sample" };
-    int[] values = { internalFormat.getSampleRate(), internalFormat.getNumChannels(), internalFormat.getSampleAmount(), internalFormat.bytesPerSample, internalFormat.bitsPerSample };
+    int[] values = { internalFormat.getSampleRate(), internalFormat.getNumChannels(), internalFormat
+        .getSampleAmount(), internalFormat.bytesPerSample, internalFormat.bitsPerSample };
 
     // Add all labels and values.
     for(int i = 0; i < labels.length; i++)
@@ -235,8 +237,8 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * I called when something has been changed in the player. This then
-   * updates the fields.
+   * I called when something has been changed in the player. This then updates
+   * the fields.
    */
   public void updatePlayer()
   {
@@ -368,8 +370,7 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns true if <code>mark</code> is in samples. False
-   * otherwise.
+   * Returns true if <code>mark</code> is in samples. False otherwise.
    * 
    * @param mark The mark.
    * @return True if in samples. False otherwise.
@@ -380,8 +381,7 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns true if <code>mark</code> is in milliseconds. False
-   * otherwise.
+   * Returns true if <code>mark</code> is in milliseconds. False otherwise.
    * 
    * @param mark The mark.
    * @return True if in milliseconds. False otherwise.
@@ -392,8 +392,7 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns true if <code>mark</code> is in seconds. False
-   * otherwise.
+   * Returns true if <code>mark</code> is in seconds. False otherwise.
    * 
    * @param mark The mark.
    * @return True if in seconds. False otherwise.
@@ -404,8 +403,7 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Returns true if <code>mark</code> is in minutes. False
-   * otherwise.
+   * Returns true if <code>mark</code> is in minutes. False otherwise.
    * 
    * @param mark The mark.
    * @return True if in minutes. False otherwise.
@@ -420,8 +418,8 @@ public class InternalFormatStatusPanel extends JPanel
    * 
    * @param mark The mark.
    * @param index The combo box index.
-   * @return True if the combo box index is the same as
-   *         <code>index</code>. False otherwise.
+   * @return True if the combo box index is the same as <code>index</code>.
+   *         False otherwise.
    */
   private boolean isUnit(Mark mark, int index)
   {
@@ -429,8 +427,8 @@ public class InternalFormatStatusPanel extends JPanel
   }
 
   /**
-   * Fetches the value from <code>textField</code>. If a valid
-   * number, that is returned. Otherwise zero is returned.
+   * Fetches the value from <code>textField</code>. If a valid number, that is
+   * returned. Otherwise zero is returned.
    * 
    * @param textField The text field.
    * @return The text field value, or zero if not valid.

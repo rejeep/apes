@@ -3,6 +3,7 @@ package apes.models;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Wrapper class enabling tag usage within the program.
  * 
@@ -11,8 +12,7 @@ import java.util.Map;
 public class Tags
 {
   /**
-   * Contains all tags. Example: { "artist" => "Madonna", "track" =>
-   * "Tell Me" }
+   * Contains all tags. Example: { "artist" => "Madonna", "track" => "Tell Me" }
    */
   Map<String, String> tags;
 

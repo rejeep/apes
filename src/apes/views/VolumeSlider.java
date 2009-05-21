@@ -5,6 +5,7 @@ import javax.swing.JSlider;
 import apes.lib.PlayerHandler;
 import apes.models.Config;
 
+
 /**
  * Slider that changes the volume.
  * 

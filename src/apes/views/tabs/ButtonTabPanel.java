@@ -7,9 +7,10 @@ import javax.swing.JPanel;
 
 import apes.controllers.TabsController;
 
+
 /**
- * Is a panel that is placed on a tab. A label and a close button is
- * placed on in.
+ * Is a panel that is placed on a tab. A label and a close button is placed on
+ * in.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

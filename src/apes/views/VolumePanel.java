@@ -10,13 +10,14 @@ import apes.controllers.PlayerController;
 import apes.lib.PlayerHandler;
 import apes.models.Config;
 
+
 /**
  * <p>
  * This is a panel that volume components are placed on.
  * </p>
  * <p>
- * The label can be configured with the option volume_label_format.
- * The value can be anything, but these replacements will be done:
+ * The label can be configured with the option volume_label_format. The value
+ * can be anything, but these replacements will be done:
  * </p>
  * <ul>
  * <li>%v - The current volume</li>
@@ -115,8 +116,8 @@ public class VolumePanel extends JPanel
   }
 
   /**
-   * Returns <code>volumeLabelFormat</code> but with
-   * <code>target</code> substituted with <code>replacement</code>.
+   * Returns <code>volumeLabelFormat</code> but with <code>target</code>
+   * substituted with <code>replacement</code>.
    * 
    * @param target the target value (%x).
    * @param replacement the replacement.
@@ -128,8 +129,8 @@ public class VolumePanel extends JPanel
   }
 
   /**
-   * Returns <code>volumeLabelFormat</code> but with
-   * <code>target</code> substituted with <code>replacement</code>.
+   * Returns <code>volumeLabelFormat</code> but with <code>target</code>
+   * substituted with <code>replacement</code>.
    * 
    * @param target the target value (%x).
    * @param replacement the replacement.

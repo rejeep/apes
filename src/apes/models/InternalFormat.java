@@ -7,9 +7,10 @@ import java.util.Observable;
 
 import apes.plugins.WaveFileFormat;
 
+
 /**
- * Describes the audio in a format suitable for internal
- * representation in the program.
+ * Describes the audio in a format suitable for internal representation in the
+ * program.
  * 
  * @author Daniel Kvick (kvick@student.chalmers.se)
  */
@@ -50,8 +51,7 @@ public class InternalFormat extends Observable
   private int sampleAmount;
 
   /**
-   * Constructor setting up the Internal Format according to the
-   * supplied data.
+   * Constructor setting up the Internal Format according to the supplied data.
    * 
    * @param tags Tag information of the audio file.
    * @param samplerate Amount of samples per second.
@@ -117,8 +117,7 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * Returns the sample rate, that is, how many samples make up one
-   * second.
+   * Returns the sample rate, that is, how many samples make up one second.
    * 
    * @return Returns the sample rate.
    */
@@ -129,15 +128,14 @@ public class InternalFormat extends Observable
 
   /**
    * Returns a chunk of data in PCM format. The chunk contains
-   * <code>amount</code> samples from each channel starting from
-   * absolute index <code>index</code>.
+   * <code>amount</code> samples from each channel starting from absolute index
+   * <code>index</code>.
    * 
-   * @param indexS The first sample to include in the chunk, as an
-   *          absolute index.
-   * @param amountS Amount of samples in the chunk. If there are fewer
-   *          than <code>amount</code> samples after
-   *          <code>index</code>, all remaining samples are
-   *          included.
+   * @param indexS The first sample to include in the chunk, as an absolute
+   *          index.
+   * @param amountS Amount of samples in the chunk. If there are fewer than
+   *          <code>amount</code> samples after <code>index</code>, all
+   *          remaining samples are included.
    * @return A byte array containing the requested data.
    */
   public byte[] getChunk(long indexS, int amountS)
@@ -189,17 +187,17 @@ public class InternalFormat extends Observable
       buffer = ByteBuffer.wrap(getSamples(iS, iS + nToRead));
       for(int i = 0; i < nToRead; i += step, c++)
       {
-        switch(bytesPerSample)
+        switch (bytesPerSample)
         {
-        case 2:
-          total += buffer.getShort((int) ( samplesToBytes(i) + channel * bytesPerSample ));
-          break;
-        case 4:
-          total += buffer.getInt((int) ( samplesToBytes(i) + channel * bytesPerSample ));
-          break;
-        default:
-          System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE AVERAGING");
-          System.exit(1);
+          case 2:
+            total += buffer.getShort((int)(samplesToBytes(i) + channel * bytesPerSample));
+            break;
+          case 4:
+            total += buffer.getInt((int)(samplesToBytes(i) + channel * bytesPerSample));
+            break;
+          default:
+            System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE AVERAGING");
+            System.exit(1);
         }
       }
       iS += nToRead;
@@ -212,8 +210,7 @@ public class InternalFormat extends Observable
    * Save file as TODO: add error handling, or some sort of response
    */
   /**
-   * Saves the internal format to the specifed location with the
-   * specified name.
+   * Saves the internal format to the specifed location with the specified name.
    * 
    * @param filePath The location the file should be saved to.
    * @param fileName The name of the file to be stored.
@@ -298,7 +295,8 @@ public class InternalFormat extends Observable
 
     try
     {
-      b = memoryHandler.read(samplesToBytes(indexS) + channel * bytesPerSample, bytesPerSample);
+      b = memoryHandler
+          .read(samplesToBytes(indexS) + channel * bytesPerSample, bytesPerSample);
     }
     catch(IOException e)
     {
@@ -306,14 +304,13 @@ public class InternalFormat extends Observable
     }
 
     for(int i = 0; i < bytesPerSample; i++)
-      amplitude += b[i] << ( i * 8 );
+      amplitude += b[i] << (i * 8);
 
     return amplitude;
   }
 
   /**
-   * Returns an array of Samples[] containing the data copied from
-   * each channel.
+   * Returns an array of Samples[] containing the data copied from each channel.
    * 
    * @param startS The first index to copy.
    * @param stopS The last index to copy.
@@ -327,7 +324,8 @@ public class InternalFormat extends Observable
 
     try
     {
-      return memoryHandler.read(samplesToBytes(startS), (int)samplesToBytes(stopS - startS + 1));
+      return memoryHandler
+          .read(samplesToBytes(startS), (int)samplesToBytes(stopS - startS + 1));
     }
     catch(IOException e)
     {
@@ -347,7 +345,7 @@ public class InternalFormat extends Observable
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
 
-    long lengthS = ( stopS - startS + 1 );
+    long lengthS = (stopS - startS + 1);
     try
     {
       if(memoryHandler.free(samplesToBytes(startS), samplesToBytes(lengthS)))
@@ -368,14 +366,13 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * Removes the samples in the specified interval from all channel
-   * and returns them in a Samples[][] containing a Samples[] for each
-   * channel.
+   * Removes the samples in the specified interval from all channel and returns
+   * them in a Samples[][] containing a Samples[] for each channel.
    * 
    * @param startS First sample to cut away.
    * @param stopS Last sample to cut away.
-   * @return An array containing arrays of Samples objects of the data
-   *         removed from the channels.
+   * @return An array containing arrays of Samples objects of the data removed
+   *         from the channels.
    */
   public void cutSamples(long startS, long stopS, MemoryHandler mH)
   {
@@ -450,7 +447,7 @@ public class InternalFormat extends Observable
    */
   public void pasteSamples(long startS, MemoryHandler m)
   {
-    memoryHandler.transfer(m, 0, (int) ( m.getUsedMemory() - 1 ), samplesToBytes(startS));
+    memoryHandler.transfer(m, 0, (int)(m.getUsedMemory() - 1), samplesToBytes(startS));
     sampleAmount += bytesToSamples(m.getUsedMemory());
     updated();
   }
@@ -478,9 +475,9 @@ public class InternalFormat extends Observable
 
     for(long iS = startS; iS < stopS; iS++)
     {
-      if( ( stopS - iS + 1 ) < IO_SIZE)
+      if((stopS - iS + 1) < IO_SIZE)
       {
-        nToWriteS = (int) ( stopS - iS + 1 );
+        nToWriteS = (int)(stopS - iS + 1);
         if(alpha == 0)
         {
           toWrite = ByteBuffer.wrap(new byte[(int)samplesToBytes(nToWriteS)]);
@@ -495,17 +492,17 @@ public class InternalFormat extends Observable
 
         for(int index = 0; index < nToWriteS; ++index)
         {
-          switch(bytesPerSample)
+          switch (bytesPerSample)
           {
-          case 2:
-            toWrite.putShort(index * 2, (short)Math.round(toWrite.getShort() * alpha));
-            break;
-          case 4:
-            toWrite.putInt(index * 4, Math.round(toWrite.getInt() * alpha));
-            break;
-          default:
-            System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
-            System.exit(1);
+            case 2:
+              toWrite.putShort(index * 2, (short)Math.round(toWrite.getShort() * alpha));
+              break;
+            case 4:
+              toWrite.putInt(index * 4, Math.round(toWrite.getInt() * alpha));
+              break;
+            default:
+              System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
+              System.exit(1);
           }
         }
       }
@@ -542,6 +539,6 @@ public class InternalFormat extends Observable
    */
   public long bytesToSamples(long bytes)
   {
-    return bytes / ( bytesPerSample * channels );
+    return bytes / (bytesPerSample * channels);
   }
 }

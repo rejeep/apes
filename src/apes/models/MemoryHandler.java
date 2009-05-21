@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+
 /**
  * This is not a class.
  * 
@@ -47,12 +48,12 @@ public class MemoryHandler implements Serializable
     int frameL = find(index + bytes - 1);
 
     // Find new size
-    Frame fstFrame = ( frameF == -1 ? swap(index) : frameTable[frameF] );
-    Frame lstFrame = ( frameL == -1 ? swap(index + bytes - 1) : frameTable[frameL] );
+    Frame fstFrame = (frameF == -1 ? swap(index) : frameTable[frameF]);
+    Frame lstFrame = (frameL == -1 ? swap(index + bytes - 1) : frameTable[frameL]);
 
     long firstIndex = fstFrame.page.index;
-    int fstSize = (int) ( index - firstIndex );
-    int lstSize = (int) ( ( lstFrame.data.length + lstFrame.page.index ) - ( index + bytes ) );
+    int fstSize = (int)(index - firstIndex);
+    int lstSize = (int)((lstFrame.data.length + lstFrame.page.index) - (index + bytes));
 
     int size = fstSize + lstSize;
 
@@ -76,7 +77,8 @@ public class MemoryHandler implements Serializable
       byte[] data = new byte[size];
       // Copy arrays
       System.arraycopy(fstFrame.data, 0, data, 0, fstSize);
-      System.arraycopy(lstFrame.data, lstFrame.data.length - lstSize, data, fstSize, lstSize);
+      System
+          .arraycopy(lstFrame.data, lstFrame.data.length - lstSize, data, fstSize, lstSize);
 
       // Copy data
       write(firstIndex, data);
@@ -85,8 +87,8 @@ public class MemoryHandler implements Serializable
   }
 
   /**
-   * Allocates new memory and effectively inserts it at the given
-   * index. Inserted data is to be considered uninitialized.
+   * Allocates new memory and effectively inserts it at the given index.
+   * Inserted data is to be considered uninitialized.
    * 
    * @param index Position in memory where to add new memory.
    * @param bytes Amount of data to allocate, in INTEGER_BYTES.
@@ -105,7 +107,7 @@ public class MemoryHandler implements Serializable
     if(frameI == -1)
     {
       // Doesn't exist
-      if( ( frame = swap(index) ) == null)
+      if((frame = swap(index)) == null)
       {
         createPages(index, bytes);
         return true;
@@ -128,7 +130,7 @@ public class MemoryHandler implements Serializable
     // Create pages
     createPages(firstIndex, bytes + frame.data.length);
 
-    byte[] fst = new byte[(int) ( index - firstIndex + 1 )];
+    byte[] fst = new byte[(int)(index - firstIndex + 1)];
     byte[] lst = new byte[frame.data.length - fst.length];
 
     System.arraycopy(frame.data, 0, fst, 0, fst.length);
@@ -170,7 +172,7 @@ public class MemoryHandler implements Serializable
     }
 
     // Create and add pages
-    int numPages = (int) ( amount / PAGE_SIZE );
+    int numPages = (int)(amount / PAGE_SIZE);
     Page[] pages = new Page[numPages];
     for(int i = 0; i < pages.length - 1; i++)
     {
@@ -183,8 +185,8 @@ public class MemoryHandler implements Serializable
       pageTable.add(page);
     }
 
-    Page page = new Page(PAGE_SIZE + ( amount % PAGE_SIZE ));
-    page.index = index + ( pages.length - 1 ) * PAGE_SIZE;
+    Page page = new Page(PAGE_SIZE + (amount % PAGE_SIZE));
+    page.index = index + (pages.length - 1) * PAGE_SIZE;
 
     pageTable.add(page);
     pages[pages.length - 1] = page;
@@ -198,8 +200,8 @@ public class MemoryHandler implements Serializable
    * Removes a page from the system.
    * 
    * @param page Page to remove.
-   * @return The frame which contained the specified page. If no such
-   *         frame exists, returns null.
+   * @return The frame which contained the specified page. If no such frame
+   *         exists, returns null.
    * @throws IOException IOException
    */
   private Frame destroyPage(Page page) throws IOException
@@ -243,9 +245,9 @@ public class MemoryHandler implements Serializable
     {
       frameI = find(index);
 
-      frame = ( frameI == -1 ? swap(index) : frameTable[frameI] );
+      frame = (frameI == -1 ? swap(index) : frameTable[frameI]);
 
-      int offset = (int) ( index - frame.page.index );
+      int offset = (int)(index - frame.page.index);
       int length = frame.data.length - offset;
 
       if(length > amount)
@@ -273,8 +275,8 @@ public class MemoryHandler implements Serializable
     while(offset < data.length)
     {
       frameI = find(index);
-      frame = ( frameI == -1 ? swap(index) : frameTable[frameI] );
-      targetPos = (int) ( index - frame.page.index );
+      frame = (frameI == -1 ? swap(index) : frameTable[frameI]);
+      targetPos = (int)(index - frame.page.index);
 
       int length = Math.min(frame.data.length - targetPos, data.length - offset);
 
@@ -351,7 +353,7 @@ public class MemoryHandler implements Serializable
     }
     for(Page page : pageTable)
     {
-      if(page.index <= index && ( page.index + page.file.length() ) > index)
+      if(page.index <= index && (page.index + page.file.length()) > index)
       {
         evicted.writeAll();
         evicted.load(page);
@@ -368,7 +370,8 @@ public class MemoryHandler implements Serializable
     for(int i = 0; i < frameTable.length; i++)
     {
       Frame f = frameTable[i];
-      if(f.page != null && ( f.page.index <= index ) && ( f.page.index + f.page.file.length() > index ))
+      if(f.page != null && (f.page.index <= index) && (f.page.index + f.page.file
+          .length() > index))
       {
         return i;
       }

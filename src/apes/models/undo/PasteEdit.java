@@ -7,9 +7,10 @@ import javax.swing.undo.AbstractUndoableEdit;
 import apes.models.InternalFormat;
 import apes.models.MemoryHandler;
 
+
 /**
- * PasteEdit records changes which occurs after performing a paste
- * action. PasteEdit provides undo/redo support for PasteAction.
+ * PasteEdit records changes which occurs after performing a paste action.
+ * PasteEdit provides undo/redo support for PasteAction.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  * @author Johan Åhlander (johan.ahlander@gmail.com)
@@ -30,7 +31,7 @@ public class PasteEdit extends AbstractUndoableEdit
     start = marked.x;
     stop = start + p.getUsedMemory();
     paste = new MemoryHandler();
-    paste.transfer(p, 0, (int) ( p.getUsedMemory() - 1 ), 0);
+    paste.transfer(p, 0, (int)(p.getUsedMemory() - 1), 0);
     redo();
   }
 

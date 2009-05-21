@@ -6,6 +6,7 @@ import apes.exceptions.UnidentifiedLanguageException;
 import apes.interfaces.AudioFormatPlugin;
 import apes.plugins.WaveFileFormat;
 
+
 /**
  * This class is to get information about what format a file is in.
  * 
@@ -32,8 +33,7 @@ public class ApesFormat
    * Returns correct <code>AudioFormatPlugin</code> from file.
    * 
    * @return A new <code>AudioFormatPlugin</code> for file.
-   * @exception UnidentifiedLanguageException If the format is not
-   *              supported.
+   * @exception UnidentifiedLanguageException If the format is not supported.
    */
   public AudioFormatPlugin getAudioFile() throws UnidentifiedLanguageException
   {

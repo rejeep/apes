@@ -7,9 +7,9 @@ import javax.swing.JButton;
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
 
+
 /**
- * Like JButton except that it takes locale tag as argument instead of
- * the text.
+ * Like JButton except that it takes locale tag as argument instead of the text.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

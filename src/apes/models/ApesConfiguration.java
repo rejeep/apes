@@ -58,8 +58,7 @@ public abstract class ApesConfiguration
   /**
    * Creates the configuration folder if it does not exists already.
    * 
-   * @param configurationFolderPath
-   *          Path to the configuration folder.
+   * @param configurationFolderPath Path to the configuration folder.
    * @return The absolute path to the configuration folder.
    */
   private String getConfigurationFolderPath(String configurationFolderPath)
@@ -79,10 +78,9 @@ public abstract class ApesConfiguration
   /**
    * Creates the configuration file if it does not exists already.
    * 
-   * @param configurationFolderPath
-   *          The absolute path to the configuration folder.
-   * @param configurationFileName
-   *          The name of the configuration file.
+   * @param configurationFolderPath The absolute path to the configuration
+   *          folder.
+   * @param configurationFileName The name of the configuration file.
    * @return The absolute path to the configuration file.
    */
   public String getConfigurationFileName(String configurationFolderPath, String configurationFileName)
@@ -211,8 +209,7 @@ public abstract class ApesConfiguration
   /**
    * Returns a string of an option.
    * 
-   * @param key
-   *          The key option.
+   * @param key The key option.
    * @return The option as a string (key = value).
    */
   private String toOption(String key)
@@ -223,8 +220,7 @@ public abstract class ApesConfiguration
   /**
    * Sets the regexp to use when parsing.
    * 
-   * @param regex
-   *          The regex.
+   * @param regex The regex.
    */
   public void setRegex(String regex)
   {
@@ -242,18 +238,32 @@ public abstract class ApesConfiguration
   }
 
   /**
+   * Sets the options.
+   * 
+   * @param options The options.
+   */
+  public void setOptions(Map<String, String> options)
+  {
+    this.options = options;
+  }
+
+  /**
+   * When parsing the file and a match is found, this method is called. If the
+   * regex has been changed, it is most likely that this method should be
+   * overridden in the subclass.
+   * 
+   * @param line The line that matches.
+   * @param matcher The matcher.
+   */
+  public void match(String line, Matcher matcher)
+  {
+    options.put(matcher.group(1), matcher.group(3));
+  }
+
+  /**
    * Returns the configuration file name.
    * 
    * @return The file name.
    */
   public abstract String getConfigurationFileName();
-
-  /**
-   * When parsing the file and a match is found, this method is called. Usually
-   * what should be done is to update the options hash with the option.
-   * 
-   * @param line The line that matches.
-   * @param matcher The matcher.
-   */
-  public abstract void match(String line, Matcher matcher);
 }

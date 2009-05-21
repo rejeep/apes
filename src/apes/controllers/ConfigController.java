@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import apes.models.Config;
 import apes.views.ConfigView;
 
+
 /**
  * Controller for the configuration file.
  * 
@@ -57,7 +58,7 @@ public class ConfigController extends ApplicationController
 
       if(type == Config.Type.INTEGER || type == Config.Type.STRING)
       {
-        value = ( (JTextField)newOptions.get(key) ).getText();
+        value = ((JTextField)newOptions.get(key)).getText();
       }
       else if(type == Config.Type.BOOLEAN)
       {

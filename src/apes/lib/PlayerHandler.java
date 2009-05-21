@@ -12,9 +12,10 @@ import javax.sound.sampled.SourceDataLine;
 import apes.models.InternalFormat;
 import apes.models.Player;
 
+
 /**
- * Wrapper for all players. So instead of calling play on a Player,
- * play in this class is called. It also handles the volume.
+ * Wrapper for all players. So instead of calling play on a Player, play in this
+ * class is called. It also handles the volume.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -36,8 +37,8 @@ public class PlayerHandler
   public static final int MAX_VALUE = 100;
 
   /**
-   * Represents a special kind of data line whose audio data can be
-   * loaded prior to playback.
+   * Represents a special kind of data line whose audio data can be loaded prior
+   * to playback.
    */
   private SourceDataLine line;
 
@@ -75,16 +76,16 @@ public class PlayerHandler
   }
 
   /**
-   * Does some initialization such as fetching the line and getting
-   * volume control. NOTE:
-   * {@link PlayerHandler#setInternalFormat setInternalFormat} must be
-   * called before this.
+   * Does some initialization such as fetching the line and getting volume
+   * control. NOTE: {@link PlayerHandler#setInternalFormat setInternalFormat}
+   * must be called before this.
    */
   private void init()
   {
     try
     {
-      AudioFormat format = new AudioFormat(internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat.getNumChannels(), true, false);
+      AudioFormat format = new AudioFormat(internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat
+          .getNumChannels(), true, false);
       DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
       if(line != null)
@@ -181,7 +182,7 @@ public class PlayerHandler
     {
       this.volume = volume;
 
-      float value = (float) ( Math.log(this.volume / 100.0) / Math.log(10.0) * 20.0 );
+      float value = (float)(Math.log(this.volume / 100.0) / Math.log(10.0) * 20.0);
 
       if(gainControl != null)
       {
@@ -206,12 +207,11 @@ public class PlayerHandler
   }
 
   /**
-   * Sets a new internal format. If a player exists with that
-   * internalFormat, it is used. Otherwise a new Player is created.
+   * Sets a new internal format. If a player exists with that internalFormat, it
+   * is used. Otherwise a new Player is created.
    * 
    * @param internalFormat an <code>InternalFormat</code> value
-   * @return The player that is associated with
-   *         <code>internalFormat</code>.
+   * @return The player that is associated with <code>internalFormat</code>.
    */
   public Player setInternalFormat(InternalFormat internalFormat)
   {
@@ -260,8 +260,7 @@ public class PlayerHandler
   }
 
   /**
-   * Remove the Player that has <code>internalFormat</code> as
-   * internal format.
+   * Remove the Player that has <code>internalFormat</code> as internal format.
    * 
    * @param internalFormat an <code>InternalFormat</code> value
    */

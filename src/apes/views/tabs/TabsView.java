@@ -9,6 +9,7 @@ import apes.controllers.TabsController;
 import apes.models.Tabs;
 import apes.views.InternalFormatView;
 
+
 /**
  * The tabs view is the pane with all tabs.
  * 
@@ -36,8 +37,7 @@ public class TabsView extends JTabbedPane implements Observer
   }
 
   /**
-   * Updates this view. Is called when a tab has been added or
-   * removed.
+   * Updates this view. Is called when a tab has been added or removed.
    * 
    * @param observable The tabs model class.
    * @param object The tab that was added or removed.

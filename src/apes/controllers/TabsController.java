@@ -6,6 +6,7 @@ import apes.views.tabs.ButtonTabPanel;
 import apes.views.tabs.TabCloseButton;
 import apes.views.tabs.TabsView;
 
+
 /**
  * Handles tab actions such as closing or changing a tab.
  * 

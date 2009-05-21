@@ -7,9 +7,10 @@ import javax.swing.JComboBox;
 import apes.interfaces.LanguageObserver;
 import apes.lib.Language;
 
+
 /**
- * Like JComboBox except that it takes an array of locale tags as
- * argument instead of the text.
+ * Like JComboBox except that it takes an array of locale tags as argument
+ * instead of the text.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */

@@ -2,6 +2,7 @@ package apes.models;
 
 import java.util.NoSuchElementException;
 
+
 public class SampleIterator
 {
   /**
@@ -31,9 +32,9 @@ public class SampleIterator
   }
 
   /**
-   * Creates a SampleIterator iterating over all samples in the given
-   * channel starting from the given sample if it exists, otherwise
-   * from the beginning of the channel.
+   * Creates a SampleIterator iterating over all samples in the given channel
+   * starting from the given sample if it exists, otherwise from the beginning
+   * of the channel.
    * 
    * @param iF Internal format to iterate over.
    * @param c Channel of iteration.
@@ -53,8 +54,8 @@ public class SampleIterator
   }
 
   /**
-   * Returns false if there are no more samples in the Iterator.
-   * Otherwise, returns true.
+   * Returns false if there are no more samples in the Iterator. Otherwise,
+   * returns true.
    */
   public boolean hasNext()
   {
@@ -72,7 +73,7 @@ public class SampleIterator
       samplesIndex += intForm.getNumChannels();
       int amplitude = 0;
       for(int i = 0; i < intForm.bytesPerSample; i++)
-        amplitude += bytes[i] << ( i * 8 );
+        amplitude += bytes[i] << (i * 8);
       return amplitude;
     }
     throw new NoSuchElementException();

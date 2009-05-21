@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 
 import apes.lib.Language;
 
+
 /**
- * Use this class to send the user a message. A message can be
- * something like:
+ * Use this class to send the user a message. A message can be something like:
  * 
  * <pre>
  * &quot;Please wait while we are processing your data&quot;
@@ -84,9 +84,9 @@ public class ApesMessage extends JPanel implements Runnable
   }
 
   /**
-   * Prints a message. NOTE: Tag is automatically prepended with
-   * "message.". So if <code>tag</code> is "file.save", the locale
-   * tag should be "message.locale.tag".
+   * Prints a message. NOTE: Tag is automatically prepended with "message.". So
+   * if <code>tag</code> is "file.save", the locale tag should be
+   * "message.locale.tag".
    * 
    * @param tag The locale tag.
    */

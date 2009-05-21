@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * Intended to parse a ApeLang file and store it for later use.
  * 
@@ -58,11 +59,11 @@ public class ApeLang
     String line;
 
     // TODO: Speed up
-    while( ( line = bufferedReader.readLine() ) != null)
+    while((line = bufferedReader.readLine()) != null)
     {
       depth = 0;
       for(int i = 0; line.charAt(i) == ' '; ++i)
-        if( ( i & 1 ) == 1)
+        if((i & 1) == 1)
           depth++;
 
       if(depth == 0 || line.charAt(depth * INDENTATION - 1) == ' ')
@@ -118,8 +119,7 @@ public class ApeLang
    * Looks for the value corresponding to the key.
    * 
    * @param key The key for the word.
-   * @return Returns the word that corresponds to the key in the
-   *         dictionary.
+   * @return Returns the word that corresponds to the key in the dictionary.
    */
   public String get(String key)
   {

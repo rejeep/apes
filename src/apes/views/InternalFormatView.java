@@ -10,6 +10,7 @@ import apes.lib.PlayerHandler;
 import apes.models.InternalFormat;
 import apes.models.Player;
 
+
 /**
  * Contains one ChannelView per channel in the internal format.
  * 

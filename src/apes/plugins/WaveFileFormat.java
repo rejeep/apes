@@ -16,11 +16,11 @@ import apes.models.InternalFormat;
 import apes.models.Tags;
 import apes.views.ProgressView;
 
+
 /**
- * Module used for converting .wav-files to the internal format and
- * converting the internal format to .wav-files. NOTE! This file has
- * no support for more chunks than the necessary. If you want to add
- * support. Read here:
+ * Module used for converting .wav-files to the internal format and converting
+ * the internal format to .wav-files. NOTE! This file has no support for more
+ * chunks than the necessary. If you want to add support. Read here:
  * <ul>
  * <li>http://www.sonicspot.com/guide/wavefiles.html</li>
  * <li>http://ccrma.stanford.edu/courses/422/projects/WaveFormat/</li>
@@ -66,8 +66,8 @@ public class WaveFileFormat implements AudioFormatPlugin
   }
 
   /**
-   * Converts a file from the internal file format to .wav and stores
-   * it on the disk
+   * Converts a file from the internal file format to .wav and stores it on the
+   * disk
    * 
    * @param internalFormat The file to be converted.
    * @param path The path to the folder were the file should be saved.
@@ -80,8 +80,8 @@ public class WaveFileFormat implements AudioFormatPlugin
   }
 
   /**
-   * Converts a file from the internal file format to .wav and stores
-   * it on the disk
+   * Converts a file from the internal file format to .wav and stores it on the
+   * disk
    * 
    * @param internalFormat The file to be converted.
    * @param file File to write to
@@ -95,10 +95,8 @@ public class WaveFileFormat implements AudioFormatPlugin
   /**
    * @param internalFormat The file to be converted.
    * @param file File to write to
-   * @param start Start of interval to copy from in internal format in
-   *          samples
-   * @param stop End of interval to copy from in internal format in
-   *          samples
+   * @param start Start of interval to copy from in internal format in samples
+   * @param stop End of interval to copy from in internal format in samples
    * @throws Exception
    */
   public void exportFile(InternalFormat internalFormat, File file, long startS, long stopS) throws IOException
@@ -115,16 +113,16 @@ public class WaveFileFormat implements AudioFormatPlugin
     short audioFormat = 1;
     short numChannels = (short)internalFormat.getNumChannels();
     int sampleRate = internalFormat.getSampleRate();
-    int byteRate = sampleRate * numChannels * ( internalFormat.bytesPerSample );
-    short blockAlign = (short) ( numChannels * ( internalFormat.bytesPerSample ) );
+    int byteRate = sampleRate * numChannels * (internalFormat.bytesPerSample);
+    short blockAlign = (short)(numChannels * (internalFormat.bytesPerSample));
     short bitsPerSample = (short)internalFormat.bitsPerSample;
     byte[] subchunk2ID = { 'd', 'a', 't', 'a' };
     int subchunk2Size;
 
     long numSamples = stopS - startS;
 
-    subchunk2Size = (int) ( numSamples * numChannels * internalFormat.bytesPerSample );
-    chunkSize = 4 + ( 8 + subchunk1Size ) + ( 8 + subchunk2Size );
+    subchunk2Size = (int)(numSamples * numChannels * internalFormat.bytesPerSample);
+    chunkSize = 4 + (8 + subchunk1Size) + (8 + subchunk2Size);
     data = ByteBuffer.wrap(new byte[44]);
 
     // Start copy data
@@ -159,7 +157,7 @@ public class WaveFileFormat implements AudioFormatPlugin
       {
         byte[] bytes = internalFormat.getChunk(startS + written, IO_CHUNK_SIZE);
         if(bytes == null)
-          bytes = internalFormat.getChunk(startS + written, (int) ( numSamples - written ));
+          bytes = internalFormat.getChunk(startS + written, (int)(numSamples - written));
         written += IO_CHUNK_SIZE;
         fStream.write(bytes);
       }
@@ -168,14 +166,12 @@ public class WaveFileFormat implements AudioFormatPlugin
 
   // TODO: Create a more detailed description of exception
   /**
-   * Imports a wave file, converts it to the internal format and
-   * returns it.
+   * Imports a wave file, converts it to the internal format and returns it.
    * 
    * @param path The path to the folder with the file to be loaded.
    * @param filename The name of the file to be imported.
    * @return Returns the file converted to the internal format
-   * @throws Exception Will throw an exception if something bad
-   *           happens
+   * @throws Exception Will throw an exception if something bad happens
    */
   // TODO: Rewrite
   public InternalFormat importFile(String path, String filename) throws IOException
