@@ -36,6 +36,7 @@ public class PasteEdit extends AbstractUndoableEdit
     redo();
   }
 
+  @Override
   public void redo()
   {
     System.out.println("paste to internalformat");
@@ -44,6 +45,7 @@ public class PasteEdit extends AbstractUndoableEdit
     undoable = true;
   }
 
+  @Override
   public void undo()
   {
     paste.dispose();
@@ -51,11 +53,13 @@ public class PasteEdit extends AbstractUndoableEdit
     undoable = false;
   }
 
+  @Override
   public boolean canRedo()
   {
     return !undoable;
   }
 
+  @Override
   public boolean canUndo()
   {
     return undoable;

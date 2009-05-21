@@ -1,5 +1,6 @@
 package apes.controllers;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -124,11 +125,11 @@ public class ChannelController extends ApplicationController implements MouseLis
     // Is the mouse inside the panel.
     if(inView(x, y))
     {
-      if(e.getModifiers() == MouseEvent.BUTTON1_MASK)
+      if(e.getModifiers() == InputEvent.BUTTON1_MASK)
       {
         player.setMark(mark);
       }
-      else if(e.getModifiers() == MouseEvent.BUTTON3_MASK)
+      else if(e.getModifiers() == InputEvent.BUTTON3_MASK)
       {
         // Is there a selection.
         if(isSelection())

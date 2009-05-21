@@ -43,6 +43,6 @@ public class Tags
    */
   public String get(String key)
   {
-    return (String)tags.get(key);
+    return tags.get(key);
   }
 }

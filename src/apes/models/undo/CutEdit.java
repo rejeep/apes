@@ -44,6 +44,7 @@ public class CutEdit extends AbstractUndoableEdit
    * Performs the action of cutting the selected interval from the
    * selected Channel.
    */
+  @Override
   public void redo()
   {
     cutout.dispose();
@@ -55,6 +56,7 @@ public class CutEdit extends AbstractUndoableEdit
    * Undoes the cutting by pasting the cutout into the file at
    * selected index.
    */
+  @Override
   public void undo()
   {
     internalFormat.pasteSamples(start, cutout);
@@ -62,11 +64,13 @@ public class CutEdit extends AbstractUndoableEdit
     undoable = false;
   }
 
+  @Override
   public boolean canRedo()
   {
     return !undoable;
   }
 
+  @Override
   public boolean canUndo()
   {
     return undoable;

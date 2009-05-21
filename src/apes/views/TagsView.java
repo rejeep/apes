@@ -161,6 +161,7 @@ public class TagsView extends JFrame
    * 
    * @return The name.
    */
+  @Override
   public String getName()
   {
     return n.getText();

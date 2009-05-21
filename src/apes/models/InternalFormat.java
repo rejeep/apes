@@ -450,7 +450,7 @@ public class InternalFormat extends Observable
    */
   public void pasteSamples(long startS, MemoryHandler m)
   {
-    memoryHandler.transfer(m, 0, (int) ( m.getUsedMemory() - 1 ), (long)samplesToBytes(startS));
+    memoryHandler.transfer(m, 0, (int) ( m.getUsedMemory() - 1 ), samplesToBytes(startS));
     sampleAmount += bytesToSamples(m.getUsedMemory());
     updated();
   }

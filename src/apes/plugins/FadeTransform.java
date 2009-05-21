@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import apes.interfaces.TransformPlugin;
 import apes.models.InternalFormat;
@@ -86,7 +87,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
 
     frame.add(bPanel);
     frame.setLocationRelativeTo(null);
-    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
   }
@@ -129,7 +130,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
       else
       {
         scale = (float)j / steps;
-        scale = (float) ( 1.0f - scale );
+        scale = ( 1.0f - scale );
       }
       curr = selection.x + ( j * interval );
       internalFormat.scaleSamples(curr, curr + interval - 1, scale);

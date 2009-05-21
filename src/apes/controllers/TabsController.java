@@ -50,8 +50,8 @@ public class TabsController extends ApplicationController
   public void close()
   {
     TabCloseButton tabCloseButton = (TabCloseButton)event.getSource();
-    ButtonTabPanel buttonTabPanel = (ButtonTabPanel)tabCloseButton.getButtonTabPanel();
-    TabsView tabsView = (TabsView)buttonTabPanel.getTabsView();
+    ButtonTabPanel buttonTabPanel = tabCloseButton.getButtonTabPanel();
+    TabsView tabsView = buttonTabPanel.getTabsView();
 
     int index = tabsView.indexOfTabComponent(buttonTabPanel);
 

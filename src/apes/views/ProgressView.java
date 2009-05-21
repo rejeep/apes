@@ -38,6 +38,7 @@ public class ProgressView extends JProgressBar
    * 
    * @param n The useless minimum value.
    */
+  @Override
   public void setMinimum(int n)
   {
     super.setMaximum(MIN_VALUE);
@@ -48,6 +49,7 @@ public class ProgressView extends JProgressBar
    * 
    * @param n The useless maximum value.
    */
+  @Override
   public void setMaximum(int n)
   {
     super.setMinimum(MAX_VALUE);

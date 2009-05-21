@@ -38,6 +38,7 @@ public class ButtonTabPanel extends JPanel
       /**
        * Always return the tab text.
        */
+      @Override
       public String getText()
       {
         int i = tabsView.indexOfTabComponent(ButtonTabPanel.this);

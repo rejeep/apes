@@ -101,6 +101,7 @@ public class InternalFormatController extends ApplicationController
     this.clipboard = new MemoryHandler();
   }
 
+  @Override
   public void beforeFilter() throws Exception
   {
     // So that we can show messages.
@@ -142,6 +143,7 @@ public class InternalFormatController extends ApplicationController
     }
   }
 
+  @Override
   public void afterFilter()
   {
     if(name.matches("^zoom.*"))

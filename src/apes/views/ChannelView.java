@@ -499,6 +499,7 @@ public class ChannelView extends JPanel implements Runnable
      * 
      * @param g A graphics object.
      */
+    @Override
     public void paintComponent(Graphics g)
     {
       super.paintComponent(g);
@@ -814,7 +815,7 @@ public class ChannelView extends JPanel implements Runnable
       // double heightScale = (double)( (float)( graphHeight / 2 ) / (
       // maxAmp - minAmp ) );
 
-      float scale = ( (float)graphHeight / 2 ) / (float) ( Math.abs(minAmp) + Math.abs(maxAmp) );
+      float scale = ( (float)graphHeight / 2 ) / ( Math.abs(minAmp) + Math.abs(maxAmp) );
       for(int i = 0; i < samples.length; i++)
       {
         samples[i] = Math.round( ( samples[i] * scale ));

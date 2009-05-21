@@ -122,6 +122,7 @@ public class PluginController extends ApplicationController
    * 
    * @param ae ActionEvent.
    */
+  @Override
   public void actionPerformed(ActionEvent ae)
   {
     String action = ae.getActionCommand();
