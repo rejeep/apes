@@ -84,8 +84,7 @@ public class PlayerHandler
   {
     try
     {
-      AudioFormat format = new AudioFormat(internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat
-          .getNumChannels(), true, false);
+      AudioFormat format = new AudioFormat(internalFormat.getSampleRate(), internalFormat.bitsPerSample, internalFormat.getNumChannels(), true, false);
       DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
       if(line != null)

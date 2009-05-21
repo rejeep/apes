@@ -172,8 +172,7 @@ public class PluginHandler
   {
     for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType()
-          .equals("transform"))
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("transform"))
       {
         return plugins.get(i).getTransformObject();
       }
@@ -191,8 +190,7 @@ public class PluginHandler
   {
     for(int i = 0; i < plugins.size(); i++)
     {
-      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType()
-          .equals("format"))
+      if(plugins.get(i).getName().equals(name) && plugins.get(i).getType().equals("format"))
       {
         return plugins.get(i).getAudioFormatObject();
       }

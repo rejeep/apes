@@ -77,8 +77,7 @@ public class MemoryHandler implements Serializable
       byte[] data = new byte[size];
       // Copy arrays
       System.arraycopy(fstFrame.data, 0, data, 0, fstSize);
-      System
-          .arraycopy(lstFrame.data, lstFrame.data.length - lstSize, data, fstSize, lstSize);
+      System.arraycopy(lstFrame.data, lstFrame.data.length - lstSize, data, fstSize, lstSize);
 
       // Copy data
       write(firstIndex, data);
@@ -370,8 +369,7 @@ public class MemoryHandler implements Serializable
     for(int i = 0; i < frameTable.length; i++)
     {
       Frame f = frameTable[i];
-      if(f.page != null && (f.page.index <= index) && (f.page.index + f.page.file
-          .length() > index))
+      if(f.page != null && (f.page.index <= index) && (f.page.index + f.page.file.length() > index))
       {
         return i;
       }

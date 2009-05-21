@@ -202,9 +202,7 @@ public class ApplicationView extends JFrame
       {
         if(config.getBooleanOption("close_confirmation"))
         {
-          int status = JOptionPane
-              .showConfirmDialog(null, language.get("exit.confirm.message"), language
-                  .get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
+          int status = JOptionPane.showConfirmDialog(null, language.get("exit.confirm.message"), language.get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
 
           if(status == JOptionPane.YES_OPTION)
           {

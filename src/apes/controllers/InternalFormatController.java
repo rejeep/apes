@@ -337,8 +337,7 @@ public class InternalFormatController extends ApplicationController
         }
         else if(format.isApes())
         {
-          internalFormatView = new InternalFormatView(InternalFormat.load(apesFile
-              .getParent(), apesFile.getName()));
+          internalFormatView = new InternalFormatView(InternalFormat.load(apesFile.getParent(), apesFile.getName()));
           tabs.add(internalFormatView);
         }
 
@@ -411,8 +410,7 @@ public class InternalFormatController extends ApplicationController
       try
       {
         if(player.getStop() != 0 && player.getStart() != player.getStop())
-          wav.exportFile(internalFormat, apesFile.getFile(), player.getStart(), player
-              .getStop());
+          wav.exportFile(internalFormat, apesFile.getFile(), player.getStart(), player.getStop());
         else
           wav.exportFile(internalFormat, apesFile.getFile());
 

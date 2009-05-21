@@ -295,8 +295,7 @@ public class InternalFormat extends Observable
 
     try
     {
-      b = memoryHandler
-          .read(samplesToBytes(indexS) + channel * bytesPerSample, bytesPerSample);
+      b = memoryHandler.read(samplesToBytes(indexS) + channel * bytesPerSample, bytesPerSample);
     }
     catch(IOException e)
     {
@@ -324,8 +323,7 @@ public class InternalFormat extends Observable
 
     try
     {
-      return memoryHandler
-          .read(samplesToBytes(startS), (int)samplesToBytes(stopS - startS + 1));
+      return memoryHandler.read(samplesToBytes(startS), (int)samplesToBytes(stopS - startS + 1));
     }
     catch(IOException e)
     {

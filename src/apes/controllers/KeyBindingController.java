@@ -3,6 +3,7 @@ package apes.controllers;
 import apes.models.KeyBinding;
 import apes.views.KeyBindingView;
 
+
 /**
  * Controller for the key binding view.
  * 
@@ -16,7 +17,7 @@ public class KeyBindingController extends ApplicationController
   private KeyBinding keyBinding;
 
   /**
-   * Key binding view. 
+   * Key binding view.
    */
   private KeyBindingView keyBindingView;
 

@@ -746,8 +746,7 @@ public class ChannelView extends JPanel implements Runnable
       if(samplesPerPixel <= 1)
       {
         int firstVisibleSample = getFirstVisibleSample();
-        ByteBuffer bytes = ByteBuffer.wrap(internalFormat
-            .getSamples(firstVisibleSample, firstVisibleSample + visibleSamples));
+        ByteBuffer bytes = ByteBuffer.wrap(internalFormat.getSamples(firstVisibleSample, firstVisibleSample + visibleSamples));
         samples = new int[visibleSamples];
 
         for(int i = 0; i < samples.length; i++)
@@ -764,8 +763,7 @@ public class ChannelView extends JPanel implements Runnable
               break;
 
             default:
-              System.err
-                  .println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
+              System.err.println("BAD BYTES PER SAMPLE IN CHANNEL VIEW WHILE UPDATING GRAPH");
               System.exit(1);
           }
         }

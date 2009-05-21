@@ -248,7 +248,6 @@ public class ChannelController extends ApplicationController implements MouseLis
    */
   public boolean inView(int x, int y)
   {
-    return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView
-        .getGraphHeight() - 1;
+    return x > 0 && y > 0 && x < channelView.getGraphWidth() - 1 && y < channelView.getGraphHeight() - 1;
   }
 }

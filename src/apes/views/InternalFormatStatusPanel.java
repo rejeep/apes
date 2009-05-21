@@ -152,8 +152,7 @@ public class InternalFormatStatusPanel extends JPanel
     top.add(header);
 
     String[] labels = { "sample_rate", "num_channels", "num_samples", "bytes_per_sample", "bits_per_sample" };
-    int[] values = { internalFormat.getSampleRate(), internalFormat.getNumChannels(), internalFormat
-        .getSampleAmount(), internalFormat.bytesPerSample, internalFormat.bitsPerSample };
+    int[] values = { internalFormat.getSampleRate(), internalFormat.getNumChannels(), internalFormat.getSampleAmount(), internalFormat.bytesPerSample, internalFormat.bitsPerSample };
 
     // Add all labels and values.
     for(int i = 0; i < labels.length; i++)
