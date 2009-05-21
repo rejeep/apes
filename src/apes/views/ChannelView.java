@@ -13,8 +13,8 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import apes.controllers.ChannelController;
-import apes.lib.Config;
 import apes.lib.SampleHelper;
+import apes.models.Config;
 import apes.models.InternalFormat;
 import apes.models.Player;
 

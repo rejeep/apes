@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 
-import apes.lib.Config;
+import apes.models.Config;
 import apes.views.ConfigView;
 
 /**

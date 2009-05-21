@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import apes.controllers.PlayerController;
-import apes.lib.Config;
 import apes.lib.PlayerHandler;
+import apes.models.Config;
 
 /**
  * <p>

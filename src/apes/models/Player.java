@@ -5,7 +5,6 @@ import java.util.Observable;
 
 import javax.sound.sampled.SourceDataLine;
 
-import apes.lib.Config;
 
 /**
  * This class plays an internal format. TODO: May be a bug when

@@ -18,8 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import apes.controllers.ConfigController;
-import apes.lib.Config;
 import apes.lib.Language;
+import apes.models.Config;
 
 /**
  * A graphical view for the configuration file.
