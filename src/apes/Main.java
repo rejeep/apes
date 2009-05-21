@@ -6,6 +6,7 @@ import javax.swing.undo.UndoManager;
 import apes.controllers.ConfigController;
 import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
+import apes.controllers.KeyBindingController;
 import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.PluginController;
@@ -13,16 +14,17 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.exceptions.UnidentifiedLanguageException;
 import apes.lib.ApesFile;
-import apes.lib.Config;
 import apes.lib.Language;
 import apes.lib.PluginHandler;
+import apes.models.Config;
 import apes.models.Tabs;
 import apes.views.ApesError;
 import apes.views.ApplicationView;
 
+
 /**
- * This is where it all nnstarts. This creates a basic GUI with a
- * layout and on it a few components are placed.
+ * This is where it all nnstarts. This creates a basic GUI with a layout and on
+ * it a few components are placed.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -71,9 +73,10 @@ public class Main extends JFrame
     LanguageController languageController = new LanguageController();
     PluginController pluginController = new PluginController(pluginHandler);
     InternalFormatController internalFormatController = new InternalFormatController(tabs, undoManager);
+    KeyBindingController keyBindingController = new KeyBindingController();
 
     // Create the application view.
-    new ApplicationView(internalFormatController, tagsController, languageController, configController, pluginController, helpController, playerController, tabsController);
+    new ApplicationView(internalFormatController, tagsController, languageController, configController, pluginController, helpController, playerController, tabsController, keyBindingController);
 
     // Open all files passed in as arguments.
     for(int i = 0; i < args.length; i++)

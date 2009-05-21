@@ -38,6 +38,7 @@ menu:
   tools:
     properties: Properties
     plugins: Plugins
+    key_bindings: Key bindings
   help:
     manual: Manual
     about: About
@@ -183,3 +184,31 @@ message:
     save: Saved file successfully
     save_as: Saved file successfully as
     export: Exported file successfully
+binding:
+  header: Key bindings
+  apply: Apply
+  close: Close
+  pause: Pause player
+  play: Start player
+  stop: Stop player
+  backward: Go backward in player
+  forward: Go forward in player
+  copy: Copy graph selection
+  cut: Cut graph selection
+  delete: Delete graph selection
+  paste: Paste at point
+  export: Export as
+  open: Open new file
+  plugins: Plugin view
+  properties: Properties view
+  key_bindings: Key bindings view
+  quit: Quit program
+  undo: Undo
+  redo: Redo
+  save: Save file
+  save_as: Save file as
+  tags: Edit tags
+  zoom_in: Zoom in
+  zoom_out: Zoom out
+  zoom_reset: Reset zoom
+  zoom_selection: Zoom to selection

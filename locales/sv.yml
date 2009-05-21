@@ -38,6 +38,7 @@ menu:
   tools:
     properties: Inställningar
     plugins: Plugins
+    key_bindings: Snabbknappar
   help:
     manual: Manual
     about: Om
@@ -183,3 +184,31 @@ message:
     save: Sparning till fil lyckades
     save_as: Sparning till fil lyckades
     export: Exportering till fil lyckades
+binding:
+  header: Snabbknappar
+  apply: Verkställ
+  close: Avsluta
+  pause: Pausa spelare
+  play: Starta spelare
+  stop: Stoppa spelare
+  backward: Gå framåt i spelare
+  forward: Gå bakåt i spelare
+  copy: Kopiera region
+  cut: Klipp ut region
+  delete: Ta bort region
+  paste: Klistra in
+  export: Exportera fil
+  open: Öppna ny fil
+  plugins: Pluginvy
+  properties: Inställningsvy
+  key_bindings: Snabbknappsvy
+  quit: Avsluta programmet
+  undo: Ångra
+  redo: Återta ångring
+  save: Spara fil
+  save_as: Spara fil som
+  tags: Ändra taggar
+  zoom_in: Zooma in
+  zoom_out: Zooma ut
+  zoom_reset: Återställ zoom
+  zoom_selection: Zooma till markering

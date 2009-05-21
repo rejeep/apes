@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
@@ -23,6 +22,7 @@ import javax.swing.border.LineBorder;
 import apes.controllers.ConfigController;
 import apes.controllers.HelpController;
 import apes.controllers.InternalFormatController;
+import apes.controllers.KeyBindingController;
 import apes.controllers.LanguageController;
 import apes.controllers.PlayerController;
 import apes.controllers.PluginController;
@@ -30,6 +30,7 @@ import apes.controllers.TabsController;
 import apes.controllers.TagsController;
 import apes.lib.Language;
 import apes.models.Config;
+import apes.models.KeyBinding;
 import apes.models.Tabs;
 import apes.views.buttons.BackwardButton;
 import apes.views.buttons.CopyButton;
@@ -51,35 +52,66 @@ import apes.views.buttons.ZoomResetButton;
 import apes.views.buttons.ZoomSelectionButton;
 import apes.views.tabs.TabsView;
 
+
 /**
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class ApplicationView extends JFrame
 {
   /**
-   * The configuration.
+   * Config model.
    */
   private Config config;
 
   /**
-   * The language.
+   * Language model.
    */
   private Language language;
 
-  // Controllers
+  /**
+   * Keybinding model.
+   */
+  private KeyBinding keyBinding;
+
+  /**
+   * Internal format controller.
+   */
   private InternalFormatController internalFormatController;
 
+  /**
+   * Tags controller.
+   */
   private TagsController tagsController;
 
+  /**
+   * Language controller.
+   */
   private LanguageController languageController;
 
+  /**
+   * Config controller.
+   */
   private ConfigController configController;
 
+  /**
+   * Plugin controller.
+   */
   private PluginController pluginController;
 
+  /**
+   * Help controller.
+   */
   private HelpController helpController;
 
+  /**
+   * Player controller.
+   */
   private PlayerController playerController;
+
+  /**
+   * Keybinding controller.
+   */
+  private KeyBindingController keyBindingController;
 
   /**
    * Creates a new <code>ApplicationView</code> instance.
@@ -92,11 +124,13 @@ public class ApplicationView extends JFrame
    * @param helpController The help controller.
    * @param playerController The player controller.
    * @param tabsController The tabs controller.
+   * @param keyBindingController The keybinding controller.
    */
-  public ApplicationView(InternalFormatController internalFormatController, TagsController tagsController, LanguageController languageController, ConfigController configController, PluginController pluginController, HelpController helpController, PlayerController playerController, TabsController tabsController)
+  public ApplicationView(InternalFormatController internalFormatController, TagsController tagsController, LanguageController languageController, ConfigController configController, PluginController pluginController, HelpController helpController, PlayerController playerController, TabsController tabsController, KeyBindingController keyBindingController)
   {
     this.config = Config.getInstance();
     this.language = Language.getInstance();
+    this.keyBinding = KeyBinding.getInstance();
 
     // Set controllers.
     this.internalFormatController = internalFormatController;
@@ -106,6 +140,8 @@ public class ApplicationView extends JFrame
     this.pluginController = pluginController;
     this.helpController = helpController;
     this.playerController = playerController;
+    this.keyBindingController = keyBindingController;
+
     // These should by default be white.
     String[] whites = { "Panel", "Label", "Slider", "Frame", "CheckBox", "TextField", "TextArea", "MenuBar", "Menu", "MenuItem" };
 
@@ -166,7 +202,9 @@ public class ApplicationView extends JFrame
       {
         if(config.getBooleanOption("close_confirmation"))
         {
-          int status = JOptionPane.showConfirmDialog(null, language.get("exit.confirm.message"), language.get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
+          int status = JOptionPane
+              .showConfirmDialog(null, language.get("exit.confirm.message"), language
+                  .get("exit.confirm.title"), JOptionPane.YES_NO_OPTION);
 
           if(status == JOptionPane.YES_OPTION)
           {
@@ -182,8 +220,7 @@ public class ApplicationView extends JFrame
   }
 
   /**
-   * Sets the dimensions for the window depending on the configuration
-   * file.
+   * Sets the dimensions for the window depending on the configuration file.
    */
   private void setWindowDimensions()
   {
@@ -230,27 +267,27 @@ public class ApplicationView extends JFrame
       JMenu file = new ApesMenu("menu.head.file");
       add(file);
 
-      JMenuItem open = new ApesMenuItem("menu.file.open", KeyEvent.VK_O);
+      JMenuItem open = new ApesMenuItem("menu.file.open", "open");
       open.addActionListener(internalFormatController);
       open.setName("open");
       file.add(open);
 
-      JMenuItem save = new ApesMenuItem("menu.file.save", KeyEvent.VK_S);
+      JMenuItem save = new ApesMenuItem("menu.file.save", "save");
       save.addActionListener(internalFormatController);
       save.setName("save");
       file.add(save);
 
-      JMenuItem saveAs = new ApesMenuItem("menu.file.save_as", KeyEvent.VK_W);
+      JMenuItem saveAs = new ApesMenuItem("menu.file.save_as", "save_as");
       saveAs.addActionListener(internalFormatController);
       saveAs.setName("saveAs");
       file.add(saveAs);
 
-      JMenuItem export = new ApesMenuItem("menu.file.export", KeyEvent.VK_E);
+      JMenuItem export = new ApesMenuItem("menu.file.export", "export");
       export.addActionListener(internalFormatController);
       export.setName("export");
       file.add(export);
 
-      JMenuItem quit = new ApesMenuItem("menu.file.quit", KeyEvent.VK_Q);
+      JMenuItem quit = new ApesMenuItem("menu.file.quit", "quit");
       // Exit program is this is clicked.
       quit.addActionListener(new ActionListener()
       {
@@ -267,37 +304,37 @@ public class ApplicationView extends JFrame
       JMenu edit = new ApesMenu("menu.head.edit");
       add(edit);
 
-      JMenuItem undo = new ApesMenuItem("menu.edit.undo", KeyEvent.VK_Z);
+      JMenuItem undo = new ApesMenuItem("menu.edit.undo", "undo");
       undo.addActionListener(internalFormatController);
       undo.setName("undo");
       edit.add(undo);
 
-      JMenuItem redo = new ApesMenuItem("menu.edit.redo", KeyEvent.VK_R);
+      JMenuItem redo = new ApesMenuItem("menu.edit.redo", "redo");
       redo.addActionListener(internalFormatController);
       redo.setName("redo");
       edit.add(redo);
 
-      JMenuItem cut = new ApesMenuItem("menu.edit.cut", KeyEvent.VK_X);
+      JMenuItem cut = new ApesMenuItem("menu.edit.cut", "cut");
       cut.addActionListener(internalFormatController);
       cut.setName("cut");
       edit.add(cut);
 
-      JMenuItem copy = new ApesMenuItem("menu.edit.copy", KeyEvent.VK_C);
+      JMenuItem copy = new ApesMenuItem("menu.edit.copy", "copy");
       copy.addActionListener(internalFormatController);
       copy.setName("copy");
       edit.add(copy);
 
-      JMenuItem paste = new ApesMenuItem("menu.edit.paste", KeyEvent.VK_V);
+      JMenuItem paste = new ApesMenuItem("menu.edit.paste", "paste");
       paste.addActionListener(internalFormatController);
       paste.setName("paste");
       edit.add(paste);
 
-      JMenuItem delete = new ApesMenuItem("menu.edit.delete", KeyEvent.VK_D);
+      JMenuItem delete = new ApesMenuItem("menu.edit.delete", "delete");
       delete.addActionListener(internalFormatController);
       delete.setName("delete");
       edit.add(delete);
 
-      JMenuItem tags = new ApesMenuItem("menu.edit.tags", KeyEvent.VK_T);
+      JMenuItem tags = new ApesMenuItem("menu.edit.tags", "tags");
       tags.addActionListener(tagsController);
       tags.setName("edit");
       edit.add(tags);
@@ -310,22 +347,22 @@ public class ApplicationView extends JFrame
       JMenu zoom = new ApesMenu("menu.head.zoom");
       view.add(zoom);
 
-      JMenuItem zoomIn = new ApesMenuItem("menu.view.zoom.in", "alt shift I");
+      JMenuItem zoomIn = new ApesMenuItem("menu.view.zoom.in", "zoom_in");
       zoomIn.addActionListener(internalFormatController);
       zoomIn.setName("zoomIn");
       zoom.add(zoomIn);
 
-      JMenuItem zoomOut = new ApesMenuItem("menu.view.zoom.out", "alt shift O");
+      JMenuItem zoomOut = new ApesMenuItem("menu.view.zoom.out", "zoom_out");
       zoomOut.addActionListener(internalFormatController);
       zoomOut.setName("zoomOut");
       zoom.add(zoomOut);
 
-      JMenuItem zoomSelection = new ApesMenuItem("menu.view.zoom.selection", "alt shift S");
+      JMenuItem zoomSelection = new ApesMenuItem("menu.view.zoom.selection", "zoom_selection");
       zoomSelection.addActionListener(internalFormatController);
       zoomSelection.setName("zoomSelection");
       zoom.add(zoomSelection);
 
-      JMenuItem zoomReset = new ApesMenuItem("menu.view.zoom.reset", "alt shift R");
+      JMenuItem zoomReset = new ApesMenuItem("menu.view.zoom.reset", "zoom_reset");
       zoomReset.addActionListener(internalFormatController);
       zoomReset.setName("zoomReset");
       zoom.add(zoomReset);
@@ -352,27 +389,27 @@ public class ApplicationView extends JFrame
       JMenu player = new ApesMenu("menu.head.player");
       add(player);
 
-      JMenuItem play = new ApesMenuItem("menu.player.play", "alt P");
+      JMenuItem play = new ApesMenuItem("menu.player.play", "play");
       play.addActionListener(playerController);
       play.setName("play");
       player.add(play);
 
-      JMenuItem pause = new ApesMenuItem("menu.player.pause", "alt C");
+      JMenuItem pause = new ApesMenuItem("menu.player.pause", "pause");
       pause.addActionListener(playerController);
       pause.setName("pause");
       player.add(pause);
 
-      JMenuItem stop = new ApesMenuItem("menu.player.stop", "alt S");
+      JMenuItem stop = new ApesMenuItem("menu.player.stop", "stop");
       stop.addActionListener(playerController);
       stop.setName("stop");
       player.add(stop);
 
-      JMenuItem forward = new ApesMenuItem("menu.player.forward", "alt F");
+      JMenuItem forward = new ApesMenuItem("menu.player.forward", "forward");
       forward.addActionListener(playerController);
       forward.setName("forward");
       player.add(forward);
 
-      JMenuItem backward = new ApesMenuItem("menu.player.backward", "alt B");
+      JMenuItem backward = new ApesMenuItem("menu.player.backward", "backward");
       backward.addActionListener(playerController);
       backward.setName("backward");
       player.add(backward);
@@ -387,15 +424,20 @@ public class ApplicationView extends JFrame
       JMenu tools = new ApesMenu("menu.head.tools");
       add(tools);
 
-      JMenuItem properties = new ApesMenuItem("menu.tools.properties", KeyEvent.VK_I);
+      JMenuItem properties = new ApesMenuItem("menu.tools.properties", "properties");
       properties.addActionListener(configController);
       properties.setName("show");
       tools.add(properties);
 
-      JMenuItem plugins = new ApesMenuItem("menu.tools.plugins", KeyEvent.VK_P);
+      JMenuItem plugins = new ApesMenuItem("menu.tools.plugins", "plugins");
       plugins.addActionListener(pluginController);
       plugins.setName("plugin");
       tools.add(plugins);
+
+      JMenuItem keyBindings = new ApesMenuItem("menu.tools.key_bindings", "key_bindings");
+      keyBindings.addActionListener(keyBindingController);
+      keyBindings.setName("show");
+      tools.add(keyBindings);
       // Tools END
 
       // Help START
