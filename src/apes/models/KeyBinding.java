@@ -1,6 +1,35 @@
 package apes.models;
 
 /**
+ * <p>
+ * This class handles user specific key bindings. This class uses the Singleton
+ * pattern. That means that if you want to use this class you should create an
+ * object like this:
+ * 
+ * <pre>
+ * Config config = Config.getInstance();
+ * </pre>
+ * 
+ * </p>
+ * <p>
+ * An keybinding in the file should consist of: At least one character from a-z
+ * (underscore may separate words), then an arbitrary number of spaces, then an
+ * equal sign, then again an arbitrary number of spaces and then the value
+ * optionally in quotes.
+ * </p>
+ * <p>
+ * Here are some valid key bindings.
+ * </p>
+ * <ul>
+ * <li>play="alt P"</li>
+ * <li>stop=alt V</li>
+ * <li>undo = "control Z"</li>
+ * <li>save = control S</li>
+ * </ul>
+ * <p>
+ * Lines starting with a <code>#</code> is a comment.
+ * </p>
+ * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
 public class KeyBinding extends ApesConfiguration
