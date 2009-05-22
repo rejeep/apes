@@ -62,8 +62,6 @@ public class MemoryHandler implements Serializable
     for(Page p : pageTable)
       if(p.index >= firstIndex && p.index < index + bytes)
         doomed.add(p);
-
-    System.out.println("Doomed size " + doomed.size() + "/" + pageTable.size());
     
     for(Page p : doomed)
     {
@@ -84,8 +82,7 @@ public class MemoryHandler implements Serializable
       // Copy data
       write(firstIndex, data);
     }
-    else
-      System.out.println("No pages added.");
+    
     return true;
   }
 
@@ -305,7 +302,6 @@ public class MemoryHandler implements Serializable
     {
       e.printStackTrace();
     }
-    System.out.println("Pages left: " + pageTable.size());
   }
 
   /**
