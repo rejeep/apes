@@ -63,6 +63,8 @@ public class MemoryHandler implements Serializable
       if(p.index >= firstIndex && p.index < index + bytes)
         doomed.add(p);
 
+    System.out.println("Doomed size " + doomed.size() + "/" + pageTable.size());
+    
     for(Page p : doomed)
     {
       destroyPage(p);
@@ -82,6 +84,8 @@ public class MemoryHandler implements Serializable
       // Copy data
       write(firstIndex, data);
     }
+    else
+      System.out.println("No pages added.");
     return true;
   }
 
@@ -205,6 +209,11 @@ public class MemoryHandler implements Serializable
    */
   private Frame destroyPage(Page page) throws IOException
   {
+    // Remove from page table
+    if(!pageTable.remove(page))
+      return null;
+    usedMemory -= page.file.length();
+    
     // Update indexes that comes after the one that was removed.
     for(Page pageX : pageTable)
     {
@@ -213,18 +222,17 @@ public class MemoryHandler implements Serializable
         pageX.index -= page.file.length();
       }
     }
-
+    
+    // Close file.
+    page.file.close();
+    page.tempFile.delete();
+    
     for(Frame f : frameTable)
     {
       if(f.page == page)
       {
-        usedMemory -= f.page.file.length();
-        page.file.close();
         f.page = null;
         f.timeStamp = Long.MIN_VALUE;
-
-        page.tempFile.delete();
-        pageTable.remove(page);
 
         return f;
       }
@@ -297,6 +305,7 @@ public class MemoryHandler implements Serializable
     {
       e.printStackTrace();
     }
+    System.out.println("Pages left: " + pageTable.size());
   }
 
   /**
@@ -394,6 +403,7 @@ public class MemoryHandler implements Serializable
 
     public void load(Page page) throws IOException
     {
+      this.page.file.close();
       this.page = page;
       data = new byte[(int)page.file.length()];
       page.read(data);
