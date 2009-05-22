@@ -168,7 +168,6 @@ public class ChannelController extends ApplicationController implements MouseLis
     if(inView(x, y))
     {
       channelView.setMousePosX(x);
-      channelView.repaint();
     }
   }
 
