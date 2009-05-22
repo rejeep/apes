@@ -29,7 +29,7 @@ public class PasteEdit extends AbstractUndoableEdit
   {
     internalFormat = intForm;
     start = marked.x;
-    stop = start + p.getUsedMemory();
+    stop = start + p.getUsedMemory() - 1;
     paste = new MemoryHandler();
     paste.transfer(p, 0, p.getUsedMemory(), 0);
     redo();
