@@ -52,9 +52,7 @@ public class ApesFormat
    */
   public boolean isWave()
   {
-    String name = file.getName().toLowerCase();
-
-    return name.matches(".*wave?$");
+    return ifFormat(".*wave?");
   }
 
   /**
@@ -64,8 +62,19 @@ public class ApesFormat
    */
   public boolean isApes()
   {
+    return ifFormat(".*apes?");
+  }
+
+  /**
+   * Returns true if file name matches the given regex. False otherwise.
+   * 
+   * @param regex The regex.
+   * @return True if match. False otherwise.
+   */
+  private boolean ifFormat(String regex)
+  {
     String name = file.getName().toLowerCase();
 
-    return name.matches(".*ape?$");
+    return name.matches(regex);
   }
 }
