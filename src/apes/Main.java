@@ -23,7 +23,7 @@ import apes.views.ApplicationView;
 
 
 /**
- * This is where it all nnstarts. This creates a basic GUI with a layout and on
+ * This is where it all starts. This creates a basic GUI with a layout and on
  * it a few components are placed.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
