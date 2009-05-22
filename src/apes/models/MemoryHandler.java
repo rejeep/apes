@@ -399,7 +399,6 @@ public class MemoryHandler implements Serializable
 
     public void load(Page page) throws IOException
     {
-      this.page.file.close();
       this.page = page;
       data = new byte[(int)page.file.length()];
       page.read(data);
