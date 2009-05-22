@@ -209,14 +209,14 @@ public class MemoryHandler implements Serializable
     // Remove from page table
     if(!pageTable.remove(page))
       return null;
-    usedMemory -= page.file.length();
+    usedMemory -= page.tempFile.length();
     
     // Update indexes that comes after the one that was removed.
     for(Page pageX : pageTable)
     {
       if(pageX.index > page.index)
       {
-        pageX.index -= page.file.length();
+        pageX.index -= page.tempFile.length();
       }
     }
     
@@ -357,7 +357,7 @@ public class MemoryHandler implements Serializable
     }
     for(Page page : pageTable)
     {
-      if(page.index <= index && (page.index + page.file.length()) > index)
+      if(page.index <= index && (page.index + page.tempFile.length()) > index)
       {
         evicted.writeAll();
         evicted.load(page);
@@ -374,7 +374,7 @@ public class MemoryHandler implements Serializable
     for(int i = 0; i < frameTable.length; i++)
     {
       Frame f = frameTable[i];
-      if(f.page != null && (f.page.index <= index) && (f.page.index + f.page.file.length() > index))
+      if(f.page != null && (f.page.index <= index) && (f.page.index + f.page.tempFile.length() > index))
       {
         return i;
       }
@@ -399,8 +399,16 @@ public class MemoryHandler implements Serializable
 
     public void load(Page page) throws IOException
     {
+      if(this.page != null)
+      {
+        this.page.file.close();
+      }
+      
       this.page = page;
-      data = new byte[(int)page.file.length()];
+      
+      page.file = new RandomAccessFile(page.tempFile, "rw");
+      
+      data = new byte[(int)page.tempFile.length()];
       page.read(data);
     }
 
