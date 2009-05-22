@@ -305,24 +305,24 @@ public class MemoryHandler implements Serializable
    * @param stop
    * @param putAt
    */
-  public void transfer(MemoryHandler source, long start, long stop, long putAt)
+  public void transfer(MemoryHandler source, long start, long amount, long putAt)
   {
-    if(start < 0 || start > stop || source.usedMemory < stop || putAt > usedMemory)
+    if(start < 0 || source.usedMemory < start + amount || putAt > usedMemory)
       return;
 
     // Allocate memory
     try
     {
-      long amount = stop - start + 2;
       malloc(putAt, amount);
 
       // Copy memory
-      for(long i = putAt, index = start; index <= stop; i += PAGE_SIZE, index += PAGE_SIZE)
+      int rest = (int)amount;
+      for(int i = 0; i < amount; i += PAGE_SIZE)
       {
-        int chunkSize = amount > PAGE_SIZE ? PAGE_SIZE : (int)amount;
-        byte[] chunk = source.read(index, chunkSize);
-        write(i, chunk);
-        amount -= chunkSize;
+        int chunkSize = (int)Math.min(rest, PAGE_SIZE);
+        byte[] chunk = source.read(start + i, chunkSize);
+        write(putAt + i, chunk);
+        rest -= chunkSize;
       }
     }
     catch(Exception e)

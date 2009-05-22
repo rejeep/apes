@@ -360,7 +360,10 @@ public class InternalFormat extends Observable
 
   public void copy(int startS, int stopS, MemoryHandler mH)
   {
-    mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0);
+    long startB = samplesToBytes(startS);
+    long amountB = samplesToBytes(stopS - startS + 1);
+    
+    mH.transfer(memoryHandler, startB, amountB, 0);
   }
 
   /**
@@ -377,7 +380,10 @@ public class InternalFormat extends Observable
     if(startS < 0 || startS > stopS || stopS >= sampleAmount)
       return;
 
-    mH.transfer(memoryHandler, samplesToBytes(startS), samplesToBytes(stopS), 0L);
+    long startB = samplesToBytes(startS);
+    long amountB = samplesToBytes(stopS - startS + 1);
+    
+    mH.transfer(memoryHandler, startB, amountB, 0L);
     removeSamples(startS, stopS);
   }
 
@@ -445,7 +451,7 @@ public class InternalFormat extends Observable
    */
   public void pasteSamples(long startS, MemoryHandler m)
   {
-    memoryHandler.transfer(m, 0, (int)(m.getUsedMemory() - 1), samplesToBytes(startS));
+    memoryHandler.transfer(m, 0, m.getUsedMemory(), samplesToBytes(startS));
     sampleAmount += bytesToSamples(m.getUsedMemory());
     updated();
   }

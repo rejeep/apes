@@ -24,7 +24,6 @@ public class CutEdit extends AbstractUndoableEdit
   private int start, stop;
 
   private boolean undoable;
-
   /**
    * Constructs the CutEdit and performs the cut.
    * 

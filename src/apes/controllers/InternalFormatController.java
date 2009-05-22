@@ -227,7 +227,7 @@ public class InternalFormatController extends ApplicationController
     edit = new CutEdit(internalFormat, selection);
     MemoryHandler cutout = ((CutEdit)edit).getCutout();
     clipboard.dispose();
-    clipboard.transfer(cutout, 0, (int)cutout.getUsedMemory() - 1, 0);
+    clipboard.transfer(cutout, 0, cutout.getUsedMemory(), 0);
     apesMessage.print("cut");
   }
 
