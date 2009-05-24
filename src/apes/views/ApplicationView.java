@@ -104,7 +104,7 @@ public class ApplicationView extends JFrame
   private PlayerController playerController;
 
   /**
-   * Keybinding controller.
+   * Key binding controller.
    */
   private KeyBindingController keyBindingController;
 
@@ -119,7 +119,7 @@ public class ApplicationView extends JFrame
    * @param helpController The help controller.
    * @param playerController The player controller.
    * @param tabsController The tabs controller.
-   * @param keyBindingController The keybinding controller.
+   * @param keyBindingController The key binding controller.
    */
   public ApplicationView(InternalFormatController internalFormatController, TagsController tagsController, LanguageController languageController, ConfigController configController, PluginController pluginController, HelpController helpController, PlayerController playerController, TabsController tabsController, KeyBindingController keyBindingController)
   {
