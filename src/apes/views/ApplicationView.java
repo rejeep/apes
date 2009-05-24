@@ -69,11 +69,6 @@ public class ApplicationView extends JFrame
   private Language language;
 
   /**
-   * Keybinding model.
-   */
-  private KeyBinding keyBinding;
-
-  /**
    * Internal format controller.
    */
   private InternalFormatController internalFormatController;
@@ -130,7 +125,7 @@ public class ApplicationView extends JFrame
   {
     this.config = Config.getInstance();
     this.language = Language.getInstance();
-    this.keyBinding = KeyBinding.getInstance();
+    KeyBinding.getInstance();
 
     // Set controllers.
     this.internalFormatController = internalFormatController;

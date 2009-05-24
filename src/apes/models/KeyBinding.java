@@ -14,7 +14,7 @@ import javax.swing.KeyStroke;
  * 
  * </p>
  * <p>
- * An keybinding in the file should consist of: At least one character from a-z
+ * A key binding in the file should consist of: At least one character from a-z
  * (underscore may separate words), then an arbitrary number of spaces, then an
  * equal sign, then again an arbitrary number of spaces and then the value
  * optionally in quotes.
