@@ -278,7 +278,7 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * TODO: Comment
+   * Returns a sample.
    * 
    * @param channel
    * @param indexS
