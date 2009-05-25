@@ -66,7 +66,6 @@ public abstract class ApesConfiguration
     File directory = new File(configurationFolderPath);
 
     // Create folder if it does not exist.
-    // TODO: Show apes message?
     if(!directory.isDirectory())
     {
       directory.mkdir();
@@ -146,7 +145,7 @@ public abstract class ApesConfiguration
     {
       // Read in the whole file. This must be done because a file can
       // not be written to while read from.
-      // TODO: This can be done with RandomAccessFile
+      // NOTE: This can be done with RandomAccessFile
       List<String> lines = new ArrayList<String>();
       Scanner scanner = new Scanner(configurationFile);
 
@@ -168,7 +167,6 @@ public abstract class ApesConfiguration
 
         if(matcher.matches())
         {
-          // TODO: Call down
           key = matcher.group(1);
 
           out.write(toOption(key));
