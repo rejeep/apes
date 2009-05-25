@@ -38,7 +38,12 @@ public class FadeTransform implements TransformPlugin, ActionListener
   Point selection;
 
   /**
-   * The interval, how many samples per fade step.
+   * The number of intervals.
+   */
+  int intervals;
+  
+  /**
+   * The number of samples in each interval 
    */
   int interval;
 
@@ -103,7 +108,9 @@ public class FadeTransform implements TransformPlugin, ActionListener
   {
     this.internalFormat = internalFormat;
     this.selection = selection;
-    interval = 10000;
+    int amount = (selection.y - selection.x + 1);
+    intervals = (int) Math.max(1,Math.round(amount*0.01));
+    interval = amount / intervals;
     showFrame();
   }
 
@@ -112,34 +119,18 @@ public class FadeTransform implements TransformPlugin, ActionListener
    * 
    * @param flag Fade in if true.
    */
-  public void doFade(Boolean flag)
+  public void fadeIn()
   {
-
-    int curr = 0;
-    float scale = 1.0f;
-
-    int diff = selection.y - selection.x;
-    int steps = diff / interval;
-    int spill = diff % interval;
-
-    for(int j = 0; j < steps; j++)
+    for(int i = 0; i < intervals; i++)
     {
-      if(flag)
-      {
-        scale = (float)j / steps;
-      }
-      else
-      {
-        scale = (float)j / steps;
-        scale = (1.0f - scale);
-      }
-      curr = selection.x + (j * interval);
-      internalFormat.scaleSamples(curr, curr + interval - 1, scale);
+      internalFormat.scaleSamples( selection.x + interval*i, selection.x + interval*(i+1), (float)i/intervals);
     }
-
-    curr = selection.x + steps * interval;
-    internalFormat.scaleSamples(curr, curr + spill, scale);
     internalFormat.updated();
+  }
+  
+  public void fadeOut()
+  {
+    
   }
 
   /**
@@ -162,13 +153,12 @@ public class FadeTransform implements TransformPlugin, ActionListener
 
     if(action.equals("Fade in"))
     {
-      doFade(true);
-      closeFrame();
+      fadeIn();
     }
     else if(action.equals("Fade out"))
     {
-      doFade(false);
-      closeFrame();
+      fadeOut();
     }
+    closeFrame();
   }
 }

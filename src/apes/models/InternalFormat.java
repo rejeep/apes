@@ -496,17 +496,20 @@ public class InternalFormat extends Observable
 
         for(int index = 0; index < nToWriteS; ++index)
         {
-          switch (bytesPerSample)
+          for(int C = 0; C < channels; C++)
           {
-            case 2:
-              toWrite.putShort(index * 2, (short)Math.round(toWrite.getShort() * alpha));
-              break;
-            case 4:
-              toWrite.putInt(index * 4, Math.round(toWrite.getInt() * alpha));
-              break;
-            default:
-              System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
-              System.exit(1);
+            switch (bytesPerSample)
+            {
+              case 2:
+                toWrite.putShort(index * 2 + C*2, (short)Math.round(toWrite.getShort() * alpha));
+                break;
+              case 4:
+                toWrite.putInt(index * 4 + C*4, Math.round(toWrite.getInt() * alpha));
+                break;
+              default:
+                System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
+                System.exit(1);
+            }
           }
         }
       }
