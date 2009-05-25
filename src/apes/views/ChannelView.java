@@ -785,6 +785,8 @@ public class ChannelView extends JPanel implements Runnable
         }
       }
 
+      applyLowPassFilter(samples, 0.1f);
+      
       // Set min and max amplitude.
       int maxAmp = Short.MIN_VALUE;
       int minAmp = Short.MAX_VALUE;
@@ -810,9 +812,7 @@ public class ChannelView extends JPanel implements Runnable
       for(int i = 0; i < samples.length; i++)
       {
         samples[i] = Math.round((samples[i] * scale));
-      }
-
-      applyLowPassFilter(samples, 0.1f);
+      }      
 
       repaint();
     }
