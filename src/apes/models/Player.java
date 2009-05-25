@@ -7,8 +7,7 @@ import javax.sound.sampled.SourceDataLine;
 
 
 /**
- * This class plays an internal format. TODO: May be a bug when reaching end of
- * file, making strange noises without stopping or something
+ * This class plays an internal format.
  * 
  * @author Johan Andersson (johandy@student.chalmers.se)
  */
@@ -93,8 +92,13 @@ public class Player extends Observable implements Runnable
   }
 
   /**
-   * Pauses playing if any. TODO: Should stop at once when pause is pressed. But
-   * calling line.stop() does not help.
+   * <p>
+   * Pauses playing if any.
+   * </p>
+   * <p>
+   * TODO: Should stop at once when pause is pressed. But calling line.stop()
+   * does not help.
+   * </p>
    */
   public void pause()
   {
