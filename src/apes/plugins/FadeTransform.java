@@ -130,7 +130,11 @@ public class FadeTransform implements TransformPlugin, ActionListener
   
   public void fadeOut()
   {
-    
+    for(int i = 0; i < intervals; i++)
+    {
+      internalFormat.scaleSamples( selection.x + interval*i, selection.x + interval*(i+1), (1 - (float)i/intervals));
+    }
+    internalFormat.updated();
   }
 
   /**
