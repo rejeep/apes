@@ -6,10 +6,15 @@ import apes.models.InternalFormat;
 
 
 /**
- * Interface for transform plugins. TODO: Some plugins will want get/set some
- * value(s).
+ * Interface for effect plugins.
  */
 public interface TransformPlugin extends Plugin
 {
+  /**
+   * Applies the effect.
+   * 
+   * @param internalFormat A internal format.
+   * @param selection A Point selection.
+   */
   void apply(InternalFormat internalFormat, Point selection);
 }
