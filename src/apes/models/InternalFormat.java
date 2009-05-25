@@ -207,10 +207,8 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * Save file as TODO: add error handling, or some sort of response
-   */
-  /**
    * Saves the internal format to the specifed location with the specified name.
+   * TODO: add error handling, or some sort of response
    * 
    * @param filePath The location the file should be saved to.
    * @param fileName The name of the file to be stored.
@@ -225,7 +223,8 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * Save file TODO: add error handling or some sort of response
+   * Save file.
+   * TODO: add error handling or some sort of response
    */
   public void save() throws IOException
   {
