@@ -6,7 +6,7 @@ import apes.models.InternalFormat;
 
 
 /**
- * TODO: Comment
+ * Interface for audio format plugins.
  * 
  * @author Simon Holm
  */
