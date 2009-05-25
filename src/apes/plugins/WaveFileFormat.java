@@ -37,7 +37,9 @@ public class WaveFileFormat implements AudioFormatPlugin
   private final static int IO_CHUNK_SIZE = 100000;
 
   /**
-   * TODO: Comment
+   * Returns the name of the plugin.
+   * 
+   * @return The name.
    */
   public String getName()
   {
@@ -45,7 +47,9 @@ public class WaveFileFormat implements AudioFormatPlugin
   }
 
   /**
-   * TODO: Comment
+   * Returns the description map.
+   * 
+   * @return Description map.
    */
   public Map<String, String> getDescriptions()
   {
