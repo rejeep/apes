@@ -518,7 +518,7 @@ public class InternalFormat extends Observable
   }
 
   /**
-   * TODO: Comment
+   * Notify observers that the internal format has changed.
    */
   public void updated()
   {
