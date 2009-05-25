@@ -501,10 +501,10 @@ public class InternalFormat extends Observable
             switch (bytesPerSample)
             {
               case 2:
-                toWrite.putShort(index * 2 + C*2, (short)Math.round(toWrite.getShort() * alpha));
+                toWrite.putShort((int)samplesToBytes(index) + C*2, (short)Math.round(toWrite.getShort() * alpha));
                 break;
               case 4:
-                toWrite.putInt(index * 4 + C*4, Math.round(toWrite.getInt() * alpha));
+                toWrite.putInt((int)samplesToBytes(index) + C*4, Math.round(toWrite.getInt() * alpha));
                 break;
               default:
                 System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
