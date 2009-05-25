@@ -488,7 +488,7 @@ public class InternalFormat extends Observable
           toWrite.order(ByteOrder.LITTLE_ENDIAN);
         }
       }
-
+      
       if(alpha != 0)
       {
         toWrite = ByteBuffer.wrap(getSamples(iS, iS + nToWriteS));
@@ -501,10 +501,10 @@ public class InternalFormat extends Observable
             switch (bytesPerSample)
             {
               case 2:
-                toWrite.putShort((int)samplesToBytes(index) + C*2, (short)Math.round(toWrite.getShort() * alpha));
+                toWrite.putShort((int)samplesToBytes(index) + C*2, (short)Math.round(toWrite.getShort((int)samplesToBytes(index) + C*2) * alpha));
                 break;
               case 4:
-                toWrite.putInt((int)samplesToBytes(index) + C*4, Math.round(toWrite.getInt() * alpha));
+                toWrite.putInt((int)samplesToBytes(index) + C*4, Math.round(toWrite.getInt((int)samplesToBytes(index) + C*4) * alpha));
                 break;
               default:
                 System.out.println("BAD BYTES PER SAMPLE IN INTERNAL FORMAT WHILE SCALING");
