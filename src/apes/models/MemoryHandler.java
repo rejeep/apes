@@ -130,7 +130,7 @@ public class MemoryHandler implements Serializable
     // Create pages
     createPages(firstIndex, bytes + frame.data.length);
 
-    byte[] fst = new byte[(int)(index - firstIndex + 1)];
+    byte[] fst = new byte[(int)(index - firstIndex)];
     byte[] lst = new byte[frame.data.length - fst.length];
 
     System.arraycopy(frame.data, 0, fst, 0, fst.length);
