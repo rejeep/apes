@@ -115,9 +115,7 @@ public class FadeTransform implements TransformPlugin, ActionListener
   }
 
   /**
-   * Performs the fade on the internal format.
-   * 
-   * @param flag Fade in if true.
+   * Performs the fade in on the internal format.
    */
   public void fadeIn()
   {
@@ -128,9 +126,16 @@ public class FadeTransform implements TransformPlugin, ActionListener
     internalFormat.updated();
   }
   
+  /**
+   * Performs the fade out on the internal format.
+   */
   public void fadeOut()
   {
-    
+    for(int i = 0; i < intervals; i++)
+    {
+      internalFormat.scaleSamples( selection.x + interval*i, selection.x + interval*(i+1), (1 - (float)i/intervals));
+    }
+    internalFormat.updated();
   }
 
   /**
